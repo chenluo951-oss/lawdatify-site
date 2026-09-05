@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>报告排版打磨日志 · lawdatify</title>
+<link rel="stylesheet" href="../assets/style.css">
+<style>
+.pol-summary{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:22px 0 6px}
+@media(max-width:720px){.pol-summary{grid-template-columns:repeat(1,1fr)}}
+.pol-stat{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 12px;text-align:center;box-shadow:var(--shadow)}
+.pol-stat .n{font-size:22px;font-weight:700;color:var(--brand);line-height:1.2}
+.pol-stat .l{font-size:11.5px;color:var(--muted);margin-top:2px}
+.pol-card{background:var(--card);border:1px solid var(--line);border-left:3px solid var(--brand);border-radius:8px;padding:14px 16px;margin:10px 0;box-shadow:var(--shadow)}
+.pol-card .pol-head{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:12.5px}
+.pol-card .pol-date{font-weight:600;color:var(--brand)}
+.pol-card .pol-time{color:var(--muted);font-variant-numeric:tabular-nums}
+.pol-card .pol-title{font-weight:600;font-size:14px;flex:1;min-width:200px}
+.pol-card .pol-body{margin-top:10px;font-size:13px}
+.pol-card .pol-row{display:flex;gap:10px;padding:5px 0;border-top:1px dashed var(--line)}
+.pol-card .pol-row:first-child{border-top:0}
+.pol-card .pol-k{flex:0 0 130px;color:var(--muted);font-size:12px}
+.pol-card .pol-v{flex:1;color:#222;line-height:1.6;word-break:break-word}
+.pol-card .qa{padding:2px 8px;border-radius:10px;font-size:11.5px;font-weight:600;border:1px solid var(--line);color:var(--muted);background:#f5f7f9}
+.pol-card .qa.pass{background:#eaf5ee;color:#2e7d4f;border-color:#cfe5d5}
+.pol-card .qa.back{background:#fdecea;color:#b0352a;border-color:#f4c1bb}
+.pol-sub{margin:8px 0 6px;background:#fafbfc;border:1px solid var(--line);border-radius:6px;padding:8px 12px}
+.pol-sub-title{font-size:13px;font-weight:600;color:var(--brand-2,#0f6e8c);margin-bottom:4px}
+.pol-md{font-size:12.5px;line-height:1.6}
+.pol-md p{margin:6px 0}
+.pol-md blockquote{border-left:3px solid var(--brand);background:#f5f8fc;padding:4px 10px;margin:6px 0;color:#333;font-size:12.5px}
+.pol-md ul{padding-left:20px;margin:4px 0}
+.pol-md table.mdt{width:100%;border-collapse:collapse;margin:8px 0;font-size:12px;background:#fff}
+.pol-md table.mdt th{background:var(--brand);color:#fff;padding:6px 8px;text-align:left;font-weight:600}
+.pol-md table.mdt td{padding:5px 8px;border:1px solid var(--line)}
+.pol-md table.mdt tr:nth-child(even){background:#f4f7fb}
+.empty{text-align:center;color:var(--muted);padding:34px 0;font-size:13px}
+.pol-hint{font-size:12px;color:var(--muted);margin:14px 0 0}
+@media print{body{background:#fff}.pol-card{page-break-inside:avoid}}
+</style>
+</head>
+<body>
+<nav class="topnav"><div class="inner">
+  <a class="brand" href="../index.html">law<span>datify</span></a>
+  <div class="navlinks">
+    <a href="../index.html">首页</a>
+    <a href="../news/index.html">资讯索引</a>
+    <a href="../analysis/index.html" class="active">法律分析</a>
+    <a href="../kb/index.html">合规知识库</a>
+    <a href="../prm.html">工作项目</a>
+  </div>
+</div></nav>
+<div class="pagehead"><div class="inner">
+  <div class="crumb"><a href="../index.html">首页</a> / <a href="index.html">法律分析</a> / 打磨日志</div>
+  <h1>报告排版打磨日志</h1>
+  <p>持续打磨「合规资讯简报」自动化（日报 / 周报 / 月报）的排版与格式水准。每半小时巡检、每改必过 QA 门禁；本页由自动化同步、保持可追溯。</p>
+</div></div>
+
+<div class="wrap">
+  <div class="pol-summary">
+    <div class="pol-stat"><div class="n">22</div><div class="l">打磨记录</div></div>
+    <div class="pol-stat"><div class="n">2026-09-05 16:05</div><div class="l">最新一次</div></div>
+    <div class="pol-stat"><div class="n">每 30 分钟</div><div class="l">巡检频率</div></div>
+  </div>
+
+  <div style="margin-top:18px"><div class="pol-card">
+  <div class="pol-head">
+    <span class="pol-date">2026-09-05</span>
+    <span class="pol-time">16:05</span>
+    <span class="qa pass">通过</span>
+    <span class="pol-title">封面新增「编制说明」固定元数据（覆盖口径 / 审核与签发，对齐对标库 A②）</span>
+  </div>
+  <div class="pol-body"><div class="pol-row"><div class="pol-k">改动文件/函数</div><div class="pol-v">`gen_report_pdf.py` :: 新增共享 helper `compile_note(S)`（返回两行居中灰蓝小字 flowable，复用 `S["motto"]` 样式，与 `issue_history_block` 一致）；`gen_report_pdf.py` :: `UI_TEXTS` 追加 `"覆盖口径：六大合规领域公开监管动态与通报处罚"` 与 `"审核与签发：朴朴超市法务合规部"`（保证字体子集化无 tofu）。`gen_weekly_pdf.py` / `gen_deep_pdf.py` 在 `issue_history_block` 后各插入一行 `story.extend(G.compile_note(S))`；`gen_weekly_docx.py` / `gen_deep_docx.py` 封面「近 3 期回顾」后各插入两行居中灰蓝小字（双交付对齐）。</div></div><div class="pol-row"><div class="pol-k">改动前 → 改动后</div><div class="pol-v">封面仅有「报告期(date_str) + 机构署名 + 使命标语 + 本期导读 + 近 3 期回顾」→ 在其后（封面分隔线之前）新增两行固定元数据：「覆盖口径：六大合规领域公开监管动态与通报处罚」「审核与签发：朴朴超市法务合规部」；日报/周报/月报 PDF+DOCX 四件套封面统一生效。</div></div><div class="pol-row"><div class="pol-k">改动依据</div><div class="pol-v">`benchmark_reports.md` 第二批 **A②**（上交所案例集「报告编制说明三项固定要素：报告期 / 覆盖口径 / 审核与签发」——报告主体范围与年报一致、报告期间覆盖全年、经董事会审议后发布）。原封面已呈现「报告期」，唯缺「覆盖口径 / 审核与签发」两项固定编制说明，属明确的版式缺口，且为纯展示、不引入任何业务内容数据（不改 policy/penalties/pupu_items/matrix_rows 等），延续本自动化已落地的封面增强族（org_motto / issue_history_block）。</div></div><div class="pol-row"><div class="pol-k">预期提升</div><div class="pol-v">封面具备完整的「编制说明」三项固定元数据，对外发送时明确报告覆盖口径与签发主体，强化机构可信度与专业研报观感，对齐头部 ESG/券商报告的封面范式；纯展示、不触内容数据、不引入新风险。</div></div><div class="pol-row"><div class="pol-k">QA 验证</div><div class="pol-v">重生成 0901 双版 PDF + DOCX + 实跑 `qa_strict.py daily_data_0901` → 简版 21 页(≥0) / 深度版 57 页(≥30) / 缺字 0 / tofu 0 / 官网首页根链接 0 / 图示 5/5 / DOCX 简版 19828 字·深度版 45830 字·缺字·tofu 0 → **全部通过，允许交付**。pypdf + python-docx 复核四件套封面页 1 均命中「覆盖口径」与「审核与签发」且无 tofu。改动可回滚（原五脚本 + 原双版 PDF/DOCX 备份于 /tmp/cbr_polish_20260905_1605/）。</div></div></div>
+  
+</div><div class="pol-card">
+  <div class="pol-head">
+    <span class="pol-date">2026-09-05</span>
+    <span class="pol-time">15:00</span>
+    <span class="qa pass">通过</span>
+    <span class="pol-title">DOCX 双交付件补齐页脚（左来源声明 + 右页码，对齐 PDF 页脚 · C③）</span>
+  </div>
+  <div class="pol-body"><div class="pol-row"><div class="pol-k">改动文件/函数</div><div class="pol-v">`gen_report_pdf.py :: 新增共享 helper `add_docx_footer(doc)`（python-docx 依赖内置于函数，不污染 PDF 引擎）；`gen_weekly_docx.py` / `gen_deep_docx.py` 在 `doc.save(...)` 前各插入一行 `G.add_docx_footer(doc)`。</div></div><div class="pol-row"><div class="pol-k">改动前 → 改动后</div><div class="pol-v">DOCX 双交付件此前**无任何页脚**（无页码、无来源/免责声明栏）→ 每页左下「资料来源详见各条原文链接 · 仅供内部合规参考」+ 右下「第 X 页 / 共 Y 页」（PAGE/NUMPAGES 域自动填充）+ 页脚上方 `#E3E8EF` 细线；与 2026-09-05 14:35 升级后的 PDF `draw_footer` 完全一致（同文案、同细线、同灰蓝 GRAY 字号）。另写入 `w:updateFields=true`，确保 Word/WPS 打开时自动刷新页码域。</div></div><div class="pol-row"><div class="pol-k">改动依据</div><div class="pol-v">`benchmark_reports.md` 第二批 **C③**（页脚 = 免责声明（左）+「第 X 页，共 Y 页」（右））。14:35 已将 **PDF** 页脚升级为该规范，但本自动化对外发送的是 **PDF + DOCX 双交付**，DOCX 此前始终无页脚，与 PDF 不一致、且缺失对外可追溯的来源/免责声明栏——属今日 PDF 页脚改动遗漏的「双交付另一半」。纯展示、不引入任何内容数据（不改 policy/penalties/pupu_items/matrix_rows 等）。</div></div><div class="pol-row"><div class="pol-k">预期提升</div><div class="pol-v">双交付（PDF+DOCX）页脚统一为「左声明 + 右页码」券商研报级规范，消除 DOCX 无页码/无来源声明的专业度缺口，强化对外可追溯观感；仅改动 DOCX 生成器，PDF 引擎、内容数据、既有 QA 门禁均不受影响。</div></div><div class="pol-row"><div class="pol-k">QA 验证</div><div class="pol-v">重生成 0901 双版 DOCX + 实跑 `qa_strict.py daily_data_0901` → 简版 21 页 / 深度版 57 页（PDF 沿用 14:39 已落地页脚版，未重新生成但校验通过）/ 缺字 0 / tofu 0 / 官网首页根链接 0 / 图示 5/5 / DOCX 简版 19789 字·深度版 45791 字·缺字·tofu 0 / `updateFields=true` 已写入 → **全部通过，允许交付**。python-docx 重新打开两文件确认页脚字段 `['PAGE','NUMPAGES']` 与分隔细线均存在、文档未损坏。改动可回滚（原三脚本 + 原双 DOCX 备份于 /tmp/cbr_polish_20260905_1500/）。</div></div></div>
+  
+</div><div class="pol-card">
+  <div class="pol-head">
+    <span class="pol-date">2026-09-05</span>
+    <span class="pol-time">14:35</span>
+    <span class="qa pass">通过</span>
+    <span class="pol-title">页脚升级：左来源声明 + 右页码（对齐对标库 C③ 页脚规范）</span>
+  </div>
+  <div class="pol-body"><div class="pol-row"><div class="pol-k">改动文件/函数</div><div class="pol-v">`gen_report_pdf.py` :: `NumberedCanvas.draw_footer`（共享引擎，日报/周报/月报 PDF 四件套统一生效；DOCX 页脚不由此函数控制，本次未触及）</div></div><div class="pol-row"><div class="pol-k">改动前 → 改动后</div><div class="pol-v">原 `drawCentredString(PAGE_W/2, …)` 仅页面正中显示「第 X 页 / 共 Y 页」→ 改为 `drawString(M_L, …)` 左侧「资料来源详见各条原文链接 · 仅供内部合规参考」+ `drawRightString(PAGE_W - M_R, …)` 右侧「第 X 页 / 共 Y 页」；`#E3E8EF` 0.5pt 细线与 GRAY 8pt 字号保持不变。</div></div><div class="pol-row"><div class="pol-k">改动依据</div><div class="pol-v">`benchmark_reports.md` 第二批 **C③**（页脚 = 免责声明（左）+「第 X 页，共 Y 页」（右））。此前历次打磨仅落实了「第 X 页 / 共 Y 页」居中页码 + 细线（建议 5），页脚左侧的「来源/免责声明」运行栏从未落地，属对标库 C③ 唯一尚未实现的页脚子项；纯展示、不引入任何内容数据（不改 policy/penalties/pupu_items/matrix_rows 等），页码格式与细线均沿用既有实现。</div></div><div class="pol-row"><div class="pol-k">预期提升</div><div class="pol-v">每页左下角固定有来源/免责提示，强化对外可追溯观感与品牌灰蓝一致性，与头部券商研报页脚「左声明 + 右页码」规范对齐；仅改 canvas 绘制坐标与文案，无新增中文字符风险（所用字符均为既有字体覆盖的常用字）。</div></div><div class="pol-row"><div class="pol-k">QA 验证</div><div class="pol-v">重生成 0901 双版 PDF + 实跑 `qa_strict.py daily_data_0901` → 简版 21 页(≥0) / 深度版 57 页(≥30) / 缺字 0 / tofu 0 / 官网首页根链接 0 / 图示 5/5 / DOCX 简版 19789 字·深度版 45791 字·缺字·tofu 0 → **全部通过，允许交付**。pypdf 文本抽取确认简版/深度版 page 2 页脚均含「资料来源详见各条原文链接」(左) 与「第 2 页 / 共 21(57) 页」(右)，改动已落地。可回滚（源码单处编辑；原双版 PDF + 引擎源码备份于 /tmp/cbr_polish_20260905_1435/）。</div></div></div>
+  
+</div><div class="pol-card">
+  <div class="pol-head">
+    <span class="pol-date">2026-09-05</span>
+    <span class="pol-time">11:25</span>
+    <span class="qa pass">通过</span>
+    <span class="pol-title">本次巡检无需改动（无明确可改进项，代码逐项复核 + 基线 QA 真实复跑全绿）</span>
+  </div>
+  <div class="pol-body"><div class="pol-row"><div class="pol-k">改动文件/函数</div><div class="pol-v">无（未改动任何排版引擎代码）</div></div><div class="pol-row"><div class="pol-k">改动前 → 改动后</div><div class="pol-v">—</div></div><div class="pol-row"><div class="pol-k">改动依据</div><div class="pol-v">本轮对共享引擎 `gen_report_pdf.py` 与四件套真实生成器 `gen_weekly_pdf.py` / `gen_deep_pdf.py` / `gen_weekly_docx.py` / `gen_deep_docx.py` 做**代码级逐项复核**（非仅看历史日志），确认：① 候选清单 9 项（封面品牌条 / 自动目录页码 / 核心观点框 / 图表配色 / 标题防孤行 / 表格斑马纹 / 行距段距 / 页眉页脚 / 图注同页）全部仍生效、无漂移；② 共享 helper 链路仍正确调用（`G.styled_toc` 目录虚线引导符+页码右对齐↔建议4、`G.key_points_box` 核心观点框 navy 标题条+浅蓝底+左强调条+圆角↔建议3、`G.src_note` 来源脚注左对齐↔共性第3条、`G.issue_history_block` 封面近3期回顾↔C①、`G.disclaimer_block` 尾部声明栏↔共性第6条）；③ 页眉页脚：`make_header_footer` 页眉已有 `#D8DEE6` 水平分隔线、`draw_footer` 页脚已有「第 X 页 / 共 Y 页」+ `#E3E8EF` 细线（建议5 / C③ 页脚部分已落地）；④ WCAG 色彩冗余（建议7）：`fig3_matrix` 单元格内嵌「高/中高/中/低/—」、`fig_waterlevel` 内嵌「领先/达标/待提升」、`fig_reg_matrix` 优先级列内嵌「高/中/低」中文文字标签，颜色并非唯一信息维度、已天然满足；⑤ 唯一仍挂起项 **建议 8（同业画像紧凑表）** 属结构性内容呈现改动、触碰内容数据，用户此前明确留待确认，超出本自动化「只动排版/格式、不动内容数据」授权范围；⑥ `benchmark_reports.md` 自 2026-09-03 第二批后无第三批样本新增，无新鲜可借鉴点输入。综上，无明确、低风险、不触碰内容数据且此前未落地的纯排版改进项。</div></div><div class="pol-row"><div class="pol-k">预期提升</div><div class="pol-v">维持已交付专业排版水准，遵守「无明确可改进项则不强行改动、不灌水」硬约束，避免为留痕而改。</div></div><div class="pol-row"><div class="pol-k">QA 验证</div><div class="pol-v">未改动代码，基线**真实复跑** `qa_strict.py daily_data_0901` → 简版 21 页 / 深度版 57 页 / 缺字 0 / tofu 0 / 官网首页根链接 0 / 图示 5/5（行业合规水位对比矩阵·食安快检准入SOP·价格展示合规样例·六大合规领域要点框架·监管要求对照自检矩阵）/ DOCX 简版 19789 字·深度版 45791 字·缺字·tofu 0 → **全部通过，允许交付**（代码自 2026-09-04 17:00 后未变动）。后续触发条件：用户确认建议 8 / 对标库新增样本 / 业务部门反馈具体排版问题。</div></div></div>
+  
+</div><div class="pol-card">
+  <div class="pol-head">
+    <span class="pol-date">2026-09-04</span>
+    <span class="pol-time">18:00</span>
+    <span class="qa pass">通过</span>
+    <span class="pol-title">本次巡检无需改动（无明确可改进项，代码逐项复核 + 基线 QA 全绿）</span>
+  </div>
+  <div class="pol-body"><div class="pol-row"><div class="pol-k">改动文件/函数</div><div class="pol-v">无（未改动任何排版引擎代码）</div></div><div class="pol-row"><div class="pol-k">改动前 → 改动后</div><div class="pol-v">—</div></div><div class="pol-row"><div class="pol-k">改动依据</div><div class="pol-v">本轮对共享引擎 `gen_report_pdf.py` 与两个真实生成器 `gen_weekly_pdf.py` / `gen_deep_pdf.py` 做逐项代码复核（非仅看历史日志），确认：① 候选清单 9 项（封面品牌条 / 自动目录页码 / 核心观点框 / 图表配色 / 标题防孤行 / 表格斑马纹 / 行距段距 / 页眉页脚 / 图注同页）全部落地并仍生效、无漂移；② 两生成器均正确调用 `G.styled_toc(F)`（目录虚线引导符 + 页码右对齐，对照建议 4）、`G.key_points_box`（核心观点框 navy 标题条 + 浅蓝底 + 左侧强调条 + 圆角，对照建议 3）、`G.issue_history_block`（封面「近 3 期回顾」，对照 C①），热力矩阵 `KeepTogether([矩阵, 图注, 来源, 图例])` 防 orphan（对照「图注同页」补全项）；③ 对标库第二批建议 5（页脚「第 X 页 / 共 Y 页」+ 细线）、建议 6（图示编号图1–图6 + 来源双行）、建议 7（WCAG 色彩冗余：热力矩阵 / 行业水位 / 自检矩阵色块单元格均内嵌中文等级文字「高/中高/中/低/领先/达标/待提升」作文字标签，已天然满足）均仍生效；④ 唯一仍挂起项 **建议 8（同业画像改为「主体 + 一句定性」紧凑表）** 属结构性内容呈现改动、触碰内容数据，用户此前明确留待确认，不在本自动化「只动排版/格式、不动内容数据」授权范围；⑤ 复核 `benchmark_reports.md` 无第三批样本新增（最近一批为 2026-09-03 第二批），无可挖掘的新版式可借鉴点。</div></div><div class="pol-row"><div class="pol-k">预期提升</div><div class="pol-v">维持现有已交付的专业排版水准，不在无明确收益处强行改动、不灌水（遵守「无明确可改进项则不强行改动」硬约束）。</div></div><div class="pol-row"><div class="pol-k">QA 验证</div><div class="pol-v">未改动代码，基线实跑 `qa_strict.py daily_data_0901`（本次真实运行，非仅沿用日志）→ 简版 21 页 / 深度版 57 页 / 缺字 0 / tofu 0 / 官网首页根链接 0 / 图示 5/5 / DOCX 简版 19789 字·深度版 45791 字·缺字·tofu 0 → **全部通过，允许交付**（代码自 17:00 巡检后未变动）。后续触发条件不变：用户确认建议 8 / 对标库新增样本 / 业务部门反馈具体排版问题。</div></div></div>
+  
+</div><div class="pol-card">
+  <div class="pol-head">
+    <span class="pol-date">2026-09-04</span>
+    <span class="pol-time">17:00</span>
+    <span class="qa pass">通过</span>
+    <span class="pol-title">封面新增「近 3 期回顾」区块（期次连续性可视化）</span>
+  </div>
+  <div class="pol-body"><div class="pol-row"><div class="pol-k">改动文件/函数</div><div class="pol-v">- `gen_report_pdf.py` :: 新增共享 helper `prev_issue_dates(date_str, n=3)`（由封面 `date_str` 正则解析单一日期、按自然日递减推算前 n 期；解析失败/周报月报区间文本时返回空列表，绝不抛错）与 `issue_history_block(S, date_str, n=3)`（返回居中灰蓝小字 flowable，降级为空块）。</div></div><div class="pol-row"><div class="pol-k">改动前 → 改动后</div><div class="pol-v">封面仅有「本期导读：领域动态 N 条 · 通报处罚 N 起 · …」一行 → 在其下方新增「近 3 期回顾： 2026年8月31日 · 2026年8月30日 · 2026年8月29日」（由封面 `date_str`=2026年9月1日 推算前 3 个自然日，居中、8.8pt 灰蓝小字），日报/周报/月报四件套封面统一生效。</div></div><div class="pol-row"><div class="pol-k">改动依据</div><div class="pol-v">`benchmark_reports.md` 第二批 **C①**（券商研报封面右下角列出往期报告及日期，强化读者连续性认知）+ 跨样本共性增量第 10 条「期次连续性可视化」。原封面已有品牌条与机构署名/使命标语，唯缺「往期回顾」连续性提示，属明确可落地的版式缺口。</div></div><div class="pol-row"><div class="pol-k">预期提升</div><div class="pol-v">强化读者对简报期次连续性的认知，对齐头部券商研报封面范式；纯展示、不引入任何业务内容数据（不改 policy/penalties/pupu_items/matrix_rows 等），日期由既有 `date_str` 元数据推算，代码自包含、可回滚。</div></div><div class="pol-row"><div class="pol-k">QA 验证</div><div class="pol-v">重生成双版 PDF + DOCX + `qa_strict.py daily_data_0901` → 缺字 0 / tofu 0 / 官网首页根链接 0 / 图示 5/5 / 简版 21 页(≥0) / 深度版 57 页(≥30) / DOCX 简版 19789 字·深度版 45791 字·缺字·tofu 0 → **全部通过，允许交付**。PDF 文本抽取确认封面页 1 命中「近 3 期回顾： 2026年8月31日 · 2026年8月30日 · 2026年8月29日」且无 tofu。改动可回滚（原四件套备份于 /tmp/cbr_polish_20260904_1700/）。</div></div></div>
+  
+</div><div class="pol-card">
+  <div class="pol-head">
+    <span class="pol-date">2026-09-04</span>
+    <span class="pol-time">16:00</span>
+    <span class="qa pass">通过</span>
+    <span class="pol-title">本次巡检无需改动（无明确可改进项）</span>
+  </div>
+  <div class="pol-body"><div class="pol-row"><div class="pol-k">改动文件/函数</div><div class="pol-v">无（未改动任何排版引擎代码）</div></div><div class="pol-row"><div class="pol-k">改动前 → 改动后</div><div class="pol-v">—</div></div><div class="pol-row"><div class="pol-k">改动依据</div><div class="pol-v">本轮对共享引擎 `gen_report_pdf.py` 做了逐项代码复核（非仅看历史日志），确认以下关键排版点均仍生效、相互一致、无漂移：① `styled_toc()` 仍设 `rightColumnWidth=42` + `dotsMinLevel=0`（目录虚线引导符 + 页码右对齐，对照 2026-09-02 15:20/16:2x 落地）；② `draw_footer()` 仍为「第 X 页 / 共 Y 页」居中 + `#E3E8EF` 0.5pt 细线（对照 2026-09-02 16:2x 落地）；③ `build_styles()` 中 `body/body0/bodyc/listitem/ana` 均 `alignment=TA_JUSTIFY` 且 `allowWidows=0/allowOrphans=0`，`h1 16.5 songb NAVY / h2 13.5 heiti NAVY keepWithNext / h3 12 heiti NAVY2 keepWithNext / body 10.5 INK`（对照 2026-09-02 17:1x 层级修复），`src` 样式 `TA_LEFT` 左对齐来源脚注（对照 15:05）；④ `key_points_box()` 仍为 navy 标题条 + `BG_KEY` 浅蓝底 + 左侧 3.0 NAVY 强调条 + 圆角（对照 16:00/16:2x）；⑤ `make_header_footer()` 页眉仍左机构名 + 右日期 + `#D8DEE6` 细线；⑥ 热力矩阵 `fig3_matrix` 的「—」格仍为 `#B8BFC9` 与图例同款灰（对照 17:00）；⑦ 建议 7（WCAG 色彩冗余）仍由色块单元格内中文等级文字（高/中高/中/低、领先/达标/待提升）天然满足。⑨ `fig3_matrix` 图例经 2026-09-02 18:00 已并入 `KeepTogether` 防 orphan。</div></div><div class="pol-row"><div class="pol-k">预期提升</div><div class="pol-v">维持现有已交付的专业排版水准，不在无明确收益处强行改动、不灌水（遵守「无明确可改进项则不强行改动」硬约束）。本轮额外发现：数据模块目录已出现更新样本 `daily_data_0902.py`（2026-09-03），但本自动化 QA 基线契约仍为 `daily_data_0901`（2026-09-01 四件套已生成于 Desktop），未变动；若需切换 QA 校验对象，应经用户确认后更新契约、避免误判。</div></div><div class="pol-row"><div class="pol-k">QA 验证</div><div class="pol-v">未改动代码，基线复跑 `qa_strict.py daily_data_0901` → 简版 21 页 / 深度版 57 页 / 缺字 0 / tofu 0 / 官网首页根链接 0 / 图示 5/5 / DOCX 简版·深度版缺字·tofu 0 → **全部通过，允许交付**（代码自 15:00 巡检后未变动，本轮为第三轮连续「无需改动」）。后续触发条件不变：用户确认建议 8 / 对标库新增样本 / 业务部门反馈具体排版问题。</div></div></div>
+  
+</div><div class="pol-card">
+  <div class="pol-head">
+    <span class="pol-date">2026-09-04</span>
+    <span class="pol-time">15:00</span>
+    <span class="qa pass">通过</span>
+    <span class="pol-title">本次巡检无需改动（无明确可改进项）</span>
+  </div>
+  <div class="pol-body"><div class="pol-row"><div class="pol-k">改动文件/函数</div><div class="pol-v">无（未改动任何排版引擎代码）</div></div><div class="pol-row"><div class="pol-k">改动前 → 改动后</div><div class="pol-v">—</div></div><div class="pol-row"><div class="pol-k">改动依据</div><div class="pol-v">① 候选清单 9 项（封面品牌条 / 自动目录页码 / 核心观点框 / 图表配色 / 标题防孤行 / 表格斑马纹 / 行距段距 / 页眉页脚 / 图注同页）已于 2026-09-02 ~ 09-03 历次打磨全部落地并复跑 QA 通过；② 本轮重新通读 `gen_report_pdf.py` 共享引擎的 `build_styles()` / `styled_toc()`（rightColumnWidth=42、dotsMinLevel=0）/ `key_points_box()`（navy 标题条 + BG_KEY 底 + 左侧 3.0 NAVY 强调条 + 圆角）/ `org_motto()` / `disclaimer_block()` / `draw_footer()`（「第 X 页 / 共 Y 页」+ #E3E8EF 细线）/ `make_header_footer()`，确认各项仍生效、相互一致，无回退或漂移；③ 对标库第二批建议 4（目录虚线引导符）/ 5（页脚「第 X 页 / 共 Y 页」）/ 6（图示编号双行）/ 7（风险等级色彩冗余 · WCAG 2.2，色块单元格本身渲染中文等级文字已天然满足）均已落实；④ 仅剩 **建议 8（同业画像改为「主体 + 一句定性」紧凑表）** 为结构性内容呈现改动、触碰内容数据，用户此前明确留待确认，不在本自动化「只动排版/格式、不动内容数据」授权范围内。</div></div><div class="pol-row"><div class="pol-k">预期提升</div><div class="pol-v">维持现有已交付的专业排版水准，不在无明确收益处强行改动、不灌水（遵守「无明确可改进项则不强行改动」硬约束）。</div></div><div class="pol-row"><div class="pol-k">QA 验证</div><div class="pol-v">未改动代码，基线复跑 `qa_strict.py daily_data_0901` → 简版 21 页 / 深度版 57 页 / 缺字 0 / tofu 0 / 官网首页根链接 0 / 图示 5/5 / DOCX 简版·深度版缺字·tofu 0 → **全部通过，允许交付**（沿用通过状态，代码自 14:45 巡检后未变动）。后续触发条件不变：用户确认建议 8 / 对标库新增样本 / 业务部门反馈具体排版问题。</div></div></div>
+  
+</div><div class="pol-card">
+  <div class="pol-head">
+    <span class="pol-date">2026-09-04</span>
+    <span class="pol-time">14:45</span>
+    <span class="qa pass">通过</span>
+    <span class="pol-title">本次巡检无需改动（无明确可改进项）</span>
+  </div>
+  <div class="pol-body"><div class="pol-row"><div class="pol-k">改动文件/函数</div><div class="pol-v">无（未改动任何排版引擎代码）</div></div><div class="pol-row"><div class="pol-k">改动前 → 改动后</div><div class="pol-v">—</div></div><div class="pol-row"><div class="pol-k">改动依据</div><div class="pol-v">① 候选清单 9 项（封面品牌条 / 自动目录页码 / 核心观点框 / 图表配色 / 标题防孤行 / 表格斑马纹 / 行距段距 / 页眉页脚 / 图注同页）已于 2026-09-02 ~ 09-03 的历次打磨中全部勾选落地并复跑 QA 通过；② 对标库 `benchmark_reports.md` 第二批建议 4（目录虚线引导符）/ 5（页脚「第 X 页 / 共 Y 页」）/ 6（图示编号双行）/ 7（风险等级色彩冗余 · WCAG 2.2）均已落实——经巡检 `fig3_matrix` 与 `fig_waterlevel` 的色块单元格本身即渲染中文等级文字（高/中高/中/低、领先/达标/待提升），颜色仅作辅助，冗余要求已天然满足；③ 仅剩 **建议 8（同业画像改为「主体 + 一句定性」紧凑表）** 仍挂起，但该项是结构性的「内容呈现」改动（段落式 → 两列表），触碰内容数据，用户此前已明确「留待用户确认」，不属于本自动化「只动排版/格式、不动内容数据」的授权范围。</div></div><div class="pol-row"><div class="pol-k">预期提升</div><div class="pol-v">维持现有已交付的专业排版水准，不在无明确收益处强行改动、不灌水（遵守「无明确可改进项则不强行改动」硬约束）。</div></div><div class="pol-row"><div class="pol-k">QA 验证</div><div class="pol-v">未改动代码，基线复跑 `qa_strict.py daily_data_0901` → 简版 21 页 / 深度版 57 页 / 缺字 0 / tofu 0 / 官网首页根链接 0 / 图示 5/5 / DOCX 简版·深度版缺字·tofu 0 → **全部通过，允许交付**（沿用通过状态）。后续若用户确认建议 8、或对标库新增样本出现新的版式可借鉴点、或业务部门反馈具体排版问题，再启动下一处增量打磨。</div></div></div>
+  
+</div><div class="pol-card">
+  <div class="pol-head">
+    <span class="pol-date">2026-09-03</span>
+    <span class="pol-time">12:00</span>
+    <span class="qa pass">通过</span>
+    <span class="pol-title">深度版图示编号统一为「图1–图6」连续编号（消除「5 张无编号 + 1 张图1」不一致）</span>
+  </div>
+  <div class="pol-body"><div class="pol-row"><div class="pol-k">改动文件/函数</div><div class="pol-v">`gen_deep_pdf.py` :: 六处图示图注（行业水位 / 监管对照自检矩阵 / 食安快检 SOP / 价格展示合规 / 六大框架 / 热力矩阵）；`qa_strict.py` 第 85 行同步热力矩阵图注引用（图1→图6，仅用于字符集收集，保持可追溯）。</div></div><div class="pol-row"><div class="pol-k">改动前 → 改动后</div><div class="pol-v">- 前：深度版 6 张图仅热力矩阵标「图1：」，其余 5 张均写「图：」（无序号），编号体系缺失、正文与业务侧无法按号引用。</div></div><div class="pol-row"><div class="pol-k">改动依据</div><div class="pol-v">`benchmark_reports.md` 第二批 **建议 6**「图示统一为『图 N-M 标题』+ 来源双行」的编号一致性要求（对齐券商研报图表按出现顺序编号规范）；巡检发现深度版图注编号缺失/不统一，属明确的排版一致性缺陷（建议 4/5/7 经核对已于前期落地，仅 6 尚未落实）。</div></div><div class="pol-row"><div class="pol-k">预期提升</div><div class="pol-v">深度版 6 张具像化图示获得连续、可引用的编号，与简版/日报「图1–图N」体系对齐，便于正文与业务侧按号引用、提升专业报告观感；纯图注序号改动，不引入任何新内容数据、不改 policy/penalties/matrix_rows。</div></div><div class="pol-row"><div class="pol-k">QA 验证</div><div class="pol-v">重生成双版 + `qa_strict.py daily_data_0901` → 简版 21 页 / 深度版 57 页（与改动前持平，序号加长未引发分页副作用）；缺字 0 / tofu 0 / 官网首页根链接 0 / 图示 5/5 / DOCX 简版·深度版缺字·tofu 0 → **全部通过，允许交付**。PDF 文本抽取确认 p30「图1」– p40「图6」连续编号已落地。</div></div></div>
+  
+</div><div class="pol-card">
+  <div class="pol-head">
+    <span class="pol-date">2026-09-02</span>
+    <span class="pol-time">18:00</span>
+    <span class="qa pass">通过</span>
+    <span class="pol-title">热力矩阵「图例」纳入 KeepTogether，杜绝图例与矩阵分页 orphan</span>
+  </div>
+  <div class="pol-body"><div class="pol-row"><div class="pol-k">改动文件/函数</div><div class="pol-v">`gen_weekly_pdf.py`（简版·四、朴朴超市业务专题·热力矩阵块）→ 将 `G.legend_paragraph(S)` 并入该块的 `KeepTogether([...])`；`gen_deep_pdf.py`（深度版·七、朴朴超市业务专题·热力矩阵块）→ 同步并入。两处均调用共享引擎 `G` 的 `fig3_matrix` / `legend_paragraph` / `src_note`，改动概念为「一处」（图例与矩阵同组防分页）。</div></div><div class="pol-row"><div class="pol-k">改动前 → 改动后</div><div class="pol-v">- 前：`KeepTogether([矩阵, 图注, 资料来源])` 之后单独 `story.append(G.legend_paragraph(S))` —— 图例作为独立流对象排在矩阵组之后；矩阵组落在页底时，图例可能被推到下一页，造成「图例 orphan」。</div></div><div class="pol-row"><div class="pol-k">改动依据</div><div class="pol-v">巡检发现此前「图与图注同页」维度虽已落地（图/图注/来源 KeepTogether），但**图例（legend）被遗漏在组外**，仍是可孤立流对象。风险热力矩阵是日报/周报/月报共用的关键图表，图例 orphan 会引发「图例与矩阵对不上」的可追溯性质疑，与该维度目标相悖——属已完成项的边界补全。</div></div><div class="pol-row"><div class="pol-k">预期提升</div><div class="pol-v">热力矩阵图例在任何内容长度 / 分页情形下均与矩阵同页，消除图例孤立下一页的专业度与可信度瑕疵。纯 grouping 改动，不引入新字符、不触碰内容数据（matrix_rows 与 legend 文案均为固定占位）。</div></div><div class="pol-row"><div class="pol-k">QA 验证</div><div class="pol-v">重生成 0901 双版 PDF + `qa_strict.py daily_data_0901` → 简版 21 页 / 深度版 57 页（页数较改动前 21/57 **完全不变**，确认无分页副作用）/ 缺字 0 / tofu 0 / 官网首页根链接 0 / 图示 5/5 / 章节齐全 / DOCX 简版·深度版缺字·tofu 0 → **全部通过，允许交付**。改动可回滚（两处源码改动可逆；原双版 PDF 与两脚本备份于 /tmp/cbr_polish_20260902_1800/）。</div></div></div>
+  
+</div><div class="pol-card">
+  <div class="pol-head">
+    <span class="pol-date">2026-09-02</span>
+    <span class="pol-time">17:3x</span>
+    <span class="qa">—</span>
+    <span class="pol-title">第七轮 · 新增能力：HTML 网页版（用户用户需求「除 word、pdf，也输出 html」）</span>
+  </div>
+  <div class="pol-body"></div>
+  <div class="pol-subs" style="margin-top:8px;padding-top:8px;border-top:1px dashed var(--line)"><div class="pol-sub"><div class="pol-sub-title">设计要点</div><div class="pol-body"></div></div><div class="pol-sub"><div class="pol-sub-title">输出文件</div><div class="pol-md"><ul><li>`~/Desktop/合规资讯简报/合规资讯简报_2026-09-01.html`（简版 ~70 KB）</li><li>`~/Desktop/合规资讯简报/合规资讯简报_2026-09-01_深度分析版.html`（深度版 ~161 KB）</li><li>调用方式：`python gen_html.py daily_data_0901`，与现有 PDF/DOCX 自动化一致。</li></ul></div></div><div class="pol-sub"><div class="pol-sub-title">结构验证</div><div class="pol-md"><table class="mdt"><thead><tr><th>指标</th><th>简版</th><th>深度版</th></tr></thead><tbody><tr><td>章节 h2.sec</td><td>5</td><td>16</td></tr><tr><td>目录项</td><td>5</td><td>16</td></tr><tr><td>锚点 id</td><td>5</td><td>16</td></tr><tr><td>外链 &lt;a&gt;</td><td>27</td><td>57</td></tr><tr><td>图示 figure</td><td>1</td><td>6</td></tr><tr><td>表格</td><td>2</td><td>10</td></tr><tr><td>核心观点框</td><td>1</td><td>1</td></tr><tr><td>免责声明栏</td><td>1</td><td>1</td></tr><tr><td>标签配对（div/table/figure/blockquote）</td><td>OK</td><td>OK</td></tr><tr><td>UTF-8 编码</td><td>OK</td><td>OK</td></tr></tbody></table></div></div><div class="pol-sub"><div class="pol-sub-title">视觉验证（pyppeteer/headless Chrome 截图）</div><div class="pol-md"><ul><li>简版首屏：品牌深蓝顶栏、目录、核心观点框（深蓝 NAVY 标题条 + 浅蓝 BG_KEY 底 + 左侧 NAVY 强调条）、领域页 h3 蓝色与正文 INK 区分清晰。</li><li>深度版含 5 张图示：行业水位矩阵（绿/黄/红 muted 色阶）、监管对照矩阵（红=高/黄=中/绿=低）、食安 SOP（浅蓝底块 + 箭头 + 合格/不合格分支）、价格样例（2 列表格）、六大领域框架（深蓝中枢 + 6 卡片网格）—— 与 PDF 完全一致。</li></ul></div></div></div>
+</div><div class="pol-card">
+  <div class="pol-head">
+    <span class="pol-date">2026-09-02</span>
+    <span class="pol-time">17:1x</span>
+    <span class="qa">—</span>
+    <span class="pol-title">第六轮打磨 · 用户反馈「字体都是一样大小、密密麻麻、没有重点」</span>
+  </div>
+  <div class="pol-body"></div>
+  <div class="pol-subs" style="margin-top:8px;padding-top:8px;border-top:1px dashed var(--line)"><div class="pol-sub"><div class="pol-sub-title">字号层级审计（调研发现）</div><div class="pol-md"><p>当前 `build_styles()` 字号分布的关键问题（**3 个挤压点**）：</p><table class="mdt"><thead><tr><th>层级</th><th>当前字号</th><th>当前颜色</th><th>与正文差</th><th>问题</th></tr></thead><tbody><tr><td>h1 一级标题</td><td>15.5</td><td>NAVY</td><td>+5.0</td><td>与 h2 差仅 1.5pt，层级不清</td></tr><tr><td>h2 二级标题</td><td>14</td><td>NAVY</td><td>+3.5</td><td>与 h1 差仅 1.5pt</td></tr><tr><td>**h3 三级标题**</td><td>**11**</td><td>**INK**</td><td>**+0.5**</td><td>**致命：与正文同色且仅大 0.5pt**</td></tr><tr><td>核心观点框标题</td><td>10.5</td><td>白字（NAVY 底）</td><td>0</td><td>重点框无重点意义</td></tr><tr><td>正文 body</td><td>10.5</td><td>INK</td><td>0</td><td>（基准）</td></tr></tbody></table><p>**根因诊断**：</p><ul><li>「密密麻麻」的根源：h3 与正文同色（都是 INK #2B2B2B），光靠 0.5pt 字号差根本无法形成视觉层级。</li><li>「没有重点」的根源：核心观点框的 navy 标题条与正文同字号（10.5pt），「重点框」失去锚定作用。</li><li>「字号一样大小」的根源：四级层级（h1/h2/h3/body）落差只有 5pt / 1.5pt / 3pt / 0.5pt，没有形成 ≥1.5pt 的合理视觉台阶。</li></ul></div></div><div class="pol-sub"><div class="pol-sub-title">改动（5 处引擎样式 + 2 处 DOCX 同步）</div><div class="pol-md"><table class="mdt"><thead><tr><th>样式</th><th>字段</th><th>改前 → 改后</th><th>理由</th></tr></thead><tbody><tr><td>h1</td><td>fontSize / leading</td><td>15.5 / 24 → **16.5 / 25**</td><td>拉大与 h2 的 3pt 落差，songb 加粗宋体字重已够</td></tr><tr><td>h2</td><td>fontSize / spaceBefore</td><td>14 / 16 → **13.5 / 18**</td><td>与 h1 形成 3pt 落差；上方留白加大突出层次</td></tr><tr><td>**h3**</td><td>fontSize / textColor / spaceBefore / spaceAfter</td><td>11 / INK / 6 / 3 → **12 / NAVY2 / 10 / 5**</td><td>**关键改动**：1.5pt 字号 + 换色（NAVY2 与正文 INK 对比）+ 前后间距三维度共同作用</td></tr><tr><td>kbox_title</td><td>fontSize</td><td>10.5 → **12**</td><td>与正文 10.5 拉开 1.5pt，「核心观点」标题凸显</td></tr><tr><td>bodyc</td><td>leading / spaceAfter</td><td>19.5 / 6 → **20 / 8**</td><td>正文舒展，行距 1.9 倍、段间距由 ≈0.3×行距 提升至 0.4×，减「密密麻麻」</td></tr><tr><td>gen_weekly_docx / gen_deep_docx</td><td>领域标题 size / color</td><td>11 / NAVY → **12 / NAVY2**</td><td>DOCX 与 PDF h3 视觉一致</td></tr></tbody></table><p>**设计原则**：层级区分靠「字号 + 颜色 + 间距」三维度，不只靠字号。h3 与正文同色是原设计最大败笔，单一维度（字号）永远做不出清晰层级。</p></div></div><div class="pol-sub"><div class="pol-sub-title">QA 验证 + 视觉抽检</div><div class="pol-md"><ul><li>`qa_strict.py daily_data_0901` → 简版 20 页 / 深度版 **57 页**（行距 + 段间距增加约 2 页，仍 ≥30）；缺字 0 / tofu 0 / 根链接 0 / 图示 5/5 / DOCX 缺字·tofu 0 → **全部通过，允许交付**。</li><li>pypdfium2 视觉抽检：①核心观点框页（page 2）—「核心观点」标题 12pt + NAVY 底，与正文 10.5pt 楷体形成清晰焦点；②领域页（page 3）— h1「二、六大领域方向回顾」16.5pt songb、h2「1. 数据合规」13.5pt heiti、h3「▍ 国家网络安全通报中心… 」12pt NAVY2、正文 10.5pt INK，**4 个层级肉眼可辨**。</li><li>改后层级比例：h1 16.5 / h2 13.5 / h3 12 / body 10.5，形成 3pt / 1.5pt / 1.5pt 的视觉台阶 + 颜色/字重双重维度，符合律所/券商研报排版规范。</li></ul></div></div><div class="pol-sub"><div class="pol-sub-title">可回滚 + 备份</div><div class="pol-md"><ul><li>源码改动可逆（5 处 + 2 处）；引擎原版备份于 `/tmp/cbr_typo_backup.py`。</li></ul></div></div><div class="pol-sub"><div class="pol-sub-title">下一轮滚动候选（更新）</div><div class="pol-md"><ul><li>字体层级主轴已修复。下一轮输入来源：① 用户主观反馈；② 对标库每 2 天新增样本；③ 业务部门反馈。</li></ul></div></div></div>
+</div><div class="pol-card">
+  <div class="pol-head">
+    <span class="pol-date">2026-09-02</span>
+    <span class="pol-time">17:00</span>
+    <span class="qa pass">通过</span>
+    <span class="pol-title">热力矩阵「暂不涉及」格底色对齐图例灰（消除图例/矩阵色差）</span>
+  </div>
+  <div class="pol-body"><div class="pol-row"><div class="pol-k">改动文件/函数</div><div class="pol-v">`gen_report_pdf.py` :: `fig3_matrix(F)` 中「—」格 `BACKGROUND`（line 556，共享引擎，日报/周报/月报三维度热力矩阵统一生效）</div></div><div class="pol-row"><div class="pol-k">改动前 → 改动后</div><div class="pol-v">`#F1F3F6`（近白，视觉近似空白）→ `#B8BFC9`（与图例「暂不涉及」色块同款灰），仅改 1 行硬编码 hex；图例 `legend_paragraph` 原即 `#B8BFC9`，本次使矩阵向图例对齐。</div></div><div class="pol-row"><div class="pol-k">改动依据</div><div class="pol-v">`benchmark_reports.md` 跨样本共性第 5 条「配色收敛到同族深蓝、统一辅助色」。巡检发现热力矩阵图例标注「暂不涉及＝灰色块」，但矩阵内「—」格底色为近白 `#F1F3F6`，图例与矩阵色值不一致；且近白色使「暂不涉及」区域看起来像「空白/未填」，弱化该中性分类的辨识度，专业读者易生「图例与图对不上」的可追溯性质疑。</div></div><div class="pol-row"><div class="pol-k">预期提升</div><div class="pol-v">热力矩阵「暂不涉及」分类在图例与矩阵内颜色一致、清晰可辨，消除图例/矩阵色差，提升关键图表（日报/周报/月报共用的风险热力矩阵）的专业度与可信度。纯背景色改动，不引入新字符、不改内容数据（matrix_rows 中「—」为固定占位符，非业务数据）。</div></div><div class="pol-row"><div class="pol-k">QA 验证</div><div class="pol-v">重生成日报 0901 双版并跑 `qa_strict.py daily_data_0901` → 缺字 0 / tofu 0 / 官网首页根链接 0 / 图示 5/5 / 简版 20 页 / 深度版 55 页 / DOCX 简版 19743 字·深度版 45745 字·缺字·tofu 0 → **全部通过，允许交付**。改动可回滚（源码单处 hex 改动；原双版 PDF 备份于 /tmp/cbr_polish_20260902_1700/）。</div></div></div>
+  
+</div><div class="pol-card">
+  <div class="pol-head">
+    <span class="pol-date">2026-09-02</span>
+    <span class="pol-time">16:2x</span>
+    <span class="qa">—</span>
+    <span class="pol-title">第五轮打磨（用户指令「都打磨」：图表配色 / 核心观点框 / 监管对比矩阵）</span>
+  </div>
+  <div class="pol-body"></div>
+  <div class="pol-subs" style="margin-top:8px;padding-top:8px;border-top:1px dashed var(--line)"><div class="pol-sub"><div class="pol-sub-title">① 风险等级色阶统一</div><div class="pol-body"><div class="pol-row"><div class="pol-k">改动文件/函数</div><div class="pol-v">`gen_report_pdf.py` 模块级常量 + 5 处硬编码 hex</div></div><div class="pol-row"><div class="pol-k">改动前 → 改动后</div><div class="pol-v">`RED #C0392B → #A93B33`（高）、`ORANGE #D35400 → #B0652C`（中高）、`AMBER #C98A1B → #B0862E`（中）、`GREEN #5B8C5A → #4C7A59`（低）。同步更新 `legend_paragraph` 的 3 处硬编码（567–569）与 `fig1_enforcement`/`fig2_price` 流程图高亮边框的 2 处硬编码（499/525）。</div></div><div class="pol-row"><div class="pol-k">改动依据</div><div class="pol-v">候选清单「图表配色」+ 对标库跨样本共性（律所/券商研报配色收敛同族、避免单点跳色）。原色饱和度悬殊（red 63% / amber 76% / green 21%），与深蓝主色不协调。</div></div><div class="pol-row"><div class="pol-k">预期提升</div><div class="pol-v">风险等级色在同一饱和度/明度区间，与深蓝主色体系协调；流程图高亮边框同样收敛，专业度提升。</div></div></div></div><div class="pol-sub"><div class="pol-sub-title">② Executive Summary 核心观点框：圆角 + 加深 + 加粗强调条</div><div class="pol-body"><div class="pol-row"><div class="pol-k">改动文件/函数</div><div class="pol-v">`gen_report_pdf.py` :: `key_points_box(S, rows, title)`（共享 helper，自动作用于 4 个真实生成器）</div></div><div class="pol-row"><div class="pol-k">改动前 → 改动后</div><div class="pol-v">BG_KEY `#F7F9FC → #F2F6FA`（加深拉开与白页对比）；新增 `ROUNDEDCORNERS (0,0),(-1,-1),3.0` 圆角（reportlab 5.0.1 支持）；左侧强调条 `LINEBEFORE 2.6 → 3.0`；内边距 标题条 `5/12 → 6/12`、内容区 `6/14/12 → 7/15/12`。</div></div><div class="pol-row"><div class="pol-k">改动依据</div><div class="pol-v">候选清单「核心观点框」+ benchmark_reports 头部样本（Executive Summary 框常见圆角 + 较深底色，与正文形成对比）。</div></div><div class="pol-row"><div class="pol-k">预期提升</div><div class="pol-v">核心观点框更明显地区分于正文、视觉焦点更聚焦。</div></div></div></div><div class="pol-sub"><div class="pol-sub-title">③ 监管要求对照自检矩阵（新增图示）</div><div class="pol-body"><div class="pol-row"><div class="pol-k">改动文件/函数</div><div class="pol-v">`gen_report_pdf.py` 新增 `fig_reg_matrix(F)`；`gen_deep_pdf.py` 在①行业水位后插入为②（标题+图+图注+来源 整体 KeepTogether 防孤行）；原 ②/③/④ 顺延为 ③/④/⑤；`qa_strict.py` 新增 marker「监管要求对照自检矩阵」、**阈值改为动态 `len(fig_markers)`（关键改进）**。</div></div><div class="pol-row"><div class="pol-k">改动前 → 改动后</div><div class="pol-v">深度版原 4 张图 → 新增②监管对照自检矩阵（5 列：合规控制点 / 监管依据 / 自检要点 / 同业普遍水位 / 优先级；6 行覆盖：算法备案、AI 内容标识、第三方 SDK、生鲜快检溯源、明码标价、商户核验）。优先级列按统一后色阶着色（红＝高 / 黄＝中 / 绿＝低）。</div></div><div class="pol-row"><div class="pol-k">改动依据</div><div class="pol-v">`benchmark_reports.md` 可落地建议 2（新增监管对比矩阵是合规类最高频结构）。内容为自检模板而非业务数据。</div></div><div class="pol-row"><div class="pol-k">预期提升</div><div class="pol-v">提供「监管依据 → 自检要点 → 同业水位 → 优先级」四段式对照，便于业务方一眼定位本期优先整改项。</div></div></div></div><div class="pol-sub"><div class="pol-sub-title">QA 验证（整体重生成后重跑 + 视觉抽检）</div><div class="pol-md"><ul><li>`qa_strict.py daily_data_0901` → 简版 20 页 / 深度版 55 页（与上轮同，新图不增页：因矩阵 6 行 30pt + 标题/图注/来源 ≈ 245pt，正好落在 page 28 与 ③ 之间）；缺字 0 / tofu 0 / 根链接 0 / 图示 **5/5**（行业水位✅ 食安SOP✅ 价格样例✅ 六大框架✅ 监管对照矩阵✅）/ DOCX 缺字·tofu 0 → **全部通过，允许交付**。</li><li>视觉抽检（pypdfium2 render 关键页）：</li><li>①行业水位：muted brick / ochre / forest 三色清晰，与深蓝标题条协调（原 garish 红/黄已消除）。</li><li>②监管对照矩阵：标题与表格同页（KeepTogether 生效），优先级列色块显著但不刺眼。</li><li>核心观点框（page 2）：圆角 + 加深底色 `#F2F6FA` 与白页形成清晰边界，加粗左侧强调条视觉锚定。</li><li>改动可回滚（源码改动可逆；备份见 /tmp/cbr_polish_20260902_1620/）。</li></ul></div></div><div class="pol-sub"><div class="pol-sub-title">下一轮候选（未做 / 已无明显可改项）</div><div class="pol-md"><ul><li>当前所有候选清单已勾完，未发现新的显著排版/格式缺陷。继续打磨可能进入「为了改而改」区，违反「无明确可改进项则不强行改动」原则。</li><li>后续打磨输入来源：① 用户主观反馈；② `benchmark_reports.md` 下次自动收集（每 2 天一次）新增样本的「可借鉴点」；③ 业务部门反馈。</li></ul></div></div></div>
+</div><div class="pol-card">
+  <div class="pol-head">
+    <span class="pol-date">2026-09-02</span>
+    <span class="pol-time">16:00</span>
+    <span class="qa pass">通过</span>
+    <span class="pol-title">核心观点框升级（navy 标题条 + 浅蓝底 + 左侧强调条）</span>
+  </div>
+  <div class="pol-body"><div class="pol-row"><div class="pol-k">改动文件/函数</div><div class="pol-v">`gen_report_pdf.py` :: `build_styles()` 新增样式 `"kbox_title"`；新增共享 helper `key_points_box(S, rows, title="核心观点")`；`UI_TEXTS` 追加 `"核心观点"` 保证子集化无 tofu。`gen_weekly_pdf.py` / `gen_deep_pdf.py` 核心观点框内联 Table 改为调用 `G.key_points_box(S, key_rows)`。</div></div><div class="pol-row"><div class="pol-k">改动前 → 改动后</div><div class="pol-v">核心观点框为单一浅蓝底块（`BG_KEY` + 左侧 2.2 NAVY 细线 + 0.6 `#D8DEE6` 浅边框 + 上下内边距 5 / 左右 12/10），无标题、视觉权重低、与正文区隔弱 → 改为「navy 标题条（白字『核心观点』）+ 浅蓝底要点列表 + 左侧 2.6 NAVY 强调条 + 0.6 `#C9D6E4` 边框 + 上下内边距 6 / 左右 14/12」，形成研报式 Executive Summary 框。</div></div><div class="pol-row"><div class="pol-k">改动依据</div><div class="pol-v">`benchmark_reports.md` 跨样本共性第 1 条「11 份样本 100% 在正文前给出 Executive Summary 或核心结论框」+ 可落地建议 3（核心观点框前置）。原框仅浅蓝底无标题，未体现「核心观点前置」的研报范式，易被误读为正文段落；沿用 15:20 抽共享 helper 的架构，改动只落 `G` 一处即全链路生效。</div></div><div class="pol-row"><div class="pol-k">预期提升</div><div class="pol-v">核心观点框获得独立 navy 标题条，与正文层级清晰区分，强化「摘要/核心观点前置」的专业观感，对齐头部 ESG/研报「封面-摘要」结构；统一收敛到 `#1F3B63` 深蓝主色体系。纯样式/结构改动，不引入任何内容数据。</div></div><div class="pol-row"><div class="pol-k">QA 验证</div><div class="pol-v">重生成 0901 双版 + `qa_strict.py daily_data_0901` → 简版 20 页 / 深度版 55 页（标题条 +1 行，仍 ≥30）；缺字 0 / tofu 0 / 根链接 0 / 图示 4/4 / 章节齐全 / DOCX 缺字·tofu 0 → **全部通过，允许交付**。改动可回滚（源码三处改动 + 备份于 /tmp/cbr_polish_20260902_1600/）。</div></div></div>
+  
+</div><div class="pol-card">
+  <div class="pol-head">
+    <span class="pol-date">2026-09-02</span>
+    <span class="pol-time">15:2x</span>
+    <span class="qa">—</span>
+    <span class="pol-title">第四轮打磨（用户指令「都打磨」：一次性落实 4 项剩余候选）</span>
+  </div>
+  <div class="pol-body"></div>
+  <div class="pol-subs" style="margin-top:8px;padding-top:8px;border-top:1px dashed var(--line)"><div class="pol-sub"><div class="pol-sub-title">① 表格斑马纹细化 + 表头强调线</div><div class="pol-body"><div class="pol-row"><div class="pol-k">改动文件/函数</div><div class="pol-v">`gen_report_pdf.py` 模块级常量 `ZEBRA`；`gen_deep_pdf.py`（5 张表：行业水位/食安SOP/价格样例/路线图/案例/`LINEBELOW`）、`gen_weekly_pdf.py`（处罚表）</div></div><div class="pol-row"><div class="pol-k">改动前 → 改动后</div><div class="pol-v">`ZEBRA = #F4F7FB` → `#EDF1F6`（更清晰的分行灰蓝）；5 张数据表表头行加 `("LINEBELOW",(0,0),(-1,0),1.0,NAVY2)` 强调下边线，统一表头与斑马纹体感。</div></div><div class="pol-row"><div class="pol-k">改动依据</div><div class="pol-v">候选清单「表格样式」+ 对标库跨样本共性（律所/券商表格表头有强调线、斑马纹更克制）。</div></div><div class="pol-row"><div class="pol-k">预期提升</div><div class="pol-v">表格行更易区分、表头层级更明确，消除浅灰斑马纹与白底边界模糊问题。</div></div></div></div><div class="pol-sub"><div class="pol-sub-title">② 章节标题防孤行复核（巡检确认已满足，无改动）</div><div class="pol-body"><div class="pol-row"><div class="pol-k">改动文件/函数</div><div class="pol-v">`gen_report_pdf.py` :: `build_styles()`</div></div></div></div><div class="pol-sub"><div class="pol-sub-title">③ 页眉页脚细线 + 页码/页眉色值</div><div class="pol-body"><div class="pol-row"><div class="pol-k">改动文件/函数</div><div class="pol-v">`gen_report_pdf.py` :: `NumberedCanvas.draw_footer` 与 `make_header_footer`</div></div><div class="pol-row"><div class="pol-k">改动前 → 改动后</div><div class="pol-v">footer 原仅居中页码(LGRAY) → 页码上方加 `line(M_L,1.55cm,PAGE_W-M_R,1.55cm)` `#E3E8EF` 0.5pt 细线；页码与页眉文字由 `LGRAY` 提为 `GRAY`(#8A94A6)，字号保持 8pt。</div></div><div class="pol-row"><div class="pol-k">改动依据</div><div class="pol-v">候选清单「页眉页脚」+ 对标库（报告页脚细线 + 灰蓝页码更显专业）。</div></div><div class="pol-row"><div class="pol-k">预期提升</div><div class="pol-v">页脚有视觉分隔、页码/页眉灰蓝更清晰可读，强化品牌灰蓝一致性。</div></div></div></div><div class="pol-sub"><div class="pol-sub-title">④ 新图示：六大合规领域要点框架图</div><div class="pol-body"><div class="pol-row"><div class="pol-k">改动文件/函数</div><div class="pol-v">`gen_report_pdf.py` 新增 `fig_framework(F)`（中枢统领六域矢量 Table）；`gen_deep_pdf.py` 在价格图后插入位置④（`KeepTogether` 图+图注+来源）；`qa_strict.py` 同步：`fig_markers` 增「六大合规领域要点框架」、阈值 `&gt;=3`→`&gt;=4`、打印 `3`→`4`。</div></div><div class="pol-row"><div class="pol-k">改动前 → 改动后</div><div class="pol-v">原深度版仅 3 张图 → 新增④「六大合规领域要点框架」（中枢「统一治理·风险识别—评估—控制—监测闭环」+ 六域卡片：数据/AI/算法/平台/产品食安/价格，逐域落到可落地控制点）。</div></div><div class="pol-row"><div class="pol-k">改动依据</div><div class="pol-v">`benchmark_reports.md` 可落地建议 2（新增监管对比矩阵 + 合规要点框架图）。</div></div><div class="pol-row"><div class="pol-k">预期提升</div><div class="pol-v">对外展示朴朴合规治理全景与六域映射，提升深度版「战略高度」与专业度。来源脚注「朴朴超市法务合规部基于六大合规领域监管脉络梳理」。</div></div></div></div><div class="pol-sub"><div class="pol-sub-title">QA 验证（整体重生成后重跑）</div><div class="pol-md"><ul><li>`qa_strict.py daily_data_0901` → 简版 20 页 / 深度版 **55 页**(原54，因新图 +1)；缺字 0 / tofu 0 / 根链接 0 / 图示 **4/4**(行业水位✅ 食安SOP✅ 价格样例✅ 六大框架✅) / DOCX 简版 19743 字·深度版 45745 字、缺字·tofu 0 → **全部通过，允许交付**。</li><li>改动可回滚（源码改动可逆；PDF 由 `daily_data_0901` 重生成，备份见 /tmp/cbr_deep_0901_backup.pdf）。</li></ul></div></div><div class="pol-sub"><div class="pol-sub-title">下一轮滚动候选（未做）</div><div class="pol-md"><ul><li>图表配色：深蓝主色 #1F3B63 的辅助色阶统一（风险等级色）</li><li>监管对比矩阵（建议 2 的「监管对比」维度，本轮实现的是「要点框架」，对比矩阵可另做）</li></ul></div></div></div>
+</div><div class="pol-card">
+  <div class="pol-head">
+    <span class="pol-date">2026-09-02</span>
+    <span class="pol-time">15:20</span>
+    <span class="qa">—</span>
+    <span class="pol-title">第二轮打磨 + 架构修正（修复「改错 build() 未生效」根因）</span>
+  </div>
+  <div class="pol-body"></div>
+  <div class="pol-subs" style="margin-top:8px;padding-top:8px;border-top:1px dashed var(--line)"><div class="pol-sub"><div class="pol-sub-title">① 抽共享 helper 到引擎，统一维护（防漂移）</div><div class="pol-body"><div class="pol-row"><div class="pol-k">改动文件/函数</div><div class="pol-v">`gen_report_pdf.py` 新增 4 个共享 helper + 3 个样式：</div></div><div class="pol-row"><div class="pol-k">改动前 → 改动后</div><div class="pol-v">四个生成器原本各自内联重复实现 → 统一抽到 `G` 复用，今后只改 `gen_report_pdf.py` 一处即全链路生效。</div></div><div class="pol-row"><div class="pol-k">改动依据</div><div class="pol-v">根因修复，消除「改一处只在某 build 生效」的漂移风险。</div></div></div></div><div class="pol-sub"><div class="pol-sub-title">② 四项改动落到四个真实生成器（PDF）</div><div class="pol-body"><div class="pol-row"><div class="pol-k">改动文件/函数</div><div class="pol-v">`gen_weekly_pdf.py` / `gen_deep_pdf.py`</div></div><div class="pol-row"><div class="pol-k">改动前 → 改动后</div><div class="pol-v">上一轮仅在 `gen_report_pdf.build()` 改、未生效 → 本轮在真实生成器落地。pdfplumber 验证命中：简版「法务合规部」2 次 /「守护合规底线」1 /「信息来源与免责声明」1 /「资料来源」1；深度版「法务合规部」3 /「信息来源与免责声明」1 /「资料来源」4；目录引导点 73 / 146 行。</div></div><div class="pol-row"><div class="pol-k">改动依据</div><div class="pol-v">`benchmark_reports.md` 可落地建议 1（封面机构署名 + 标语）、建议 2（图表来源脚注）、建议 3（固定尾部声明栏）。</div></div></div></div><div class="pol-sub"><div class="pol-sub-title">③ DOCX 同步补齐（封面署名 + 尾部声明栏）</div><div class="pol-body"><div class="pol-row"><div class="pol-k">改动文件/函数</div><div class="pol-v">`gen_weekly_docx.py` / `gen_deep_docx.py`</div></div><div class="pol-row"><div class="pol-k">改动前 → 改动后</div><div class="pol-v">原 DOCX 无机构署名与免责栏 → 补齐，与 PDF 对齐。重生成成功（输出「DOCX saved」）。</div></div></div></div><div class="pol-sub"><div class="pol-sub-title">QA 验证（本轮重跑，针对真实四件套）</div><div class="pol-body"></div></div></div>
+</div><div class="pol-card">
+  <div class="pol-head">
+    <span class="pol-date">2026-09-02</span>
+    <span class="pol-time">15:05</span>
+    <span class="qa pass">通过</span>
+    <span class="pol-title">图表「资料来源」脚注左对齐（图注居中、来源左对齐）</span>
+  </div>
+  <div class="pol-body"><div class="pol-row"><div class="pol-k">改动文件/函数</div><div class="pol-v">`gen_report_pdf.py` :: `build_styles()` 中 `"src"` 样式（`S["src"]` 经 `G.src_note()` 同步作用于周报/月报深度版的图表来源脚注；日报四图亦直接使用 `S["src"]`）</div></div><div class="pol-row"><div class="pol-k">改动前 → 改动后</div><div class="pol-v">`alignment=TA_CENTER` → `alignment=TA_LEFT`（fontSize 7.6、textColor LGRAY、`spaceAfter=12` 等其余参数不变；图注 `fig` 样式保持 `TA_CENTER` 居中）</div></div><div class="pol-row"><div class="pol-k">改动依据</div><div class="pol-v">`benchmark_reports.md` 跨样本共性第 3 条「图表必带资料来源脚注」+ 样本 10/11（中金/中信研报）脚注统一「资料来源：……，XX 研究部」且左对齐。巡检发现我方图注（图1/2/3/4）居中、来源脚注此前亦居中，二者混同、未体现「图注居中 + 来源左对齐」的研报级层级区分。</div></div><div class="pol-row"><div class="pol-k">预期提升</div><div class="pol-v">图注（图题）保持居中符合通用规范；「资料来源」脚注左对齐后阅读层级更清晰，与中金/中信/CAICT 等头部研报图表脚注规范一致，提升专业度与可追溯观感。仅改对齐方式，不引入新字符、不改内容数据（不触碰 policy/penalties/pupu_items/matrix_rows）。</div></div><div class="pol-row"><div class="pol-k">QA 验证</div><div class="pol-v">重生成深度版并跑 `qa_strict.py daily_data_0901` → 缺字 0 / tofu 0 / 根链接 0 / 图示 3/3 / 简版 20 页(≥0) / 深度版 54 页(≥30) / DOCX 缺字·tofu 0 → **全部通过，允许交付**。改动已生效、可回滚（源码单处改动；深度版 PDF 已备份至 /tmp/cbr_deep_0901_backup.pdf）。</div></div></div>
+  
+</div><div class="pol-card">
+  <div class="pol-head">
+    <span class="pol-date">2026-09-02</span>
+    <span class="pol-time">15:00</span>
+    <span class="qa pass">通过</span>
+    <span class="pol-title">对标库首轮打磨（3 项，依据 benchmark_reports.md）</span>
+  </div>
+  <div class="pol-body"></div>
+  <div class="pol-subs" style="margin-top:8px;padding-top:8px;border-top:1px dashed var(--line)"><div class="pol-sub"><div class="pol-sub-title">① 四张图表补「资料来源」脚注</div><div class="pol-body"><div class="pol-row"><div class="pol-k">改动文件/函数</div><div class="pol-v">`gen_report_pdf.py` :: `build_styles()` 新增 `"src"` 样式；`build()` 中图1–图4 的 `KeepTogether` 图注后各追加 `Paragraph("资料来源：…", S["src"])`；新增来源文字纳入 `UI_TEXTS`/`collect_all_text` 保证子集化。</div></div><div class="pol-row"><div class="pol-k">改动前 → 改动后</div><div class="pol-v">仅图1 曾在正文提及来源 → 四张图（价格欺诈链/执法流程/风险热力矩阵/政企检架构）图注下统一加「资料来源：依据公开监管通报与处罚决定书整理，详见各条原文链接」（矩阵为内部评估、政企检为福建局公开信息）。</div></div><div class="pol-row"><div class="pol-k">改动依据</div><div class="pol-v">`benchmark_reports.md` 跨样本共性第 3 条「图表必带资料来源脚注（中金/中信/CAICT 统一规范）」+ 可落地建议 2。</div></div><div class="pol-row"><div class="pol-k">预期提升</div><div class="pol-v">满足对外可追溯硬性要求，消除「图无来源」的专业度缺口。</div></div><div class="pol-row"><div class="pol-k">QA 验证</div><div class="pol-v">重生成双版 + `qa_strict.py` → 缺字 0 / tofu 0 / 根链接 0 / 图示 3/3 / 简版 20 页 / 深度版 54 页 / DOCX 缺字·tofu 0 → **通过**。</div></div></div></div><div class="pol-sub"><div class="pol-sub-title">② 封面品牌条升级（机构署名 + 使命标语）</div><div class="pol-body"><div class="pol-row"><div class="pol-k">改动文件/函数</div><div class="pol-v">`gen_report_pdf.py` :: `build_styles()` 新增 `"org"`/`"motto"` 样式；`build()` 封面区在 `SUBTITLE` 后插入「朴朴超市 · 法务合规部」(org) 与「守护合规底线 · 支撑业务决策」(motto)。</div></div><div class="pol-row"><div class="pol-k">改动前 → 改动后</div><div class="pol-v">封面仅有主标题「合规资讯简报」→ 增加机构署名行与一句使命标语，形成「品牌条 + 机构 + 使命」的研报式封面层级。</div></div><div class="pol-row"><div class="pol-k">改动依据</div><div class="pol-v">`benchmark_reports.md` 样本 1/2（PwC/腾讯 ESG 封面「机构名 + 报告年度 + 使命标语」做法）+ 可落地建议 1。</div></div><div class="pol-row"><div class="pol-k">预期提升</div><div class="pol-v">强化机构归属感与对外专业度，对齐行业 Top 报告封面范式。</div></div><div class="pol-row"><div class="pol-k">QA 验证</div><div class="pol-v">同上 → **通过**；新增字符（朴/守护/底线/支撑/决策等）已纳入 `UI_TEXTS` 子集，无缺字。</div></div></div></div><div class="pol-sub"><div class="pol-sub-title">③ 尾部加「信息来源与免责声明」固定栏</div><div class="pol-body"><div class="pol-row"><div class="pol-k">改动文件/函数</div><div class="pol-v">`gen_report_pdf.py` :: `build()` 尾注前新增 `h3` 标题 + `BG_KEY` 浅蓝底声明框（四条：信息来源 / 用途限制 / 时效性 / 版权）。</div></div><div class="pol-row"><div class="pol-k">改动前 → 改动后</div><div class="pol-v">尾部仅一句轻量 FOOTER_NOTE → 增加固定「信息来源与免责声明」栏，对齐中信证券研报尾部声明结构。</div></div><div class="pol-row"><div class="pol-k">改动依据</div><div class="pol-v">`benchmark_reports.md` 跨样本共性第 6 条「固定尾部栏（中信评级说明+声明）」+ 可落地建议 3。</div></div><div class="pol-row"><div class="pol-k">预期提升</div><div class="pol-v">对外发送具备明确免责与溯源边界，降低合规风险。</div></div><div class="pol-row"><div class="pol-k">QA 验证</div><div class="pol-v">同上 → **通过**；声明全文已纳入 `UI_TEXTS` 子集（含「媒/威/核/验/咨/询/截/至/版/著/作/归」等），无缺字。</div></div></div></div></div>
+</div><div class="pol-card">
+  <div class="pol-head">
+    <span class="pol-date">2026-09-02</span>
+    <span class="pol-time">14:11</span>
+    <span class="qa pass">通过</span>
+    <span class="pol-title">正文行距舒展（bodyc leading 18.5→19.5）</span>
+  </div>
+  <div class="pol-body"><div class="pol-row"><div class="pol-k">改动文件/函数</div><div class="pol-v">`gen_report_pdf.py` :: `build_styles()` 中 `"bodyc"` 样式</div></div><div class="pol-row"><div class="pol-k">改动前 → 改动后</div><div class="pol-v">`leading=18.5` → `leading=19.5`（fontSize 10.5 不变，行距由约 1.76× 升至约 1.86× 字号）</div></div><div class="pol-row"><div class="pol-k">改动依据</div><div class="pol-v">候选清单「行距/段距：正文楷体行距与段距的阅读舒适度」。对标库 `benchmark_reports.md` 尚未建立（对标收集任务每月 5 号跑），本次依据排版通用可读性准则：长正文 10.5pt 楷体在约 1.5 倍行距下偏紧，微调 +1pt 提升连续阅读舒适度。未引入任何新字符/符号，不触碰内容数据（`DATA`/`SUMMARY` 等）。</div></div><div class="pol-row"><div class="pol-k">预期提升</div><div class="pol-v">日报/周报/月报正文（【要点】内容、影响分析等 bodyc 块）行距更舒展，降低长段落视觉拥挤感，契合律所/咨询报告「疏朗」排版取向。</div></div><div class="pol-row"><div class="pol-k">QA 验证</div><div class="pol-v">改动后重生成日报 0901 双版并跑 `qa_strict.py daily_data_0901` → 缺字 0 / tofu 0 / 根链接 0 / 图示 3/3 / 简版 20 页(≥0) / 深度版 54 页(≥30) / DOCX 缺字·tofu 0 → **全部通过，允许交付**。改动已生效、可回滚（源码改动可逆；重生成前已备份原 PDF 至 /tmp/cbr_backup_0901/）。</div></div></div>
+  
+</div><div class="pol-card">
+  <div class="pol-head">
+    <span class="pol-date">2026-09-02</span>
+    <span class="pol-time">14:01</span>
+    <span class="qa pass">通过</span>
+    <span class="pol-title">基线建立（无改动）</span>
+  </div>
+  <div class="pol-body"><div class="pol-row"><div class="pol-k">改动文件/函数</div><div class="pol-v">无（仅新建本日志文件）</div></div><div class="pol-row"><div class="pol-k">改动前 → 改动后</div><div class="pol-v">—</div></div><div class="pol-row"><div class="pol-k">改动依据</div><div class="pol-v">用户 2026-09-02 指令——将「自动打磨报告排版、格式」建为每半小时自动化，并输出打磨提升细节说明。</div></div><div class="pol-row"><div class="pol-k">预期提升</div><div class="pol-v">建立可追溯的打磨基线与候选清单，使后续每次增量改动有据可依、不重复、可回滚。</div></div><div class="pol-row"><div class="pol-k">QA 验证</div><div class="pol-v">本次未改动排版引擎，沿用当期已通过状态（2026-09-01 四件套：简版 PDF 20 页 / 深度版 54 页，缺字 0、tofu 0、根链接 0、图示 3/3）→ 通过</div></div></div>
+  
+</div></div>
+
+  <p class="pol-hint">本页由「站点模块生成脚本」同步 · 最后更新 2026-09-05 17:33 · 数据源：references/polish_changelog.md</p>
+</div>
+<footer><div class="inner">
+  <div>lawdatify.site · 法律合规主站</div>
+  <div><a href="../index.html">首页</a> · <a href="../news/index.html">资讯索引</a> · <a href="../analysis/index.html">法律分析</a> · <a href="../kb/index.html">知识库</a> · <a href="../prm.html">PRM</a></div>
+</div></footer>
+</body>
+</html>

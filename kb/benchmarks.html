@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>行业报告排版对标库 · lawdatify</title>
+<link rel="stylesheet" href="../assets/style.css">
+<style>
+.bm-summary{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:22px 0 6px}
+@media(max-width:720px){.bm-summary{grid-template-columns:repeat(1,1fr)}}
+.bm-stat{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 12px;text-align:center;box-shadow:var(--shadow)}
+.bm-stat .n{font-size:22px;font-weight:700;color:var(--brand);line-height:1.2}
+.bm-stat .l{font-size:11.5px;color:var(--muted);margin-top:2px}
+.bm-cat{margin:22px 0}
+.bm-cat h2{font-size:18px;color:var(--brand);border-left:4px solid var(--brand);padding-left:10px;margin-bottom:10px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.bm-cat .bm-sub{font-size:13px;color:var(--muted);font-weight:400}
+.bm-cat .bm-cnt{font-size:12px;background:#eef3f9;color:var(--brand);border:1px solid var(--line);border-radius:10px;padding:2px 10px;font-weight:500}
+.bm-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:14px}
+.bm-card{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:14px;box-shadow:var(--shadow)}
+.bm-org{font-size:12px;color:var(--muted);font-weight:600;letter-spacing:.2px;text-transform:uppercase}
+.bm-title{font-size:15px;font-weight:600;color:#222;margin:4px 0 6px;line-height:1.4}
+.bm-meta{font-size:12px;color:var(--muted);margin-bottom:8px}
+.bm-linkbox{font-size:12px;margin-bottom:8px;word-break:break-all}
+.bm-link{color:var(--brand-2,#0f6e8c);text-decoration:none;border-bottom:1px dotted var(--brand-2,#0f6e8c)}
+.bm-link:hover{background:var(--brand-2,#0f6e8c);color:#fff}
+.bm-pts{font-size:12.5px;color:#333;line-height:1.7;padding-left:18px;margin:6px 0 0}
+.bm-pts li{margin-bottom:3px}
+.empty{text-align:center;color:var(--muted);padding:34px 0;font-size:13px}
+.bm-hint{font-size:12px;color:var(--muted);margin:18px 0 0}
+@media print{body{background:#fff}.bm-card{page-break-inside:avoid}}
+</style>
+</head>
+<body>
+<nav class="topnav"><div class="inner">
+  <a class="brand" href="../index.html">law<span>datify</span></a>
+  <div class="navlinks">
+    <a href="../index.html">首页</a>
+    <a href="../news/index.html">资讯索引</a>
+    <a href="../analysis/index.html">法律分析</a>
+    <a href="../kb/index.html" class="active">合规知识库</a>
+    <a href="../prm.html">工作项目</a>
+  </div>
+</div></nav>
+<div class="pagehead"><div class="inner">
+  <div class="crumb"><a href="../index.html">首页</a> / <a href="index.html">合规知识库</a> / 报告对标库</div>
+  <h1>行业报告排版对标库</h1>
+  <p>持续沉淀 ESG / 法律 / 券商研报等专业报告的「结构特征+可借鉴点」，作为打磨合规资讯简报排版格式的对标基准。每 2 天由自动化收集更新；所有链接均为发布机构官网的具体深链（非首页根域名）。</p>
+</div></div>
+
+<div class="wrap">
+  <div class="bm-summary">
+    <div class="bm-stat"><div class="n">3</div><div class="l">对标分类</div></div>
+    <div class="bm-stat"><div class="n">11</div><div class="l">累计样本</div></div>
+    <div class="bm-stat"><div class="n">每 2 天</div><div class="l">收集频率</div></div>
+  </div>
+
+  <div style="margin-top:18px"><section class="bm-cat">
+  <h2>一、ESG <span class="bm-sub">可持续发展报告</span> <span class="bm-cnt">3 份样本</span></h2>
+  <div class="bm-grid"><div class="bm-card">
+  <div class="bm-org">普华永道中国（PwC China）</div>
+  <div class="bm-title">《2025年普华永道中国可持续发展报告》</div>
+  <div class="bm-meta"><span class="bm-date">2025 年（报告年度 2025；PDF 直链由 pwccn.com 提供）</span></div>
+  <div class="bm-linkbox">深链：<a href="https://www.pwccn.com/zh/about-us/corporate-sustainability/2025-pwc-china-sustainability-report-zh.pdf" target="_blank" rel="noopener" class="bm-link">https://www.pwccn.com/zh/about-us/corporate-sustainability/2025-pwc-chin…</a></div>
+  <ol class='bm-pts'><li>- ① 封面与品牌条：封面以大标题 + 机构名「普华永道中国」+ 报告年度构成，配主题图；品牌识别清晰。</li></ol>
+</div><div class="bm-card">
+  <div class="bm-org">腾讯（Tencent）</div>
+  <div class="bm-title">《2025年环境、社会及管治报告》</div>
+  <div class="bm-meta"><span class="bm-date">2026-04-09（PDF 路径 `/uploads/2026/04/09/`）</span></div>
+  <div class="bm-linkbox">深链：<a href="https://static.www.tencent.com/uploads/2026/04/09/f6dbd30b3d8ca9c65f76f3d73b7da739.pdf" target="_blank" rel="noopener" class="bm-link">https://static.www.tencent.com/uploads/2026/04/09/f6dbd30b3d8ca9c65f76f3…</a></div>
+  <ol class='bm-pts'><li>- ① 封面与品牌条：封面突出使命标语「用户为本 科技向善」，并与章节视觉强绑定。</li></ol>
+</div><div class="bm-card">
+  <div class="bm-org">普华永道韩国（PwC Korea）</div>
+  <div class="bm-title">Solving the Future Together — 2025 PwC Korea Sustainability Report</div>
+  <div class="bm-meta"><span class="bm-date">2025 年（官网发布页）</span></div>
+  <div class="bm-linkbox">深链：<a href="https://www.pwc.com/kr/en/aboutus/sustainability-report.html" target="_blank" rel="noopener" class="bm-link">https://www.pwc.com/kr/en/aboutus/sustainability-report.html</a></div>
+  <ol class='bm-pts'><li>- ① 封面与品牌条：英文版但结构通用——封面标题 + 机构品牌条 + 年度。</li></ol>
+</div></div>
+</section><section class="bm-cat">
+  <h2>二、法律 <span class="bm-sub">合规类报告</span> <span class="bm-cnt">4 份样本</span></h2>
+  <div class="bm-grid"><div class="bm-card">
+  <div class="bm-org">中伦律师事务所</div>
+  <div class="bm-title">《公司类纠纷丨2025年度司法实践全景回顾》</div>
+  <div class="bm-meta"><span class="bm-date">2026 年（2025 年度回顾；检索页含 2025-08-29 条目）</span></div>
+  <div class="bm-linkbox">深链：<a href="https://www.zhonglun.com/news/latest/55586.html" target="_blank" rel="noopener" class="bm-link">https://www.zhonglun.com/news/latest/55586.html</a></div>
+  <ol class='bm-pts'><li>- ① 封面与品牌条：官网研究文章页，顶部机构导航即品牌条；标题层级清晰。</li></ol>
+</div><div class="bm-card">
+  <div class="bm-org">金杜律师事务所（King &amp; Wood Mallesons）</div>
+  <div class="bm-title">《生成式人工智能与版权：中国篇（2025）》（受汤森路透 Practical Law 邀稿）</div>
+  <div class="bm-meta"><span class="bm-date">2025 年</span></div>
+  <div class="bm-linkbox">深链：<a href="https://www.kingandwood.com/cn/zh/insights/latest-thinking/publication/king-wood-mallesons-delighted-to-contribute-to-china-chapter-of-ai-generated-content-and-copyright-published-by-thomson-reuters-practical-law-in-2025.html" target="_blank" rel="noopener" class="bm-link">https://www.kingandwood.com/cn/zh/insights/latest-thinking/publication/k…</a></div>
+  <ol class='bm-pts'><li>- ① 封面与品牌条：律所洞察页统一品牌条 + 「最新思考」栏目标识。</li></ol>
+</div><div class="bm-card">
+  <div class="bm-org">金杜律师事务所</div>
+  <div class="bm-title">《2025年欧美供应链合规执法总结及2026年趋势展望（下篇）》</div>
+  <div class="bm-meta"><span class="bm-date">2025–2026 年（上下篇）</span></div>
+  <div class="bm-linkbox">深链：<a href="https://www.kingandwood.com/cn/zh/insights/latest-thinking/a-summary-of-eu-and-us-law-enforcement-on-supply-chain-compliance-in-2025-and-trends-in-2026-ii.html" target="_blank" rel="noopener" class="bm-link">https://www.kingandwood.com/cn/zh/insights/latest-thinking/a-summary-of-…</a></div>
+  <ol class='bm-pts'><li>- **⑦ 表格样式（重点）**：文中含「美 UFLPA vs 欧《强迫劳动条例》」对比表，字段含「举证责任/市场准入逻辑/调查程序/处罚」，是**合规简报「监管对比矩阵」的绝佳范本**。</li></ol>
+</div><div class="bm-card">
+  <div class="bm-org">中国连锁经营协会（CCFA）× 中伦律师事务所</div>
+  <div class="bm-title">《首店经济白皮书》（首店经济新趋势下的合规指南）</div>
+  <div class="bm-meta"><span class="bm-date">2025 年</span></div>
+  <div class="bm-linkbox">深链：<a href="http://www.ccfa.org.cn/portal/cn/xiangxi.jsp?id=446515&amp;type=33" target="_blank" rel="noopener" class="bm-link">http://www.ccfa.org.cn/portal/cn/xiangxi.jsp?id=446515&amp;type=33</a></div>
+  <ol class='bm-pts'><li>- ⑤ 章节结构：「出海篇 / 国内篇」双板块，按风险点（市场准入/IP/数据/劳动/食安…）逐条列「合规要点+应对策略」——**极适合我方「行业合规要点清单」版式**。</li></ol>
+</div></div>
+</section><section class="bm-cat">
+  <h2>三、券商 <span class="bm-sub">研究机构研报</span> <span class="bm-cnt">4 份样本</span></h2>
+  <div class="bm-grid"><div class="bm-card">
+  <div class="bm-org">中国信息通信研究院（CAICT）</div>
+  <div class="bm-title">《人工智能产业发展研究报告（2025年）》</div>
+  <div class="bm-meta"><span class="bm-date">2026-02-02（路径 `t20260202`）</span></div>
+  <div class="bm-linkbox">深链：<a href="https://www.caict.ac.cn/kxyj/qwfb/bps/202602/t20260202_712679.htm" target="_blank" rel="noopener" class="bm-link">https://www.caict.ac.cn/kxyj/qwfb/bps/202602/t20260202_712679.htm</a></div>
+  <ol class='bm-pts'><li>- ② 自动目录与页码：官方页面提供「摘要 + 目录 + 全文下载 PDF」，目录按「一、技术产业发展 …（一）…（二）…」多级。</li></ol>
+</div><div class="bm-card">
+  <div class="bm-org">中国信息通信研究院（CAICT）</div>
+  <div class="bm-title">《人工智能安全治理研究报告（2025年）》</div>
+  <div class="bm-meta"><span class="bm-date">2026-01-09（路径 `t20260109`）</span></div>
+  <div class="bm-linkbox">深链：<a href="https://www.caict.ac.cn/kxyj/qwfb/bps/202601/t20260109_709725.htm" target="_blank" rel="noopener" class="bm-link">https://www.caict.ac.cn/kxyj/qwfb/bps/202601/t20260109_709725.htm</a></div>
+  <ol class='bm-pts'><li>- ⑤ 章节结构：提出「两横三纵」治理框架，再按「风险管理/模型研发/系统部署/应用运行/产业生态」展开——**框架图（framework diagram）是我方合规月报可新增的图表类型**。</li></ol>
+</div><div class="bm-card">
+  <div class="bm-org">中金公司（CICC）</div>
+  <div class="bm-title">《中金公司 2025 年度投资策略会》官方报道（含 2025 展望研报要点）</div>
+  <div class="bm-meta"><span class="bm-date">2025 年（官网新闻 `details311_135512`）</span></div>
+  <div class="bm-linkbox">深链：<a href="https://www.cicc.com/news/details311_135512.html" target="_blank" rel="noopener" class="bm-link">https://www.cicc.com/news/details311_135512.html</a></div>
+  <ol class='bm-pts'><li>- ③ Executive Summary / 核心观点框：报道以「配置方向」三段式结论（景气成长/韧性外需/周期反转）开篇。</li></ol>
+</div><div class="bm-card">
+  <div class="bm-org">中信证券研究部</div>
+  <div class="bm-title">研究业务与报告体系介绍（含 2025–2026 下半年策略研报样例）</div>
+  <div class="bm-meta"><span class="bm-date">2025–2026 年</span></div>
+  <div class="bm-linkbox">深链：<a href="https://www.citics.com/newsite/business/research_sales/research/" target="_blank" rel="noopener" class="bm-link">https://www.citics.com/newsite/business/research_sales/research/</a></div>
+  <ol class='bm-pts'><li>- ⑦ 表格样式（重点）：中信研报尾部固定「投资评级说明和声明」+「行业评级（超配/标配/低配）」+「近一年行业走势」对照表——**建议我方合规简报尾部加「信息来源与免责声明」固定栏**。</li></ol>
+</div></div>
+</section></div>
+
+  <p class="bm-hint">本页由「站点模块生成脚本」同步 · 最后更新 2026-09-05 17:33 · 数据源：references/benchmark_reports.md</p>
+</div>
+<footer><div class="inner">
+  <div>lawdatify.site · 法律合规主站</div>
+  <div><a href="../index.html">首页</a> · <a href="../news/index.html">资讯索引</a> · <a href="../analysis/index.html">法律分析</a> · <a href="../kb/index.html">知识库</a> · <a href="../prm.html">PRM</a></div>
+</div></footer>
+</body>
+</html>
