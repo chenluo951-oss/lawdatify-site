@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>站内搜索 · lawdatify</title>
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+
+<nav class="topnav"><div class="inner">
+  <a class="brand" href="index.html">law<span>datify</span></a>
+  <div class="navlinks">
+    <a href="index.html">首页</a>
+    <a href="news/index.html">资讯索引</a>
+    <a href="analysis/index.html">法律分析</a>
+    <a href="kb/index.html">合规知识库</a>
+    <a href="prm.html">工作项目</a>
+  </div>
+</div></nav>
+
+<div class="pagehead"><div class="inner">
+  <div class="crumb"><a href="index.html">首页</a> / 搜索</div>
+  <h1>站内搜索</h1>
+  <p id="qline">正在加载…</p>
+</div></div>
+
+<div id="results"></div>
+
+<footer><div class="inner">
+  <div>lawdatify.site · 法律合规主站</div>
+  <div><a href="index.html">首页</a> · <a href="news/index.html">资讯索引</a> · <a href="analysis/index.html">法律分析</a> · <a href="kb/index.html">知识库</a> · <a href="prm.html">PRM</a></div>
+</div></footer>
+
+<script>
+const params = new URLSearchParams(location.search);
+const q = (params.get('q') || '').trim();
+document.getElementById('qline').textContent = q ? '关键词：' + q : '请输入搜索关键词';
+
+fetch('assets/manifest.json').then(r=>r.json()).then(data=>{
+  const box = document.getElementById('results');
+  if(!q){ box.innerHTML = '<p style="padding:0 24px;color:#5b6b7b">未提供关键词。</p>'; return; }
+  const kw = q.toLowerCase();
+  const hits = data.filter(it =>
+    (it.title+it.desc+(it.tags||[]).join(' ')+it.cat).toLowerCase().includes(kw)
+  );
+  if(!hits.length){ box.innerHTML = '<p style="padding:0 24px;color:#5b6b7b">未找到与「'+q+'」相关的内容。</p>'; return; }
+  box.innerHTML = hits.map(it=>
+    '<div class="r"><a href="'+it.url+'">'+it.title+'</a>'+
+    '<div class="snip">'+it.desc+'</div>'+
+    '<div class="tagrow"><span class="tag">'+it.cat+'</span>'+
+    (it.tags||[]).map(t=>'<span class="tag green">'+t+'</span>').join('')+'</div></div>'
+  ).join('');
+}).catch(()=>{
+  document.getElementById('results').innerHTML = '<p style="padding:0 24px;color:#b3541e">搜索索引加载失败，请稍后重试。</p>';
+});
+</script>
+
+</body>
+</html>
