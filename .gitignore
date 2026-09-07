@@ -11,3 +11,6 @@ __pycache__/
 # 云端运行时产物与字体（不入仓，Actions 每次现下载）
 out/
 .fonts/
+
+# 待 PAT 补 workflow 权限后再入仓（当前推送会被 GitHub 拒绝，故先本地保留）
+.github/workflows/
