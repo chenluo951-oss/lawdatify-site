@@ -1,0 +1,117 @@
+name: 云端生成合规简报
+
+# 完全脱离本地设备：GitHub Actions 定时触发 → 联网检索 → LLM 生成 → 渲染 PDF/DOCX/HTML
+# → 入仓 → Netlify 监听 Git 变更自动部署。本机关机、断网、无额度都不影响。
+#
+# 需要配置（仓库 Settings → Secrets and variables → Actions）：
+#   Secrets: LLM_API_KEY（必填，推荐智谱 GLM-4-Flash 永久免费 key）
+#   Variables: LLM_PROVIDER（默认 glm；可选 gemini / siliconflow / openai）
+#   TAVILY_API_KEY：仅当 LLM_PROVIDER=openai/siliconflow 时才需要（glm/gemini 自带检索）
+
+on:
+  schedule:
+    # UTC 时间；北京 = UTC+8
+    - cron: "30 1 * * *"   # 每天 09:30 生成日报（覆盖昨天）
+    - cron: "35 1 * * 1"   # 每周一 09:35 生成周报（覆盖上周）
+  workflow_dispatch:
+    inputs:
+      kind:
+        description: 报告类型
+        required: true
+        default: daily
+        type: choice
+        options:
+          - daily
+          - weekly
+
+permissions:
+  contents: write
+
+concurrency:
+  group: cloud-report
+  cancel-in-progress: false
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 检出仓库
+        uses: actions/checkout@v4
+
+      - name: 准备 Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: 安装渲染依赖
+        run: pip install --quiet reportlab python-docx fonttools pypdf
+
+      - name: 准备开源中文字体（Noto CJK，SIL OFL）
+        run: |
+          mkdir -p .fonts
+          B="https://github.com/google/fonts/raw/main/ofl"
+          curl -sSL -o .fonts/song.ttf  "$B/notoserifsc/NotoSerifSC%5Bwght%5D.ttf"
+          curl -sSL -o .fonts/kaiti.ttf "$B/notoserifsc/NotoSerifSC%5Bwght%5D.ttf"
+          curl -sSL -o .fonts/songb.ttf "$B/notoserifsc/NotoSerifSC%5Bwght%5D.ttf"
+          curl -sSL -o .fonts/qihei.ttf "$B/notosanssc/NotoSansSC%5Bwght%5D.ttf"
+          curl -sSL -o .fonts/heiti.ttf "$B/notosanssc/NotoSansSC%5Bwght%5D.ttf"
+          du -sh .fonts
+
+      - name: 确定报告类型
+        id: kind
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "value=${{ github.event.inputs.kind }}" >> $GITHUB_OUTPUT
+          elif [ "${{ github.event.schedule }}" = "35 1 * * 1" ]; then
+            echo "value=weekly" >> $GITHUB_OUTPUT
+          else
+            echo "value=daily" >> $GITHUB_OUTPUT
+          fi
+
+      - name: 生成报告（联网检索 + LLM + 渲染）
+        env:
+          LLM_PROVIDER: ${{ vars.LLM_PROVIDER || 'glm' }}
+          LLM_MODEL: ${{ vars.LLM_MODEL }}
+          LLM_API_KEY: ${{ secrets.LLM_API_KEY }}
+          TAVILY_API_KEY: ${{ secrets.TAVILY_API_KEY }}
+          CBR_FONT_DIR: ${{ github.workspace }}/.fonts
+          CBR_OUT_DIR: ${{ github.workspace }}/out
+        run: |
+          if [ -z "$LLM_API_KEY" ]; then
+            echo "::warning::未配置 LLM_API_KEY，跳过报告生成（仅做站点重建）"
+            exit 0
+          fi
+          python3 cloud/generate_report.py --kind ${{ steps.kind.outputs.value }}
+
+      - name: 报告入库并重建站点页面
+        env:
+          REFS_DIR: sources/references
+          BRIEF_SRC: news/reports
+        run: |
+          if [ -d out ]; then
+            cp out/*.html news/reports/ 2>/dev/null || true
+            cp out/*.pdf  news/reports/ 2>/dev/null || true
+          fi
+          python3 generate_modules.py
+          python3 gen_briefs.py
+          rm -rf out
+
+      - name: 提交变更（触发 Netlify 自动部署）
+        run: |
+          git config user.name "lawdatify-bot"
+          git config user.email "bot@users.noreply.github.com"
+          git add -A
+          if git diff --cached --quiet; then
+            echo "无内容变更，跳过提交"
+          else
+            git commit -m "feat(cloud): 云端生成 ${{ steps.kind.outputs.value }} 简报 $(date -u +%Y-%m-%dT%H:%MZ)"
+            git push
+          fi
+
+      - name: 结果摘要
+        if: always()
+        run: |
+          echo "### 云端生成结果" >> $GITHUB_STEP_SUMMARY
+          echo "- 报告类型：${{ steps.kind.outputs.value }}" >> $GITHUB_STEP_SUMMARY
+          echo "- 触发方式：${{ github.event_name }}" >> $GITHUB_STEP_SUMMARY
+          echo "- 未配置 LLM_API_KEY 时本工作流只做站点重建" >> $GITHUB_STEP_SUMMARY
