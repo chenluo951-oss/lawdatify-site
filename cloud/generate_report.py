@@ -25,6 +25,7 @@
 import os
 import re
 import sys
+import ast
 import json
 import argparse
 import datetime
@@ -91,7 +92,7 @@ def openai_chat(base_url, api_key, model, prompt, timeout=600):
     r = http_json(
         base_url.rstrip("/") + "/chat/completions",
         {"model": model, "messages": [{"role": "user", "content": prompt}],
-         "temperature": 0.3},
+         "temperature": 0.3, "max_tokens": int(os.environ.get("LLM_MAX_TOKENS") or 8192)},
         headers={"Content-Type": "application/json", "Authorization": "Bearer " + api_key},
         timeout=timeout,
     )
@@ -100,27 +101,52 @@ def openai_chat(base_url, api_key, model, prompt, timeout=600):
 
 def glm_web_generate(api_key, model, prompt, timeout=600):
     """智谱 GLM 原生 web_search 工具：一次调用同时完成联网检索 + 生成。
-    返回模型正文，并把检索到的来源链接（title/link）追加到文末，保证可溯源。"""
+    返回模型正文，并把检索到的来源链接（title/link）追加到文末，保证可溯源。
+
+    稳健性处理：
+    1) max_tokens 若超过该型号上限会被拒，自动降级重试（各型号上限 4K~16K 不等）；
+    2) finish_reason=length 表示输出被截断，抛可识别异常交由上层「精简后重试」。
+    """
     url = BASE_URLS["glm"].rstrip("/") + "/chat/completions"
-    body = {
+    base = {
         "model": model,
         "messages": [{"role": "user", "content": prompt}],
         "temperature": 0.3,
         "tools": [{"type": "web_search",
                    "web_search": {"enable": True, "search_result": True}}],
     }
-    r = http_json(url, body,
-                  headers={"Content-Type": "application/json",
-                           "Authorization": "Bearer " + api_key},
-                  timeout=timeout)
-    msg = (r.get("choices") or [{}])[0].get("message", {})
-    text = (msg.get("content") or "").strip()
-    for w in (msg.get("web_search") or []):
-        link = w.get("link") or w.get("url")
-        title = w.get("title") or ""
-        if link and link not in text:
-            text += "\n[检索来源] %s — %s" % (title, link)
-    return text
+    headers = {"Content-Type": "application/json", "Authorization": "Bearer " + api_key}
+    # 不显式给足长度，中文数据模块（数百行）极易在半途被截断成未闭合字符串
+    cands = [int(os.environ.get("LLM_MAX_TOKENS") or 8192), 4096, 2048]
+    last = None
+    for mt in cands:
+        body = dict(base)
+        body["max_tokens"] = mt
+        try:
+            r = http_json(url, body, headers=headers, timeout=timeout)
+        except urllib.error.HTTPError as e:
+            err = ""
+            try:
+                err = e.read().decode("utf-8", "ignore")
+            except Exception:
+                pass
+            last = err
+            if "max_tokens" in err or "length" in err.lower():
+                log("max_tokens=%d 被模型拒绝，自动降级" % mt)
+                continue
+            raise
+        ch = (r.get("choices") or [{}])[0]
+        if ch.get("finish_reason") == "length":
+            raise RuntimeError("GLM 输出被 max_tokens(%d) 截断，内容不完整" % mt)
+        msg = ch.get("message", {})
+        text = (msg.get("content") or "").strip()
+        for w in (msg.get("web_search") or []):
+            link = w.get("link") or w.get("url")
+            title = w.get("title") or ""
+            if link and link not in text:
+                text += "\n[检索来源] %s — %s" % (title, link)
+        return text
+    raise RuntimeError("GLM 请求失败（max_tokens 已降级仍不可用）: %s" % (last or "")[:300])
 
 
 def llm(prompt, use_search=False):
@@ -247,6 +273,22 @@ def extract_code(text):
     return m.group(1).strip() if m else text.strip()
 
 
+def check_syntax(code):
+    """写入前先做语法预检。返回 (是否通过, 可读错误)。
+    出错时把「行号 + 该行原始内容」一并返回，便于回喂给模型修正。"""
+    try:
+        ast.parse(code)
+        return True, ""
+    except SyntaxError as e:
+        lines = code.splitlines()
+        ln = e.lineno or 0
+        snippet = lines[ln - 1].strip() if 0 < ln <= len(lines) else ""
+        return False, ("第 %d 行语法错误：%s；该行内容：%s"
+                       % (ln, e.msg, snippet[:120]))
+    except Exception as e:
+        return False, "解析异常：%s" % e
+
+
 def validate_module(path, mod):
     env = os.environ.copy()
     env["PYTHONPATH"] = GEN
@@ -318,10 +360,27 @@ def main():
 
     ok = False
     hint = ""
-    for attempt in (1, 2):
+    for attempt in (1, 2, 3):
         log("生成数据模块（第 %d 次）" % attempt)
-        raw = llm(build_prompt(a.kind, period_label, start, end, material, template, hint))
+        try:
+            raw = llm(build_prompt(a.kind, period_label, start, end, material, template, hint))
+        except Exception as e:
+            log("生成请求失败:", e)
+            hint = ("上次生成失败（%s）。请主动精简内容以保证一次性输出完整："
+                    "policy 每领域 2 条、penalties 3 条、pupu_items 3 条、"
+                    "matrix_rows 6-8 行、outlook 4-6 条；每条 summary/analysis 控制在 80 字内。"
+                    % str(e)[:150])
+            continue
         code = extract_code(raw)
+        # 先做语法预检，避免把坏代码写进文件再靠 import 才发现
+        syn_ok, syn_err = check_syntax(code)
+        if not syn_ok:
+            log("语法预检失败:", syn_err)
+            hint = ("上次输出的 Python 代码有语法错误：%s。"
+                    "请重新输出【完整】的数据模块代码：所有字符串字面量必须用成对引号闭合；"
+                    "字符串内部不要直接换行（改用 \\n 或拆成多段拼接）；"
+                    "必须一次性输出完整，不要中途截断。" % syn_err)
+            continue
         with open(mod_path, "w", encoding="utf-8") as f:
             f.write(code)
         ok, msg = validate_module(mod_path, mod)
