@@ -422,6 +422,10 @@ def salvage_truncated(code):
             lines = code.splitlines()
             ln = e.lineno or 0
             msg = e.msg or ""
+            # 括号不匹配时，报错文案里「on line N」指向的是【开括号】所在行，
+            # 往往和 e.lineno（闭括号所在行）不同，两个位置都要试着修。
+            _mo = re.search(r"on line (\d+)", msg)
+            opener_line = int(_mo.group(1)) if _mo else None
             # 1) 字符串未闭合 -> 该行末尾补一个引号
             if "unterminated string" in msg and 0 < ln <= len(lines):
                 lines[ln - 1] = lines[ln - 1].rstrip() + '"'
@@ -432,18 +436,21 @@ def salvage_truncated(code):
             if need:
                 code = code.rstrip() + need + "\n"
                 continue
-            # 3) 闭括号类型写错（如用 ) 去关闭 [ ）：在报错行上逐个替换成别的闭括号试错。
-            #    不依赖报错文案的具体措辞（各 Python 版本措辞不同），只看 e.lineno。
-            if 0 < ln <= len(lines):
-                line = lines[ln - 1]
+            # 3) 括号类型写错（如用 ) 关 [ 、或把 { 写成 ( ）：
+            #    先在报错行上替换【闭括号】试错，再在「on line N」指向的开括号行上替换【开括号】试错。
+            #    不依赖报错文案的具体措辞（各 Python 版本措辞不同）。
+            for target_line, pool in ((ln, ")]}"), (opener_line, "([{")):
+                if target_line is None or not (0 < target_line <= len(lines)):
+                    continue
+                line = lines[target_line - 1]
                 for pos, c in enumerate(line):
-                    if c not in ")]}":
+                    if c not in pool:
                         continue
-                    for alt in ")]}":
+                    for alt in pool:
                         if alt == c:
                             continue
                         cand = lines[:]
-                        cand[ln - 1] = line[:pos] + alt + line[pos + 1:]
+                        cand[target_line - 1] = line[:pos] + alt + line[pos + 1:]
                         cand = "\n".join(cand) + "\n"
                         try:
                             ast.parse(cand)
@@ -541,7 +548,8 @@ def main():
 
     ok = False
     hint = ""
-    for attempt in (1, 2, 3):
+    # 单次生成成功率有限（模型偶发括号/换行/截断错误），多次重试可显著提升总体成功率
+    for attempt in (1, 2, 3, 4, 5, 6):
         log("生成数据模块（第 %d 次）" % attempt)
         try:
             raw = llm(build_prompt(a.kind, period_label, start, end, material, template, hint))
@@ -591,7 +599,7 @@ def main():
         log("校验失败:", msg[-300:])
 
     if not ok:
-        raise SystemExit("数据模块两次生成均未通过校验，终止")
+        raise SystemExit("数据模块多次生成均未通过校验，终止")
 
     done = render(mod, out_dir)
     files = sorted(f for f in os.listdir(out_dir) if start.strftime("%m%d") in f or mod in f)
