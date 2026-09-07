@@ -251,6 +251,7 @@ def build_prompt(kind, period_label, start, end, material, template, retry_hint=
    - outlook：前瞻要点。
 3. 【硬性要求·会被自动校验】
    - **所有 url 必须是发布机构官网的具体公告/通报/处罚决定书页面深链**，严禁使用 `https://www.samr.gov.cn/` 这类官网首页根域名；找不到确切深链就不要写该条。
+   - **【语法红线】字符串值内部一律禁止出现英文双引号 "**（会提前闭合字符串导致语法错误），引用他人表述请用中文引号；每个字符串必须写在一行内，禁止在字符串中间换行。
    - 全部使用简体中文，不要出现生僻字与繁体字（PDF 字体为 Noto CJK，缺字会 QA 失败）。
    - 数字、文号、法条引用必须准确，无法核实的宁可不写。
    - 内容要具体到"朴朴该做什么"，不要空话。
@@ -271,6 +272,28 @@ def extract_code(text):
         return m.group(1).strip()
     m = re.search(r"```\s*(.*?)```", text, re.S)
     return m.group(1).strip() if m else text.strip()
+
+
+def sanitize_quotes(code):
+    """把「字符串值内部」误用的英文双引号换成中文右引号。
+
+    模型常在正文里用英文 " 做引用（如：该表述将"个性化广告关闭…），
+    这会提前闭合 Python 字符串导致 unterminated string literal。
+    仅处理形如  "key": "value..."  的单行结构，避免误伤语法引号。
+    返回 (净化后代码, 修复处数)。
+    """
+    out = []
+    fixed = 0
+    for line in code.splitlines():
+        m = re.match(r'^(\s*"[^"]*"\s*:\s*)"(.*)"(\s*,?\s*)$', line)
+        if m:
+            head, val, tail = m.group(1), m.group(2), m.group(3)
+            if '"' in val:
+                val = val.replace('"', '\u201d')
+                fixed += 1
+            line = '%s"%s"%s' % (head, val, tail)
+        out.append(line)
+    return "\n".join(out), fixed
 
 
 def check_syntax(code):
@@ -375,11 +398,21 @@ def main():
         # 先做语法预检，避免把坏代码写进文件再靠 import 才发现
         syn_ok, syn_err = check_syntax(code)
         if not syn_ok:
+            # 值内误用英文引号是高频确定性错误，先自动净化再判
+            cleaned, n = sanitize_quotes(code)
+            if n:
+                c_ok, c_err = check_syntax(cleaned)
+                if c_ok:
+                    log("自动净化值内英文引号 %d 处，语法通过" % n)
+                    code, syn_ok, syn_err = cleaned, True, ""
+                else:
+                    syn_err = c_err
+        if not syn_ok:
             log("语法预检失败:", syn_err)
             hint = ("上次输出的 Python 代码有语法错误：%s。"
-                    "请重新输出【完整】的数据模块代码：所有字符串字面量必须用成对引号闭合；"
-                    "字符串内部不要直接换行（改用 \\n 或拆成多段拼接）；"
-                    "必须一次性输出完整，不要中途截断。" % syn_err)
+                    "硬性要求：字符串值【内部】禁止出现英文双引号，引用一律用中文引号；"
+                    "每个字符串必须写在一行内，不得在中间换行；"
+                    "必须一次性输出完整代码，不要中途截断。" % syn_err)
             continue
         with open(mod_path, "w", encoding="utf-8") as f:
             f.write(code)
