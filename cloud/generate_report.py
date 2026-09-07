@@ -275,8 +275,21 @@ def extract_code(text):
     return m.group(1).strip() if m else text.strip()
 
 
+def _alt_quotes(s):
+    """把字符串内部的 ASCII 双引号交替换成中文左右引号 “ ”（成对出现，读起来正常）。"""
+    out = []
+    left = True
+    for ch in s:
+        if ch == '"':
+            out.append('\u201c' if left else '\u201d')
+            left = not left
+        else:
+            out.append(ch)
+    return "".join(out)
+
+
 def sanitize_quotes(code):
-    """把「字符串值内部」误用的英文双引号换成中文右引号。
+    """把「字符串值内部」误用的英文双引号换成中文引号。
 
     模型常在正文里用英文 " 做引用（如：该表述将"个性化广告关闭…），
     这会提前闭合 Python 字符串导致 unterminated string literal。
@@ -290,7 +303,7 @@ def sanitize_quotes(code):
         if m:
             head, val, tail = m.group(1), m.group(2), m.group(3)
             if '"' in val:
-                val = val.replace('"', '\u201d')
+                val = _alt_quotes(val)
                 fixed += 1
             line = '%s"%s"%s' % (head, val, tail)
         out.append(line)
@@ -322,6 +335,28 @@ def merge_unterminated(code):
             i += 1
         out.append(line)
     return "\n".join(out), fixed
+
+
+def repair_code(code):
+    """两级自动修复并循环至稳定。返回 (修复后代码, 合并处数, 净化处数)。
+
+    顺序至关重要：必须【先合并跨行、再净化值内引号】。
+      - 内嵌的英文引号是成对出现的，不改变引号数的奇偶性，
+        因此「某行引号数为奇数」可靠地表示字符串真的没闭合（模型在值中间换了行）。
+      - 若先净化：未合并时该行结尾没有闭合引号，净化正则匹配不到 → 白跑。
+      - 合并后再净化：该行已是完整单行（结尾有闭合引号）→ 正则命中 → 修好。
+    两者交替执行直到代码不再变化，可处理「跨行 + 内嵌引号」叠加的情况。
+    """
+    n_merge = n_san = 0
+    for _ in range(6):
+        before = code
+        code, m = merge_unterminated(code)
+        code, s = sanitize_quotes(code)
+        n_merge += m
+        n_san += s
+        if code == before:
+            break
+    return code, n_merge, n_san
 
 
 def check_syntax(code):
@@ -423,27 +458,12 @@ def main():
                     % str(e)[:150])
             continue
         code = extract_code(raw)
-        # 先做语法预检，避免把坏代码写进文件再靠 import 才发现
+        # 先自动修复再预检：必须「先合并跨行、再净化值内引号」并循环至稳定。
+        # 顺序反了会失效——未合并时该行结尾没有闭合引号，净化正则匹配不到。
+        code, n_merge, n_san = repair_code(code)
+        if n_merge or n_san:
+            log("自动修复：合并跨行 %d 处、净化值内引号 %d 处" % (n_merge, n_san))
         syn_ok, syn_err = check_syntax(code)
-        # 两级自动修复：先净化值内英文引号，再合并在字符串中间换行的行
-        if not syn_ok:
-            cleaned, n = sanitize_quotes(code)
-            if n:
-                c_ok, c_err = check_syntax(cleaned)
-                if c_ok:
-                    log("自动净化值内英文引号 %d 处，语法通过" % n)
-                    code, syn_ok, syn_err = cleaned, True, ""
-                else:
-                    syn_err = c_err
-        if not syn_ok:
-            merged, m = merge_unterminated(code)
-            if m:
-                m_ok, m_err = check_syntax(merged)
-                if m_ok:
-                    log("自动合并跨行字符串 %d 处，语法通过" % m)
-                    code, syn_ok, syn_err = merged, True, ""
-                else:
-                    syn_err = m_err
         if not syn_ok:
             log("语法预检失败:", syn_err)
             hint = ("上次输出的 Python 代码有语法错误：%s。"
