@@ -58,12 +58,21 @@
 
 <div class="wrap">
   <div class="pol-summary">
-    <div class="pol-stat"><div class="n">22</div><div class="l">打磨记录</div></div>
-    <div class="pol-stat"><div class="n">2026-09-05 16:05</div><div class="l">最新一次</div></div>
+    <div class="pol-stat"><div class="n">23</div><div class="l">打磨记录</div></div>
+    <div class="pol-stat"><div class="n">2026-09-07 10:34</div><div class="l">最新一次</div></div>
     <div class="pol-stat"><div class="n">每 30 分钟</div><div class="l">巡检频率</div></div>
   </div>
 
   <div style="margin-top:18px"><div class="pol-card">
+  <div class="pol-head">
+    <span class="pol-date">2026-09-07</span>
+    <span class="pol-time">10:34</span>
+    <span class="qa pass">通过</span>
+    <span class="pol-title">封面「编制说明」补齐第三行：数据截止时点 + 官方来源条数（对齐对标库第三批 D⑤）</span>
+  </div>
+  <div class="pol-body"><div class="pol-row"><div class="pol-k">改动文件/函数</div><div class="pol-v">`gen_report_pdf.py :: compile_note(S, cutoff=None, n_src=None)` —— 新增两个**可选**参数，传入时在原两行（覆盖口径 / 审核与签发）之后追加第三行「数据截止：{cutoff} · 官方来源 {n_src} 条（详见各条原文链接）」；`gen_weekly_pdf.py`（第 71 行调用点前）与 `gen_deep_pdf.py`（第 119 行调用点前）各新增两行：用集合去重统计 `policy` 各条 `url` 与 `penalties` 第 6 元素得到 `_src_urls`，再以 `cutoff=meta["date_str"], n_src=len(_src_urls)` 调用。</div></div><div class="pol-row"><div class="pol-k">改动前 → 改动后</div><div class="pol-v">封面编制说明仅有「覆盖口径：六大合规领域公开监管动态与通报处罚」「审核与签发：朴朴超市法务合规部」两行 → 新增第三行「数据截止：2026年9月6日 · 官方来源 12 条（详见各条原文链接）」（日报）/「数据截止：2026年8月31日—9月6日 · 官方来源 18 条（详见各条原文链接）」（周报）；日报/周报/月报 PDF 双版统一生效；DOCX 生成器未调用 `compile_note`，不受影响。</div></div><div class="pol-row"><div class="pol-k">改动依据</div><div class="pol-v">`benchmark_reports.md` 第三批 **D⑤**——ESG/可持续信息披露报告普遍在「汇报期及范围」中明确数据涵盖区间与数据来源（如兴胜创建「2025 年 4 月 1 日至 2026 年 3 月 31 日财政年度」、上交所案例集要求报告期与年报一致并经董事会审议）。原封面已呈现报告期，但**未显式披露数据截止时点**，也未量化本期官方来源条数；补上后与用户对「可追溯官方深链」的硬性要求直接呼应，属纯封面展示、不引入任何业务内容数据（不触碰 policy/penalties/puppu_items/matrix_rows 等）。</div></div><div class="pol-row"><div class="pol-k">预期提升</div><div class="pol-v">对外发送时，读者在封面即可确认「数据截止到什么时候、本期有多少条可点击官方来源、去哪里核验」，把可追溯性从正文各条链接前置到封面；同时对齐头部 ESG/券商报告的「数据口径披露」惯例。参数为可选且默认 None，未传参的调用路径行为完全不变，向后兼容。</div></div><div class="pol-row"><div class="pol-k">QA 验证</div><div class="pol-v">重生成 0906 日报 / 周报双版 PDF + 实跑 `qa_strict.py daily_data_0906` → 简版 20 页(≥0) / 深度版 56 页(≥30) / 缺字 0 / tofu 0 / PDF 内根链接 0 / 章节齐全 / 图示 5/5 / DOCX 简版 18914 字·深度版 44916 字·缺字 0·tofu 0 → **全部通过，允许交付**。pypdf 文本抽取确认日报与周报封面第 1 页均命中「覆盖口径」「审核与签发」「数据截止：…… · 官方来源 N 条」三行且无 tofu。改动可回滚（原三脚本备份于 `/tmp/cbr_polish_20260907_1000/`）。</div></div></div>
+  
+</div><div class="pol-card">
   <div class="pol-head">
     <span class="pol-date">2026-09-05</span>
     <span class="pol-time">16:05</span>
@@ -263,7 +272,7 @@
   
 </div></div>
 
-  <p class="pol-hint">本页由「站点模块生成脚本」同步 · 最后更新 2026-09-05 17:33 · 数据源：references/polish_changelog.md</p>
+  <p class="pol-hint">本页由「站点模块生成脚本」同步 · 最后更新 2026-09-07 10:35 · 数据源：references/polish_changelog.md</p>
 </div>
 <footer><div class="inner">
   <div>lawdatify.site · 法律合规主站</div>
