@@ -567,10 +567,15 @@ def main():
                 code, syn_ok, syn_err = salvaged, True, ""
         if not syn_ok:
             log("语法预检失败:", syn_err)
-            hint = ("上次输出的 Python 代码有语法错误：%s。"
-                    "硬性要求：字符串值【内部】禁止出现英文双引号，引用一律用中文引号；"
-                    "每个字符串必须写在一行内，不得在中间换行；"
-                    "必须一次性输出完整代码，不要中途截断。" % syn_err)
+            # 关键：不要把出错行的【正文原文】回喂给模型。
+            # GLM 会把这段中文当成数据内容原样续写进字段值里（已多次观察到污染），
+            # 所以这里只回喂「错误类型 + 行号」，够它定位即可。
+            brief = syn_err.split("；")[0]
+            hint = ("【上次输出未通过语法校验】%s\n"
+                    "请重新输出完整代码：不要做任何解释，也不要复述本段要求原文。"
+                    "三条铁律：一、每个字符串值写在同一行内；"
+                    "二、值内需要引用时用中文引号；"
+                    "三、含短横线的日期/文号一律写成带引号的字符串。" % brief)
             continue
         with open(mod_path, "w", encoding="utf-8") as f:
             f.write(code)
@@ -578,8 +583,12 @@ def main():
         if ok:
             log("数据模块校验通过")
             break
-        log("校验失败:", msg)
-        hint = "上次输出未通过校验（%s），请修正后重新输出完整代码。" % msg[-200:]
+        # 同样不回喂中文正文，只提取纯英文的缺字段清单
+        miss = re.search(r"MISS:([A-Za-z_,]+)", msg)
+        hint = ("上次输出语法通过但字段不全%s。请一次性输出完整代码，"
+                "确保 META / DATA / PENALTIES / MATRIX_ROWS / OUTLOOK 全部齐全，"
+                "不要复述本段要求原文。" % (("，缺少：" + miss.group(1)) if miss else ""))
+        log("校验失败:", msg[-300:])
 
     if not ok:
         raise SystemExit("数据模块两次生成均未通过校验，终止")
