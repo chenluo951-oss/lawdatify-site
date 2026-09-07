@@ -256,6 +256,7 @@ def build_prompt(kind, period_label, start, end, material, template, retry_hint=
    - 数字、文号、法条引用必须准确，无法核实的宁可不写。
    - 内容要具体到"朴朴该做什么"，不要空话。
 4. 篇幅：policy 每领域 2-4 条；penalties 3-6 条；确保信息密度，不要注水。
+   每条 summary / content / analysis **控制在 80 字以内**（超长易导致输出截断与换行，造成语法错误）。
 %s
 
 【模板】（照此结构，替换内容；不要改字段名与文件的整体组织方式）
@@ -292,6 +293,33 @@ def sanitize_quotes(code):
                 val = val.replace('"', '\u201d')
                 fixed += 1
             line = '%s"%s"%s' % (head, val, tail)
+        out.append(line)
+    return "\n".join(out), fixed
+
+
+def merge_unterminated(code):
+    """合并「在字符串中间换行」导致未闭合的行。
+
+    模型写超长正文时常在值中间直接回车，Python 单行字符串不允许跨行，
+    于是报 unterminated string literal。此处按双引号奇偶性把后续行并回来，
+    直到引号闭合。返回 (合并后代码, 修复行数)。
+    """
+    lines = code.splitlines()
+    out = []
+    i = 0
+    fixed = 0
+    while i < len(lines):
+        line = lines[i]
+        if line.count('"') % 2 == 1:
+            j = i + 1
+            while j < len(lines) and line.count('"') % 2 == 1:
+                line = line.rstrip() + lines[j].strip()
+                j += 1
+            if line.count('"') % 2 == 0:
+                fixed += 1
+            i = j
+        else:
+            i += 1
         out.append(line)
     return "\n".join(out), fixed
 
@@ -397,8 +425,8 @@ def main():
         code = extract_code(raw)
         # 先做语法预检，避免把坏代码写进文件再靠 import 才发现
         syn_ok, syn_err = check_syntax(code)
+        # 两级自动修复：先净化值内英文引号，再合并在字符串中间换行的行
         if not syn_ok:
-            # 值内误用英文引号是高频确定性错误，先自动净化再判
             cleaned, n = sanitize_quotes(code)
             if n:
                 c_ok, c_err = check_syntax(cleaned)
@@ -407,6 +435,15 @@ def main():
                     code, syn_ok, syn_err = cleaned, True, ""
                 else:
                     syn_err = c_err
+        if not syn_ok:
+            merged, m = merge_unterminated(code)
+            if m:
+                m_ok, m_err = check_syntax(merged)
+                if m_ok:
+                    log("自动合并跨行字符串 %d 处，语法通过" % m)
+                    code, syn_ok, syn_err = merged, True, ""
+                else:
+                    syn_err = m_err
         if not syn_ok:
             log("语法预检失败:", syn_err)
             hint = ("上次输出的 Python 代码有语法错误：%s。"
