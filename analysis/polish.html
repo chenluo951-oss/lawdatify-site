@@ -58,12 +58,21 @@
 
 <div class="wrap">
   <div class="pol-summary">
-    <div class="pol-stat"><div class="n">26</div><div class="l">打磨记录</div></div>
-    <div class="pol-stat"><div class="n">2026-09-07 16:30</div><div class="l">最新一次</div></div>
+    <div class="pol-stat"><div class="n">27</div><div class="l">打磨记录</div></div>
+    <div class="pol-stat"><div class="n">2026-09-07 17:36</div><div class="l">最新一次</div></div>
     <div class="pol-stat"><div class="n">每 30 分钟</div><div class="l">巡检频率</div></div>
   </div>
 
   <div style="margin-top:18px"><div class="pol-card">
+  <div class="pol-head">
+    <span class="pol-date">2026-09-07</span>
+    <span class="pol-time">17:36</span>
+    <span class="qa pass">通过</span>
+    <span class="pol-title">深度版章节编号连续性修复（消除目录重复「九」/跳号/「（补）」草稿残留 · 对齐自动目录与章节层级维度）</span>
+  </div>
+  <div class="pol-body"><div class="pol-row"><div class="pol-k">改动文件/函数</div><div class="pol-v">`gen_deep_pdf.py`（8 处 `h1_block` 章节标题字符串：九（补）→九、十（补）→十、十一（补）→十一、十二（补）→十二、十三（补）→十三、十四（补）→十四、十五（补）→十五、九、关联延伸→十六、关联延伸）；`gen_deep_docx.py`（静态目录列表 1 处 + 9 处 `add_h1` 同序重编号 + 1 处 `add_h1`「七（补）、同业深度画像」→`add_h2` 子节；双交付对齐）。</div></div><div class="pol-row"><div class="pol-k">改动前 → 改动后</div><div class="pol-v">- 前：深度版章节编号为「六、六大领域深度分析 → 七、行业水位调研 → 八、违规与合规案例参考 → 九（补）、合规焦点专题 → 十（补）…十五（补）、合规治理与组织职责建议」后接第二个 **「九、关联延伸」**（出现在十五之后），编号非连续、跳号且残留「（补）」草稿标记；DOCX 深度版目录与正文同样存在重复「九」，且「同业深度画像」以独立 h1「七（补）、同业深度画像」出现（PDF 中该节为「七、行业水位调研」下的 h2 子节，双交付结构不一致）。</div></div><div class="pol-row"><div class="pol-k">改动依据</div><div class="pol-v">代码级巡检发现深度版自动目录（目录）存在**重复章节号「九」**（「九（补）、合规焦点专题」与「九、关联延伸」并列）、编号跳号（「十五」之后直接「九」）、残留「（补）」草稿标记——属「自动目录与页码对齐」「章节标题层级」维度的明确排版缺陷，直接违反用户「零排版错误」硬性要求（业务部门在目录里看到两个「九」即属硬伤）。该缺陷未被候选清单 9 项与建议 4/5/6/7/8/9/10/11 覆盖（建议 8/11 触碰内容数据仍挂起）。纯标题编号格式改动，**不触碰任何内容数据**（领域标题、正文、policy/penalties/pupu_items 等均未变），仅改 h1 前缀数字与移除「（补）」标记。</div></div><div class="pol-row"><div class="pol-k">预期提升</div><div class="pol-v">对外深度版目录与正文章节号连续、无跳号、无重复、无草稿残留，消除「目录出现两个九」的专业度硬伤；PDF/DOCX 双交付章节结构完全一致，强化对外可追溯与对齐观感。</div></div><div class="pol-row"><div class="pol-k">QA 验证</div><div class="pol-v">重生成 0906 深度版 PDF+DOCX + 实跑 `qa_strict.py daily_data_0906` → 简版 20 页(≥0) / 深度版 59 页(≥30) / 缺字 0 / tofu 0 / 官网首页根链接 0 / 章节齐全 / 图示 5/5（行业水位✅ 食安SOP✅ 价格样例✅ 六大框架✅ 自检矩阵✅）/ DOCX 简版 18951 字·深度版 47460 字·缺字·tofu 0 → **全部通过，允许交付**。pypdf 文本抽取确认深度版 PDF 目录与正文均命中「九、合规焦点专题 … 十六、关联延伸」顺序编号、无「（补）」、无重复「九」；python-docx 复核 DOCX 深度版目录列表与正文 h1 同序、无「（补）」、无重复「九」、同业深度画像已为 h2 子节。改动可回滚（原两脚本备份于 /tmp/cbr_polish_20260907_1736/）。</div></div></div>
+  
+</div><div class="pol-card">
   <div class="pol-head">
     <span class="pol-date">2026-09-07</span>
     <span class="pol-time">16:30</span>
@@ -299,7 +308,7 @@
   
 </div></div>
 
-  <p class="pol-hint">本页由「站点模块生成脚本」同步 · 最后更新 2026-09-07 10:26 · 数据源：references/polish_changelog.md</p>
+  <p class="pol-hint">本页由「站点模块生成脚本」同步 · 最后更新 2026-09-07 18:33 · 数据源：references/polish_changelog.md</p>
 </div>
 <footer><div class="inner">
   <div>lawdatify.site · 法律合规主站</div>
