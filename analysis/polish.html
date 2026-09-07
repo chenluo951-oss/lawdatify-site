@@ -58,12 +58,21 @@
 
 <div class="wrap">
   <div class="pol-summary">
-    <div class="pol-stat"><div class="n">25</div><div class="l">打磨记录</div></div>
-    <div class="pol-stat"><div class="n">2026-09-07 12:08</div><div class="l">最新一次</div></div>
+    <div class="pol-stat"><div class="n">26</div><div class="l">打磨记录</div></div>
+    <div class="pol-stat"><div class="n">2026-09-07 16:30</div><div class="l">最新一次</div></div>
     <div class="pol-stat"><div class="n">每 30 分钟</div><div class="l">巡检频率</div></div>
   </div>
 
   <div style="margin-top:18px"><div class="pol-card">
+  <div class="pol-head">
+    <span class="pol-date">2026-09-07</span>
+    <span class="pol-time">16:30</span>
+    <span class="qa pass">通过</span>
+    <span class="pol-title">本次巡检无需改动（无明确可改进项）</span>
+  </div>
+  <div class="pol-body"><div class="pol-row"><div class="pol-k">改动文件/函数</div><div class="pol-v">无（未改动任何排版引擎代码）</div></div><div class="pol-row"><div class="pol-k">改动前 → 改动后</div><div class="pol-v">—</div></div><div class="pol-row"><div class="pol-k">改动依据</div><div class="pol-v">对共享引擎 `gen_report_pdf.py` 与四件套真实生成器 `gen_weekly_pdf.py` / `gen_deep_pdf.py` / `gen_weekly_docx.py` / `gen_deep_docx.py` 做**代码级逐项复核**（非仅看历史日志），结论：① 候选清单 9 项（封面品牌条 / 自动目录页码 / 核心观点框 / 图表配色 / 标题防孤行 / 表格斑马纹 / 行距段距 / 页眉页脚 / 图注同页）全部仍生效、相互一致、无回退或漂移；② 共享 helper 链路仍正确调用：`G.styled_toc`（目录虚线引导符+页码右对齐↔建议4）、`G.key_points_box`（核心观点框 navy 标题条+浅蓝底+左强调条+圆角↔建议3）、`G.src_note`（来源脚注左对齐↔共性第3条）、`G.issue_history_block`（封面近3期回顾↔C①）、`G.compile_note`/`G.add_docx_compile_note`（封面编制说明三行含「数据截止+官方来源条数」↔A②/D⑤，四件套封面统一生效）、`G.disclaimer_block`（尾部声明栏↔共性第6条）、`G.draw_footer`+`G.add_docx_footer`（页脚左声明+右页码+细线↔C③，PDF/DOCX 双交付对齐）；③ 深度版三索引附录：`gen_deep_pdf.index_appendix` + `gen_deep_docx.docx_index_appendix`（法规依据/官方来源/术语表，PDF+DOCX 双交付对齐↔D①/建议10）；④ 图示编号与来源双行：`gen_deep_pdf` 图1–图6 + `G.src_note` 双行来源（↔建议6），热力矩阵 `KeepTogether([矩阵,图注,来源,图例])` 防 orphan（↔「图注同页」补全项）；⑤ 唯一仍挂起项 **建议 8（同业画像「主体+一句定性」紧凑表）** 与 **建议 11（热力矩阵升级双轴）** 均属结构性内容呈现改动、触碰内容数据，用户此前明确留待确认，超出本自动化「只动排版/格式、不动内容数据」授权范围；⑥ 复核发现：此前一度怀疑 DOCX 深度版封面缺「数据截止+官方来源条数」第三行（由 2026-09-07 10:34 日志「DOCX 生成器未调用 compile_note」表述引起的误判），实际 `gen_weekly_docx.py:119` 与 `gen_deep_docx.py:147` 均已调用 `G.add_docx_compile_note(doc, cutoff=..., n_src=...)`，四件套封面三行编制说明已完全对齐——该疑似缺口不存在；DOCX 深度版对具像化图示以「表格+标题」呈现（仅含行业水位/食安SOP/价格样例三项，未含自检矩阵与六大框架两张），与 PDF 深度版「图1–图6」结构不完全一致，但补齐需新增 2 张图示（结构性、非纯格式），故不强行改动。</div></div><div class="pol-row"><div class="pol-k">预期提升</div><div class="pol-v">维持现有已交付的专业排版水准，不在无明确收益处强行改动、不灌水（遵守「无明确可改进项则不强行改动」硬约束）。</div></div><div class="pol-row"><div class="pol-k">QA 验证</div><div class="pol-v">未改动代码，基线**真实复跑** `qa_strict.py daily_data_0906`（最近一期数据模块）→ 简版 20 页 / 深度版 59 页 / 缺字 0 / tofu 0 / 官网首页根链接 0 / 图示 5/5 / DOCX 简版 18951 字·深度版 47505 字·缺字·tofu 0 → **全部通过，允许交付**（代码自 2026-09-07 12:08 后未变动，引擎无漂移）。后续触发下一处增量打磨的条件：用户确认建议 8 / 建议 11、或对标库新增样本出现新的纯版式可借鉴点、或业务部门反馈具体排版问题。</div></div></div>
+  
+</div><div class="pol-card">
   <div class="pol-head">
     <span class="pol-date">2026-09-07</span>
     <span class="pol-time">12:08</span>
@@ -290,7 +299,7 @@
   
 </div></div>
 
-  <p class="pol-hint">本页由「站点模块生成脚本」同步 · 最后更新 2026-09-07 16:13 · 数据源：references/polish_changelog.md</p>
+  <p class="pol-hint">本页由「站点模块生成脚本」同步 · 最后更新 2026-09-07 17:19 · 数据源：references/polish_changelog.md</p>
 </div>
 <footer><div class="inner">
   <div>lawdatify.site · 法律合规主站</div>
