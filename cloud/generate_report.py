@@ -363,6 +363,97 @@ def repair_code(code):
     return code, n_merge, n_san
 
 
+_CLOSER_FOR = {"(": ")", "[": "]", "{": "}"}
+
+
+def _needed_closers(code):
+    """忽略字符串与注释内容做括号配对扫描，返回末尾还缺的闭括号序列。
+
+    （不能简单按字符统计 —— 字符串里常有括号；也不能逐个试补 ——
+      截断处往往同时缺 ] } } 好几个，逐个试补很容易失败。）
+    """
+    stack = []
+    i, n = 0, len(code)
+    while i < n:
+        ch = code[i]
+        if ch in "\"'":
+            q = ch
+            if code[i:i + 3] == q * 3:            # 三引号字符串
+                j = code.find(q * 3, i + 3)
+                i = (j + 3) if j != -1 else n
+                continue
+            i += 1
+            while i < n:                          # 单行字符串
+                if code[i] == "\\":
+                    i += 2
+                    continue
+                if code[i] == q:
+                    i += 1
+                    break
+                i += 1
+            continue
+        if ch == "#":                             # 注释
+            j = code.find("\n", i)
+            i = (j + 1) if j != -1 else n
+            continue
+        if ch in "([{":
+            stack.append(ch)
+        elif ch in ")]}" and stack:
+            stack.pop()
+        i += 1
+    return "".join(_CLOSER_FOR[c] for c in reversed(stack))
+
+
+def salvage_truncated(code):
+    """把「输出被截断 / 未闭合」的代码补救成语法合法形式。返回 (代码, 是否合法)。
+
+    LLM 有输出上限，长中文数据模块常在半途被切断，末尾字符串与括号都来不及闭合。
+    三步处理：
+      1) 给未闭合的字符串补上收尾引号（一次补一处，循环推进）
+      2) 用括号栈算出末尾缺哪些闭括号，一次性补齐
+      3) 闭括号类型写错（如用 ) 去关闭 [ ）时，替换成正确类型
+    补救后内容可能不完整，是否可用交由 validate_module 的字段校验判断，缺字段会触发重试。
+    """
+    for _ in range(30):
+        try:
+            ast.parse(code)
+            return code, True
+        except SyntaxError as e:
+            lines = code.splitlines()
+            ln = e.lineno or 0
+            msg = e.msg or ""
+            # 1) 字符串未闭合 -> 该行末尾补一个引号
+            if "unterminated string" in msg and 0 < ln <= len(lines):
+                lines[ln - 1] = lines[ln - 1].rstrip() + '"'
+                code = "\n".join(lines) + "\n"
+                continue
+            # 2) 末尾括号缺失 -> 按栈一次性补齐
+            need = _needed_closers(code)
+            if need:
+                code = code.rstrip() + need + "\n"
+                continue
+            # 3) 闭括号类型写错（如用 ) 去关闭 [ ）：在报错行上逐个替换成别的闭括号试错。
+            #    不依赖报错文案的具体措辞（各 Python 版本措辞不同），只看 e.lineno。
+            if 0 < ln <= len(lines):
+                line = lines[ln - 1]
+                for pos, c in enumerate(line):
+                    if c not in ")]}":
+                        continue
+                    for alt in ")]}":
+                        if alt == c:
+                            continue
+                        cand = lines[:]
+                        cand[ln - 1] = line[:pos] + alt + line[pos + 1:]
+                        cand = "\n".join(cand) + "\n"
+                        try:
+                            ast.parse(cand)
+                            return cand, True
+                        except SyntaxError:
+                            continue
+            break
+    return code, False
+
+
 def check_syntax(code):
     """写入前先做语法预检。返回 (是否通过, 可读错误)。
     出错时把「行号 + 该行原始内容」一并返回，便于回喂给模型修正。"""
@@ -468,6 +559,12 @@ def main():
         if n_merge or n_san:
             log("自动修复：合并跨行 %d 处、净化值内引号 %d 处" % (n_merge, n_san))
         syn_ok, syn_err = check_syntax(code)
+        if not syn_ok:
+            # 输出被截断时末尾的字符串与括号都来不及闭合，纯语法必然失败 —— 先补救再看
+            salvaged, s_ok = salvage_truncated(code)
+            if s_ok:
+                log("补救截断输出（补引号/闭合括号）后语法通过，内容完整性交由字段校验判断")
+                code, syn_ok, syn_err = salvaged, True, ""
         if not syn_ok:
             log("语法预检失败:", syn_err)
             hint = ("上次输出的 Python 代码有语法错误：%s。"
