@@ -58,12 +58,21 @@
 
 <div class="wrap">
   <div class="pol-summary">
-    <div class="pol-stat"><div class="n">23</div><div class="l">打磨记录</div></div>
-    <div class="pol-stat"><div class="n">2026-09-07 10:34</div><div class="l">最新一次</div></div>
+    <div class="pol-stat"><div class="n">24</div><div class="l">打磨记录</div></div>
+    <div class="pol-stat"><div class="n">2026-09-07 10:51</div><div class="l">最新一次</div></div>
     <div class="pol-stat"><div class="n">每 30 分钟</div><div class="l">巡检频率</div></div>
   </div>
 
   <div style="margin-top:18px"><div class="pol-card">
+  <div class="pol-head">
+    <span class="pol-date">2026-09-07</span>
+    <span class="pol-time">10:51</span>
+    <span class="qa pass">通过</span>
+    <span class="pol-title">深度版尾注前三索引附录（对齐对标库第三批 D① / 建议 10）</span>
+  </div>
+  <div class="pol-body"><div class="pol-row"><div class="pol-k">改动文件/函数</div><div class="pol-v">`gen_deep_pdf.py` 新增 `index_appendix(S, F, base_data)`（返回三索引 flowables）、`index_appendix_text(base_data)`（返回同内容字符串供子集化防 tofu）、`_idx_table_style()`（通用表样式）；`build()` 两处：① `all_text += index_appendix_text(base_data)` 在 `subset_fonts` 之前纳入子集化；② 在「信息来源与免责声明」前插入 `PageBreak()` + `story.extend(index_appendix(S, F, base_data))`。</div></div><div class="pol-row"><div class="pol-k">改动前 → 改动后</div><div class="pol-v">深度版尾注前仅有「信息来源与免责声明」固定栏、无索引 → 新增「附录、索引与术语对照」章节（进入目录），含三索引：① 法规依据索引（按领域列出本期引述的法规/监管文件 title）② 官方来源索引（列出本期去重后 N 条官方来源：来源说明 + 具体深链 URL，均为通报/公告/处罚决定书页，无官网首页根域名）③ 术语表（AIGC / 算法备案 / PIPL / 前置仓 / 即时零售 / 明码标价 / 合规水位 7 条固定对照）。表样式对齐深度版其他表格（藏蓝表头 + 0.5pt 网格 + 斑马纹 + 顶线）。日报/周报 PDF 与 DOCX 双交付的简版不受影响；本改动仅作用于深度版 PDF。</div></div><div class="pol-row"><div class="pol-k">改动依据</div><div class="pol-v">`benchmark_reports.md` 第三批 **D①**（港交所 ESG 报告附录固定为「守则索引 / 标准索引 / 核证声明」三块 → 我方深度版尾注前增设「法规依据索引 / 官方来源索引 / 术语表」三索引）+ 可落地 **建议 10**（原标注「待下一轮打磨评估」）。三索引内容 100% 源自本期数据（`policy` 的 `title`/`url`、`penalties` 的监管机构/url）或固定术语对照，纯展示、不引入任何业务内容数据（不触碰 policy/penalties/pupu_items 等）。</div></div><div class="pol-row"><div class="pol-k">预期提升</div><div class="pol-v">对外发送时，读者在尾注前即可一次性核验「本期依据哪些法规、引用了哪些官方来源（含可点击深链）、关键术语如何解读」，把可追溯性从正文各条链接收口为统一索引，对齐头部 ESG/券商报告的「附录三索引」结构，专业度与可审计性提升，并强化对「官方深链可追溯」硬性要求的闭环呈现。</div></div><div class="pol-row"><div class="pol-k">QA 验证</div><div class="pol-v">重生成 0906 深度版 PDF + 实跑 `qa_strict.py daily_data_0906` → 简版 20 页(≥0) / 深度版 59 页(≥30，+3 页) / 缺字 0 / tofu 0 / PDF 内根链接 0 / 章节齐全 / 图示 5/5 / DOCX 简版 18914 字·深度版 44916 字·缺字 0·tofu 0 → **全部通过，允许交付**。pypdf 文本抽取确认三索引均命中、官方来源 URL 均为具体深链（如 `cac.gov.cn/2026-09/02/c_1790099041364574.htm`、`gov.cn/lianbo/2026-09/content_7080266.htm`）、「信息来源与免责声明」仍在附录之后。改动可回滚（原脚本备份于 `/tmp/cbr_polish_20260907_1051/`）。</div></div></div>
+  
+</div><div class="pol-card">
   <div class="pol-head">
     <span class="pol-date">2026-09-07</span>
     <span class="pol-time">10:34</span>
@@ -272,7 +281,7 @@
   
 </div></div>
 
-  <p class="pol-hint">本页由「站点模块生成脚本」同步 · 最后更新 2026-09-07 10:54 · 数据源：references/polish_changelog.md</p>
+  <p class="pol-hint">本页由「站点模块生成脚本」同步 · 最后更新 2026-09-07 11:54 · 数据源：references/polish_changelog.md</p>
 </div>
 <footer><div class="inner">
   <div>lawdatify.site · 法律合规主站</div>
