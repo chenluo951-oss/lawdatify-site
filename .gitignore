@@ -11,3 +11,7 @@ __pycache__/
 # 云端运行时产物与字体（不入仓，Actions 每次现下载）
 out/
 .fonts/
+
+# 旧的「每30分钟云端融合」方案：与本地自动化重复，且 Netlify 已有云端构建命令，暂不启用。
+# 如需启用，删除下面这一行并推送即可。
+.github/workflows/site-sync.yml
