@@ -1,5 +1,4 @@
-# 融合脚本不进发布仓库（自动化在 WorkBuddy 本地执行）
-*.py
+# 融合脚本必须入仓：GitHub Actions 云端重建站点时要调用
 __pycache__/
 *.pyc
 
