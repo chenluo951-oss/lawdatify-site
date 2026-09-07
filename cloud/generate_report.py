@@ -119,7 +119,7 @@ def glm_web_generate(api_key, model, prompt, timeout=600):
     }
     headers = {"Content-Type": "application/json", "Authorization": "Bearer " + api_key}
     # 不显式给足长度，中文数据模块（数百行）极易在半途被截断成未闭合字符串
-    cands = [int(os.environ.get("LLM_MAX_TOKENS") or 12288), 8192, 4096]
+    cands = [int(os.environ.get("LLM_MAX_TOKENS") or 16384), 12288, 8192]
     last = None
     for mt in cands:
         body = dict(base)
@@ -254,11 +254,13 @@ def build_prompt(kind, period_label, start, end, material, template, retry_hint=
 3. 【硬性要求·会被自动校验】
    - **所有 url 必须是发布机构官网的具体公告/通报/处罚决定书页面深链**，严禁使用 `https://www.samr.gov.cn/` 这类官网首页根域名；找不到确切深链就不要写该条。
    - **【语法红线】字符串值内部一律禁止出现英文双引号 "**（会提前闭合字符串导致语法错误），引用他人表述请用中文引号；每个字符串必须写在一行内，禁止在字符串中间换行。
+   - **【括号配对】以 [ 开始的列表必须用 ] 结束，严禁写成 ) ；字典用 { } 配对。**括号不配对会直接导致语法错误。
    - 全部使用简体中文，不要出现生僻字与繁体字（PDF 字体为 Noto CJK，缺字会 QA 失败）。
    - 数字、文号、法条引用必须准确，无法核实的宁可不写。
    - 内容要具体到"朴朴该做什么"，不要空话。
-4. 篇幅：policy 每领域 2-4 条；penalties 3-6 条；确保信息密度，不要注水。
-   每条 summary / content / analysis **控制在 80 字以内**（超长易导致输出截断与换行，造成语法错误）。
+4. 篇幅（务必控制总量，输出超长会被截断成语法错误）：policy 每领域 2 条；penalties 3-4 条；
+   pupu_items 3 条；matrix_rows 6 行；outlook 4 条；确保信息密度，不要注水。
+   每条 summary / content / analysis **控制在 60 字以内**（超长易导致输出截断与换行，造成语法错误）。
 %s
 
 【模板】（照此结构，替换内容；不要改字段名与文件的整体组织方式）
