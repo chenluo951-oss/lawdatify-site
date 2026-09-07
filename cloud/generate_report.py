@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """云端合规简报生成器（GitHub Actions / 任意 Linux 环境调用）
 
-一次调用完成：检索监管动态 → LLM 生成数据模块 → 渲染 PDF/DOCX/HTML → QA 校验。
+一次调用完成：检索监管动态 → LLM 生成内容 → 渲染 PDF/DOCX/HTML → QA 校验。
 
 用法:
     python3 cloud/generate_report.py --kind daily  [--date 2026-09-08]
@@ -13,14 +13,22 @@
     LLM_API_KEY    必填
     LLM_MODEL     可选，默认按 provider 选免费模型
     TAVILY_API_KEY 仅当 provider=openai/siliconflow 且需联网检索时填（glm/gemini 自带检索，不需要）
-    CBR_FONT_DIR  中文字体目录，需含 song/kaiti/qihei/heiti/songb 五个 .ttf
+    CBR_FONT_DIR  中文字体目录
     CBR_OUT_DIR   报告输出目录（默认 ./out）
     GEMINI_PROXY  可选，gemini 走代理时填 http://host:port
 
-说明:
-    - glm（智谱 GLM-4-Flash）永久免费、国内直连，且 chat 接口原生支持 web_search 工具，
-      因此「检索 + 生成」只需一个 key，无需额外搜索 API（Tavily 之类）。
-    - gemini 同样自带 Google 搜索，但用户所在地区无法开通，故默认改为 glm。
+【设计要点：为什么是 JSON 而不是让 LLM 直接写 Python】
+
+早期版本让 LLM 直接输出数据模块源码（几百行 Python 字面量），实测不可靠：
+GLM-4-Flash 会在字符串值里写出英文引号、在值中间换行、写错括号类型，
+甚至在重试时输出 Markdown 标题而非代码 —— 累计 7 轮运行、约 30 次生成均无法收敛。
+
+现改为两段式：
+  1) LLM 只输出 **JSON**（任务更简单、模型更擅长、容错面小）；
+  2) 本地用 json / py_lit **确定性**生成 Python 模块 —— 语法恒正确，与模型写作水平无关。
+两条降险的关键收益：
+  - json.loads(s, strict=False) 天然容忍字符串内的裸换行（曾经的头号失败原因）；
+  - META、六大领域名等机械字段由程序生成，既省 token 又不可能写错。
 """
 import os
 import re
@@ -32,6 +40,7 @@ import datetime
 import subprocess
 import urllib.request
 import urllib.error
+import urllib.parse
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 GEN = os.path.join(ROOT, "generator")
@@ -39,8 +48,8 @@ CLOUD = os.path.join(ROOT, "cloud")
 
 DEFAULT_MODELS = {
     "gemini": "gemini-2.5-flash",
-    # 必须用 -250414 版本：旧版 glm-4-flash 输出上限仅 4K，
-    # 完整数据模块（数百行中文）会被从中间截断成未闭合字符串；新版上限 16K（同样免费）。
+    # 必须用 -250414 版本：旧版 glm-4-flash 输出上限仅 4K，长输出会被从中间截断；
+    # 新版上限 16K（同样免费）。
     "glm": "glm-4-flash-250414",
     "siliconflow": "Qwen/Qwen2.5-7B-Instruct",
     "openai": "gpt-4o-mini",
@@ -53,12 +62,13 @@ BASE_URLS = {
 
 DOMAINS = [
     ("数据合规", "个人信息保护、数据出境、网络安全、App 违规收集、数据分类分级"),
-    ("AI 合规", "生成式 AI 备案、大模型安全、AI 生成内容标识、训练语料合规、智能体"),
+    ("AI合规", "生成式 AI 备案、大模型安全、AI 生成内容标识、训练语料合规、智能体"),
     ("算法合规", "算法备案、算法推荐、调度决策、价格算法、劳动者权益"),
     ("平台合规", "平台责任、经营者资质、商户审核、反垄断与反不正当竞争、网络交易"),
-    ("产品合规", "食品安全、监督抽检、农兽药残留、标签标识、冷链与前置仓经营许可"),
+    ("产品合规（食品安全）", "食品安全、监督抽检、农兽药残留、标签标识、冷链与前置仓经营许可"),
     ("价格合规", "明码标价、价格欺诈、虚构划线价、动态定价、促销合规"),
 ]
+DOMAIN_NAMES = [d[0] for d in DOMAINS]
 
 
 def log(*a):
@@ -105,9 +115,7 @@ def glm_web_generate(api_key, model, prompt, timeout=600):
     """智谱 GLM 原生 web_search 工具：一次调用同时完成联网检索 + 生成。
     返回模型正文，并把检索到的来源链接（title/link）追加到文末，保证可溯源。
 
-    稳健性处理：
-    1) max_tokens 若超过该型号上限会被拒，自动降级重试（各型号上限 4K~16K 不等）；
-    2) finish_reason=length 表示输出被截断，抛可识别异常交由上层「精简后重试」。
+    max_tokens 超过该型号上限会被拒，这里自动降级重试。
     """
     url = BASE_URLS["glm"].rstrip("/") + "/chat/completions"
     base = {
@@ -118,7 +126,6 @@ def glm_web_generate(api_key, model, prompt, timeout=600):
                    "web_search": {"enable": True, "search_result": True}}],
     }
     headers = {"Content-Type": "application/json", "Authorization": "Bearer " + api_key}
-    # 不显式给足长度，中文数据模块（数百行）极易在半途被截断成未闭合字符串
     cands = [int(os.environ.get("LLM_MAX_TOKENS") or 16384), 12288, 8192]
     last = None
     for mt in cands:
@@ -139,16 +146,17 @@ def glm_web_generate(api_key, model, prompt, timeout=600):
             raise
         ch = (r.get("choices") or [{}])[0]
         if ch.get("finish_reason") == "length":
-            raise RuntimeError("GLM 输出被 max_tokens(%d) 截断，内容不完整" % mt)
+            # 输出被截断：交给上层「精简篇幅后重试」
+            raise RuntimeError("GLM output truncated at max_tokens=%d" % mt)
         msg = ch.get("message", {})
         text = (msg.get("content") or "").strip()
         for w in (msg.get("web_search") or []):
             link = w.get("link") or w.get("url")
             title = w.get("title") or ""
             if link and link not in text:
-                text += "\n[检索来源] %s — %s" % (title, link)
+                text += "\n[检索来源] %s - %s" % (title, link)
         return text
-    raise RuntimeError("GLM 请求失败（max_tokens 已降级仍不可用）: %s" % (last or "")[:300])
+    raise RuntimeError("GLM request failed (max_tokens downgraded): %s" % (last or "")[:300])
 
 
 def llm(prompt, use_search=False):
@@ -212,12 +220,10 @@ def collect_material(kind, start, end, queries):
                                        "你是合规检索助手。请检索 %s 至 %s 期间与中国「%s」相关的监管动态，"
                                        "列出 8-12 条，每条给出：发布日期、发布机构、文件/事件标题、"
                                        "官网原文深链 URL（必须是具体公告页，不能是官网首页根域名）、100 字内要点。"
-                                       "优先采用官方网站与权威媒体来源。"
-                                       % (start, end, q))))
+                                       "优先采用官方网站与权威媒体来源。" % (start, end, q))))
             except Exception as e:
                 log("  检索失败:", e)
         return "\n\n".join(material)
-    # openai / siliconflow 等无内置检索的 provider → Tavily
     tk = os.environ.get("TAVILY_API_KEY")
     if not tk:
         raise SystemExit("provider=%s 无内置检索，需要 TAVILY_API_KEY" % provider)
@@ -230,9 +236,67 @@ def collect_material(kind, start, end, queries):
     return "\n\n".join(material)
 
 
-def build_prompt(kind, period_label, start, end, material, template, retry_hint=""):
+# --------------------------------------------------------------------------
+# 由程序确定性生成的机械字段（不让 LLM 参与，避免无谓出错与 token 消耗）
+# --------------------------------------------------------------------------
+
+def build_meta(kind, start, end):
+    if kind == "daily":
+        date_str = "%d年%d月%d日" % (start.year, start.month, start.day)
+        return {
+            "title": "合规资讯日报",
+            "date_str": date_str,
+            "header_text": "合规资讯日报 · 每日监管与合规动态",
+            "subtitle": "— 昨日监管动态汇总 · 六大合规领域 · 朴朴超市业务专题 —",
+            "brief_en": "DAILY COMPLIANCE BRIEF",
+            "tagline": "每日监管与合规动态",
+            "filename": "合规资讯简报_%s.pdf" % start.isoformat(),
+            "sections": {
+                "summary": "一、今日综述",
+                "policy": "二、六大领域动态回顾",
+                "penalties": "三、监管通报与处罚汇总",
+                "pupu": "四、朴朴超市业务专题",
+                "outlook": "五、明日前瞻",
+            },
+        }
+    date_str = "%d年%d月%d日—%d月%d日" % (start.year, start.month, start.day,
+                                       end.month, end.day)
+    return {
+        "title": "合规资讯周报",
+        "date_str": date_str,
+        "header_text": "合规资讯周报 · 每周监管与合规动态",
+        "subtitle": "— 上周监管动态汇总 · 六大合规领域 · 朴朴超市业务专题 —",
+        "brief_en": "WEEKLY COMPLIANCE BRIEF",
+        "tagline": "每周监管与合规动态",
+        "filename": "合规资讯周报_%s.pdf" % end.isoformat(),
+        "sections": {
+            "summary": "一、本周综述",
+            "policy": "二、六大领域动态回顾",
+            "penalties": "三、监管通报与处罚汇总",
+            "pupu": "四、朴朴超市业务专题",
+            "outlook": "五、下周前瞻",
+        },
+    }
+
+
+def build_prompt(kind, period_label, start, end, material, retry_hint=""):
+    """构造 JSON 生成提示。相比早期让模型写 Python 源码，JSON 任务的出错面小得多。"""
     dom = "\n".join("- %s：%s" % (a, b) for a, b in DOMAINS)
-    return """你是朴朴超市（即时零售 / 前置仓生鲜电商）的法务合规专家，要产出一份%s的内部合规简报数据。
+    shape = json.dumps({
+        "summary": ["本期核心判断 1（120-220 字，含具体数据/文号/日期）"],
+        "policy": {d: [{"title": "动态标题",
+                        "meta": "日期 动作 ｜ 发布机构",
+                        "content": "事实陈述（150-260 字，含量化数据与法条依据）",
+                        "analysis": "对朴朴的影响与落点（180-320 字，写到可执行动作）",
+                        "url": "https://发布机构官网/具体公告页.htm"}]
+                   for d in DOMAIN_NAMES},
+        "penalties": [["MM-DD", "处罚/发布机关", "事项标题", "违法事由", "处理结果", "https://官网/具体处罚决定书页面"]],
+        "penalty_stats": ["本期处罚的结构性判断（100-180 字）"],
+        "pupu_items": [["专题标题", "高/中高/中", "涉及业务环节", "风险分析", "①②③④编号的可执行建议"]],
+        "matrix_rows": [["风险主题", "数据合规", "AI合规", "算法合规", "平台合规", "产品合规", "价格合规"]],
+        "outlook": ["下期具体动作（60-160 字，动词开头）"],
+    }, ensure_ascii=False, indent=1)
+    return """你是朴朴超市（即时零售 / 前置仓生鲜电商）的法务合规专家，要产出一份%s的内容数据。
 
 【报告期】%s（%s 至 %s）
 
@@ -242,237 +306,384 @@ def build_prompt(kind, period_label, start, end, material, template, retry_hint=
 【检索到的公开监管素材】（可能含噪声，只保留可核实的官方信息，剔除自媒体转述）
 %s
 
-【输出要求】
-1. 严格按下方《模板》的 Python 结构与字段名输出一个完整数据模块，**只输出一个 ```python 代码块**，不要任何解释文字。
-2. 字段规范：
-   - META 中的期次/日期与本次报告期一致；title/date_str 用中文。
-   - policy：按六大领域分组，每条含 date、title、summary、impact（对朴朴的业务影响）、url。
-   - penalties：监管通报与处罚，每条含日期、被处罚主体、事由、依据、结果、url。
-   - pupu_items：站在朴朴业务视角的专题分析（3-5 条），每条含主题、风险点、涉及业务环节、应对建议。
-   - matrix_rows：风险热力矩阵，含风险主题、等级（高/中/低）、涉及环节、分析、建议。
-   - outlook：前瞻要点。
-3. 【硬性要求·会被自动校验】
-   - **所有 url 必须是发布机构官网的具体公告/通报/处罚决定书页面深链**，严禁使用 `https://www.samr.gov.cn/` 这类官网首页根域名；找不到确切深链就不要写该条。
-   - **【语法红线】字符串值内部一律禁止出现英文双引号 "**（会提前闭合字符串导致语法错误），引用他人表述请用中文引号；每个字符串必须写在一行内，禁止在字符串中间换行。
-   - **【括号配对】以 [ 开始的列表必须用 ] 结束，严禁写成 ) ；字典用 { } 配对。**括号不配对会直接导致语法错误。
-   - 全部使用简体中文，不要出现生僻字与繁体字（PDF 字体为 Noto CJK，缺字会 QA 失败）。
-   - 数字、文号、法条引用必须准确，无法核实的宁可不写。
-   - 内容要具体到"朴朴该做什么"，不要空话。
-4. 篇幅（务必控制总量，输出超长会被截断成语法错误）：policy 每领域 2 条；penalties 3-4 条；
-   pupu_items 3 条；matrix_rows 6 行；outlook 4 条；确保信息密度，不要注水。
-   每条 summary / content / analysis **控制在 60 字以内**（超长易导致输出截断与换行，造成语法错误）。
+【任务】输出**一个 JSON 对象**（可包在 ```json 围栏里，但不要输出任何解释文字）。结构如下：
 %s
 
-【模板】（照此结构，替换内容；不要改字段名与文件的整体组织方式）
-```python
+【字段说明】
+- summary：4-6 条，本期核心判断，务必含具体数字、文号、日期、机构。
+- policy：六大领域，每领域 2 条。content 写事实，analysis 必须落到「朴朴该做什么」的可执行动作，不要空话。
+- penalties：4-8 条，每条 6 项。无处罚事项的领域可用监管动态/抽检通报条目代替，并在第 4 项注明「非处罚」。
+- penalty_stats：3-5 条，对处罚数据的结构性归纳。
+- pupu_items：4-5 条，每条 5 项，风险等级只能取 高/中高/中 三值。
+- matrix_rows：6-8 行，每行 7 项：第 1 项为风险主题，后 6 项依次是六个领域的风险等级，取值只能为 高/中高/中/低/— 。
+- outlook：4-6 条，下期具体动作，动词开头。
+
+【硬性要求·会被程序自动校验】
+1. **url 必须是发布机构官网的具体公告/通报/处罚决定书页面深链**，严禁 `https://www.samr.gov.cn/` 这类官网首页根域名。
+   查不到确切深链的条目请直接不要写（本条会被自动丢弃，写了也白写）。
+2. 全部使用简体中文，避免生僻字与繁体字（PDF 字体为 Noto CJK，缺字会导致 QA 失败）。
+3. 数字、文号、法条引用必须准确，无法核实的宁可不写。
+4. 每个字符串值写在一行内；确需换行请用 \\n 转义。
+5. 篇幅务必控制：输出超长会被截断成不可解析的结果。
 %s
-```
 """ % ("日报" if kind == "daily" else "周报", period_label, start, end, dom,
-       material[:60000], retry_hint, template)
+       material[:60000], shape, retry_hint)
 
 
-def extract_code(text):
-    m = re.search(r"```python\s*(.*?)```", text, re.S)
+# --------------------------------------------------------------------------
+# JSON 解析与修复（比修复 Python 源码可靠得多）
+# --------------------------------------------------------------------------
+
+_JSON_CLOSE = {"{": "}", "[": "]"}
+
+
+def _strip_fences(text):
+    t = text.strip()
+    m = re.search(r"```(?:json|JSON)?\s*(.*?)```", t, re.S)
     if m:
         return m.group(1).strip()
-    m = re.search(r"```\s*(.*?)```", text, re.S)
-    return m.group(1).strip() if m else text.strip()
+    return t
 
 
-def _alt_quotes(s):
-    """把字符串内部的 ASCII 双引号交替换成中文左右引号 “ ”（成对出现，读起来正常）。"""
-    out = []
-    left = True
-    for ch in s:
-        if ch == '"':
-            out.append('\u201c' if left else '\u201d')
-            left = not left
-        else:
-            out.append(ch)
-    return "".join(out)
+def _brace_slice(t):
+    i = t.find("{")
+    j = t.rfind("}")
+    if i != -1 and j > i:
+        return t[i:j + 1]
+    return t
 
 
-def sanitize_quotes(code):
-    """把「字符串值内部」误用的英文双引号换成中文引号。
-
-    模型常在正文里用英文 " 做引用（如：该表述将"个性化广告关闭…），
-    这会提前闭合 Python 字符串导致 unterminated string literal。
-    仅处理形如  "key": "value..."  的单行结构，避免误伤语法引号。
-    返回 (净化后代码, 修复处数)。
-    """
-    out = []
-    fixed = 0
-    for line in code.splitlines():
-        m = re.match(r'^(\s*"[^"]*"\s*:\s*)"(.*)"(\s*,?\s*)$', line)
-        if m:
-            head, val, tail = m.group(1), m.group(2), m.group(3)
-            if '"' in val:
-                val = _alt_quotes(val)
-                fixed += 1
-            line = '%s"%s"%s' % (head, val, tail)
-        out.append(line)
-    return "\n".join(out), fixed
-
-
-def merge_unterminated(code):
-    """合并「在字符串中间换行」导致未闭合的行。
-
-    模型写超长正文时常在值中间直接回车，Python 单行字符串不允许跨行，
-    于是报 unterminated string literal。此处按双引号奇偶性把后续行并回来，
-    直到引号闭合。返回 (合并后代码, 修复行数)。
-    """
-    lines = code.splitlines()
-    out = []
-    i = 0
-    fixed = 0
-    while i < len(lines):
-        line = lines[i]
-        if line.count('"') % 2 == 1:
-            j = i + 1
-            while j < len(lines) and line.count('"') % 2 == 1:
-                line = line.rstrip() + lines[j].strip()
-                j += 1
-            if line.count('"') % 2 == 0:
-                fixed += 1
-            i = j
-        else:
-            i += 1
-        out.append(line)
-    return "\n".join(out), fixed
-
-
-def repair_code(code):
-    """两级自动修复并循环至稳定。返回 (修复后代码, 合并处数, 净化处数)。
-
-    顺序至关重要：必须【先合并跨行、再净化值内引号】。
-      - 内嵌的英文引号是成对出现的，不改变引号数的奇偶性，
-        因此「某行引号数为奇数」可靠地表示字符串真的没闭合（模型在值中间换了行）。
-      - 若先净化：未合并时该行结尾没有闭合引号，净化正则匹配不到 → 白跑。
-      - 合并后再净化：该行已是完整单行（结尾有闭合引号）→ 正则命中 → 修好。
-    两者交替执行直到代码不再变化，可处理「跨行 + 内嵌引号」叠加的情况。
-    """
-    n_merge = n_san = 0
-    for _ in range(6):
-        before = code
-        code, m = merge_unterminated(code)
-        code, s = sanitize_quotes(code)
-        n_merge += m
-        n_san += s
-        if code == before:
-            break
-    return code, n_merge, n_san
-
-
-_CLOSER_FOR = {"(": ")", "[": "]", "{": "}"}
-
-
-def _needed_closers(code):
-    """忽略字符串与注释内容做括号配对扫描，返回末尾还缺的闭括号序列。
-
-    （不能简单按字符统计 —— 字符串里常有括号；也不能逐个试补 ——
-      截断处往往同时缺 ] } } 好几个，逐个试补很容易失败。）
-    """
+def _json_missing_closers(s):
+    """忽略字符串内容做括号配对扫描，返回末尾还缺的闭括号序列。"""
     stack = []
-    i, n = 0, len(code)
+    i, n = 0, len(s)
     while i < n:
-        ch = code[i]
-        if ch in "\"'":
-            q = ch
-            if code[i:i + 3] == q * 3:            # 三引号字符串
-                j = code.find(q * 3, i + 3)
-                i = (j + 3) if j != -1 else n
-                continue
+        ch = s[i]
+        if ch == '"':
             i += 1
-            while i < n:                          # 单行字符串
-                if code[i] == "\\":
+            while i < n:
+                if s[i] == "\\":
                     i += 2
                     continue
-                if code[i] == q:
+                if s[i] == '"':
                     i += 1
                     break
                 i += 1
             continue
-        if ch == "#":                             # 注释
-            j = code.find("\n", i)
-            i = (j + 1) if j != -1 else n
-            continue
-        if ch in "([{":
+        if ch in "{[":
             stack.append(ch)
-        elif ch in ")]}" and stack:
+        elif ch in "}]" and stack:
             stack.pop()
         i += 1
-    return "".join(_CLOSER_FOR[c] for c in reversed(stack))
+    return "".join(_JSON_CLOSE[c] for c in reversed(stack))
 
 
-def salvage_truncated(code):
-    """把「输出被截断 / 未闭合」的代码补救成语法合法形式。返回 (代码, 是否合法)。
+def _one_fix(s, stage):
+    """按 stage 施加一种修复。返回新串（无变化时返回原串）。"""
+    if stage == 0:                                  # 尾随逗号：{"a":1,} -> {"a":1}
+        return re.sub(r",(\s*[}\]])", r"\1", s)
+    if stage == 1:                                  # 末尾缺失的闭括号，一次性补齐
+        need = _json_missing_closers(s)
+        if need:
+            return s.rstrip().rstrip(",") + need
+        return s
+    if stage == 2:                                  # 字符串未闭合：补一个引号
+        return s.rstrip() + '"'
+    # stage >= 3：丢掉最后一行（多半是被截断的残缺元素），再补齐闭括号。
+    # 宁可少一条内容，也要保住其余部分可解析。
+    lines = s.splitlines()
+    while lines and not lines[-1].strip():
+        lines.pop()
+    if not lines:
+        return s
+    lines.pop()
+    t = "\n".join(lines).rstrip().rstrip(",")
+    return t + _json_missing_closers(t)
 
-    LLM 有输出上限，长中文数据模块常在半途被切断，末尾字符串与括号都来不及闭合。
-    三步处理：
-      1) 给未闭合的字符串补上收尾引号（一次补一处，循环推进）
-      2) 用括号栈算出末尾缺哪些闭括号，一次性补齐
-      3) 闭括号类型写错（如用 ) 去关闭 [ ）时，替换成正确类型
-    补救后内容可能不完整，是否可用交由 validate_module 的字段校验判断，缺字段会触发重试。
-    """
-    for _ in range(30):
+
+def parse_json_loose(text):
+    """尽力把 LLM 输出解析成 dict。返回 (dict|None, 说明)。"""
+    raw = _strip_fences(text)
+    if not raw:
+        return None, "empty output"
+    cands = [raw, _brace_slice(raw)]
+    for c in cands:
+        obj, note = _try_parse(c)
+        if obj is not None:
+            return obj, note
+    return None, "unparseable after all repairs"
+
+
+def _try_parse(text):
+    s = text.strip()
+    if not s:
+        return None, ""
+    # strict=False：容忍字符串内裸换行/制表符（曾是 LLM 写 Python 时的头号失败原因，
+    # 在 JSON 路径上只需这一个开关即可免疫）。
+    for attempt in range(8):
         try:
-            ast.parse(code)
-            return code, True
-        except SyntaxError as e:
-            lines = code.splitlines()
-            ln = e.lineno or 0
-            msg = e.msg or ""
-            # 括号不匹配时，报错文案里「on line N」指向的是【开括号】所在行，
-            # 往往和 e.lineno（闭括号所在行）不同，两个位置都要试着修。
-            _mo = re.search(r"on line (\d+)", msg)
-            opener_line = int(_mo.group(1)) if _mo else None
-            # 1) 字符串未闭合 -> 该行末尾补一个引号
-            if "unterminated string" in msg and 0 < ln <= len(lines):
-                lines[ln - 1] = lines[ln - 1].rstrip() + '"'
-                code = "\n".join(lines) + "\n"
+            v = json.loads(s, strict=False)
+            if isinstance(v, dict):
+                return v, ("json.loads" if attempt == 0 else "json.loads+fix%d" % attempt)
+            return None, "root is not an object"
+        except json.JSONDecodeError as e:
+            # 多个 JSON 对象粘连时，截断到第一个完整对象
+            if "Extra data" in (e.msg or "") and e.pos:
+                head = s[:e.pos].strip()
+                try:
+                    v = json.loads(head, strict=False)
+                    if isinstance(v, dict):
+                        return v, "trim extra data"
+                except Exception:
+                    pass
+        except Exception:
+            pass
+        new = _one_fix(s, attempt)
+        if new == s:
+            continue
+        s = new
+    # 兜底：按 Python 字面量解析（比 JSON 宽松，允许单引号）
+    try:
+        v = ast.literal_eval(text.strip())
+        if isinstance(v, dict):
+            return v, "ast.literal_eval"
+    except Exception:
+        pass
+    return None, ""
+
+
+# --------------------------------------------------------------------------
+# 内容规范化：结构补齐 + 深链校验
+# --------------------------------------------------------------------------
+
+_ROOT_ALLOW = {"beian.cac.gov.cn"}      # 算法备案查询系统，本身即合法入口
+
+
+def deep_link_ok(u):
+    """url 必须是官网具体页面的深链，不接受首页根域名。"""
+    if not isinstance(u, str) or not u.startswith(("http://", "https://")):
+        return False
+    try:
+        p = urllib.parse.urlsplit(u)
+    except Exception:
+        return False
+    if not p.netloc:
+        return False
+    if p.netloc in _ROOT_ALLOW:
+        return True
+    return bool(p.path.strip("/")) or bool(p.query)
+
+
+def _str_item(v, default=""):
+    return v.strip() if isinstance(v, str) else default
+
+
+def _pad(lst, n, filler="—"):
+    lst = list(lst)[:n]
+    return lst + [filler] * (n - len(lst))
+
+
+def normalize(obj, start, end):
+    """把任意"大致合规"的模型输出整理成渲染所需的严格结构。
+
+    返回 (data, issues)；data 键：summary/policy/penalties/penalty_stats/
+    pupu_items/matrix_rows/outlook。
+    """
+    issues = []
+    period = "%s 至 %s" % (start.isoformat(), end.isoformat())
+
+    def strlist(key, min_n, max_n):
+        v = obj.get(key)
+        out = [_str_item(x) for x in v if _str_item(x)] if isinstance(v, list) else []
+        if len(out) < min_n:
+            issues.append("%s 仅 %d 条（需 >=%d）" % (key, len(out), min_n))
+        return out[:max_n]
+
+    summary = strlist("summary", 1, 8)
+    penalty_stats = strlist("penalty_stats", 0, 6)
+    outlook = strlist("outlook", 1, 8)
+
+    # ---- policy：接受 {域名: [条目]} 或 [[域名, [条目]], ...] 两种写法 ----
+    pol_raw = obj.get("policy")
+    pol_map = {}
+    if isinstance(pol_raw, dict):
+        pol_map = pol_raw
+    elif isinstance(pol_raw, list):
+        for row in pol_raw:
+            if isinstance(row, (list, tuple)) and len(row) >= 2:
+                pol_map[row[0]] = row[1]
+            elif isinstance(row, dict) and "domain" in row:
+                pol_map[row["domain"]] = row.get("items")
+    policy = []
+    dropped = 0
+    for dom in DOMAIN_NAMES:
+        items = pol_map.get(dom)
+        if not isinstance(items, list):
+            items = []
+        clean = []
+        for it in items:
+            if not isinstance(it, dict):
                 continue
-            # 2) 末尾括号缺失 -> 按栈一次性补齐
-            need = _needed_closers(code)
-            if need:
-                code = code.rstrip() + need + "\n"
+            url = _str_item(it.get("url"))
+            if not deep_link_ok(url):
+                dropped += 1
                 continue
-            # 3) 括号类型写错（如用 ) 关 [ 、或把 { 写成 ( ）：
-            #    先在报错行上替换【闭括号】试错，再在「on line N」指向的开括号行上替换【开括号】试错。
-            #    不依赖报错文案的具体措辞（各 Python 版本措辞不同）。
-            for target_line, pool in ((ln, ")]}"), (opener_line, "([{")):
-                if target_line is None or not (0 < target_line <= len(lines)):
-                    continue
-                line = lines[target_line - 1]
-                for pos, c in enumerate(line):
-                    if c not in pool:
-                        continue
-                    for alt in pool:
-                        if alt == c:
-                            continue
-                        cand = lines[:]
-                        cand[target_line - 1] = line[:pos] + alt + line[pos + 1:]
-                        cand = "\n".join(cand) + "\n"
-                        try:
-                            ast.parse(cand)
-                            return cand, True
-                        except SyntaxError:
-                            continue
-            break
-    return code, False
+            clean.append({
+                "title": _str_item(it.get("title") or it.get("matter"), "（缺标题）"),
+                "meta": _str_item(it.get("meta"), period),
+                "content": _str_item(it.get("content") or it.get("summary")),
+                "analysis": _str_item(it.get("analysis") or it.get("impact")),
+                "url": url,
+            })
+        if not clean:
+            clean.append({
+                "title": "%s：本期内无满足深链溯源要求的官方重大动态" % dom,
+                "meta": period + " ｜ —",
+                "content": "本期内未检索到可在发布机构官网定位到具体公告页面的%s领域动态。"
+                           "为避免引用不可核实来源，本条留空待核。" % dom,
+                "analysis": "建议对该领域保持常规监测，待官方发布可溯源的具体公告后补充分析。",
+                "url": "",
+            })
+        policy.append((dom, clean))
+    if dropped:
+        issues.append("丢弃 %d 条 policy（url 非深链）" % dropped)
+
+    # ---- penalties：每条 6 项 ----
+    pen_raw = obj.get("penalties")
+    penalties = []
+    pen_drop = 0
+    if isinstance(pen_raw, list):
+        for r in pen_raw:
+            if not isinstance(r, (list, tuple)):
+                continue
+            r = list(r) + ["—"] * (6 - len(r)) if len(r) < 6 else list(r)[:6]
+            r = [_str_item(x, "—") for x in r]
+            if not deep_link_ok(r[5]):
+                pen_drop += 1
+                continue
+            penalties.append(tuple(r))
+    if pen_drop:
+        issues.append("丢弃 %d 条 penalties（url 非深链）" % pen_drop)
+
+    # ---- pupu_items：每条 5 项 ----
+    pupu_raw = obj.get("pupu_items")
+    pupu = []
+    if isinstance(pupu_raw, list):
+        for r in pupu_raw:
+            if isinstance(r, dict):
+                r = [r.get(k) for k in ("title", "level", "link", "analysis", "advice")]
+            if not isinstance(r, (list, tuple)):
+                continue
+            pupu.append(tuple(_pad([_str_item(x, "—") for x in r], 5)))
+
+    # ---- matrix_rows：每行 7 项（主题 + 六大领域等级）----
+    mx_raw = obj.get("matrix_rows")
+    matrix = []
+    if isinstance(mx_raw, list):
+        for r in mx_raw:
+            if not isinstance(r, (list, tuple)):
+                continue
+            matrix.append(_pad([_str_item(x, "—") for x in r], 7))
+
+    data = {
+        "summary": summary,
+        "policy": policy,
+        "penalties": penalties,
+        "penalty_stats": penalty_stats,
+        "pupu_items": pupu,
+        "matrix_rows": matrix,
+        "outlook": outlook,
+    }
+    return data, issues
+
+
+# --------------------------------------------------------------------------
+# 确定性生成 Python 模块（语法恒正确，与 LLM 写作水平无关）
+# --------------------------------------------------------------------------
+
+def py_lit(v, ind=0):
+    """把基础类型渲染成合法且可读的 Python 字面量。
+
+    不用 json.dumps：它会输出 true/false/null 这类 Python 不认识的字面量。
+    list 渲染成 [..]、tuple 渲染成 (..)；单元素 tuple 必须补尾随逗号，
+    否则 (x) 只是「被括号包裹的 x」，结构会塌陷（曾导致 PENALTIES 退化为一维列表）。
+    """
+    sp = " " * ind
+    if isinstance(v, str):
+        return repr(v)
+    if isinstance(v, bool):
+        return "True" if v else "False"
+    if v is None:
+        return "None"
+    if isinstance(v, (int, float)):
+        return str(v)
+    if isinstance(v, (list, tuple)):
+        is_t = isinstance(v, tuple)
+        open_c, close_c = ("(", ")") if is_t else ("[", "]")
+        if not v:
+            return "()" if is_t else "[]"
+        inner = [py_lit(x, ind + 4) for x in v]
+        one = open_c + ", ".join(inner) + ("," if (is_t and len(v) == 1) else "") + close_c
+        if len(one) + ind <= 96:
+            return one
+        body = ",\n".join(" " * (ind + 4) + x for x in inner)
+        return open_c + "\n" + body + "\n" + sp + close_c
+    if isinstance(v, dict):
+        if not v:
+            return "{}"
+        items = [repr(k) + ": " + py_lit(val, ind + 4) for k, val in v.items()]
+        one = "{" + ", ".join(items) + "}"
+        if len(one) + ind <= 96:
+            return one
+        body = ",\n".join(" " * (ind + 4) + x for x in items)
+        return "{\n" + body + "\n" + sp + "}"
+    return repr(v)
+
+
+def module_source(meta, data):
+    """由 dict 生成数据模块源码。结构与 cloud/template_daily.py 完全一致。"""
+    L = ["# -*- coding: utf-8 -*-",
+         '"""%s %s 内容数据（六大合规领域）"""' % (meta["title"], meta["date_str"]),
+         ""]
+    L.append("META = " + py_lit(meta))
+    L.append("")
+    L.append("# 一、综述（核心观点框）")
+    L.append("SUMMARY = " + py_lit(data["summary"]))
+    L.append("")
+    L.append("# 二、六大领域动态回顾")
+    L.append("POLICY_DOMAINS = " + py_lit([(d, items) for d, items in data["policy"]]))
+    L.append("")
+    L.append("# 三、监管通报与处罚汇总")
+    L.append("PENALTIES = " + py_lit([tuple(r) for r in data["penalties"]]))
+    L.append("")
+    L.append("PENALTY_STATS = " + py_lit(data["penalty_stats"]))
+    L.append("")
+    L.append("# 四、朴朴超市业务专题")
+    L.append("PUPU_ITEMS = " + py_lit([tuple(r) for r in data["pupu_items"]]))
+    L.append("")
+    L.append("MATRIX_ROWS = " + py_lit(data["matrix_rows"]))
+    L.append("")
+    L.append("# 五、前瞻")
+    L.append("OUTLOOK = " + py_lit(data["outlook"]))
+    L.append("")
+    L.append("DATA = {")
+    for key, var in (("summary", "SUMMARY"), ("policy", "POLICY_DOMAINS"),
+                     ("penalties", "PENALTIES"), ("penalty_stats", "PENALTY_STATS"),
+                     ("pupu_items", "PUPU_ITEMS"), ("matrix_rows", "MATRIX_ROWS"),
+                     ("outlook", "OUTLOOK")):
+        L.append('    "%s": %s,' % (key, var))
+    L.append("}")
+    L.append("")
+    return "\n".join(L)
 
 
 def check_syntax(code):
-    """写入前先做语法预检。返回 (是否通过, 可读错误)。
-    出错时把「行号 + 该行原始内容」一并返回，便于回喂给模型修正。"""
+    """写入前的语法自检。此路径理论上恒为 True（源码由程序生成）。"""
     try:
         ast.parse(code)
         return True, ""
     except SyntaxError as e:
-        lines = code.splitlines()
-        ln = e.lineno or 0
-        snippet = lines[ln - 1].strip() if 0 < ln <= len(lines) else ""
-        return False, ("第 %d 行语法错误：%s；该行内容：%s"
-                       % (ln, e.msg, snippet[:120]))
+        return False, "第 %d 行：%s" % (e.lineno or 0, e.msg)
     except Exception as e:
         return False, "解析异常：%s" % e
 
@@ -540,50 +751,52 @@ def main():
     if not material.strip():
         raise SystemExit("未检索到任何素材，终止（避免产出空报告）")
 
-    template_path = os.path.join(CLOUD, "template_daily.py" if a.kind == "daily" else "template_weekly.py")
-    template = open(template_path, encoding="utf-8").read()
-
+    meta = build_meta(a.kind, start, end)
     mod = "%s_data_%s" % (a.kind, start.strftime("%m%d"))
     mod_path = os.path.join(GEN, mod + ".py")
 
     ok = False
     hint = ""
-    # 单次生成成功率有限（模型偶发括号/换行/截断错误），多次重试可显著提升总体成功率
-    for attempt in (1, 2, 3, 4, 5, 6):
-        log("生成数据模块（第 %d 次）" % attempt)
+    best = None                 # 记录内容最丰富的一次，作为兜底
+    best_score = -1
+    for attempt in (1, 2, 3):
+        log("生成内容（第 %d 次）" % attempt)
         try:
-            raw = llm(build_prompt(a.kind, period_label, start, end, material, template, hint))
+            raw = llm(build_prompt(a.kind, period_label, start, end, material, hint))
         except Exception as e:
             log("生成请求失败:", e)
-            hint = ("上次生成失败（%s）。请主动精简内容以保证一次性输出完整："
-                    "policy 每领域 2 条、penalties 3 条、pupu_items 3 条、"
-                    "matrix_rows 6-8 行、outlook 4-6 条；每条 summary/analysis 控制在 80 字内。"
-                    % str(e)[:150])
+            hint = "上次的请求失败了，请精简篇幅后重试（summary 4 条、每领域 2 条、penalties 5 条、outlook 4 条）。"
             continue
-        code = extract_code(raw)
-        # 先自动修复再预检：必须「先合并跨行、再净化值内引号」并循环至稳定。
-        # 顺序反了会失效——未合并时该行结尾没有闭合引号，净化正则匹配不到。
-        code, n_merge, n_san = repair_code(code)
-        if n_merge or n_san:
-            log("自动修复：合并跨行 %d 处、净化值内引号 %d 处" % (n_merge, n_san))
+        obj, note = parse_json_loose(raw)
+        if obj is None:
+            log("JSON 解析失败:", note)
+            hint = "上次的输出无法被 JSON 解析（%s）。请只输出一个 JSON 对象，不要解释文字，" \
+                   "并精简篇幅以保证输出完整。" % note
+            continue
+        log("JSON 解析成功（%s）" % note)
+        data, issues = normalize(obj, start, end)
+        for it in issues:
+            log("  ·", it)
+        # 内容量打分：用于在所有尝试都未通过硬性校验时挑最好的一次
+        score = (len(data["summary"]) + len(data["penalties"]) + len(data["pupu_items"])
+                 + len(data["outlook"]) + sum(len(v) for _, v in data["policy"]))
+        if score > best_score:
+            best, best_score = data, score
+        # 硬性门槛：综述、处罚、前瞻都不能为空，且至少要有可用的 policy 条目
+        usable_policy = sum(1 for _, items in data["policy"]
+                            if items and items[0].get("url"))
+        if not data["summary"] or not data["penalties"] or not data["outlook"]:
+            hint = ("上次输出缺少必要字段（summary=%d / penalties=%d / outlook=%d，"
+                    "带深链的 policy 条目=%d）。请补齐后重新输出完整 JSON："
+                    "url 必须是发布机构官网的具体公告页深链，查不到就不要写该条。"
+                    % (len(data["summary"]), len(data["penalties"]),
+                       len(data["outlook"]), usable_policy))
+            log("内容不完整，重试:", hint[:120])
+            continue
+        code = module_source(meta, data)
         syn_ok, syn_err = check_syntax(code)
         if not syn_ok:
-            # 输出被截断时末尾的字符串与括号都来不及闭合，纯语法必然失败 —— 先补救再看
-            salvaged, s_ok = salvage_truncated(code)
-            if s_ok:
-                log("补救截断输出（补引号/闭合括号）后语法通过，内容完整性交由字段校验判断")
-                code, syn_ok, syn_err = salvaged, True, ""
-        if not syn_ok:
-            log("语法预检失败:", syn_err)
-            # 关键：不要把出错行的【正文原文】回喂给模型。
-            # GLM 会把这段中文当成数据内容原样续写进字段值里（已多次观察到污染），
-            # 所以这里只回喂「错误类型 + 行号」，够它定位即可。
-            brief = syn_err.split("；")[0]
-            hint = ("【上次输出未通过语法校验】%s\n"
-                    "请重新输出完整代码：不要做任何解释，也不要复述本段要求原文。"
-                    "三条铁律：一、每个字符串值写在同一行内；"
-                    "二、值内需要引用时用中文引号；"
-                    "三、含短横线的日期/文号一律写成带引号的字符串。" % brief)
+            log("生成的模块语法异常（不应发生）:", syn_err)
             continue
         with open(mod_path, "w", encoding="utf-8") as f:
             f.write(code)
@@ -591,15 +804,20 @@ def main():
         if ok:
             log("数据模块校验通过")
             break
-        # 同样不回喂中文正文，只提取纯英文的缺字段清单
-        miss = re.search(r"MISS:([A-Za-z_,]+)", msg)
-        hint = ("上次输出语法通过但字段不全%s。请一次性输出完整代码，"
-                "确保 META / DATA / PENALTIES / MATRIX_ROWS / OUTLOOK 全部齐全，"
-                "不要复述本段要求原文。" % (("，缺少：" + miss.group(1)) if miss else ""))
         log("校验失败:", msg[-300:])
+        hint = "上次输出经程序转换后字段不全，请重新输出完整 JSON，确保 7 个顶层键齐全。"
 
     if not ok:
-        raise SystemExit("数据模块多次生成均未通过校验，终止")
+        # 兜底：用内容最多的一次再写一遍（少几条内容总好过整期没有）
+        if best is None:
+            raise SystemExit("三次均未产出可解析的 JSON，终止")
+        log("三次均未通过完整校验，改用内容最完整的一次兜底（评分 %d）" % best_score)
+        code = module_source(meta, best)
+        with open(mod_path, "w", encoding="utf-8") as f:
+            f.write(code)
+        ok, msg = validate_module(mod_path, mod)
+        if not ok:
+            raise SystemExit("兜底模块仍未通过校验: %s" % msg[-300:])
 
     done = render(mod, out_dir)
     files = sorted(f for f in os.listdir(out_dir) if start.strftime("%m%d") in f or mod in f)
