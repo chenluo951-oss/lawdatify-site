@@ -39,7 +39,9 @@ CLOUD = os.path.join(ROOT, "cloud")
 
 DEFAULT_MODELS = {
     "gemini": "gemini-2.5-flash",
-    "glm": "glm-4-flash",
+    # 必须用 -250414 版本：旧版 glm-4-flash 输出上限仅 4K，
+    # 完整数据模块（数百行中文）会被从中间截断成未闭合字符串；新版上限 16K（同样免费）。
+    "glm": "glm-4-flash-250414",
     "siliconflow": "Qwen/Qwen2.5-7B-Instruct",
     "openai": "gpt-4o-mini",
 }
@@ -117,7 +119,7 @@ def glm_web_generate(api_key, model, prompt, timeout=600):
     }
     headers = {"Content-Type": "application/json", "Authorization": "Bearer " + api_key}
     # 不显式给足长度，中文数据模块（数百行）极易在半途被截断成未闭合字符串
-    cands = [int(os.environ.get("LLM_MAX_TOKENS") or 8192), 4096, 2048]
+    cands = [int(os.environ.get("LLM_MAX_TOKENS") or 12288), 8192, 4096]
     last = None
     for mt in cands:
         body = dict(base)
