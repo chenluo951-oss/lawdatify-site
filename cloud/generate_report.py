@@ -9,13 +9,18 @@
     python3 cloud/generate_report.py --kind weekly [--date 2026-09-07]
 
 环境变量:
-    LLM_PROVIDER   gemini | glm | siliconflow | openai   （默认 gemini）
+    LLM_PROVIDER   glm | gemini | siliconflow | openai   （默认 glm，国内永久免费、自带联网检索）
     LLM_API_KEY    必填
     LLM_MODEL     可选，默认按 provider 选免费模型
-    TAVILY_API_KEY 非 gemini 检索时必填（Tavily 每月 1000 次免费）
+    TAVILY_API_KEY 仅当 provider=openai/siliconflow 且需联网检索时填（glm/gemini 自带检索，不需要）
     CBR_FONT_DIR  中文字体目录，需含 song/kaiti/qihei/heiti/songb 五个 .ttf
     CBR_OUT_DIR   报告输出目录（默认 ./out）
     GEMINI_PROXY  可选，gemini 走代理时填 http://host:port
+
+说明:
+    - glm（智谱 GLM-4-Flash）永久免费、国内直连，且 chat 接口原生支持 web_search 工具，
+      因此「检索 + 生成」只需一个 key，无需额外搜索 API（Tavily 之类）。
+    - gemini 同样自带 Google 搜索，但用户所在地区无法开通，故默认改为 glm。
 """
 import os
 import re
@@ -93,16 +98,43 @@ def openai_chat(base_url, api_key, model, prompt, timeout=600):
     return r["choices"][0]["message"]["content"]
 
 
+def glm_web_generate(api_key, model, prompt, timeout=600):
+    """智谱 GLM 原生 web_search 工具：一次调用同时完成联网检索 + 生成。
+    返回模型正文，并把检索到的来源链接（title/link）追加到文末，保证可溯源。"""
+    url = BASE_URLS["glm"].rstrip("/") + "/chat/completions"
+    body = {
+        "model": model,
+        "messages": [{"role": "user", "content": prompt}],
+        "temperature": 0.3,
+        "tools": [{"type": "web_search",
+                   "web_search": {"enable": True, "search_result": True}}],
+    }
+    r = http_json(url, body,
+                  headers={"Content-Type": "application/json",
+                           "Authorization": "Bearer " + api_key},
+                  timeout=timeout)
+    msg = (r.get("choices") or [{}])[0].get("message", {})
+    text = (msg.get("content") or "").strip()
+    for w in (msg.get("web_search") or []):
+        link = w.get("link") or w.get("url")
+        title = w.get("title") or ""
+        if link and link not in text:
+            text += "\n[检索来源] %s — %s" % (title, link)
+    return text
+
+
 def llm(prompt, use_search=False):
-    p = (os.environ.get("LLM_PROVIDER") or "gemini").lower()
+    p = (os.environ.get("LLM_PROVIDER") or "glm").lower()
     key = os.environ.get("LLM_API_KEY")
     if not key:
         raise SystemExit("缺少 LLM_API_KEY")
-    model = os.environ.get("LLM_MODEL") or DEFAULT_MODELS.get(p, DEFAULT_MODELS["gemini"])
+    model = os.environ.get("LLM_MODEL") or DEFAULT_MODELS.get(p, DEFAULT_MODELS["glm"])
     if p == "gemini":
         return gemini_generate(key, model, prompt, use_search,
                                os.environ.get("GEMINI_PROXY"))
-    return openai_chat(BASE_URLS.get(p, "https://api.openai.com/v1"), key, model, prompt)
+    if p == "glm" and use_search:
+        return glm_web_generate(key, model, prompt)
+    return openai_chat(BASE_URLS.get(p, BASE_URLS["glm"]), key, model, prompt)
 
 
 def tavily(api_key, query, max_results=8):
@@ -120,16 +152,21 @@ def tavily(api_key, query, max_results=8):
 
 
 def collect_material(kind, start, end, queries):
-    """检索素材。gemini 直接让模型带 Google 搜索出结果；其他 provider 用 Tavily 多轮检索。"""
-    provider = (os.environ.get("LLM_PROVIDER") or "gemini").lower()
+    """检索素材。
+    - gemini：模型自带 Google 搜索；
+    - glm（智谱）：模型自带 web_search 工具，一次调用即检索+生成，无需额外搜索 API；
+    - 其他 provider（openai/siliconflow）：用 Tavily 多轮检索（需 TAVILY_API_KEY）。
+    """
+    provider = (os.environ.get("LLM_PROVIDER") or "glm").lower()
+    key = os.environ.get("LLM_API_KEY")
+    model = os.environ.get("LLM_MODEL") or DEFAULT_MODELS.get(provider, DEFAULT_MODELS["glm"])
     material = []
     if provider == "gemini":
         for q in queries:
             log("检索(gemini+搜索):", q)
             try:
                 material.append("## 查询：%s\n%s" % (
-                    q, gemini_generate(os.environ["LLM_API_KEY"],
-                                       os.environ.get("LLM_MODEL") or DEFAULT_MODELS["gemini"],
+                    q, gemini_generate(key, model,
                                        "请检索 %s 至 %s 期间与「%s」相关的中国监管动态，"
                                        "列出 8-12 条，每条给出：发布日期、发布机构、文件/事件标题、"
                                        "官网原文深链 URL（必须是具体公告页，不能是官网首页）、100 字内要点。"
@@ -138,9 +175,24 @@ def collect_material(kind, start, end, queries):
             except Exception as e:
                 log("  检索失败:", e)
         return "\n\n".join(material)
+    if provider == "glm":
+        for q in queries:
+            log("检索(glm web_search):", q)
+            try:
+                material.append("## 查询：%s\n%s" % (
+                    q, glm_web_generate(key, model,
+                                       "你是合规检索助手。请检索 %s 至 %s 期间与中国「%s」相关的监管动态，"
+                                       "列出 8-12 条，每条给出：发布日期、发布机构、文件/事件标题、"
+                                       "官网原文深链 URL（必须是具体公告页，不能是官网首页根域名）、100 字内要点。"
+                                       "优先采用官方网站与权威媒体来源。"
+                                       % (start, end, q))))
+            except Exception as e:
+                log("  检索失败:", e)
+        return "\n\n".join(material)
+    # openai / siliconflow 等无内置检索的 provider → Tavily
     tk = os.environ.get("TAVILY_API_KEY")
     if not tk:
-        raise SystemExit("非 gemini 模式需要 TAVILY_API_KEY")
+        raise SystemExit("provider=%s 无内置检索，需要 TAVILY_API_KEY" % provider)
     for q in queries:
         log("检索(tavily):", q)
         try:
