@@ -113,7 +113,10 @@ def openai_chat(base_url, api_key, model, prompt, timeout=600):
 
 def glm_web_generate(api_key, model, prompt, timeout=600):
     """智谱 GLM 原生 web_search 工具：一次调用同时完成联网检索 + 生成。
-    返回模型正文，并把检索到的来源链接（title/link）追加到文末，保证可溯源。
+
+    返回 (正文, 来源链接列表)。正文里也会把来源追加到文末以便模型照抄；
+    来源链接列表单独返回，用于后续做「URL 白名单」校验 —— 实测只靠提示词无法
+    阻止模型编造形如 content_1234567890.htm 的占位深链，必须在程序端兜住。
 
     max_tokens 超过该型号上限会被拒，这里自动降级重试。
     """
@@ -150,12 +153,16 @@ def glm_web_generate(api_key, model, prompt, timeout=600):
             raise RuntimeError("GLM output truncated at max_tokens=%d" % mt)
         msg = ch.get("message", {})
         text = (msg.get("content") or "").strip()
+        links = []
         for w in (msg.get("web_search") or []):
-            link = w.get("link") or w.get("url")
-            title = w.get("title") or ""
-            if link and link not in text:
+            link = (w.get("link") or w.get("url") or "").strip()
+            title = (w.get("title") or "").strip()
+            if not link:
+                continue
+            links.append((title, link))
+            if link not in text:
                 text += "\n[检索来源] %s - %s" % (title, link)
-        return text
+        return text, links
     raise RuntimeError("GLM request failed (max_tokens downgraded): %s" % (last or "")[:300])
 
 
@@ -169,7 +176,7 @@ def llm(prompt, use_search=False):
         return gemini_generate(key, model, prompt, use_search,
                                os.environ.get("GEMINI_PROXY"))
     if p == "glm" and use_search:
-        return glm_web_generate(key, model, prompt)
+        return glm_web_generate(key, model, prompt)[0]
     return openai_chat(BASE_URLS.get(p, BASE_URLS["glm"]), key, model, prompt)
 
 
@@ -187,53 +194,145 @@ def tavily(api_key, query, max_results=8):
     return "\n".join(out)
 
 
+_URL_RE = re.compile(r"https?://[^\s，。；！？）)\]】\"'、]+")
+
+
+def url_key(u):
+    """URL 归一化键：忽略协议、www、端口、末尾斜杠与查询参数顺序。"""
+    try:
+        p = urllib.parse.urlsplit((u or "").strip())
+    except Exception:
+        return ""
+    if not p.netloc:
+        return ""
+    host = p.netloc.lower().split(":")[0]
+    if host.startswith("www."):
+        host = host[4:]
+    q = "&".join(sorted(x for x in (p.query or "").split("&") if x))
+    return "%s%s?%s" % (host, p.path.rstrip("/"), q)
+
+
+def _mono_digits(s):
+    """数字串中是否含"连续递增/递减/全同"的 6 位窗口 —— 占位 URL 的手写特征。
+
+    用滑动窗口而不是整串判断：模型编的 1234567890 末位是 9→0，整串并非单调，
+    但前 6 位 123456 是；20260906123456 则由尾部 123456 暴露。
+    真实公告页 ID（如 cac 的 c_1790099041364574）数字无规律，不会误伤。
+    """
+    if len(s) < 6:
+        return False
+    for i in range(len(s) - 5):
+        d = [int(c) for c in s[i:i + 6]]
+        diffs = {d[j + 1] - d[j] for j in range(5)}
+        if diffs.issubset({0, 1}) or diffs.issubset({0, -1}):
+            return True
+    return False
+
+
+def looks_fake(u):
+    """占位/幻觉 URL 的确定性检测。
+
+    实测 GLM 会拼出 content_1234567890.htm、20260906123456.html 这类：
+    格式合法、能通过深链校验，但点进去 404。这里按"手写数字串"特征识别。
+    """
+    if not isinstance(u, str) or not u.startswith(("http://", "https://")):
+        return True
+    tail = u.rsplit("/", 1)[-1]
+    try:
+        path = urllib.parse.urlsplit(u).path or ""
+    except Exception:
+        path = ""
+    for seg in (tail, path):
+        for run in re.findall(r"\d{6,}", seg):
+            if _mono_digits(run):
+                return True
+    return False
+
+
+def _urls_from_text(t):
+    """从检索正文里兜底提取 URL（结构化来源缺失时使用）。"""
+    out = []
+    for u in _URL_RE.findall(t or ""):
+        u = u.rstrip(".,;；。、）)】]}'\"")
+        if u:
+            out.append(("", u))
+    return out
+
+
+def _dedup_sources(pairs, limit=120):
+    seen, out = set(), []
+    for title, u in pairs:
+        if not isinstance(u, str):
+            continue
+        k = url_key(u)
+        if not k or k in seen:
+            continue
+        seen.add(k)
+        out.append((title or "", u))
+    return out[:limit]
+
+
 def collect_material(kind, start, end, queries):
-    """检索素材。
-    - gemini：模型自带 Google 搜索；
-    - glm（智谱）：模型自带 web_search 工具，一次调用即检索+生成，无需额外搜索 API；
-    - 其他 provider（openai/siliconflow）：用 Tavily 多轮检索（需 TAVILY_API_KEY）。
+    """检索素材。返回 (素材正文, 真实链接池)。
+
+    链接池 [(title, url), ...] 是后续 URL 白名单的依据 —— 模型只能引用池中出现过的
+    链接，从根本上杜绝它自行拼出格式合法但 404 的占位 URL。
+
+    - gemini：模型自带 Google 搜索（无结构化来源，从正文提取）；
+    - glm（智谱）：web_search 工具，API 直接返回真实来源，同时兜底从正文提取；
+    - 其他 provider（openai/siliconflow）：Tavily 多轮检索（需 TAVILY_API_KEY）。
     """
     provider = (os.environ.get("LLM_PROVIDER") or "glm").lower()
     key = os.environ.get("LLM_API_KEY")
     model = os.environ.get("LLM_MODEL") or DEFAULT_MODELS.get(provider, DEFAULT_MODELS["glm"])
     material = []
+    pairs = []
+
+    def harvest(text, links=None):
+        pairs.extend(links or [])
+        pairs.extend(_urls_from_text(text))
+        return text
+
     if provider == "gemini":
         for q in queries:
             log("检索(gemini+搜索):", q)
             try:
                 material.append("## 查询：%s\n%s" % (
-                    q, gemini_generate(key, model,
-                                       "请检索 %s 至 %s 期间与「%s」相关的中国监管动态，"
-                                       "列出 8-12 条，每条给出：发布日期、发布机构、文件/事件标题、"
-                                       "官网原文深链 URL（必须是具体公告页，不能是官网首页）、100 字内要点。"
-                                       % (start, end, q),
-                                       use_search=True)))
+                    q, harvest(gemini_generate(
+                        key, model,
+                        "请检索 %s 至 %s 期间与「%s」相关的中国监管动态，"
+                        "列出 8-12 条，每条给出：发布日期、发布机构、文件/事件标题、"
+                        "官网原文深链 URL（必须是具体公告页，不能是官网首页）、100 字内要点。"
+                        % (start, end, q), use_search=True))))
             except Exception as e:
                 log("  检索失败:", e)
-        return "\n\n".join(material)
+        return "\n\n".join(material), _dedup_sources(pairs)
+
     if provider == "glm":
         for q in queries:
             log("检索(glm web_search):", q)
             try:
-                material.append("## 查询：%s\n%s" % (
-                    q, glm_web_generate(key, model,
-                                       "你是合规检索助手。请检索 %s 至 %s 期间与中国「%s」相关的监管动态，"
-                                       "列出 8-12 条，每条给出：发布日期、发布机构、文件/事件标题、"
-                                       "官网原文深链 URL（必须是具体公告页，不能是官网首页根域名）、100 字内要点。"
-                                       "优先采用官方网站与权威媒体来源。" % (start, end, q))))
+                text, links = glm_web_generate(
+                    key, model,
+                    "你是合规检索助手。请检索 %s 至 %s 期间与中国「%s」相关的监管动态，"
+                    "列出 8-12 条，每条给出：发布日期、发布机构、文件/事件标题、"
+                    "官网原文深链 URL（必须是具体公告页，不能是官网首页根域名）、100 字内要点。"
+                    "优先采用官方网站与权威媒体来源。" % (start, end, q))
+                material.append("## 查询：%s\n%s" % (q, harvest(text, links)))
             except Exception as e:
                 log("  检索失败:", e)
-        return "\n\n".join(material)
+        return "\n\n".join(material), _dedup_sources(pairs)
+
     tk = os.environ.get("TAVILY_API_KEY")
     if not tk:
         raise SystemExit("provider=%s 无内置检索，需要 TAVILY_API_KEY" % provider)
     for q in queries:
         log("检索(tavily):", q)
         try:
-            material.append("## 查询：%s\n%s" % (q, tavily(tk, q)))
+            material.append("## 查询：%s\n%s" % (q, harvest(tavily(tk, q))))
         except Exception as e:
             log("  检索失败:", e)
-    return "\n\n".join(material)
+    return "\n\n".join(material), _dedup_sources(pairs)
 
 
 # --------------------------------------------------------------------------
@@ -279,9 +378,36 @@ def build_meta(kind, start, end):
     }
 
 
-def build_prompt(kind, period_label, start, end, material, retry_hint=""):
-    """构造 JSON 生成提示。相比早期让模型写 Python 源码，JSON 任务的出错面小得多。"""
+def build_prompt(kind, period_label, start, end, material, retry_hint="", sources=None):
+    """构造 JSON 生成提示。相比早期让模型写 Python 源码，JSON 任务的出错面小得多。
+
+    sources 是检索阶段实际拿到的真实链接池。把它显式列给模型并要求「原样复制」，
+    是为了根治 URL 幻觉 —— 实测 GLM 会自行拼出形如 content_1234567890.htm 的
+    占位 URL，格式合法但全部 404。
+    """
     dom = "\n".join("- %s：%s" % (a, b) for a, b in DOMAINS)
+    # 链接池：把检索阶段真实拿到的链接编号列出，要求模型原样复制，不得自行拼 URL
+    pool_lines, pool_keys = [], set()
+    for i, src in enumerate(sources or [], 1):
+        # 兼容 [(title, url)] 与 [url] 两种写法
+        title, u = src if isinstance(src, (list, tuple)) and len(src) >= 2 else ("", src)
+        if not isinstance(u, str):
+            continue
+        k = url_key(u)
+        if not k or k in pool_keys:
+            continue
+        pool_keys.add(k)
+        pool_lines.append("[%d] %s%s" % (i, u, ("（%s）" % title[:40]) if title else ""))
+    if pool_lines:
+        pool = ("【可用链接池（共 %d 条，来自检索阶段实际命中的来源）】\n%s\n\n"
+                ">>> url 字段必须【原样完整复制】上面某一条链接，一个字符都不要改；\n"
+                ">>> 严禁自行拼接、改写、猜测 URL；不在池中的 url 会被程序自动丢弃，该条目作废。\n"
+                ">>> 池中没有合适链接的条目，请整条不写（不要为了凑数编造）。\n"
+                % (len(pool_lines), "\n".join(pool_lines)))
+    else:
+        pool = ("【可用链接池】本次检索未拿到结构化来源链接。\n"
+                ">>> 这种情况下每条 url 必须是你有把握能在发布机构官网定位到的具体页面；\n"
+                ">>> 凡是凑出来的占位链接（含连续或重复数字）都会被程序识别并丢弃，条目作废。\n")
     shape = json.dumps({
         "summary": ["本期核心判断 1（120-220 字，含具体数据/文号/日期）"],
         "policy": {d: [{"title": "动态标题",
@@ -303,6 +429,7 @@ def build_prompt(kind, period_label, start, end, material, retry_hint=""):
 【六大合规领域】
 %s
 
+%s
 【检索到的公开监管素材】（可能含噪声，只保留可核实的官方信息，剔除自媒体转述）
 %s
 
@@ -319,14 +446,14 @@ def build_prompt(kind, period_label, start, end, material, retry_hint=""):
 - outlook：4-6 条，下期具体动作，动词开头。
 
 【硬性要求·会被程序自动校验】
-1. **url 必须是发布机构官网的具体公告/通报/处罚决定书页面深链**，严禁 `https://www.samr.gov.cn/` 这类官网首页根域名。
-   查不到确切深链的条目请直接不要写（本条会被自动丢弃，写了也白写）。
+1. **url 必须是发布机构官网的具体公告/通报/处罚决定书页面深链**，严禁 `https://www.samr.gov.cn/` 这类官网首页根域名；
+   且必须来自上面的链接池（原样复制）。不在池中的 url 一律作废，该条整条丢弃 —— 所以宁可少写，不要编。
 2. 全部使用简体中文，避免生僻字与繁体字（PDF 字体为 Noto CJK，缺字会导致 QA 失败）。
-3. 数字、文号、法条引用必须准确，无法核实的宁可不写。
+3. 数字、文号、法条引用必须准确，无法核实的宁可不写。发布机构须与所引用链接的来源一致，不要张冠李戴。
 4. 每个字符串值写在一行内；确需换行请用 \\n 转义。
 5. 篇幅务必控制：输出超长会被截断成不可解析的结果。
 %s
-""" % ("日报" if kind == "daily" else "周报", period_label, start, end, dom,
+""" % ("日报" if kind == "daily" else "周报", period_label, start, end, dom, pool,
        material[:60000], shape, retry_hint)
 
 
@@ -483,14 +610,33 @@ def _pad(lst, n, filler="—"):
     return lst + [filler] * (n - len(lst))
 
 
-def normalize(obj, start, end):
+def normalize(obj, start, end, allowed=None):
     """把任意"大致合规"的模型输出整理成渲染所需的严格结构。
+
+    allowed 是检索阶段拿到的真实链接池。只要它非空，url 就必须命中池子 ——
+    这是防止模型编造深链的最后一道、也是最硬的一道闸门（提示词只是软约束）。
 
     返回 (data, issues)；data 键：summary/policy/penalties/penalty_stats/
     pupu_items/matrix_rows/outlook。
     """
     issues = []
     period = "%s 至 %s" % (start.isoformat(), end.isoformat())
+    allowed_keys = {url_key(u) for u in (allowed or [])}
+    allowed_keys.discard("")
+    strict = bool(allowed_keys)
+    drop = {"nondeep": 0, "fake": 0, "offpool": 0}
+
+    def url_ok(u):
+        if not deep_link_ok(u):
+            drop["nondeep"] += 1
+            return False
+        if looks_fake(u):
+            drop["fake"] += 1
+            return False
+        if strict and url_key(u) not in allowed_keys:
+            drop["offpool"] += 1
+            return False
+        return True
 
     def strlist(key, min_n, max_n):
         v = obj.get(key)
@@ -515,7 +661,6 @@ def normalize(obj, start, end):
             elif isinstance(row, dict) and "domain" in row:
                 pol_map[row["domain"]] = row.get("items")
     policy = []
-    dropped = 0
     for dom in DOMAIN_NAMES:
         items = pol_map.get(dom)
         if not isinstance(items, list):
@@ -525,8 +670,7 @@ def normalize(obj, start, end):
             if not isinstance(it, dict):
                 continue
             url = _str_item(it.get("url"))
-            if not deep_link_ok(url):
-                dropped += 1
+            if not url_ok(url):
                 continue
             clean.append({
                 "title": _str_item(it.get("title") or it.get("matter"), "（缺标题）"),
@@ -545,25 +689,26 @@ def normalize(obj, start, end):
                 "url": "",
             })
         policy.append((dom, clean))
-    if dropped:
-        issues.append("丢弃 %d 条 policy（url 非深链）" % dropped)
 
     # ---- penalties：每条 6 项 ----
     pen_raw = obj.get("penalties")
     penalties = []
-    pen_drop = 0
     if isinstance(pen_raw, list):
         for r in pen_raw:
             if not isinstance(r, (list, tuple)):
                 continue
             r = list(r) + ["—"] * (6 - len(r)) if len(r) < 6 else list(r)[:6]
             r = [_str_item(x, "—") for x in r]
-            if not deep_link_ok(r[5]):
-                pen_drop += 1
+            if not url_ok(r[5]):
                 continue
             penalties.append(tuple(r))
-    if pen_drop:
-        issues.append("丢弃 %d 条 penalties（url 非深链）" % pen_drop)
+
+    if drop["offpool"]:
+        issues.append("丢弃 %d 条（url 不在检索链接池中，判定为编造）" % drop["offpool"])
+    if drop["fake"]:
+        issues.append("丢弃 %d 条（url 含占位数字串）" % drop["fake"])
+    if drop["nondeep"]:
+        issues.append("丢弃 %d 条（url 非深链/官网首页）" % drop["nondeep"])
 
     # ---- pupu_items：每条 5 项 ----
     pupu_raw = obj.get("pupu_items")
@@ -594,7 +739,7 @@ def normalize(obj, start, end):
         "matrix_rows": matrix,
         "outlook": outlook,
     }
-    return data, issues
+    return data, issues, drop
 
 
 # --------------------------------------------------------------------------
@@ -747,9 +892,14 @@ def main():
     queries = ["%s %s %s 官方公告 通报" % (start, end, d[0]) for d in DOMAINS]
     if a.kind == "weekly":
         queries.append("%s %s 市场监管总局 网信办 工信部 政策发布" % (start, end))
-    material = collect_material(a.kind, start.isoformat(), end.isoformat(), queries)
+    material, sources = collect_material(a.kind, start.isoformat(), end.isoformat(), queries)
     if not material.strip():
         raise SystemExit("未检索到任何素材，终止（避免产出空报告）")
+    src_urls = [u for _, u in sources]
+    if src_urls:
+        log("真实链接池: %d 条（将强制校验 url 必须命中此池）" % len(src_urls))
+    else:
+        log("警告: 检索未返回结构化来源，url 校验退化为「深链 + 占位串检测」")
 
     meta = build_meta(a.kind, start, end)
     mod = "%s_data_%s" % (a.kind, start.strftime("%m%d"))
@@ -762,7 +912,7 @@ def main():
     for attempt in (1, 2, 3):
         log("生成内容（第 %d 次）" % attempt)
         try:
-            raw = llm(build_prompt(a.kind, period_label, start, end, material, hint))
+            raw = llm(build_prompt(a.kind, period_label, start, end, material, hint, sources))
         except Exception as e:
             log("生成请求失败:", e)
             hint = "上次的请求失败了，请精简篇幅后重试（summary 4 条、每领域 2 条、penalties 5 条、outlook 4 条）。"
@@ -774,7 +924,7 @@ def main():
                    "并精简篇幅以保证输出完整。" % note
             continue
         log("JSON 解析成功（%s）" % note)
-        data, issues = normalize(obj, start, end)
+        data, issues, drop = normalize(obj, start, end, src_urls)
         for it in issues:
             log("  ·", it)
         # 内容量打分：用于在所有尝试都未通过硬性校验时挑最好的一次
@@ -786,11 +936,14 @@ def main():
         usable_policy = sum(1 for _, items in data["policy"]
                             if items and items[0].get("url"))
         if not data["summary"] or not data["penalties"] or not data["outlook"]:
-            hint = ("上次输出缺少必要字段（summary=%d / penalties=%d / outlook=%d，"
-                    "带深链的 policy 条目=%d）。请补齐后重新输出完整 JSON："
-                    "url 必须是发布机构官网的具体公告页深链，查不到就不要写该条。"
-                    % (len(data["summary"]), len(data["penalties"]),
-                       len(data["outlook"]), usable_policy))
+            # 只回喂「统计数字 + 英文短句」，绝不回喂中文正文（模型会把它当数据续写）
+            hint = ("LAST_OUTPUT_ISSUES: dropped_offpool=%d dropped_fake=%d dropped_nondeep=%d; "
+                    "usable_policy=%d; summary=%d penalties=%d outlook=%d. "
+                    "RULE: every url MUST be copied VERBATIM from the link pool (%d links supplied above). "
+                    "Never assemble or guess a URL. Re-emit the COMPLETE JSON only."
+                    % (drop["offpool"], drop["fake"], drop["nondeep"], usable_policy,
+                       len(data["summary"]), len(data["penalties"]),
+                       len(data["outlook"]), len(src_urls)))
             log("内容不完整，重试:", hint[:120])
             continue
         code = module_source(meta, data)
