@@ -274,8 +274,9 @@ def _urls_from_text(t):
 def _head_ok(u, timeout=10):
     """单个链接的可达性判定。
 
-    只把"明确不存在"的判为假：404/410/DNS 失败/连接失败。
-    403/401/429 多半是政府站点反爬，页面真实存在，一律保留 —— 宁可放过，不可误杀。
+    只把"明确不存在"的判为假：404/410，或 DNS 失败／连接被拒（域名、路径根本不存在）。
+    403/401/429 是政府站点反爬，页面真实存在；超时与 SSL 错误多半是 runner 跨境访问
+    国内站点的网络问题 —— 这些都保留，宁可放过，不可误杀（误杀会把链接池掏空）。
     """
     req = urllib.request.Request(u, method="HEAD", headers={
         "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
@@ -295,10 +296,15 @@ def _head_ok(u, timeout=10):
             except urllib.error.HTTPError as e2:
                 return e2.code not in (404, 410)
             except Exception:
-                return False
-        return True                          # 401/403/429 等：视为有效
+                return True                  # 网络问题，不是链接的错
+        return True                          # 401/403/429：站点反爬，页面存在
+    except urllib.error.URLError as e:
+        reason = getattr(e, "reason", None)
+        if "timed out" in str(reason).lower():
+            return True                      # 超时：跨境网络问题，不判死
+        return False                         # DNS 失败 / 连接被拒
     except Exception:
-        return False                         # DNS/连接/SSL/超时失败 -> 不可达
+        return True                          # SSL 等环境性错误，保留
 
 
 def verify_pool(urls, workers=16, min_keep=3):
@@ -469,13 +475,14 @@ def build_prompt(kind, period_label, start, end, material, retry_hint="", source
         pool_lines.append("[%d] %s%s" % (i, u, ("（%s）" % title[:40]) if title else ""))
     if pool_lines:
         pool = ("【可用链接池（共 %d 条，来自检索阶段实际命中的来源）】\n%s\n\n"
-                ">>> url 字段必须【原样完整复制】上面某一条链接，一个字符都不要改；\n"
-                ">>> 严禁自行拼接、改写、猜测 URL；不在池中的 url 会被程序自动丢弃，该条目作废。\n"
-                ">>> 池中没有合适链接的条目，请整条不写（不要为了凑数编造）。\n"
+                ">>> 引用方式：**只填编号**。把 url_ref 写成上面某一条的编号数字（如 3），\n"
+                ">>> 由程序自动替换为该编号对应的完整链接 —— 你不需要、也不要抄写 URL 文本。\n"
+                ">>> 严禁填编号以外的任何内容；编号不存在或填了别的东西，该条目整条作废。\n"
+                ">>> 池中没有合适来源的条目，请整条不写（不要为凑数编造）。\n"
                 % (len(pool_lines), "\n".join(pool_lines)))
     else:
         pool = ("【可用链接池】本次检索未拿到结构化来源链接。\n"
-                ">>> 这种情况下每条 url 必须是你有把握能在发布机构官网定位到的具体页面；\n"
+                ">>> 这种情况下 url 必须写你确实能在发布机构官网定位到的具体页面完整地址；\n"
                 ">>> 凡是凑出来的占位链接（含连续或重复数字）都会被程序识别并丢弃，条目作废。\n")
     shape = json.dumps({
         "summary": ["本期核心判断 1（120-220 字，含具体数据/文号/日期）"],
@@ -483,9 +490,9 @@ def build_prompt(kind, period_label, start, end, material, retry_hint="", source
                         "meta": "日期 动作 ｜ 发布机构",
                         "content": "事实陈述（150-260 字，含量化数据与法条依据）",
                         "analysis": "对朴朴的影响与落点（180-320 字，写到可执行动作）",
-                        "url": "https://发布机构官网/具体公告页.htm"}]
+                        "url_ref": 1}]
                    for d in DOMAIN_NAMES},
-        "penalties": [["MM-DD", "处罚/发布机关", "事项标题", "违法事由", "处理结果", "https://官网/具体处罚决定书页面"]],
+        "penalties": [["MM-DD", "处罚/发布机关", "事项标题", "违法事由", "处理结果", 2]],
         "penalty_stats": ["本期处罚的结构性判断（100-180 字）"],
         "pupu_items": [["专题标题", "高/中高/中", "涉及业务环节", "风险分析", "①②③④编号的可执行建议"]],
         "matrix_rows": [["风险主题", "数据合规", "AI合规", "算法合规", "平台合规", "产品合规", "价格合规"]],
@@ -515,8 +522,8 @@ def build_prompt(kind, period_label, start, end, material, retry_hint="", source
 - outlook：4-6 条，下期具体动作，动词开头。
 
 【硬性要求·会被程序自动校验】
-1. **url 必须是发布机构官网的具体公告/通报/处罚决定书页面深链**，严禁 `https://www.samr.gov.cn/` 这类官网首页根域名；
-   且必须来自上面的链接池（原样复制）。不在池中的 url 一律作废，该条整条丢弃 —— 所以宁可少写，不要编。
+1. **每条动态/处罚的来源用 url_ref 填链接池编号**（penalties 的第 6 项也填编号）。
+   严禁自己写 URL 文本、严禁官网首页根域名 —— 编号不合法的条目整条作废，宁可少写，不要编。
 2. 全部使用简体中文，避免生僻字与繁体字（PDF 字体为 Noto CJK，缺字会导致 QA 失败）。
 3. 数字、文号、法条引用必须准确，无法核实的宁可不写。发布机构须与所引用链接的来源一致，不要张冠李戴。
 4. 每个字符串值写在一行内；确需换行请用 \\n 转义。
@@ -679,21 +686,47 @@ def _pad(lst, n, filler="—"):
     return lst + [filler] * (n - len(lst))
 
 
-def normalize(obj, start, end, allowed=None):
+def normalize(obj, start, end, allowed=None, pool=None):
     """把任意"大致合规"的模型输出整理成渲染所需的严格结构。
 
-    allowed 是检索阶段拿到的真实链接池。只要它非空，url 就必须命中池子 ——
+    pool 是检索阶段拿到的真实链接池（有序）。只要它非空，url 就必须命中池子 ——
     这是防止模型编造深链的最后一道、也是最硬的一道闸门（提示词只是软约束）。
 
-    返回 (data, issues)；data 键：summary/policy/penalties/penalty_stats/
+    模型用 url_ref 填池中的编号即可引用来源：抄数字远比抄几十字符的 URL 可靠，
+    GLM 实测常常把长链接抄错或干脆自己编一个。编号无效则该条目作废。
+
+    返回 (data, issues, drop)；data 键：summary/policy/penalties/penalty_stats/
     pupu_items/matrix_rows/outlook。
     """
     issues = []
     period = "%s 至 %s" % (start.isoformat(), end.isoformat())
-    allowed_keys = {url_key(u) for u in (allowed or [])}
-    allowed_keys.discard("")
+    pool = [u for u in (pool or allowed or []) if isinstance(u, str)]
+    allowed_keys = {url_key(u) for u in pool} - {""}
     strict = bool(allowed_keys)
-    drop = {"nondeep": 0, "fake": 0, "offpool": 0}
+    drop = {"nondeep": 0, "fake": 0, "offpool": 0, "badref": 0}
+
+    def _by_ref(v):
+        """把 url_ref（编号，int 或纯数字字符串）解析成池中的链接。"""
+        n = None
+        if isinstance(v, bool):
+            return None
+        if isinstance(v, (int, float)):
+            n = int(v)
+        elif isinstance(v, str) and v.strip().isdigit():
+            n = int(v.strip())
+        if n is None or n < 1 or n > len(pool):
+            return None
+        return pool[n - 1]
+
+    def resolve(entry, raw_url):
+        """先按 url_ref 取池中链接，取不到再退回 url 文本校验。"""
+        ref = entry.get("url_ref") if isinstance(entry, dict) else None
+        u = _by_ref(ref)
+        if u:
+            return u
+        if ref not in (None, "", []):
+            drop["badref"] += 1
+        return _str_item(raw_url)
 
     def url_ok(u):
         if not deep_link_ok(u):
@@ -738,7 +771,7 @@ def normalize(obj, start, end, allowed=None):
         for it in items:
             if not isinstance(it, dict):
                 continue
-            url = _str_item(it.get("url"))
+            url = resolve(it, it.get("url"))
             if not url_ok(url):
                 continue
             clean.append({
@@ -767,11 +800,15 @@ def normalize(obj, start, end, allowed=None):
             if not isinstance(r, (list, tuple)):
                 continue
             r = list(r) + ["—"] * (6 - len(r)) if len(r) < 6 else list(r)[:6]
-            r = [_str_item(x, "—") for x in r]
-            if not url_ok(r[5]):
+            # 第 6 项可能是池编号（int）也可能是 URL 文本
+            u = _by_ref(r[5]) or _str_item(r[5], "—")
+            r = [_str_item(x, "—") for x in r[:5]] + [u]
+            if not url_ok(u):
                 continue
             penalties.append(tuple(r))
 
+    if drop["badref"]:
+        issues.append("丢弃 %d 条（url_ref 编号无效或超出链接池范围）" % drop["badref"])
     if drop["offpool"]:
         issues.append("丢弃 %d 条（url 不在检索链接池中，判定为编造）" % drop["offpool"])
     if drop["fake"]:
@@ -999,7 +1036,7 @@ def main():
                    "并精简篇幅以保证输出完整。" % note
             continue
         log("JSON 解析成功（%s）" % note)
-        data, issues, drop = normalize(obj, start, end, src_urls)
+        data, issues, drop = normalize(obj, start, end, pool=src_urls)
         for it in issues:
             log("  ·", it)
         # 内容量打分：用于在所有尝试都未通过硬性校验时挑最好的一次
@@ -1012,12 +1049,13 @@ def main():
                             if items and items[0].get("url"))
         if not data["summary"] or not data["penalties"] or not data["outlook"]:
             # 只回喂「统计数字 + 英文短句」，绝不回喂中文正文（模型会把它当数据续写）
-            hint = ("LAST_OUTPUT_ISSUES: dropped_offpool=%d dropped_fake=%d dropped_nondeep=%d; "
-                    "usable_policy=%d; summary=%d penalties=%d outlook=%d. "
-                    "RULE: every url MUST be copied VERBATIM from the link pool (%d links supplied above). "
-                    "Never assemble or guess a URL. Re-emit the COMPLETE JSON only."
-                    % (drop["offpool"], drop["fake"], drop["nondeep"], usable_policy,
-                       len(data["summary"]), len(data["penalties"]),
+            hint = ("LAST_OUTPUT_ISSUES: dropped_badref=%d dropped_offpool=%d dropped_fake=%d "
+                    "dropped_nondeep=%d; usable_policy=%d; summary=%d penalties=%d outlook=%d. "
+                    "RULE: set url_ref to a NUMBER between 1 and %d (the link pool index). "
+                    "Do NOT write URL text. Invalid ref = the whole entry is discarded. "
+                    "Re-emit the COMPLETE JSON only."
+                    % (drop["badref"], drop["offpool"], drop["fake"], drop["nondeep"],
+                       usable_policy, len(data["summary"]), len(data["penalties"]),
                        len(data["outlook"]), len(src_urls)))
             log("内容不完整，重试:", hint[:120])
             continue
