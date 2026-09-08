@@ -212,18 +212,22 @@ def url_key(u):
     return "%s%s?%s" % (host, p.path.rstrip("/"), q)
 
 
+_W = 6
+
+
 def _mono_digits(s):
     """数字串中是否含"连续递增/递减/全同"的 6 位窗口 —— 占位 URL 的手写特征。
 
     用滑动窗口而不是整串判断：模型编的 1234567890 末位是 9→0，整串并非单调，
     但前 6 位 123456 是；20260906123456 则由尾部 123456 暴露。
-    真实公告页 ID（如 cac 的 c_1790099041364574）数字无规律，不会误伤。
+    窗口取 6 而非 5：真实公告序号（t20260907_567890）里 5 位连号并不罕见，
+    取 5 会误伤；5 位的纯数字文件名（12345.html）由 looks_fake 的另一条规则覆盖。
     """
-    if len(s) < 6:
+    if len(s) < _W:
         return False
-    for i in range(len(s) - 5):
-        d = [int(c) for c in s[i:i + 6]]
-        diffs = {d[j + 1] - d[j] for j in range(5)}
+    for i in range(len(s) - _W + 1):
+        d = [int(c) for c in s[i:i + _W]]
+        diffs = {d[j + 1] - d[j] for j in range(_W - 1)}
         if diffs.issubset({0, 1}) or diffs.issubset({0, -1}):
             return True
     return False
@@ -243,9 +247,17 @@ def looks_fake(u):
     except Exception:
         path = ""
     for seg in (tail, path):
-        for run in re.findall(r"\d{6,}", seg):
+        for run in re.findall(r"\d{5,}", seg):
             if _mono_digits(run):
                 return True
+    # 文件名主体是纯数字（12345.html），或形如 t20260907_0.html 的「日期 + 1-2 位小序号」。
+    # 真实公告页要么带字母前缀（c_1790099041364574、art_4471df…、content_7041234），
+    # 要么序号是长随机串（t20260907_567890），这两种都不匹配下面的规则。
+    stem = re.sub(r"\.[A-Za-z0-9]{1,5}$", "", tail)
+    if stem.isdigit():
+        return True
+    if re.match(r"^[tT]?\d{8}[_-]\d{1,2}$", stem):
+        return True
     return False
 
 
@@ -257,6 +269,63 @@ def _urls_from_text(t):
         if u:
             out.append(("", u))
     return out
+
+
+def _head_ok(u, timeout=10):
+    """单个链接的可达性判定。
+
+    只把"明确不存在"的判为假：404/410/DNS 失败/连接失败。
+    403/401/429 多半是政府站点反爬，页面真实存在，一律保留 —— 宁可放过，不可误杀。
+    """
+    req = urllib.request.Request(u, method="HEAD", headers={
+        "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
+                      "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124 Safari/537.36",
+        "Accept": "*/*"})
+    try:
+        with urllib.request.urlopen(req, timeout=timeout) as r:
+            return r.status < 400
+    except urllib.error.HTTPError as e:
+        if e.code in (404, 410):
+            return False
+        if e.code in (405, 501):            # 不支持 HEAD，改用 GET 探针
+            try:
+                with urllib.request.urlopen(urllib.request.Request(
+                        u, headers={"User-Agent": "Mozilla/5.0"}), timeout=timeout) as r:
+                    return r.status < 400
+            except urllib.error.HTTPError as e2:
+                return e2.code not in (404, 410)
+            except Exception:
+                return False
+        return True                          # 401/403/429 等：视为有效
+    except Exception:
+        return False                         # DNS/连接/SSL/超时失败 -> 不可达
+
+
+def verify_pool(urls, workers=16, min_keep=3):
+    """对链接池做可达性过滤。
+
+    检索阶段（含模型的 web_search）本身可能返回编造链接，只靠提示词和启发式
+    挡不住 —— 这里用"点得开吗"这个最终标准过一遍。
+    若过滤后可用链接过少（网络受限导致大量误判），则回退到原始池，避免把报告掏空。
+    """
+    import concurrent.futures
+    urls = list(dict.fromkeys(urls))
+    if not urls:
+        return urls, {}
+    kept, stat = [], {"ok": 0, "dead": 0}
+    with concurrent.futures.ThreadPoolExecutor(max_workers=workers) as ex:
+        for u, ok in zip(urls, ex.map(_head_ok, urls)):
+            if ok:
+                kept.append(u)
+                stat["ok"] += 1
+            else:
+                stat["dead"] += 1
+    log("链接池可达性校验: 保留 %d / 剔除 %d" % (stat["ok"], stat["dead"]))
+    if len(kept) < min_keep:
+        log("可用链接过少（%d < %d），判定为网络受限，回退使用未校验池"
+            % (len(kept), min_keep))
+        return urls, stat
+    return kept, stat
 
 
 def _dedup_sources(pairs, limit=120):
@@ -895,6 +964,12 @@ def main():
     material, sources = collect_material(a.kind, start.isoformat(), end.isoformat(), queries)
     if not material.strip():
         raise SystemExit("未检索到任何素材，终止（避免产出空报告）")
+    # 检索阶段（模型自带 web_search）本身就会混入编造链接，先用"点得开吗"过一遍，
+    # 只把可达链接留作白名单；网络受限导致存活过少时会自动回退，避免把报告掏空。
+    if sources:
+        kept, vstat = verify_pool([u for _, u in sources])
+        kset = {url_key(x) for x in kept}
+        sources = [s for s in sources if url_key(s[1]) in kset]
     src_urls = [u for _, u in sources]
     if src_urls:
         log("真实链接池: %d 条（将强制校验 url 必须命中此池）" % len(src_urls))
