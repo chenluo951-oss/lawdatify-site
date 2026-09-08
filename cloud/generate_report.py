@@ -262,12 +262,21 @@ def looks_fake(u):
 
 
 def _urls_from_text(t):
-    """从检索正文里兜底提取 URL（结构化来源缺失时使用）。"""
+    """从检索正文里兜底提取 URL（结构化来源缺失时使用）。
+
+    顺带把同一行里 URL 之前的文字当作标题摘出来 —— 池里带着上下文标题，
+    模型才判断得出该引用哪一条，否则面对一串裸链接它只会自己编一个。
+    """
     out = []
-    for u in _URL_RE.findall(t or ""):
-        u = u.rstrip(".,;；。、）)】]}'\"")
-        if u:
-            out.append(("", u))
+    for line in (t or "").splitlines():
+        for m in _URL_RE.finditer(line):
+            u = m.group(0).rstrip(".,;；。、）)】]}'\"")
+            if not u:
+                continue
+            pre = line[:m.start()].strip()
+            title = re.sub(r"^[\-\*\s•·>|｜]+", "", pre)
+            title = re.sub(r"^[\d]+[.、)]\s*", "", title).strip()[-40:]
+            out.append((title, u))
     return out
 
 
@@ -498,6 +507,14 @@ def build_prompt(kind, period_label, start, end, material, retry_hint="", source
         "matrix_rows": [["风险主题", "数据合规", "AI合规", "算法合规", "平台合规", "产品合规", "价格合规"]],
         "outlook": ["下期具体动作（60-160 字，动词开头）"],
     }, ensure_ascii=False, indent=1)
+    # 结构里刻意不出现 url 字段：让模型只能填编号，没有"顺手编一个链接"的入口
+    ref_note = (
+        "【来源引用·最重要】\n"
+        "policy 每条用 url_ref 填一个【链接池编号数字】；penalties 每条的第 6 项同样填编号。\n"
+        "结构示例：{\"title\": \"...\", \"meta\": \"...\", \"content\": \"...\", "
+        "\"analysis\": \"...\", \"url_ref\": 3}  —— url_ref 的值就是 3，不要写网址。\n"
+        "绝对不要自己写 http 开头的网址：你写的每一个网址都会被程序判定为编造并整条作废。\n"
+    ) if pool_lines else ""
     return """你是朴朴超市（即时零售 / 前置仓生鲜电商）的法务合规专家，要产出一份%s的内容数据。
 
 【报告期】%s（%s 至 %s）
@@ -505,6 +522,7 @@ def build_prompt(kind, period_label, start, end, material, retry_hint="", source
 【六大合规领域】
 %s
 
+%s
 %s
 【检索到的公开监管素材】（可能含噪声，只保留可核实的官方信息，剔除自媒体转述）
 %s
@@ -530,7 +548,7 @@ def build_prompt(kind, period_label, start, end, material, retry_hint="", source
 5. 篇幅务必控制：输出超长会被截断成不可解析的结果。
 %s
 """ % ("日报" if kind == "daily" else "周报", period_label, start, end, dom, pool,
-       material[:60000], shape, retry_hint)
+       ref_note, material[:60000], shape, retry_hint)
 
 
 # --------------------------------------------------------------------------
