@@ -37,6 +37,11 @@ FMT_LABEL = {"html": "网页版", "pdf": "PDF", "docx": "Word"}
 # 网页版单份仅 20~130KB，且可直接在线阅读，对外分享体验更好。
 ONLINE_FMTS = ("html",)
 
+# 不发布名单（2026-09-09 建立）：文件名含下列片段的期次不进站点。
+# 用途：某期报告若被查出含编造/失效来源链接，在此屏蔽即可，文件仍留本机备查。
+# 当前屏蔽：2026-09-06 日报（来源链接为 content_1234567890 一类编造值，实测 404）。
+BLOCKED = ("简报_2026-09-06",)
+
 
 def esc(s):
     return html.escape("" if s is None else str(s), quote=False)
@@ -82,6 +87,10 @@ def scan(base=None):
     if not os.path.isdir(base):
         return groups
     for fn in sorted(os.listdir(base)):
+        # 不发布名单：这些期次经实测含编造来源链接（如 content_1234567890），
+        # 文件保留在本机与 _quarantine/，但不进站点。新增屏蔽项在此追加文件名片段。
+        if any(b in fn for b in BLOCKED):
+            continue
         p = parse_name(fn)
         if not p:
             continue

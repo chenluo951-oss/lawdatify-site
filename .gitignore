@@ -24,3 +24,6 @@ news/reports/*.pdf
 news/reports/*.docx
 *.pdf
 *.docx
+
+# 含编造链接、待复核的报告（隔离区，不发布）
+_quarantine/

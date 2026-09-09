@@ -3,7 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>法律合规资讯索引 · lawdatify</title>
+<title>合规资讯 · 六大领域动态 · lawdatify</title>
+<meta name="description" content="按数据、AI、算法、平台、产品、价格六大领域分类展示监管动态与合规资讯，逐条附发布机构官网深链。">
 <link rel="stylesheet" href="../assets/style.css">
 </head>
 <body>
@@ -12,7 +13,7 @@
   <a class="brand" href="../index.html">law<span>datify</span></a>
   <div class="navlinks">
     <a href="../index.html">首页</a>
-    <a href="index.html" class="active">资讯索引</a>
+    <a href="index.html" class="active">合规资讯</a>
     <a href="../analysis/index.html">法律分析</a>
     <a href="../kb/index.html">合规知识库</a>
     <a href="../prm.html">工作项目</a>
@@ -20,60 +21,581 @@
 </div></nav>
 
 <div class="pagehead"><div class="inner">
-  <div class="crumb"><a href="../index.html">首页</a> / 法律合规资讯索引</div>
-  <h1>法律合规资讯索引</h1>
-  <p>聚合外部法规、监管处罚通报、政策更新与内部合规简报，按领域分类，附官方深链，持续更新。</p>
+  <div class="crumb"><a href="../index.html">首页</a> / 合规资讯</div>
+  <h1>六大领域合规动态</h1>
+  <p>从每日 / 每周合规简报中自动提取，按领域归类，逐条附发布机构官网深链（已实测可达）。每条含监管要点与面向业务的合规解读。</p>
 </div></div>
 
 <div class="wrap">
 
-  <div class="section-title"><span class="bar"></span>合规简报归档</div>
-  <div class="notice">由自动化合规简报（日报 / 周报 / 月报）每日同步生成，当前已接入 10 个期次、15 份报告。点击进入可检索全部历史与最新期次。</div>
+<!-- FEED:START -->
+<div class="feedbar">
+  <div class="fb-stats">
+    <div class="st"><div class="n">36</div><div class="l">合规动态</div></div>
+    <div class="st"><div class="n">6</div><div class="l">覆盖领域</div></div>
+    <div class="st"><div class="n">2026-10-01</div><div class="l">更新至</div></div>
+  </div>
+  <div class="fb-tools">
+    <input id="q" type="search" placeholder="按关键词 / 机构过滤…" aria-label="过滤">
+    <div class="ftabs"><button class="ftab active" data-f="all">全部 <em>36</em></button><button class="ftab" data-f="数据合规">数据合规 <em>8</em></button><button class="ftab" data-f="AI合规">AI合规 <em>6</em></button><button class="ftab" data-f="算法合规">算法合规 <em>3</em></button><button class="ftab" data-f="平台合规">平台合规 <em>7</em></button><button class="ftab" data-f="产品合规">产品合规 <em>6</em></button><button class="ftab" data-f="价格合规">价格合规 <em>6</em></button></div>
+  </div>
+</div>
+<div id="feed"><section class="fgroup" id="g-数据合规" data-g="数据合规"><div class="fgroup-h"><span class="dot" style="background:#1b4f8a"></span><h3>数据合规</h3><span class="cnt">8 条</span></div><div class="nilist"><article class="ni" data-domain="数据合规" data-idx="0">
+  <div class="ni-bar" style="background:#1b4f8a"></div>
+  <div class="ni-body">
+    <div class="ni-top">
+      <span class="ni-dom" style="color:#1b4f8a;background:#1b4f8a14">数据合规</span>
+      <span class="ni-date">2026-09-06</span>
+      <span class="ni-org">国家安全部</span>
+      <span class="ni-kind">周报</span>
+    </div>
+    <h4 class="ni-title">国家安全机关披露间谍窃取快递企业数据案：物理接触＋终端植入成物流数据外泄新路径</h4>
+    <p class="ni-pt">国家安全机关披露一起间谍窃取快递数据案：涉案人员深夜翻入快递网点，插入预置木马 U 盘，企图窃取境内快递企业数据；网点值班人员及时发现并拨打 12339 举报，国家安全机关与相关部门成功破获该案，封堵数据外泄通道。攻击路径为“物理接触—终端植入—内网横向渗透”，区别于网络入侵、钓鱼邮件与供应链攻击，暴露的是网点末端设备（操作终端、扫码枪、自助柜）USB 接口管控缺失与内网隔离不足。</p>
+    <details class="ana"><summary>朴朴视角 · 合规解读</summary><div class="ana-b">对朴朴的三点映射：其一，前置仓与配送站点的操作终端、PDA、电子秤、自助取货柜存在同类暴露面，须纳入统一终端安全基线——关闭非必要 USB 存储权限、启用终端白名单、终端与内网做 VLAN 隔离与最小访问授权。其二，“值班人员及时发现并举报”是本案止损关键，说明人员意识培训与 12339 渠道知晓率是实质性控制措施，建议将“异常物理接触与陌生设备接入”的识别与上报写入站点 SOP 并纳入月度演练。其三，快递物流数据已被纳入国家安全关注范围，朴朴的订单、地址与轨迹数据虽属商业数据，但规模化特征使之具备重要数据属性，须按《网络数据安全管理条例》完成分类分级，并落实一般操作日志不少于 6 个月、涉重要数据与个人信息合作处理日志不少于 3 年的留存要求。</div></details>
+    <div class="ni-foot"><a class="src" href="https://www.cac.gov.cn/2026-09/04/c_1790271981702331.htm" target="_blank" rel="noopener">cac.gov.cn <span class="arw">↗</span></a></div>
+  </div>
+</article><article class="ni" data-domain="数据合规" data-idx="1">
+  <div class="ni-bar" style="background:#1b4f8a"></div>
+  <div class="ni-body">
+    <div class="ni-top">
+      <span class="ni-dom" style="color:#1b4f8a;background:#1b4f8a14">数据合规</span>
+      <span class="ni-date">2026-09-02</span>
+      <span class="ni-org">山东省通信管理局</span>
+      <span class="ni-kind">日报</span>
+    </div>
+    <h4 class="ni-title">山东省通信管理局通报不合格 App 整改情况（2026 年第 3 批）：生鲜电商应用《袋鼠菜篮》被点名</h4>
+    <p class="ni-pt">山东省通信管理局发布《关于不合格 APP 整改情况的通报（2026 年第 3 批）》。附件 1 为予以通报的 15 款 App 名单，附件 2 为予以下架的 3 款 App 名单。通报的问题项高度集中且表述细化，主要包括五类：违规收集个人信息（15 款全部涉及）、超范围收集个人信息（《袋鼠菜篮》《沂网购》等）、App 强制频繁过度索取权限（12 款）、</p>
+    <details class="ana"><summary>朴朴视角 · 合规解读</summary><div class="ana-b">本批通报对朴朴有三点直接价值。其一，《袋鼠菜篮》作为同业态同类目应用被点名，说明生鲜电商 App 已进入通管局抽测范围，且问题项与朴朴 App 的高频风险完全重合（超范围收集、权限索取频率、自启动关联启动），建议立即对照这五类问题开展一轮自查。其二，“强制用户使用定向推送功能”被单列为独立通报事项，指向《个人信息保护法》第二十四条与《互联网信息服务算法推荐管理规定》第十八条——定向推送必须提供不针对其个人特征的选项或便捷的关闭方式，若朴朴 App 的个性化推荐开关存在默认开启、入口深藏、关闭后仍推送三类情形，即构成同类违规。其三，下架名单中 3 款均为“通报后仍未整改”的结果，整改窗口一旦错过即不可逆，须以通报口径倒排整改时限并留痕。</div></details>
+    <div class="ni-foot"><a class="src" href="https://sdca.miit.gov.cn/xwdt/tzgg/art/2026/art_707b508093314187a13f2aa550a4a133.html" target="_blank" rel="noopener">sdca.miit.gov.cn <span class="arw">↗</span></a></div>
+  </div>
+</article><article class="ni" data-domain="数据合规" data-idx="2">
+  <div class="ni-bar" style="background:#1b4f8a"></div>
+  <div class="ni-body">
+    <div class="ni-top">
+      <span class="ni-dom" style="color:#1b4f8a;background:#1b4f8a14">数据合规</span>
+      <span class="ni-date">2026-09-02</span>
+      <span class="ni-org">北京市通信管理局</span>
+      <span class="ni-kind">日报</span>
+    </div>
+    <h4 class="ni-title">北京市通信管理局通报问题移动互联网应用程序（2026 年第九期）：5 款通报、2 款全网下架</h4>
+    <p class="ni-pt">北京市通信管理局发布《关于问题移动互联网应用程序的通报（2026 年第九期）》。通报指出，近期通过抽测发现本市部分移动互联网应用程序存在“违反必要原则收集个人信息”“未明示收集使用个人信息的目的、方式和范围”等侵害用户权益问题，截至目前尚有 5 款未整改或整改不到位，现予以公开通报（附件 1）。</p>
+    <details class="ana"><summary>朴朴视角 · 合规解读</summary><div class="ana-b">北京通报的价值在于量化了整改窗口：8 月 4 日通报至 9 月 2 日下架，间隔约 4 周，即“一次通报＋一次整改复核”的闭环周期已压缩至一个月以内。同时“违反必要原则收集个人信息”被列在首位，与山东通报的“超范围收集个人信息”属同一判定口径的不同表述，两地合计覆盖 20 款 App，说明必要性与最小必要原则是当前 App 抽测的第一顺位判定项。建议朴朴在隐私合规台账中，为每一项个人信息字段单独列明“收集目的—使用场景—必要性论证—最小范围替代方案”，而非仅做整体说明，以便在任何一地抽测中即时举证。</div></details>
+    <div class="ni-foot"><a class="src" href="https://bjca.miit.gov.cn/zwgk/wlaqgl/art/2026/art_d7373df5e6c546d58b829292e19adef1.html" target="_blank" rel="noopener">bjca.miit.gov.cn <span class="arw">↗</span></a></div>
+  </div>
+</article><article class="ni" data-domain="数据合规" data-idx="3">
+  <div class="ni-bar" style="background:#1b4f8a"></div>
+  <div class="ni-body">
+    <div class="ni-top">
+      <span class="ni-dom" style="color:#1b4f8a;background:#1b4f8a14">数据合规</span>
+      <span class="ni-date">2026-09-01</span>
+      <span class="ni-org">国家互联网信息办公室、公安部、国家市场监督管理总局（国家标准委）</span>
+      <span class="ni-kind">周报</span>
+    </div>
+    <h4 class="ni-title">个保“大—小”两端监管闭环本周合拢：第 25 号令施行、大型处理者规定征求意见截止、数据出境国标实施</h4>
+    <p class="ni-pt">国家网信办、公安部联合公布的第 25 号令《小型个人信息处理者个人信息保护简化措施规定》自 2026 年 9 月 1 日起施行，将处理不满 10 万人个人信息的处理者界定为小型个人信息处理者，提供四条简化路径：规则简化（至少载明处理者名称、权利受理部门或人员及联系方式、处理目的方式、信息种类与保存期限，</p>
+    <details class="ana"><summary>朴朴视角 · 合规解读</summary><div class="ana-b">三项制度叠加对朴朴形成三层约束。其一，朴朴用户规模远超 1000 万人，确定落入“大型个人信息处理者”范畴，须提前对照认定标准准备申报材料与制度改造：个人信息保护负责人须为管理层成员（不能仅由法务或安全部门负责人兼任而无决策权），独立监督委员会须在认定后 6 个月内组建且外部成员占三分之二以上，年度社会责任报告与双年度合规审计须排入日程。这是本周对朴朴影响最深远、准备周期最长的一项。其二，第 25 号令的“平台沿用”机制为平台—商户责任划分提供了官方认可路径：若朴朴在招商入驻环节为小微商户提供统一处理规则模板并统一开展合规审计与影响评估，可在数据处理协议中约定商户沿用，但须完成“统一规则＋合规审计＋影响评估”三项前置动作，并留存商户沿用确认文件。其三，GB/T 45232-2026 与重庆条例的日志留存要求（一般 6 个月、重要数据与个人信息合作处理 3 年）应作为朴朴日志策略的下限基准，避免出现“按业务需要设定留存期”而低于地方立法要求的情形。建议本周内启动大型处理者认定的内部评估与差距清单，并在招商协议模板中增补沿用平台规则的条款。</div></details>
+    <div class="ni-foot"><a class="src" href="https://www.cac.gov.cn/2026-07/24/c_1786638889704872.htm" target="_blank" rel="noopener">cac.gov.cn <span class="arw">↗</span></a></div>
+  </div>
+</article><article class="ni" data-domain="数据合规" data-idx="4">
+  <div class="ni-bar" style="background:#1b4f8a"></div>
+  <div class="ni-body">
+    <div class="ni-top">
+      <span class="ni-dom" style="color:#1b4f8a;background:#1b4f8a14">数据合规</span>
+      <span class="ni-date">2026-09-01</span>
+      <span class="ni-org">国家网络安全通报中心（公安部计算机信息系统安全产品质量监督检验中心检测）</span>
+      <span class="ni-kind">日报</span>
+    </div>
+    <h4 class="ni-title">国家网络安全通报中心通报 42 款违法违规收集使用个人信息移动应用</h4>
+    <p class="ni-pt">根据中央网信办、工业和信息化部、公安部联合发布的《关于开展 2026 年个人信息保护系列专项行动的公告》，经公安部计算机信息系统安全产品质量监督检验中心检测，42 款移动应用存在一项或多项违法违规收集使用个人信息情况，共涉八类问题：未公开个人信息收集使用规则（10 款，含《有来医生》《114 挂号 号百就医服务》等）；未经用户同意收集使用个人信息（27 款）；</p>
+    <details class="ana"><summary>朴朴视角 · 合规解读</summary><div class="ana-b">八类问题中“未同步告知权限目的”“超必要范围收集”“无有效注销入口”“无投诉举报渠道”四项属零售类 App 高频风险点，且与工信部通报口径高度一致。建议以这八类为基准对朴朴 App 逐项自查：权限申请时的目的同步告知是否到位、位置与通讯录收集是否与场景相关、注销入口是否真实可用（而非仅页面存在）、投诉举报渠道是否在隐私政策中显著公布且可达。复测下架机制意味着整改不能停留在提交报告，须经得起二次验证。</div></details>
+    <div class="ni-foot"><a class="src" href="https://finance.sina.com.cn/stock/bxjj/2026-09-01/doc-iniqhsee1557691.shtml" target="_blank" rel="noopener">finance.sina.com.cn <span class="arw">↗</span></a></div>
+  </div>
+</article><article class="ni" data-domain="数据合规" data-idx="5">
+  <div class="ni-bar" style="background:#1b4f8a"></div>
+  <div class="ni-body">
+    <div class="ni-top">
+      <span class="ni-dom" style="color:#1b4f8a;background:#1b4f8a14">数据合规</span>
+      <span class="ni-date">2026-09-01</span>
+      <span class="ni-org">国家网信办等十部门；上海市通信管理局；重庆市、四川省通信管理局</span>
+      <span class="ni-kind">日报</span>
+    </div>
+    <h4 class="ni-title">《促进和规范电子单证应用规定》9 月 1 日施行；上海金融 App 专项整治、川渝 App 通报同步推进</h4>
+    <p class="ni-pt">《促进和规范电子单证应用规定》（十部门令第 22 号）自 9 月 1 日施行，明确电子提单、电子海运单、电子仓单等电子单证的法律地位，要求可靠的电子单证系统实现信息全程可追溯、不可篡改并识别签发人；第二十一条规定国际贸易、跨境运输过程中产生的电子单证数据向境外提供，符合“不包含个人信息或重要数据”或“所涉个人信息仅为签发、转让、质押电子单证或行使权利所必需”两种情形之一的，</p>
+    <details class="ana"><summary>朴朴视角 · 合规解读</summary><div class="ana-b">电子单证规定对即时零售的供应链单据、仓单电子化具有直接适用价值：若朴朴推进供应商对账单、入库单、仓单的电子化改造，可参照“可靠电子单证系统”的八项可靠性评价因素（运行规则、数据完整性保障、电子签名可靠性、防未授权访问、软硬件安全性、运行稳定性、灾难恢复、独立审计频次）建设系统，使电子单据具备可举证效力。上海金融专项整治的“七大类问题”中“未妥善处理用户投诉”被单列，提示投诉处置闭环已正式成为个保合规的独立判定项，朴朴客服工单的响应时效与处置留痕应纳入个保合规台账。川渝通报给予 9 天的整改窗口，提示各地通管局的整改期限已从 15 个工作日压缩至 10 个自然日以内。</div></details>
+    <div class="ni-foot"><a class="src" href="https://guangdong.chinatax.gov.cn/gdsw/zjfg/2026-04/22/content_b8ab7a9c2d724e7b8c9afc35a82a7674.shtml" target="_blank" rel="noopener">guangdong.chinatax.gov.cn <span class="arw">↗</span></a></div>
+  </div>
+</article><article class="ni" data-domain="数据合规" data-idx="6">
+  <div class="ni-bar" style="background:#1b4f8a"></div>
+  <div class="ni-body">
+    <div class="ni-top">
+      <span class="ni-dom" style="color:#1b4f8a;background:#1b4f8a14">数据合规</span>
+      <span class="ni-date">2026-08-31</span>
+      <span class="ni-org">中央网信办、工业和信息化部、公安部（国家网络安全通报中心）</span>
+      <span class="ni-kind">周报</span>
+    </div>
+    <h4 class="ni-title">个人信息保护系列专项行动阶段性成效：核查 2 万余款、通报 1100 余款、下架 400 余款，“个性化广告关闭选项”成独立整治项</h4>
+    <p class="ni-pt">2026 年个人信息保护系列专项行动公布阶段性成效：各地累计对 2 万余款 App、SDK 个人信息收集使用情况开展核查检测，督促 4000 余款完成整改，公开通报 1100 余款存在违法违规问题的 App、SDK，对 400 余款采取下架等处置处罚措施；针对“未明确收集个人信息用于广告、用户画像”“未提供个性化广告关闭选项”两类问题，对 1000 余家企业和机构的产品开展核查并督促整改；</p>
+    <details class="ana"><summary>朴朴视角 · 合规解读</summary><div class="ana-b">本周数据揭示三项趋势。其一，“个性化广告关闭选项”与“个性化推荐关闭选项”已被央地一致认定为两项独立的可关闭性要求：前者指向基于画像的广告匹配与精准营销，后者指向商品与内容推荐。朴朴须分别设置关闭入口、验证关闭后曝光结果显著变化、禁止默认勾选，并保留带截图的验证记录。其二，整改窗口已压缩至 4 周左右，且“通报—整改复核—全网下架”成为标准链条，错过窗口不可逆，须以通报口径倒排整改时限并全程留痕。其三，《袋鼠菜篮》作为生鲜电商同业态应用被点名，说明生鲜零售 App 已进入通管局抽测范围，问题项（违规收集、超范围收集、强制频繁过度索取权限、强制定向推送、频繁自启动关联启动）与朴朴 App 的高频风险完全重合。建议立即按五类问题建立逐权限的“收集目的—使用场景—必要性论证—最小范围替代方案”举证台账。此外，“严惩行业内鬼”提示对客服、运营、仓配等可批量接触用户信息的岗位建立查询留痕与异常量告警。</div></details>
+    <div class="ni-foot"><a class="src" href="http://gaj.liaoyang.gov.cn/govxxgk/LYGAJ/2026-08-31/601c7543-1ded-42b9-b6c9-2487ad812d75.html" target="_blank" rel="noopener">gaj.liaoyang.gov.cn <span class="arw">↗</span></a></div>
+  </div>
+</article><article class="ni" data-domain="数据合规" data-idx="7">
+  <div class="ni-bar" style="background:#1b4f8a"></div>
+  <div class="ni-body">
+    <div class="ni-top">
+      <span class="ni-dom" style="color:#1b4f8a;background:#1b4f8a14">数据合规</span>
+      <span class="ni-date">2026-08-25</span>
+      <span class="ni-org">工业和信息化部信息通信管理局</span>
+      <span class="ni-kind">日报</span>
+    </div>
+    <h4 class="ni-title">工信部通报 26 款 App／SDK 侵害用户权益（第 5 批，总第 58 批）</h4>
+    <p class="ni-pt">依据《关于开展 2026 年个人信息保护系列专项行动的公告》，工信部组织对 App、SDK 违法违规收集使用个人信息开展治理，经第三方检测抽查发现 26 款存在侵害用户权益行为并予以通报。违规类型集中于：违规收集个人信息、强制频繁过度索取权限、信息窗口无法关闭或诱导跳转、违规提供自动续费服务、SDK 超范围收集与信息公示不到位。</p>
+    <details class="ana"><summary>朴朴视角 · 合规解读</summary><div class="ana-b">零售类 App 的高频风险点高度重合：权限申请时机与必要性、第三方 SDK 收集范围与公示、弹窗可关闭性、自动续费显著告知。建议以 26 款问题清单为基准，对朴朴 App 做一轮权限、SDK、弹窗与续费条款的专项自查。</div></details>
+    <div class="ni-foot"><a class="src" href="https://www.miit.gov.cn/" target="_blank" rel="noopener">miit.gov.cn <span class="arw">↗</span></a></div>
+  </div>
+</article></div></section><section class="fgroup" id="g-AI合规" data-g="AI合规"><div class="fgroup-h"><span class="dot" style="background:#7c3aed"></span><h3>AI合规</h3><span class="cnt">6 条</span></div><div class="nilist"><article class="ni" data-domain="AI合规" data-idx="8">
+  <div class="ni-bar" style="background:#7c3aed"></div>
+  <div class="ni-body">
+    <div class="ni-top">
+      <span class="ni-dom" style="color:#7c3aed;background:#7c3aed14">AI合规</span>
+      <span class="ni-date">2026-09-06</span>
+      <span class="ni-org">工业和信息化部</span>
+      <span class="ni-kind">周报</span>
+    </div>
+    <h4 class="ni-title">工信部 AI 政策双线推进：中小企业创业支持计划发布、应用服务商培育专项行动启动</h4>
+    <p class="ni-pt">工业和信息化部 9 月 6 日发布《人工智能中小企业创业支持计划（2026—2028 年）》，提出通过三年时间在行业应用、数据服务、智能算力等重点领域，新培育科技和创新型中小企业 1 万家以上、专精特新“小巨人”企业突破 2000 家，高标准建设 10 个科技型企业孵化器、10 个国家中小企业公共服务示范平台（基地）、10 个国家级中小企业特色产业集群。</p>
+    <details class="ana"><summary>朴朴视角 · 合规解读</summary><div class="ana-b">两条 AI 政策合并观察，监管口径已由“备案准入”转向“生态培育＋合规能力并列”。对朴朴三点启示：其一，安全治理服务商市场将在政策驱动下快速扩容，朴朴引入第三方 AI 能力（智能客服、销量预测、智能补货、营销素材生成）时可优先选择进入服务商资源池、具备安全治理服务能力的供应商，并在合同中约定模型更新告知、数据使用边界、输出内容标识与日志留存义务。其二，供应商准入问卷应同步增加四项核查：算法备案状态、训练数据来源合法性证明、内容过滤机制、人工复核流程。其三，政策鼓励不降低合规要求——调用第三方模型的企业自身仍须完成算法备案，不得以供应商合规承诺替代上线前后的技术检测。此外，“数字企业绿色低碳发展”与“数字化碳管理”被列为独立任务，建议提前建立分点位、分环节（尤其前置仓冷藏冷冻设备）的能耗台账，既是成本项也是未来的披露项。</div></details>
+    <div class="ni-foot"><a class="src" href="https://www.gov.cn/lianbo/202609/content_7080266.htm" target="_blank" rel="noopener">gov.cn <span class="arw">↗</span></a></div>
+  </div>
+</article><article class="ni" data-domain="AI合规" data-idx="9">
+  <div class="ni-bar" style="background:#7c3aed"></div>
+  <div class="ni-body">
+    <div class="ni-top">
+      <span class="ni-dom" style="color:#7c3aed;background:#7c3aed14">AI合规</span>
+      <span class="ni-date">2026-09-02</span>
+      <span class="ni-org">中央网络安全和信息化委员会办公室</span>
+      <span class="ni-kind">日报</span>
+    </div>
+    <h4 class="ni-title">中央网信办通报“清朗·整治 AI 应用乱象”专项行动第二阶段：清理 561 万余条、查处账号 4.9 万余个，点名四家头部大模型平台</h4>
+    <p class="ni-pt">中央网信办组织开展“清朗·整治 AI 应用乱象”专项行动第二阶段工作，聚焦利用 AI 制作发布虚假信息、传播暴力低俗内容、假冒仿冒他人、侵害未成年人权益等突出问题。截至目前累计清理违法违规信息 561 万余条，查处账号 4.9 万余个，处置违规网站、应用程序等 2400 余个。</p>
+    <details class="ana"><summary>朴朴视角 · 合规解读</summary><div class="ana-b">本轮通报的关键变化是治理节点前移——从“清理已生成内容”转向“管住语料与输出两端”，且点名方式由“通报违规”转为“点名合规做得好的头部平台并明确其义务”，实质上抬高了头部平台的合规基准线。对朴朴的三点启示：其一，若平台使用 AI 生成商品主图、详情页文案、营销海报或客服话术，须同步落实《人工智能生成合成内容标识办法》与 GB 45438-2025 的显式标识与隐式元数据标识要求，且日志留存不少于六个月；其二，AI 数字人带货被明确列为典型违规形态，若朴朴采用数字人直播或 AI 主播，须完成标识、取得被仿冒形象主体的单独授权，并在直播页面持续向消费者提示；其三，“智能体封面和对话含淫秽色情信息”被点名，提示平台自查范围须覆盖第三方 AI 组件的默认展示内容与对话输出，不能仅审核自有内容。</div></details>
+    <div class="ni-foot"><a class="src" href="https://www.cac.gov.cn/2026-09/02/c_1790099041364574.htm" target="_blank" rel="noopener">cac.gov.cn <span class="arw">↗</span></a></div>
+  </div>
+</article><article class="ni" data-domain="AI合规" data-idx="10">
+  <div class="ni-bar" style="background:#7c3aed"></div>
+  <div class="ni-body">
+    <div class="ni-top">
+      <span class="ni-dom" style="color:#7c3aed;background:#7c3aed14">AI合规</span>
+      <span class="ni-date">2026-09-02</span>
+      <span class="ni-org">中央网信办、全国网络安全标准化技术委员会</span>
+      <span class="ni-kind">日报</span>
+    </div>
+    <h4 class="ni-title">人工智能大模型标准体系加速成型：智能体安全治理从“管控输出内容”转向“约束自主执行行为”</h4>
+    <p class="ni-pt">2026 年国家网络安全宣传周新闻发布会上，中央网信办网络安全协调局副局长、一级巡视员王丽宏介绍，中央网信办组织制定发布《生成式人工智能服务安全基本要求》《生成式人工智能预训练和优化训练数据安全规范》等国家标准，对大模型服务供给、训练数据使用等关键环节提出明确安全基线要求，并发布《政务大模型应用安全规范》明确模型选型、建设部署、运行等环节安全要求。</p>
+    <details class="ana"><summary>朴朴视角 · 合规解读</summary><div class="ana-b">“身份、权限、工具、审计”四抓手对即时零售的 AI 应用具有直接映射意义。即时零售场景中，调度决策类算法（派单、运力调度、履约路径规划）与动态定价算法本身即属算法备案范围，一旦叠加智能体能力实现自动补货、自动调价、自动工单处置，风险等级即从“内容合规”升级为“行动合规”，须按四抓手逐项配置：身份——每个智能体（含第三方组件）须有唯一可识别标识并可追溯至责任主体；权限——按最小必要原则限定其可访问的数据范围与可执行的动作集合，禁止跨系统越权调用；工具——对其可调用的外部插件、API、脚本建立准入清单与安全评估；审计——全量留存操作日志并支持事后还原。建议法务会同技术团队按此四抓手做一次智能体（含已接入的第三方 AI 组件）台账盘点，形成可举证的授权与审计记录。</div></details>
+    <div class="ni-foot"><a class="src" href="https://www.cac.gov.cn/2026-09/01/c_1790011556066214.htm" target="_blank" rel="noopener">cac.gov.cn <span class="arw">↗</span></a></div>
+  </div>
+</article><article class="ni" data-domain="AI合规" data-idx="11">
+  <div class="ni-bar" style="background:#7c3aed"></div>
+  <div class="ni-body">
+    <div class="ni-top">
+      <span class="ni-dom" style="color:#7c3aed;background:#7c3aed14">AI合规</span>
+      <span class="ni-date">2026-09-01</span>
+      <span class="ni-org">中央网信办网络安全协调局</span>
+      <span class="ni-kind">日报</span>
+    </div>
+    <h4 class="ni-title">2026 年国家网络安全宣传周新闻发布会：中央网信办系统披露人工智能五大安全风险</h4>
+    <p class="ni-pt">9 月 1 日上午，2026 年国家网络安全宣传周新闻发布会在北京举行。中央网信办网络安全协调局副局长、一级巡视员王丽宏表示，当前人工智能领域主要面临五方面安全风险挑战：一是技术先天脆弱性难以根除，深度学习算法可解释性欠缺、推理过程不透明，微小输入扰动即可导致错误结果，训练数据来源复杂可能引入偏见歧视；</p>
+    <details class="ana"><summary>朴朴视角 · 合规解读</summary><div class="ana-b">“从回答问题走向执行任务”这一判断对朴朴的 AI 应用边界具有直接指导意义：若平台引入智能体（Agent）类能力用于自动补货、自动定价、自动客服处置或自动工单流转，其风险等级已从内容合规升级为行动合规，须设置权限边界、操作审计与人工兜底三道闸门，避免“智能体越权”转化为实际业务损失。网安周分论坛中“个人信息保护”“人工智能安全治理”两场宜安排法务与算法团队参加，作为年内监管口径的直接获取渠道。此外，第三点提及的智能体“技能”插件供应链风险，同样适用于平台接入的第三方 AI 组件，应纳入供应商安全评估范围。</div></details>
+    <div class="ni-foot"><a class="src" href="https://wlaq.gmw.cn/2026-09/01/content_38979067.htm" target="_blank" rel="noopener">wlaq.gmw.cn <span class="arw">↗</span></a></div>
+  </div>
+</article><article class="ni" data-domain="AI合规" data-idx="12">
+  <div class="ni-bar" style="background:#7c3aed"></div>
+  <div class="ni-body">
+    <div class="ni-top">
+      <span class="ni-dom" style="color:#7c3aed;background:#7c3aed14">AI合规</span>
+      <span class="ni-date">2026-09-01</span>
+      <span class="ni-org">水利部信息中心</span>
+      <span class="ni-kind">日报</span>
+    </div>
+    <h4 class="ni-title">上善水利大模型通过生成式人工智能服务备案，成为首个完成备案的水利行业大模型</h4>
+    <p class="ni-pt">根据《生成式人工智能服务管理暂行办法》，经中央网信办和北京市委网信办审查，水利部信息中心组织研发的上善水利大模型通过生成式人工智能服务备案，备案名“水信息”大模型，备案号 Beijing-ShuiXinXi-202606250243，成为首个完成备案的水利行业大模型。该模型依托国家重点研发计划项目研发，已在流域防洪、河湖库智能监管、水利工程智能运管等场景实战应用。</p>
+    <details class="ana"><summary>朴朴视角 · 合规解读</summary><div class="ana-b">行业大模型备案持续放量，进一步坐实“先备案后上线”的监管节奏，且垂直行业模型已进入常态化审批。对朴朴的启示有二：其一，若自研或微调用于选品、销量预测、智能客服的模型并对外提供服务，须履行备案；若仅调用第三方已备案模型 API，仍须按各地网信办要求完成登记并公示编号，不能以“底层模型已备案”为由豁免。其二，需注意行业模型完成网信备案不等于取得行业准入——若 AI 能力触及医疗健康宣称、金融支付等强监管领域，仍须另行判断行业资质，两条线不能混同。</div></details>
+    <div class="ni-foot"><a class="src" href="http://xxzx.mwr.gov.cn/zxpd/gzdt/202609/t20260901_2140947.html" target="_blank" rel="noopener">xxzx.mwr.gov.cn <span class="arw">↗</span></a></div>
+  </div>
+</article><article class="ni" data-domain="AI合规" data-idx="13">
+  <div class="ni-bar" style="background:#7c3aed"></div>
+  <div class="ni-body">
+    <div class="ni-top">
+      <span class="ni-dom" style="color:#7c3aed;background:#7c3aed14">AI合规</span>
+      <span class="ni-date">2026-08-19</span>
+      <span class="ni-org">北京／浙江／山东省网信办</span>
+      <span class="ni-kind">日报</span>
+    </div>
+    <h4 class="ni-title">多地网信办密集公告大模型备案／登记（北京累计 296 款、浙江 99 款、山东 51 款）</h4>
+    <p class="ni-pt">截至 8 月 24 日，北京市累计完成 296 款生成式 AI 服务备案，浙江省累计 99 款、山东省累计 51 款；多地明确，通过 API 调用已备案大模型的应用或功能须走登记路径。已上线的生成式 AI 应用或功能，须在显著位置或产品详情页公示模型名称与备案编号，并依据《人工智能生成合成内容标识办法》添加生成合成内容标识。</p>
+    <details class="ana"><summary>朴朴视角 · 合规解读</summary><div class="ana-b">朴朴若使用 AI 生成营销素材、智能客服话术或商品文案，须落实“备案／登记公示＋内容标识＋合规复核”三件套；纯调用第三方已备案模型亦须确认登记路径与编号公示，避免“有 AI 无标识”的合规缺口。</div></details>
+    <div class="ni-foot"><a class="src" href="https://www.cac.gov.cn/" target="_blank" rel="noopener">cac.gov.cn <span class="arw">↗</span></a></div>
+  </div>
+</article></div></section><section class="fgroup" id="g-算法合规" data-g="算法合规"><div class="fgroup-h"><span class="dot" style="background:#0f766e"></span><h3>算法合规</h3><span class="cnt">3 条</span></div><div class="nilist"><article class="ni" data-domain="算法合规" data-idx="14">
+  <div class="ni-bar" style="background:#0f766e"></div>
+  <div class="ni-body">
+    <div class="ni-top">
+      <span class="ni-dom" style="color:#0f766e;background:#0f766e14">算法合规</span>
+      <span class="ni-date">2026-10-01</span>
+      <span class="ni-org">中华人民共和国公安部令第 176 号</span>
+      <span class="ni-kind">日报</span>
+    </div>
+    <h4 class="ni-title">《公安机关网络空间安全监督检查办法》10 月 1 日施行：算法安全主体责任首次纳入公安监督检查范围</h4>
+    <p class="ni-pt">《公安机关网络空间安全监督检查办法》于 2026 年 8 月 6 日由公安部部长王小洪签署公布（公安部令第 176 号），自 10 月 1 日起施行，同时废止 2018 年《公安机关互联网安全监督检查规定》（公安部令第 151 号）。办法共 23 条，监督检查对象从互联网服务提供者扩展至网络运营者、数据处理者、个人信息处理者、关键信息基础设施运营者、网络产品服务提供者等。</p>
+    <details class="ana"><summary>朴朴视角 · 合规解读</summary><div class="ana-b">该办法标志着“网信＋公安”双线检查格局正式成型：网信部门主算法备案与内容治理，公安机关主监督检查与执法处罚，且算法安全主体责任成为公安侧的明确检查项。朴朴须在 10 月 1 日前完成两项准备：一是核实自身网络定级是否达等保三级，若达标则每年至少面临一次公安现场检查，须提前建立检查应对台账；二是将派单、运力调度、推荐、搜索排序等算法的管理制度与技术措施文档化，确保被检查时可即时举证“制度＋措施＋记录”三层证据，而非仅有备案编号。约谈条款指向法定代表人或主要负责人，意味着合规责任已明确上溯至管理层。</div></details>
+    <div class="ni-foot"><a class="src" href="https://m.thepaper.cn/newsDetail_forward_33750803" target="_blank" rel="noopener">m.thepaper.cn <span class="arw">↗</span></a></div>
+  </div>
+</article><article class="ni" data-domain="算法合规" data-idx="15">
+  <div class="ni-bar" style="background:#0f766e"></div>
+  <div class="ni-body">
+    <div class="ni-top">
+      <span class="ni-dom" style="color:#0f766e;background:#0f766e14">算法合规</span>
+      <span class="ni-date">2026-09-06</span>
+      <span class="ni-org">互联网信息服务算法备案系统；中央网信委《生活服务类平台算法负面清单（试行）》</span>
+      <span class="ni-kind">周报</span>
+    </div>
+    <h4 class="ni-title">算法备案与算法透明化：五类算法全覆盖，即时零售平台通常同时落入三类</h4>
+    <p class="ni-pt">依据《互联网信息服务算法推荐管理规定》，具有舆论属性或者社会动员能力的算法推荐服务提供者应当通过互联网信息服务算法备案系统履行备案手续，并在显著位置标明备案编号并提供公示信息链接。备案覆盖五类：生成合成类、个性化推送类、排序精选类、检索过滤类、调度决策类；核心材料《算法安全自评估报告》须覆盖算法情况介绍、服务情况介绍、风险研判、风险防控措施四部分。</p>
+    <details class="ana"><summary>朴朴视角 · 合规解读</summary><div class="ana-b">即时零售是“一个 App、多算法备案”的典型：商品推荐与“猜你喜欢”属个性化推送类，搜索排序、榜单与商家排名属排序精选类，骑手派单、运力调度与履约路径规划属调度决策类；若客服引入生成式问答，再叠加生成合成类。四项建议：一是按类型逐项盘点并分别完成备案，避免以“整体已备案”替代逐算法登记；二是核验备案号悬挂位置与指向备案系统公示信息页面的超链接；三是建立“备案—迭代—重新评估”联动机制，核心算法版本迭代、模型替换、目标函数调整或应用场景扩展时须重新评估；四是对照《生活服务类平台算法负面清单（试行）》自查是否存在“仅以商品价格作为算法推荐核心参数”“通过算法对特定经营者实施差别待遇”等禁止性情形。需要提示的是，算法备案属动态管理，算法模型发生重大机制调整、功能迭代或业务范围变更的，须在 30 日内主动更新备案信息。</div></details>
+    <div class="ni-foot"><a class="src" href="https://beian.cac.gov.cn/" target="_blank" rel="noopener">beian.cac.gov.cn <span class="arw">↗</span></a></div>
+  </div>
+</article><article class="ni" data-domain="算法合规" data-idx="16">
+  <div class="ni-bar" style="background:#0f766e"></div>
+  <div class="ni-body">
+    <div class="ni-top">
+      <span class="ni-dom" style="color:#0f766e;background:#0f766e14">算法合规</span>
+      <span class="ni-date">2026-09-01</span>
+      <span class="ni-org">国家网信办、公安部、文化和旅游部、市场监管总局、广电总局令第 23 号</span>
+      <span class="ni-kind">日报</span>
+    </div>
+    <h4 class="ni-title">《互联网信息内容多渠道分发服务管理规定》9 月 1 日施行：平台须建 MCN 机构分类分级管理制度</h4>
+    <p class="ni-pt">《规定》共五章三十一条。核心义务包括：多渠道分发服务机构（即 MCN 机构）须依法办理经营主体登记，登记的经营范围应包含“互联网信息内容多渠道分发服务”表述，已登记的应自施行之日起 30 日内办理经营范围变更登记；平台须与入驻机构签订入驻协议并核验其登记与许可情况，不符合的不得同意入驻；</p>
+    <details class="ana"><summary>朴朴视角 · 合规解读</summary><div class="ana-b">朴朴虽非典型的公众账号内容平台，但只要引入 MCN、达人直播、探店种草等分销推广，即落入“平台信息服务提供者”角色，须履行入驻核验、备案报送、名称显著展示、分类分级管理四项义务。第十九条“直播选品机制、纠错机制、合规审核机制”对生鲜直播带货尤为关键——生鲜商品的产地、等级、保鲜期宣称若无前置审核留痕，一旦发生虚假宣传，平台难以举证已尽审核义务。建议在直播带货流程中固化“选品卡＋审核记录＋纠错日志”三件套，并将机构资质、商标授权、食品经营许可纳入入驻核验清单。</div></details>
+    <div class="ni-foot"><a class="src" href="https://www.cac.gov.cn/2026-05/29/c_1781795864412597.htm" target="_blank" rel="noopener">cac.gov.cn <span class="arw">↗</span></a></div>
+  </div>
+</article></div></section><section class="fgroup" id="g-平台合规" data-g="平台合规"><div class="fgroup-h"><span class="dot" style="background:#b45309"></span><h3>平台合规</h3><span class="cnt">7 条</span></div><div class="nilist"><article class="ni" data-domain="平台合规" data-idx="17">
+  <div class="ni-bar" style="background:#b45309"></div>
+  <div class="ni-body">
+    <div class="ni-top">
+      <span class="ni-dom" style="color:#b45309;background:#b4530914">平台合规</span>
+      <span class="ni-date">2026-09-04</span>
+      <span class="ni-org">国家市场监督管理总局</span>
+      <span class="ni-kind">周报</span>
+    </div>
+    <h4 class="ni-title">市场监管总局公布第二批 7 起反垄断专项行动案件：三类形态均指向公平准入与自主经营</h4>
+    <p class="ni-pt">市场监管总局公布第二批共 7 起破除妨碍统一市场和公平竞争卡点堵点专项行动案件，涉及医药卫生、能源、殡葬、垃圾清运、互联网上网服务等领域，包括市场监管总局查处湖北省卫生健康委员会、湖南省市场监管局查处湖南湘江新区管委会宣传工作部、内蒙古查处鄂尔多斯市能源局与新巴尔虎左旗农牧水利科技局、上海市查处松江区绿化和市容管理局、重庆市查处潼南区民政局、广西查处钦州市殡葬管理处滥用行政权力排除限制竞争行为。</p>
+    <details class="ana"><summary>朴朴视角 · 合规解读</summary><div class="ana-b">本批案件对象虽为行政机关，但对平台有三点传导效应。其一，“限定交易对象或签订排他性合作协议”与平台经济领域“二选一”判定逻辑同源，若朴朴在与供应商、区域合作方的协议中约定独家供货、限制其与其他平台合作，或约定不再引入同类竞争者，须重新评估是否构成排除、限制竞争。其二，“违规设定歧视性准入条件”映射至招商入驻规则——不得以本地注册、本地设仓、本地纳税作为隐性门槛，招商条件须完整公示且对所有经营者一致适用。其三，若朴朴作为供应商参与政企采购或团餐、福利采购招标，可援引该专项行动渠道反映遇到的地方壁垒。建议对供应商协议与招商规则做一次排除性条款专项排查，并同步关注《反不正当竞争法》《公平竞争审查条例实施办法》的修订进展。</div></details>
+    <div class="ni-foot"><a class="src" href="https://www.samr.gov.cn/jzxts/tzgg/qlpc/art/2026/art_644e18e5be3e4221becb0e9b7b4216ad.html" target="_blank" rel="noopener">samr.gov.cn <span class="arw">↗</span></a></div>
+  </div>
+</article><article class="ni" data-domain="平台合规" data-idx="18">
+  <div class="ni-bar" style="background:#b45309"></div>
+  <div class="ni-body">
+    <div class="ni-top">
+      <span class="ni-dom" style="color:#b45309;background:#b4530914">平台合规</span>
+      <span class="ni-date">2026-09-02</span>
+      <span class="ni-org">国家市场监督管理总局</span>
+      <span class="ni-kind">日报</span>
+    </div>
+    <h4 class="ni-title">全国市场监管执法稽查工作座谈会在包头召开：上半年查办 64.17 万件、罚没 69.82 亿元，下半年深化“幽灵外卖”整治</h4>
+    <p class="ni-pt">全国市场监管执法稽查工作暨查处“幽灵外卖”违法行为座谈会在内蒙古自治区包头市召开，市场监管总局副局长白清元出席会议并讲话。会议指出，2026 年上半年全国市场监管系统累计查办案件 64.17 万件，罚没金额 69.82 亿元，在重大案件查办、推进服务型执法、执法规范化建设等方面取得阶段性突破，尤其是“幽灵外卖”专项整治等重点工作取得积极成效。</p>
+    <details class="ana"><summary>朴朴视角 · 合规解读</summary><div class="ana-b">对朴朴有三条硬性信号。其一，“幽灵外卖”整治的对象是线上餐饮与无实体门店经营，虽不直接指向自营前置仓，但“线上页面展示的经营主体与实际经营地址不一致”“证照挂靠”等判定逻辑同样适用于线上便利店与平台入驻商户，须核验朴朴各点位在美团、淘宝闪购、京东秒送等三方平台页面的亮证信息与实际经营资质完全一致。其二，“内卷式竞争乱象”被列为下半年第一项重点，与平台补贴、低价倾销、低于成本销售直接相关，须与价格合规基线同步排查。其三，“电子取证技术支撑＋集群办案＋行刑衔接”意味着跨区域、批量化的证据固定能力显著增强，平台一旦被立案，历史订单、页面快照、后台日志均可被调取，日常留痕的价值从“内部管理”上升为“举证材料”。服务型执法条款（初次违法、后果轻微、主动改正可免予或从轻减轻）则提示建立“自查发现—主动报告—完成整改”的闭环可显著降低处罚成本。</div></details>
+    <div class="ni-foot"><a class="src" href="https://www.samr.gov.cn/xw/zj/art/2026/art_725241e4f8c3444bbd60fe36b0d6ab2e.html" target="_blank" rel="noopener">samr.gov.cn <span class="arw">↗</span></a></div>
+  </div>
+</article><article class="ni" data-domain="平台合规" data-idx="19">
+  <div class="ni-bar" style="background:#b45309"></div>
+  <div class="ni-body">
+    <div class="ni-top">
+      <span class="ni-dom" style="color:#b45309;background:#b4530914">平台合规</span>
+      <span class="ni-date">2026-09-02</span>
+      <span class="ni-org">国家市场监督管理总局</span>
+      <span class="ni-kind">日报</span>
+    </div>
+    <h4 class="ni-title">市场监管总局公布九起养老服务领域不正当竞争典型案例：私域直播虚假宣传被罚 40 万元</h4>
+    <p class="ni-pt">市场监管总局公布九起养老服务领域不正当竞争典型案例，聚焦虚假宣传等不正当竞争违法行为。其一，湖南省长沙市雨花区市场监管局查处湖南享智科技有限公司虚假宣传案：当事人系“有享猫”App 平台运营方，该平台 2026 年 1 月上线，由当事人自主制作宣传素材，通过直播间及商品详情页进行宣传；</p>
+    <details class="ana"><summary>朴朴视角 · 合规解读</summary><div class="ana-b">总局在案情评析中直接点名“私域直播运营主体”，意味着自建 App 内的直播、社群直播、小程序直播等私域场景已与公域直播同责同罚，不再是监管洼地。对朴朴的三点提示：其一，“虚构科研机构技术支持、专家背书及专利效力”“虚假标注为某协会指定用品”是食品与生鲜品类最高频的违规宣称形态，须在商品上架审核中把“机构背书”“协会指定”“专利功效”三类宣称列为强制举证项，无法提供证明材料的不得上线；其二，普通食品宣称保健功效或疗效（降农残、降嘌呤、消炎镇痛、增强免疫等）直接违反《广告法》第十七条与《反不正当竞争法》第九条，朴朴自有品牌与代工商品的详情页、包装文案、直播口播须统一走同一套宣称审核库；其三，处罚金额 40 万元与 35 万元均按《反不正当竞争法》第二十五条第一款裁量，属中高位罚金，说明虚假宣传已从“责令改正”为主转向“高额罚款”为主。</div></details>
+    <div class="ni-foot"><a class="src" href="https://www.samr.gov.cn/xw/zj/art/2026/art_159a263330fa43009de93d52287101a2.html" target="_blank" rel="noopener">samr.gov.cn <span class="arw">↗</span></a></div>
+  </div>
+</article><article class="ni" data-domain="平台合规" data-idx="20">
+  <div class="ni-bar" style="background:#b45309"></div>
+  <div class="ni-body">
+    <div class="ni-top">
+      <span class="ni-dom" style="color:#b45309;background:#b4530914">平台合规</span>
+      <span class="ni-date">2026-09-02</span>
+      <span class="ni-org">惠州市市场监督管理局</span>
+      <span class="ni-kind">日报</span>
+    </div>
+    <h4 class="ni-title">惠州市市场监督管理局发布网络食品销售虚假宣传整治典型案例：详情页使用医疗用语并虚构成交量被处罚</h4>
+    <p class="ni-pt">惠州市市场监督管理局发布网络食品销售虚假宣传和保健食品护老提升专项整治典型案例。案例一：大亚湾区市场监管局根据投诉举报线索对某科技发展公司检查，发现该公司在微信购物商城销售红参血肽·营养素饮品、益生元 SOD 酵母固体饮料和多元复合多肽蛋白特膳粉等预包装食品，</p>
+    <details class="ana"><summary>朴朴视角 · 合规解读</summary><div class="ana-b">本案把网络食品销售的三类高发违规一次性点齐，且全部源自投诉举报，说明举报已成为最主要的案源渠道。其一，使用医疗用语——食品详情页出现“血细胞再生”“抗炎修复”“免疫系统”“补脑增强记忆力”等表述，即触发《广告法》第十七条，与商品属性是否为“特膳”“固体饮料”无关；其二，数据化宣称——“28 天实测”“+64%”“100% 受试者”“钻研 24 年”“掌握核心科技”均需有检测报告或临床试验数据支撑，否则构成第二十八条的虚假广告；其三，虚构成交量——违反《网络反不正当竞争暂行规定》第九条，属独立的违法项，与虚假宣传并罚。对朴朴的直接动作：将“医疗用语词库”“数据化宣称词库”嵌入商品上架的机审环节，对销量、评价、复购等展示数据的计算逻辑做一次真实性核验，并在供应商准入承诺函中要求其对提供的宣传素材真实性负责并承担赔偿。</div></details>
+    <div class="ni-foot"><a class="src" href="https://hzamr.huizhou.gov.cn/gkmlpt/content/5/5844/post_5844572.html" target="_blank" rel="noopener">hzamr.huizhou.gov.cn <span class="arw">↗</span></a></div>
+  </div>
+</article><article class="ni" data-domain="平台合规" data-idx="21">
+  <div class="ni-bar" style="background:#b45309"></div>
+  <div class="ni-body">
+    <div class="ni-top">
+      <span class="ni-dom" style="color:#b45309;background:#b4530914">平台合规</span>
+      <span class="ni-date">2026-09-01</span>
+      <span class="ni-org">国家市场监督管理总局等 25 个部门</span>
+      <span class="ni-kind">日报</span>
+    </div>
+    <h4 class="ni-title">2026 年全国“质量月”活动 9 月启动，25 部门联合部署（国市监质发〔2026〕109 号）</h4>
+    <p class="ni-pt">市场监管总局等 25 个部门联合印发《关于开展 2026 年全国“质量月”活动的通知》（国市监质发〔2026〕109 号），活动时间为 2026 年 9 月，主题为“增强质量技术基础能力 提升质量安全保障水平”。活动围绕三条主线：一是宣贯质量理念、弘扬质量文化；二是开放质量资源、赋能质量提升，组织企业实验室、生产线、检验检测机构向社会公众开放，面向中小企业开展“一站式”服务；</p>
+    <details class="ana"><summary>朴朴视角 · 合规解读</summary><div class="ana-b">“质量月”将持续整个 9 月，且明确点名“电商”领域与“线上线下质量隐患”排查，意味着 9 月是产品质量与宣传合规的高发监管窗口，且会公开发布典型案例。朴朴应在 9 月内完成三项动作：一是对生鲜、预包装食品、自有品牌商品开展一轮资质与标签自查；二是核查商品详情页、直播话术中的质量宣称是否有检测报告或认证支撑；三是准备质量安全事件的应急响应与对外沟通预案，避免在“公开发布典型案例”环节被点名。此外，通知鼓励检验检测机构开放日与专家入企帮扶，可作为平台快检能力建设的外部资源对接窗口。</div></details>
+    <div class="ni-foot"><a class="src" href="https://www.samr.gov.cn/zw/zfxxgk/fdzdgknr/zlfzs/art/2026/art_d88ab854d98d4e0f80259f39dbedfe2a.html" target="_blank" rel="noopener">samr.gov.cn <span class="arw">↗</span></a></div>
+  </div>
+</article><article class="ni" data-domain="平台合规" data-idx="22">
+  <div class="ni-bar" style="background:#b45309"></div>
+  <div class="ni-body">
+    <div class="ni-top">
+      <span class="ni-dom" style="color:#b45309;background:#b4530914">平台合规</span>
+      <span class="ni-date">2026-08-31</span>
+      <span class="ni-org">国家中医药管理局</span>
+      <span class="ni-kind">日报</span>
+    </div>
+    <h4 class="ni-title">国家中医药管理局通报“香港大药房”网店违规营销案，各平台下架店铺 35 家、商品链接 3318 个</h4>
+    <p class="ni-pt">国家中医药管理局在中医医疗违法违规行为专项治理工作中发布《关于涉中医药网络违规营销宣传问题调查处置情况的通报》，查处两起案件。其一，“香港大药房”网店违规营销案：多家以“香港大药房”名义开设的网店销售“透骨膏”“无湿丸”等产品，经查相关产品系日用品并非药品，但店铺在直播营销中宣称缓解疼痛等功效，涉嫌违反《中华人民共和国广告法》第十七条（除医疗、药品、医疗器械广告外，禁止其他广告涉及疾病治疗功能，</p>
+    <details class="ana"><summary>朴朴视角 · 合规解读</summary><div class="ana-b">本案对平台的实质审查义务提出更高要求：下架依据是“无有效商标注册证及香港品牌店授权”，即商标与品牌授权的真实性核验已成为平台义务，而非仅查验营业执照与食品经营许可。朴朴可据此扩展供应商与商户入驻核验清单，增加商标注册证有效性核验、品牌授权链路核验（授权方是否有权再授权、授权期限与品类范围）、宣称功效与产品实际属性一致性核验三项。同时，“日用品宣称疗效”的违规逻辑与生鲜电商“普通食品宣称保健功效”完全同构，须将此类宣称纳入详情页与直播口播的统一审核库。</div></details>
+    <div class="ni-foot"><a class="src" href="http://www.natcm.gov.cn/fajiansi/gongzuodongtai/2026-08-31/38643.html" target="_blank" rel="noopener">natcm.gov.cn <span class="arw">↗</span></a></div>
+  </div>
+</article><article class="ni" data-domain="平台合规" data-idx="23">
+  <div class="ni-bar" style="background:#b45309"></div>
+  <div class="ni-body">
+    <div class="ni-top">
+      <span class="ni-dom" style="color:#b45309;background:#b4530914">平台合规</span>
+      <span class="ni-date">2026-08-31</span>
+      <span class="ni-org">深圳市市场监督管理局</span>
+      <span class="ni-kind">日报</span>
+    </div>
+    <h4 class="ni-title">网络餐饮“幽灵外卖”专项整治典型案例（深圳“外卖统一查”第 8、9 期）</h4>
+    <p class="ni-pt">深圳市监局“外卖统一查”专项行动通报多起网络餐饮违法：第 8 期某蛋糕店关停原址仍以虚假地址在外卖平台接单（“幽灵外卖”）、某骑手站点购买并使用伪造健康证（移送公安）、某餐饮店伪造食品经营许可证；第 9 期某餐饮店伪造许可证、使用过期食品原料并拆除冷食专间设施、虚标食品生产日期。监管明确：任何形式的“幽灵外卖”“地址造假”“线上门店与实体不符”均属违法，伪造证件一律移送公安。</p>
+    <details class="ana"><summary>朴朴视角 · 合规解读</summary><div class="ana-b">平台对入网商户的资质审查从“静态审核”升级为“实质审查＋鉴伪＋动态巡检”。朴朴的商户／供应商治理可借鉴三层校验：初审资质真实性、复核与实际经营一致性、动态巡检预警，并将冷食类、许可证与实际上架强绑定。</div></details>
+    <div class="ni-foot"><a class="src" href="https://amr.sz.gov.cn/" target="_blank" rel="noopener">amr.sz.gov.cn <span class="arw">↗</span></a></div>
+  </div>
+</article></div></section><section class="fgroup" id="g-产品合规" data-g="产品合规"><div class="fgroup-h"><span class="dot" style="background:#15803d"></span><h3>产品合规</h3><span class="cnt">6 条</span></div><div class="nilist"><article class="ni" data-domain="产品合规" data-idx="24">
+  <div class="ni-bar" style="background:#15803d"></div>
+  <div class="ni-body">
+    <div class="ni-top">
+      <span class="ni-dom" style="color:#15803d;background:#15803d14">产品合规</span>
+      <span class="ni-date">2026-09-06</span>
+      <span class="ni-org">国家市场监督管理总局（市监食检发〔2026〕92 号、103 号）</span>
+      <span class="ni-kind">周报</span>
+    </div>
+    <h4 class="ni-title">市场监管总局连续发布食品抽检不合格通报：即时零售与外卖渠道被列为固定披露字段</h4>
+    <p class="ni-pt">市场监管总局办公厅发布食品安全监督抽检不合格情况通报：92 号通报抽检 2474 批次样品、检出 47 批次不合格；103 号通报抽检 2325 批次样品、检出 45 批次不合格。不合格项目高度集中于食品添加剂超范围超限量使用（柠檬黄、日落黄、亮蓝、诱惑红、脱氢乙酸及其钠盐、甜蜜素、安赛蜜、纽甜、二氧化硫残留量）与标签标示不符两类。</p>
+    <details class="ana"><summary>朴朴视角 · 合规解读</summary><div class="ana-b">四份通告共同勾勒出即时零售的食安风险图谱与监管口径。其一，渠道责任显性化——“淘宝闪购”“京东外卖”被直接写入国家抽检通报的字段，即时零售与网络餐饮已成固定披露对象，平台与经营者责任同时记录。其二，“符合国标但不符合标签标示”是独立不合格情形（如山梨酸及其钾盐、日落黄），说明标签标示值与实际检出值的一致性已成独立判定项，朴朴自有品牌与代工商品的配料表、营养成分表须以实际检测数据为准，不得沿用模板。其三，不合格品类与项目可转化为快检靶向清单：农兽药残留集中在荔枝、芒果、泡椒、甘薯；餐饮具大肠菌群与阴离子合成洗涤剂指向清洗消毒与漂洗环节；铜绿假单胞菌指向桶装水与预包装饮品。其四，自制餐饮食品（凉皮）的添加剂滥用提示现制现售与联营档口须建立添加剂“采购—领用—投料”台账与称量记录，禁止经验投料。建议按“添加剂、农兽药残留、微生物、标签一致性”四类建立供应商年度送检计划。</div></details>
+    <div class="ni-foot"><a class="src" href="https://www.samr.gov.cn/zw/zfxxgk/fdzdgknr/spcjs/art/2026/art_4471df1845994192bfbb8d14035055a3.html" target="_blank" rel="noopener">samr.gov.cn <span class="arw">↗</span></a></div>
+  </div>
+</article><article class="ni" data-domain="产品合规" data-idx="25">
+  <div class="ni-bar" style="background:#15803d"></div>
+  <div class="ni-body">
+    <div class="ni-top">
+      <span class="ni-dom" style="color:#15803d;background:#15803d14">产品合规</span>
+      <span class="ni-date">2026-09-02</span>
+      <span class="ni-org">重庆市大渡口区市场监督管理局跳磴镇市场监管所</span>
+      <span class="ni-kind">日报</span>
+    </div>
+    <h4 class="ni-title">重庆大渡口对 24 小时线上便利店及即时零售前置仓开展专项执法检查：六项检查清单首次完整覆盖前置仓</h4>
+    <p class="ni-pt">重庆市大渡口区跳磴镇市场监管所针对辖区 24 小时线上便利店及即时零售前置仓开展专项执法检查行动，采取“线上＋线下”协同监管模式。检查内容分三条线：一是聚焦线上页面，严查经营资质公示——对辖区线上便利店在美团、淘宝闪购等平台的销售页面进行全面“体检”，一查资质“亮证”情况，逐一核验商家是否在线上页面公示营业执照、食品经营许可证或仅销售预包装食品备案信息，确保证照真实有效清晰可辨；</p>
+    <details class="ana"><summary>朴朴视角 · 合规解读</summary><div class="ana-b">这是本轮监管中首份完整覆盖前置仓业态的检查口径，六项检查清单可直接转为朴朴的自查表：①线上亮证——各三方平台页面公示的营业执照、食品经营许可证或仅销售预包装食品备案信息须与实际点位一致，证照临期须设更新预警，避免“线上线下信息两张皮”；②页面宣传与价格标识——商品信息真实性、价格标识规范性，与本期平台合规、价格合规条目的判定逻辑一致；③进货查验与电子台账——供应商资质、进货票据、电子进销货台账须完整可追溯，推动“来源可查、去向可追”；④冷藏冷冻温湿度记录——冷藏冷冻设备运行状态与温湿度记录须连续留痕，这是前置仓最容易被抽查出问题的环节；⑤保质期与临期管控——“临期不提示、过期不下架”被明确列为突出隐患，须建立临期商品自动提示与到期强制下架的系统规则；⑥配送时效与售后履约——七日无理由退货的实际办理流程与响应效率、投诉渠道畅通性已被纳入检查，须确保公示承诺与实际执行一致。建议按点位建立六项清单的自查台账并留存整改记录，监管口径已明确从集中治理转向长效常态管控。</div></details>
+    <div class="ni-foot"><a class="src" href="https://ddk.gov.cn/zwxx_271/bmjz/bmdt/202609/t20260902_16021070.html" target="_blank" rel="noopener">ddk.gov.cn <span class="arw">↗</span></a></div>
+  </div>
+</article><article class="ni" data-domain="产品合规" data-idx="26">
+  <div class="ni-bar" style="background:#15803d"></div>
+  <div class="ni-body">
+    <div class="ni-top">
+      <span class="ni-dom" style="color:#15803d;background:#15803d14">产品合规</span>
+      <span class="ni-date">2026-09-02</span>
+      <span class="ni-org">聊城市东昌府区市场监督管理局（东昌市监处罚〔2026〕599 号）</span>
+      <span class="ni-kind">日报</span>
+    </div>
+    <h4 class="ni-title">聊城东昌府区通报不合格食品核查处置：猪皮冻铬超标，没收违法所得 47 元并处罚款 3500 元</h4>
+    <p class="ni-pt">聊城市东昌府区市场监督管理局发布《关于不合格食品核查处置情况的通告》，就山东省市场监督管理局组织的 2026 年山东省第二季度食品安全监督抽检中发现的 1 批次不合格产品涉及辖区一家餐饮经营单位的情况予以通报。抽检基本情况：样品名称为猪皮冻，抽样单号 SBJ26370000003730160，进货日期 2026 年 5 月 18 日，被抽样单位为聊城市东昌府区董丽丽董家肉食店，</p>
+    <details class="ana"><summary>朴朴视角 · 合规解读</summary><div class="ana-b">本案有两点值得注意。其一，重金属污染的责任认定落到了“自制环节”——商家将外购原料加工为成品销售，即对成品的指标合格承担全部责任，不能以“原料来自供应商”抗辩。对朴朴的意义在于：前置仓若开展分割、分装、清洗、切配、熟食加工等作业，即成为食品生产经营者，须对成品的理化与微生物指标承担主体责任，不能仅依赖供应商的检验报告；建议对自制类商品（净菜、切果、预制菜、熟食）建立独立的出厂快检与留样制度。其二，处罚裁量充分体现了服务型执法：货值小、违法所得少、积极配合、主动整改，最终罚没合计 3547 元，与总局座谈会“对初次违法、后果轻微、主动改正的依法免予或从轻、减轻处罚”的口径一致——这提示发现问题后的配合态度与整改速度本身即是重要的减罚因素，应写入朴朴的食品安全事件应急处置预案。</div></details>
+    <div class="ni-foot"><a class="src" href="http://www.dongchangfu.gov.cn/site_dcfqscjgjt/channel_65f94efeff5aa51c908163d7/doc_6a977ec8450c42ebc2c0692a.html" target="_blank" rel="noopener">dongchangfu.gov.cn <span class="arw">↗</span></a></div>
+  </div>
+</article><article class="ni" data-domain="产品合规" data-idx="27">
+  <div class="ni-bar" style="background:#15803d"></div>
+  <div class="ni-body">
+    <div class="ni-top">
+      <span class="ni-dom" style="color:#15803d;background:#15803d14">产品合规</span>
+      <span class="ni-date">2026-09-01</span>
+      <span class="ni-org">岱山县、安康市、崇左市市场监督管理局</span>
+      <span class="ni-kind">日报</span>
+    </div>
+    <h4 class="ni-title">9 月 1 日多地集中发布食品安全监督抽检通告：农兽药残留与添加剂为高频不合格项</h4>
+    <p class="ni-pt">9 月 1 日三地同步发布抽检通告。岱山县市场监督管理局 2026 年第 4 期通告：抽检食用农产品、餐饮食品、糕点、肉制品等 16 类食品 119 批次，合格 115 批次、不合格 4 批次，不合格项目均为农药残留超标——香蕉（噻虫胺、噻虫嗪）、荔枝（除虫脲）、马铃薯（毒死蜱）、进口香蕉（噻虫嗪、噻虫胺）。</p>
+    <details class="ana"><summary>朴朴视角 · 合规解读</summary><div class="ana-b">三地通告的高频不合格项高度集中于噻虫嗪、噻虫胺、毒死蜱、除虫脲等农药残留与 4-氯苯氧乙酸钠等非法添加物，与 GB 2763-2026 的判定口径一致。对朴朴的直接启示：一是将噻虫嗪、噻虫胺、毒死蜱列入叶菜、根茎类、热带水果的入库快检必检项，尤其是香蕉、豇豆、西芹、香芹、黄豆芽、马铃薯已被三地同时点名，应设为高风险单品专项监测；二是黄豆芽检出 4-氯苯氧乙酸钠属非法添加物而非农残，须在供应商准入承诺函中单独列明禁止添加清单；三是餐饮具洗涤剂残留提示前置仓与配送环节的工器具清洗规范同样纳入品控。</div></details>
+    <div class="ni-foot"><a class="src" href="https://gsj.ankang.gov.cn/Content-2942414.html" target="_blank" rel="noopener">gsj.ankang.gov.cn <span class="arw">↗</span></a></div>
+  </div>
+</article><article class="ni" data-domain="产品合规" data-idx="28">
+  <div class="ni-bar" style="background:#15803d"></div>
+  <div class="ni-body">
+    <div class="ni-top">
+      <span class="ni-dom" style="color:#15803d;background:#15803d14">产品合规</span>
+      <span class="ni-date">2026-09-01</span>
+      <span class="ni-org">北京市海淀区市场监督管理局</span>
+      <span class="ni-kind">日报</span>
+    </div>
+    <h4 class="ni-title">北京海淀：餐饮门店 26 份健康证 23 份伪造，行刑衔接移送公安机关</h4>
+    <p class="ni-pt">北京市海淀区市场监督管理局通报一起餐饮从业人员使用伪造健康证上岗案件。经查，海淀区一家餐饮门店共有 26 名人员从事直接接触入口食品的岗位，经海淀区卫生健康部门反馈确认，26 份健康证中仅 3 份真实有效，其余 23 份均系伪造；该门店店长多次委托他人为员工办理虚假健康证明，员工未实际体检即取得虚假证件。</p>
+    <details class="ana"><summary>朴朴视角 · 合规解读</summary><div class="ana-b">该案确立两项要点：一是健康证核验从“收集留存”升级为“核验真伪”，平台对入网商户与前置仓直接入口食品岗位人员的健康证，须建立与卫健部门数据或发证机构的核验机制，仅留存复印件已不足以尽责；二是伪造证件一律启动行刑衔接移送公安，行政风险升级为刑事风险。顺义区的脱敏提示则提供了可操作的平衡方案——健康证明公示时对身份证号等个人身份信息做部分物理遮挡，既满足公示要求又符合《个人信息保护法》最小必要原则，建议朴朴在员工健康证公示、骑手健康证管理中同步采用。</div></details>
+    <div class="ni-foot"><a class="src" href="https://news.foodmate.net/2026/09/751886.html" target="_blank" rel="noopener">news.foodmate.net <span class="arw">↗</span></a></div>
+  </div>
+</article><article class="ni" data-domain="产品合规" data-idx="29">
+  <div class="ni-bar" style="background:#15803d"></div>
+  <div class="ni-body">
+    <div class="ni-top">
+      <span class="ni-dom" style="color:#15803d;background:#15803d14">产品合规</span>
+      <span class="ni-date">2026-08-31</span>
+      <span class="ni-org">绍兴市上虞区市场监督管理局（百官分局）</span>
+      <span class="ni-kind">日报</span>
+    </div>
+    <h4 class="ni-title">浙江绍兴“吃饭皇帝大”后厨用扫把洗炒锅，上虞区市监 8 月 31 日行政处罚</h4>
+    <p class="ni-pt">网友通过“明厨亮灶”实时监控发现，浙江绍兴“吃饭皇帝大”上虞万达广场店后厨工作人员将扫把放入炒锅内清洗。8 月 28 日执法人员到场核查，确认商家在清洗地面挡火板时将扫把放入炒锅，该行为违反《餐饮服务食品安全操作规范》相关规定。8 月 31 日区市监回应：已依法对涉事商家作出行政处罚，涉事锅具等设备已由商家自行销毁，并强调后厨人员须在专用清洗区完成清洁操作。</p>
+    <details class="ana"><summary>朴朴视角 · 合规解读</summary><div class="ana-b">明厨亮灶使后厨操作透明化、可远程取证，个案处置周期显著缩短。前置仓虽非餐饮堂食，但分拣、加工、打包环节卫生标准可参照提升；对合作的餐饮商户须强化后厨操作规范与人员培训要求。</div></details>
+    <div class="ni-foot"><a class="src" href="https://www.samr.gov.cn/" target="_blank" rel="noopener">samr.gov.cn <span class="arw">↗</span></a></div>
+  </div>
+</article></div></section><section class="fgroup" id="g-价格合规" data-g="价格合规"><div class="fgroup-h"><span class="dot" style="background:#be123c"></span><h3>价格合规</h3><span class="cnt">6 条</span></div><div class="nilist"><article class="ni" data-domain="价格合规" data-idx="30">
+  <div class="ni-bar" style="background:#be123c"></div>
+  <div class="ni-body">
+    <div class="ni-top">
+      <span class="ni-dom" style="color:#be123c;background:#be123c14">价格合规</span>
+      <span class="ni-date">2026-09-02</span>
+      <span class="ni-org">蚌埠市禹会区市场监督管理局</span>
+      <span class="ni-kind">日报</span>
+    </div>
+    <h4 class="ni-title">蚌埠禹会区开展开学季价格专项检查：九类价格违法行为清单可直接转为零售自查项</h4>
+    <p class="ni-pt">蚌埠市禹会区市场监督管理局紧扣蚌埠市市场监管局 2026 年秋季“开学季”价格行为提示要求，聚焦重点场所、重点品类、重点行为，全面启动开学季价格专项检查行动。本次专项检查以校园周边文具书店、商超便利店、餐饮饭店、宾馆民宿等经营单位为核心区域，紧盯图书文具、教辅资料、电子学习产品、餐饮住宿、交通出行等开学高频消费品类。</p>
+    <details class="ana"><summary>朴朴视角 · 合规解读</summary><div class="ana-b">这份检查清单几乎逐条对应即时零售的价格展示与履约场景，建议直接转为朴朴的促销自查表：①明码标价与货签对位——线上商品的详情页、搜索列表页、购物车、活动页展示价格须一致，调价后须同步更新，避免出现“列表页标价低于详情页标价”；②低标高结——结算金额高于展示价格是最容易被投诉举报且最容易查实的行为，须监控优惠券失效、起购量限制、规格差异等导致的差价；③虚假折价与虚构原价——与遂溪县案的判定逻辑一致，须留存活动前成交记录；④不实价格比较——“全网最低价”“比其他平台便宜”等比较宣传须真实可查；⑤价外加价与收取未标明费用——包装费、配送费、分拣费须在结算前明示且金额固定，不得在选定商品属性后变动；⑥单方面涨价与无故取消订单——大额促销期间的订单履约问题须设专门处置口径，避免因库存或成本原因单方取消而引发批量投诉。此外，检查中“轻微问题现场指导立行立改、涉嫌违法固定证据立案查处”的二分处理，提示主动整改可将风险止步于行政指导阶段。</div></details>
+    <div class="ni-foot"><a class="src" href="https://scj.bengbu.gov.cn/xwzx/gzdt/141093507.html" target="_blank" rel="noopener">scj.bengbu.gov.cn <span class="arw">↗</span></a></div>
+  </div>
+</article><article class="ni" data-domain="价格合规" data-idx="31">
+  <div class="ni-bar" style="background:#be123c"></div>
+  <div class="ni-body">
+    <div class="ni-top">
+      <span class="ni-dom" style="color:#be123c;background:#be123c14">价格合规</span>
+      <span class="ni-date">2026-09-01</span>
+      <span class="ni-org">广东省人民代表大会常务委员会</span>
+      <span class="ni-kind">日报</span>
+    </div>
+    <h4 class="ni-title">《广东省实施〈中华人民共和国价格法〉办法》：补贴赠送致实际价格低于成本最高可罚 100 万元</h4>
+    <p class="ni-pt">《广东省实施〈中华人民共和国价格法〉办法》第八条明确：除依法降价处理的鲜活商品、季节性商品、积压商品等商品外，经营者不得以排挤竞争对手或者独占市场为目的从事下列行为，扰乱正常的生产经营秩序，损害其他经营者的合法权益：（一）以低于自身生产、经营成本的价格销售商品或者提供服务；（二）采取回扣、补贴、赠送等方式使商品或者服务的实际价格低于自身生产、经营成本。</p>
+    <details class="ana"><summary>朴朴视角 · 合规解读</summary><div class="ana-b">这是本期对朴朴业务风险最直接的一条。广东是即时零售竞争最激烈的市场之一，“首单补贴”“满减券”“新人 0 元购”“买赠”等玩法若使商品实际成交价低于自身经营成本，且被认定为以排挤竞争对手为目的，即落入第八条规制范围，最高面临 100 万元罚款。三点应对建议：一是建立补贴活动的成本核算与留档机制，对补贴后的实际成交价与单品经营成本做逐项比对并留存核算表，证明补贴具有正当商业理由（如新品推广、临期处理）而非以排挤对手为目的；二是充分利用第八条对鲜活商品、季节性商品、积压商品的除外规定，生鲜品类的降价促销应明确标注商品属性与降价原因（如临期、当日清仓）；三是按第六条要求保留降价前的成交记录或核定价格资料，这是应对价格欺诈核查的举证基础。</div></details>
+    <div class="ni-foot"><a class="src" href="https://www.gd.gov.cn/zwgk/wjk/zcfgk/content/post_2521306.html" target="_blank" rel="noopener">gd.gov.cn <span class="arw">↗</span></a></div>
+  </div>
+</article><article class="ni" data-domain="价格合规" data-idx="32">
+  <div class="ni-bar" style="background:#be123c"></div>
+  <div class="ni-body">
+    <div class="ni-top">
+      <span class="ni-dom" style="color:#be123c;background:#be123c14">价格合规</span>
+      <span class="ni-date">2026-09-01</span>
+      <span class="ni-org">宝鸡市太白县市场监督管理局（太市监处罚〔2026〕18 号）</span>
+      <span class="ni-kind">日报</span>
+    </div>
+    <h4 class="ni-title">陕西青峰峡悦豪假日酒店虚构划线价构成价格欺诈，警告并罚款 1000 元</h4>
+    <p class="ni-pt">9 月 1 日，宝鸡市太白县市场监督管理局公开太市监处罚〔2026〕18 号行政处罚决定书。经查明，陕西青峰峡悦豪假日酒店有限公司 2026 年 4 月在抖音平台上架酒店房源时，平台划线价采用“客房门市挂牌价＋所有附赠服务原价累加”的方式核算，由第三方平台完成标注；</p>
+    <details class="ana"><summary>朴朴视角 · 合规解读</summary><div class="ana-b">本案的认定逻辑对零售电商完全适用：划线价的核算方式（挂牌价＋附赠服务原价累加）看似有依据，但只要该价格从未真实成交，即构成虚假被比较价格。朴朴应重点核查三类展示价格：一是划线价／原价，须有本平台或本区域内的真实成交记录支撑，不能以“供应商指导价”“市场参考价”替代；二是“历史低价”标签，须基于真实历史成交数据计算而非估算；三是捆绑销售中的“套餐原价”，不得将各项单品价格简单累加得出，除非各项单品确曾以该价格单独成交。本案从举报到结案历时一个月，提示价格展示类违规的查处周期短、证据要求明确，且整改及时可获减轻处罚——建立价格展示的日常巡检与快速下架机制是降低成本的最有效手段。</div></details>
+    <div class="ni-foot"><a class="src" href="https://finance.sina.com.cn/stock/aigc/bwdt/sjzjxzcf/2026-09-01/doc-iniqhfqk1566527.shtml" target="_blank" rel="noopener">finance.sina.com.cn <span class="arw">↗</span></a></div>
+  </div>
+</article><article class="ni" data-domain="价格合规" data-idx="33">
+  <div class="ni-bar" style="background:#be123c"></div>
+  <div class="ni-body">
+    <div class="ni-top">
+      <span class="ni-dom" style="color:#be123c;background:#be123c14">价格合规</span>
+      <span class="ni-date">2026-09-01</span>
+      <span class="ni-org">滁州市市场监督管理局、鸡西市市场监督管理局</span>
+      <span class="ni-kind">日报</span>
+    </div>
+    <h4 class="ni-title">开学季与专项领域价格提醒告诫密集发布：明码标价、促销比价与赠品标注成重点</h4>
+    <p class="ni-pt">9 月 1 日，滁州市市场监督管理局发布《关于规范医疗机构价格行为的提醒告诫书》，依据《价格法》《明码标价和禁止价格欺诈规定》《价格违法行为行政处罚规定》，要求医疗机构在收费窗口、门诊、住院部等显著位置全面准确实时公示项目、内涵、计价标准及药品耗材价格，严禁虚假公示、遗漏公示、滞后公示，严禁在标价之外收取任何未标明费用；</p>
+    <details class="ana"><summary>朴朴视角 · 合规解读</summary><div class="ana-b">两份提示虽分别面向医疗机构与开学季学生用品，但其列出的价格合规要点与零售电商的展示逻辑完全一致，可直接转化为朴朴的促销自查清单：一是货签对位与调价及时性——线上商品调价后，详情页、搜索列表页、购物车、活动页的展示须同步更新，避免出现“首页标价低于详情页标价”；二是先涨后打的禁止——大促前应留存活动前成交价格数据，作为折扣基数的举证；三是赠品标注——买赠活动须标注赠品品名与数量，若标注价值须为该赠品在本平台的实际销售价格，不得虚标；四是货签错位与规格差异定价——同一商品因规格、等级、产地不同定价不同的，须分别标注明确区分。</div></details>
+    <div class="ni-foot"><a class="src" href="https://scjgj.chuzhou.gov.cn/xxfb/bjdt/1104473622.html" target="_blank" rel="noopener">scjgj.chuzhou.gov.cn <span class="arw">↗</span></a></div>
+  </div>
+</article><article class="ni" data-domain="价格合规" data-idx="34">
+  <div class="ni-bar" style="background:#be123c"></div>
+  <div class="ni-body">
+    <div class="ni-top">
+      <span class="ni-dom" style="color:#be123c;background:#be123c14">价格合规</span>
+      <span class="ni-date">2026-08-28</span>
+      <span class="ni-org">遂溪县市场监督管理局</span>
+      <span class="ni-kind">日报</span>
+    </div>
+    <h4 class="ni-title">湛江遂溪县查处餐饮团购套餐虚假划线价案：六款套餐划线价均无真实成交，构成价格欺诈</h4>
+    <p class="ni-pt">遂溪县市场监督管理局根据线索对某餐饮店进行现场核查。经查，该店在某平台上线 6 款团购套餐：无限畅吃双人餐标价 78.6 元、划线价 276 元；无限畅吃单人餐标价 39.8 元、划线价 138 元；无限畅吃三人餐标价 119 元、划线价 414 元；无限畅吃四人餐标价 159 元、划线价 552 元；酸梅汁 1 杯标价 1 元、划线价 10 元；</p>
+    <details class="ana"><summary>朴朴视角 · 合规解读</summary><div class="ana-b">本案与外卖打包费乱象共同构成即时零售价格合规的两大高发点，判定逻辑完全适用于线上商超：其一，划线价必须有真实成交支撑——虚拟的“门市价”“指导价”“供应商建议零售价”若无本平台或本区域真实成交记录，即属“无依据、无从比较的虚假价格”，团购套餐与多件组合装是重灾区；其二，套餐划线价不得简单累加——本案六款套餐的划线价均显著高于成交价 3 倍以上，若以单品价格累加得出套餐原价，除非各项单品确曾以该价格单独成交，否则同样构成虚假被比较价格；其三，打包费与附加费的价外加价风险——媒体同期曝光的“强制加购 1 元环保餐盒才能下单”“选定辣度后打包费由 1 元涨至 3 元”“加购餐盒后仍被收取 4.7 元打包费”，涉及《价格法》的价外加价、利用技术手段强制收费、重复收费，与朴朴的包装费、配送费、分拣费展示逻辑直接相关。建议对划线价、套餐原价、附加费三项建立“真实成交留痕＋定期巡检＋快速下架”机制：划线价须关联可查询的历史成交记录，套餐原价须逐单品核验成交史，包装与配送费的计价规则须在结算页前置明示且不得在选定商品属性后变动。</div></details>
+    <div class="ni-foot"><a class="src" href="https://zjamr.zhanjiang.gov.cn/zwdt/xwfbt/content/post_2218032.html" target="_blank" rel="noopener">zjamr.zhanjiang.gov.cn <span class="arw">↗</span></a></div>
+  </div>
+</article><article class="ni" data-domain="价格合规" data-idx="35">
+  <div class="ni-bar" style="background:#be123c"></div>
+  <div class="ni-body">
+    <div class="ni-top">
+      <span class="ni-dom" style="color:#be123c;background:#be123c14">价格合规</span>
+      <span class="ni-date">2026-08-24</span>
+      <span class="ni-org">潮州市市场监督管理局</span>
+      <span class="ni-kind">日报</span>
+    </div>
+    <h4 class="ni-title">潮州公布 3 宗网络食品销售虚假宣传典型案例（含量／价格宣称须有依据）</h4>
+    <p class="ni-pt">潮州市监局公布三宗网络食品销售虚假宣传案：某食品店在网店标示“牛肉含量≥98%”但无法提供依据，被依《反不正当竞争法》处罚；某食品公司促销活动结束后未撤下“体验价抢购¥6.6 起”用语，致宣传价格与实际不符，被依《广告法》处罚；某茶厂标“耐泡度比生茶提高 30%”无依据，被依《广告法》处罚。</p>
+    <details class="ana"><summary>朴朴视角 · 合规解读</summary><div class="ana-b">含量、功效、价格类宣称均须有可举证依据，且促销价展示须与实际结算一致。详情页宣称与直播／口播应同审，避免“促销结束未撤标语”类的低级违规。</div></details>
+    <div class="ni-foot"><a class="src" href="https://www.chaozhou.gov.cn/" target="_blank" rel="noopener">chaozhou.gov.cn <span class="arw">↗</span></a></div>
+  </div>
+</article></div></section></div>
+<div id="empty" class="empty" hidden>没有匹配的动态，换个关键词试试。</div>
+<script>
+(function(){
+  var q=document.getElementById('q'), feed=document.getElementById('feed'),
+      empty=document.getElementById('empty'), cur='all';
+  function apply(){
+    var kw=(q.value||'').trim().toLowerCase(), shown=0;
+    var gs=feed.querySelectorAll('.fgroup');
+    for(var i=0;i<gs.length;i++){
+      var g=gs[i], okG=(cur==='all'||g.dataset.g===cur), n=0;
+      var ns=g.querySelectorAll('.ni');
+      for(var j=0;j<ns.length;j++){
+        var el=ns[j], t=el.innerText.toLowerCase();
+        var ok=okG&&(!kw||t.indexOf(kw)>-1);
+        el.hidden=!ok; if(ok){n++;shown++;}
+      }
+      g.hidden=(n===0);
+    }
+    empty.hidden=(shown>0);
+  }
+  var ts=document.querySelectorAll('.ftab');
+  for(var i=0;i<ts.length;i++){
+    ts[i].addEventListener('click',function(){
+      for(var j=0;j<ts.length;j++) ts[j].classList.remove('active');
+      this.classList.add('active'); cur=this.dataset.f; apply();
+    });
+  }
+  if(q) q.addEventListener('input',apply);
+})();
+</script>
+<!-- FEED:END -->
+
+  <div class="section-title"><span class="bar"></span>完整简报归档</div>
   <div class="list">
     <div class="item">
-      <h4><a href="briefs.html">进入合规简报归档 →</a></h4>
-      <div class="meta">日报 · 周报 · 月报 · 补编 ｜ 网页版 + PDF ｜ 按类型与关键词检索</div>
-      <p>聚合全部历史与最新合规资讯报告，含六大领域（数据 / 算法 / 平台 / 产品 / 价格 / AI）的资讯简版与深度分析版，附逐条官方深链。</p>
-      <div class="tagrow"><span class="tag green">日报</span><span class="tag green">周报</span><span class="tag green">月报</span><span class="tag green">已接入</span></div>
+      <h4><a href="briefs.html">按期次浏览完整简报 →</a></h4>
+      <div class="meta">日报 · 周报 · 月报 · 补编 ｜ 资讯简版 + 深度分析版</div>
+      <p>上面是「按领域」的动态流；如需按时间顺序阅读某一期完整简报（含综述、处罚汇总、业务专题、前瞻），请进入归档页。</p>
+      <div class="tagrow"><span class="tag green">全期次</span><span class="tag">网页版在线阅读</span></div>
     </div>
   </div>
 
-  <div class="section-title"><span class="bar"></span>外部法规与监管动态</div>
-  <div class="list">
-    <div class="item">
-      <h4>数据合规</h4>
-      <div class="meta">个人信息保护 · 数据安全 · 跨境传输</div>
-      <p>个人信息保护法、数据安全法配套规则、跨境传输新规与执法案例索引。</p>
-      <div class="tagrow"><span class="tag">PIPL</span><span class="tag">数据安全</span><span class="tag warn">待补充</span></div>
-    </div>
-    <div class="item">
-      <h4>算法合规</h4>
-      <div class="meta">算法备案 · 生成式 AI · 推荐算法</div>
-      <p>算法推荐管理规定、生成式 AI 服务管理暂行办法、深度合成标识要求等。</p>
-      <div class="tagrow"><span class="tag">算法备案</span><span class="tag">AIGC</span><span class="tag warn">待补充</span></div>
-    </div>
-    <div class="item">
-      <h4>平台与价格合规</h4>
-      <div class="meta">平台责任 · 价格法 · 反不正当竞争</div>
-      <p>平台经济领域反垄断指南、价格违法行为处罚规定、促销合规要点。</p>
-      <div class="tagrow"><span class="tag">反垄断</span><span class="tag">价格合规</span><span class="tag warn">待补充</span></div>
-    </div>
-  </div>
-
-  <div class="section-title"><span class="bar"></span>相关项目</div>
-  <div class="list">
-    <div class="item">
-      <h4><a href="../prm.html">平台规则与协议管理中心（PRM）</a></h4>
-      <div class="meta">工作项目</div>
-      <p>面向法务的统一协议与规则管理工具，资产台账集中、流程标准化、范围可扩展。</p>
-    </div>
+  <div class="notice">
+    数据来源：自动化合规简报（每日 / 每周生成）。所有外链在生成时逐一实测，仅保留可达链接；失效或无法溯源的条目不会展示在此页。
   </div>
 
 </div>
 
 <footer><div class="inner">
   <div>lawdatify.site · 法律合规主站</div>
-  <div><a href="../index.html">首页</a> · <a href="index.html">资讯索引</a> · <a href="../analysis/index.html">法律分析</a> · <a href="../kb/index.html">知识库</a> · <a href="../prm.html">PRM</a></div>
+  <div><a href="../index.html">首页</a> · <a href="index.html">合规资讯</a> · <a href="../analysis/index.html">法律分析</a> · <a href="../kb/index.html">知识库</a> · <a href="../prm.html">PRM</a></div>
 </div></footer>
 
 </body>
