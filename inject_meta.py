@@ -42,6 +42,10 @@ PAGES = [
     "analysis/index.html",
     "kb/index.html",
     "kb/benchmarks.html",
+    "radar/index.html",
+    "radar/calendar.html",
+    "radar/actions.html",
+    "radar/map.html",
 ]
 
 # 每页的分享描述。社交卡片上显示的就是这段文字，因此按受众重写而非沿用页面 description。
@@ -58,6 +62,10 @@ OG_DESC = {
     "analysis/polish.html": "报告排版打磨日志：每次打磨的改动文件、前后对比、依据与 QA 验证结果。",
     "kb/index.html": "按六大领域沉淀的合规行动要点，标注风险等级与优先级，源自简报解读并持续累积。",
     "kb/benchmarks.html": "ESG / 法律 / 券商研报专业样本对标库，提炼可借鉴的排版与结构要点。",
+    "radar/index.html": "合规雷达总览：立法日历、监管行动与全球监管地图三视图，按倒计时聚焦未来关键合规节点。",
+    "radar/calendar.html": "合规日历：按倒计时排列的法律施行日、征求意见截止与申报节点，覆盖中国与主要海外辖区，逐条附原文深链。",
+    "radar/actions.html": "监管行动：正在推进的专项治理、检查、立法草案与安全调查，含适用对象、重点内容与最新进展。",
+    "radar/map.html": "全球监管地图：按司法辖区查看立法、执法与规则动态，点击辖区即可下钻该地全部合规条目。",
 }
 
 DEFAULT_DESC = "六大领域合规动态、法律分析与合规知识库，逐条附官方深链，由法务团队持续维护。"
