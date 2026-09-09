@@ -346,12 +346,26 @@ def update_manifest():
                 data = json.load(f)
         except Exception:
             data = []
+    # 清理非公开条目（PRM 与打磨日志不对外，剔除历史残留），否则搜索结果会暴露入口
+    # 见 generate_modules.PRIVATE_URLS
+    PRIVATE_URLS = {"analysis/polish.html", "prm.html",
+                    "_private/polish.html", "_private/prm.html"}
+    before = len(data)
+    data = [d for d in data if d.get("url") not in PRIVATE_URLS]
+    cleaned = before - len(data)
+
+    def _write(items):
+        with open(MANIFEST, "w", encoding="utf-8") as f:
+            json.dump(items, f, ensure_ascii=False, indent=2)
+
     if any(d.get("title") == "合规简报归档" for d in data):
+        if cleaned:
+            _write(data)
+            return f"已剔除 {cleaned} 条非公开条目"
         return "exists"
     data.append(entry)
-    with open(MANIFEST, "w", encoding="utf-8") as f:
-        json.dump(data, f, ensure_ascii=False, indent=2)
-    return "added"
+    _write(data)
+    return "added" + (f"（并剔除 {cleaned} 条非公开条目）" if cleaned else "")
 
 
 def main():
@@ -369,5 +383,27 @@ def main():
     print("完成 →", BRIEFS)
 
 
+def refresh_chrome():
+    """整页重写后恢复统一的对外元数据与页脚。
+
+    本脚本每次运行都会整体重写输出页面，会冲掉 inject_meta.py 注入的
+    og/twitter 标签与 unify_chrome.py 统一的导航页脚；两个脚本均幂等，
+    在此重新执行即可恢复。"""
+    import importlib.util
+    here = os.path.dirname(os.path.abspath(__file__))
+    for name in ("inject_meta", "unify_chrome"):
+        p = os.path.join(here, name + ".py")
+        if not os.path.exists(p):
+            continue
+        try:
+            spec = importlib.util.spec_from_file_location(name, p)
+            m = importlib.util.module_from_spec(spec)
+            spec.loader.exec_module(m)
+            m.main()
+        except Exception as e:  # 元数据恢复失败不应阻断主流程
+            print(f"  页面元数据刷新跳过（{name}）：{e}")
+
+
 if __name__ == "__main__":
     main()
+    refresh_chrome()

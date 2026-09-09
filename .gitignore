@@ -27,3 +27,6 @@ news/reports/*.docx
 
 # 含编造链接、待复核的报告（隔离区，不发布）
 _quarantine/
+
+# 非公开页面（仅本人本机可见，不上传站点）
+_private/

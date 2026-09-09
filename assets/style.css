@@ -220,3 +220,57 @@ footer a{color:var(--muted)}
   .fb-stats{gap:24px}
   .ni-body{padding:14px 16px}
 }
+
+/* ---------------- 页脚 v2（对外版）：品牌 + 来源说明 + 工具入口 + 更新时间 ---------------- */
+footer .inner{flex-direction:column;align-items:flex-start;gap:10px}
+.foot-brand{font-weight:800;font-size:15px;color:var(--ink)}
+.foot-brand span{color:var(--brand)}
+.foot-desc{color:var(--muted);max-width:760px}
+.foot-links{display:flex;flex-wrap:wrap;gap:6px 0;color:var(--faint);font-size:13px}
+.foot-links a{margin-right:2px}
+.foot-links a:not(:last-child)::after{content:"·";margin:0 8px;color:var(--faint)}
+.foot-meta{color:var(--faint);font-size:12.5px;border-top:1px dashed var(--line);
+  padding-top:12px;width:100%}
+.foot-meta .upd{color:var(--ink-2);font-weight:600}
+
+/* ---------------- 关于本站 ---------------- */
+.about{padding-bottom:30px}
+.about-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
+.about-card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+  padding:26px 28px;box-shadow:var(--shadow)}
+.about-card h3{margin:0 0 12px;font-size:16.5px;color:var(--ink);
+  padding-left:12px;border-left:3px solid var(--brand)}
+.about-card p{margin:0 0 10px;color:var(--ink-2);font-size:14.5px}
+.about-card p:last-child{margin-bottom:0}
+.about-card b{color:var(--brand)}
+.disclaimer{margin-top:22px;background:#fbf7ef;border:1px solid #eadfc8;border-radius:var(--radius-s);
+  padding:18px 22px;color:#6d5a35;font-size:13.5px;line-height:1.85}
+.disclaimer b{color:#8a6d2f}
+
+/* ---------------- 打印样式：领导打印 / 转 PDF 场景 ---------------- */
+@media print{
+  .topnav,.searchbox,.hero form,.fb-actions,#toTop,.tagrow .tag.green::after{display:none !important}
+  body{background:#fff;font-size:12.5px;color:#111}
+  .hero{background:#fff !important;color:#111;padding:24px 0 14px;border-bottom:2px solid #12375c}
+  .hero h1{color:#111 !important}
+  .hero p,.hero .eyebrow{color:#444 !important}
+  .wrap{max-width:100%;padding:0 6mm}
+  .ni,.item,.kb-card,.about-card,.hl{box-shadow:none !important;break-inside:avoid;
+    border:1px solid #ddd !important}
+  .ni-body{max-height:none !important}
+  .ni-more,.kb-more{display:block !important}
+  a{color:#12375c;text-decoration:none}
+  a[href^="http"]::after{content:" (" attr(href) ")";font-size:9px;color:#777;
+    word-break:break-all}
+  footer{border-top:1px solid #ddd;margin-top:14px}
+  .foot-links{display:none}
+  section.fgroup{break-inside:auto}
+}
+
+/* ---------------- 移动端补充 ---------------- */
+@media(max-width:560px){
+  .about-grid{grid-template-columns:1fr}
+  .about-card{padding:20px 18px}
+  .foot-desc{font-size:12.5px}
+  .foot-meta{font-size:12px}
+}

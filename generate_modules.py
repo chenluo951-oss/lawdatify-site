@@ -26,9 +26,15 @@ REFS = os.environ.get("REFS_DIR") or os.path.expanduser(
     "~/.workbuddy/skills/compliance-report-generator/references"
 )
 DST_ROOT = os.path.dirname(os.path.abspath(__file__))
-POLISH_OUT = os.path.join(DST_ROOT, "analysis", "polish.html")
+# 打磨日志属内部工作记录，按用户 2026-09-09 决定不对外发布：
+# 输出到 _private/（已 gitignore），仅本机可见。切勿改回 analysis/polish.html。
+POLISH_OUT = os.path.join(DST_ROOT, "_private", "polish.html")
 BENCH_OUT = os.path.join(DST_ROOT, "kb", "benchmarks.html")
 MANIFEST = os.path.join(DST_ROOT, "assets", "manifest.json")
+
+# 非公开页面：不得进入站内搜索索引。见 _private/ 与 .gitignore。
+PRIVATE_URLS = {"analysis/polish.html", "prm.html", "_private/polish.html",
+                "_private/prm.html"}
 
 POLISH_FILE = os.path.join(REFS, "polish_changelog.md")
 BENCH_FILE = os.path.join(REFS, "benchmark_reports.md")
@@ -496,16 +502,9 @@ def update_manifest():
         {
             "title": "合规简报归档",
             "url": "news/briefs.html",
-            "desc": "自动化合规资讯（日报/周报/月报/补编）全期次归档，含网页版与PDF，按类型与关键词检索。",
+            "desc": "自动化合规资讯（日报/周报/月报/补编）全期次归档，网页版在线阅读，按类型与关键词检索。",
             "cat": "资讯索引",
             "tags": ["日报", "周报", "月报", "简报", "归档"],
-        },
-        {
-            "title": "报告排版打磨日志",
-            "url": "analysis/polish.html",
-            "desc": "合规资讯简报排版打磨全过程时间线，每条含改动文件、前后对比、依据、QA 验证结果。",
-            "cat": "法律分析",
-            "tags": ["打磨", "排版", "格式", "QA", "巡检"],
         },
         {
             "title": "行业报告对标库",
@@ -522,6 +521,8 @@ def update_manifest():
                 data = json.load(f)
         except Exception:
             data = []
+    # 清理非公开条目（PRM 与打磨日志不对外，剔除历史残留），否则搜索结果会暴露入口
+    data = [d for d in data if d.get("url") not in PRIVATE_URLS]
     have = {d.get("title") for d in data}
     added = 0
     for e in entries:
@@ -552,5 +553,27 @@ def main():
     print(f"搜索索引：新增 {a} 项")
 
 
+def refresh_chrome():
+    """整页重写后恢复统一的对外元数据与页脚。
+
+    本脚本每次运行都会整体重写输出页面，会冲掉 inject_meta.py 注入的
+    og/twitter 标签与 unify_chrome.py 统一的导航页脚；两个脚本均幂等，
+    在此重新执行即可恢复。"""
+    import importlib.util
+    here = os.path.dirname(os.path.abspath(__file__))
+    for name in ("inject_meta", "unify_chrome"):
+        p = os.path.join(here, name + ".py")
+        if not os.path.exists(p):
+            continue
+        try:
+            spec = importlib.util.spec_from_file_location(name, p)
+            m = importlib.util.module_from_spec(spec)
+            spec.loader.exec_module(m)
+            m.main()
+        except Exception as e:  # 元数据恢复失败不应阻断主流程
+            print(f"  页面元数据刷新跳过（{name}）：{e}")
+
+
 if __name__ == "__main__":
     main()
+    refresh_chrome()

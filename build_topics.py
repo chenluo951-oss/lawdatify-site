@@ -542,6 +542,17 @@ def main():
     if replace_block(os.path.join(HERE, "index.html"), render_home_latest(verified)):
         print("  index.html ✓")
 
+    # 刷新全站「数据更新至」时间戳（页脚 UPDATED 区块，见 unify_chrome.py）
+    try:
+        from unify_chrome import refresh_updated
+        latest_stamp = max((x["issue"] for x in verified + internal), default=None)
+        stamp = latest_stamp or datetime.now().strftime("%Y-%m-%d")
+        n = refresh_updated(stamp)
+        if n:
+            print(f"  页脚更新时间 → {stamp}（{n} 页）")
+    except Exception as e:
+        print(f"  页脚时间戳刷新失败（不阻断）：{e}")
+
     meta = {
         "generated": datetime.now().strftime("%Y-%m-%d %H:%M"),
         "news_items": len(verified),

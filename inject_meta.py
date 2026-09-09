@@ -1,0 +1,150 @@
+#!/usr/bin/env python3
+"""为站点页面统一注入社会化分享元数据（Open Graph / Twitter Card）与站点图标。
+
+用法：
+    python3 inject_meta.py           # 处理全部页面
+    python3 inject_meta.py --check   # 只报告差异，不写入
+
+设计说明：
+- 幂等：注入内容包在 <!-- SOCIAL:START --> / <!-- SOCIAL:END --> 标记之间，
+  重复运行会整体替换而不是追加，可安全反复执行。
+- **SITE_URL 是本脚本唯一的域名开关**。将来站点从 GitHub Pages 切换
+  到自定义域名时，改这一处常量再运行一次即可全站更新。
+
+为什么需要它：站点要分享给公司业务领导与外部同行，分享到微信/钉钉/飞书
+时的预览卡片依赖 og:title / og:description / og:image；缺失这些标签，
+对方看到的就只有一个没有标题、没有摘要、没有封面的秃链接。
+"""
+
+import os
+import re
+import sys
+
+HERE = os.path.dirname(os.path.abspath(__file__))
+
+# ------------------------------------------------------------------
+# 站点根地址 —— 切换域名时只需修改这一处
+# 注意 og:url / og:image 必须是绝对 URL（爬虫要求），不能用相对路径
+# ------------------------------------------------------------------
+SITE_URL = "https://chenluo951-oss.github.io/lawdatify-site"
+OG_IMAGE = f"{SITE_URL}/assets/og-cover.png"
+
+SITE_NAME = "lawdatify · 法律合规主站"
+LOCALE = "zh_CN"
+
+# 需要处理的页面（相对仓库根）。_quarantine/ 与 news/reports/ 下不入列。
+PAGES = [
+    "index.html",
+    "search.html",
+    "about.html",
+    "news/index.html",
+    "news/briefs.html",
+    "analysis/index.html",
+    "kb/index.html",
+    "kb/benchmarks.html",
+]
+
+# 每页的分享描述。社交卡片上显示的就是这段文字，因此按受众重写而非沿用页面 description。
+OG_DESC = {
+    "index.html": "面向即时零售业务的合规主站：每日更新六大领域监管动态，附官方深链逐条可溯源，"
+                  "并沉淀可执行的合规行动要点。",
+    "prm.html": "平台规则与协议管理中心（PRM）：面向法务的统一规则资产台账与流程标准化方案。",
+    "search.html": "站内全文检索：法规、动态、知识要点一站搜。",
+    "about.html": "关于本站：内容来源、选择标准、更新频率、链接核验机制与免责声明。",
+    "news/index.html": "按数据合规、AI 合规、算法合规、平台合规、产品合规、价格合规六大领域分类的"
+                       "监管动态流，每条附发布机构官网原文深链与合规解读。",
+    "news/briefs.html": "合规简报归档：日报 / 周报 / 月报全期次网页版在线阅读。",
+    "analysis/index.html": "法律分析：报告排版打磨日志与专题实务沉淀，全过程可追溯。",
+    "analysis/polish.html": "报告排版打磨日志：每次打磨的改动文件、前后对比、依据与 QA 验证结果。",
+    "kb/index.html": "按六大领域沉淀的合规行动要点，标注风险等级与优先级，源自简报解读并持续累积。",
+    "kb/benchmarks.html": "ESG / 法律 / 券商研报专业样本对标库，提炼可借鉴的排版与结构要点。",
+}
+
+DEFAULT_DESC = "六大领域合规动态、法律分析与合规知识库，逐条附官方深链，由法务团队持续维护。"
+
+BLOCK_RE = re.compile(
+    r"[ \t]*<!-- SOCIAL:START -->.*?<!-- SOCIAL:END -->\n?", re.S
+)
+
+
+def page_url(rel: str) -> str:
+    """把相对文件路径转成对外绝对 URL（目录页去掉 index.html）。"""
+    p = "/" + rel.replace(os.sep, "/")
+    if p.endswith("/index.html"):
+        p = p[: -len("index.html")]
+    return SITE_URL + p.rstrip("/") + "/"
+
+
+def esc_attr(s: str) -> str:
+    return s.replace("&", "&amp;").replace('"', "&quot;")
+
+
+def build_block(rel: str, title: str) -> str:
+    desc = OG_DESC.get(rel, DEFAULT_DESC)
+    t = esc_attr(title)
+    d = esc_attr(desc)
+    u = page_url(rel)
+    # 相对路径前缀：子目录页面需要 ../ 才能指到站点根
+    prefix = "../" * rel.count("/")
+    return (
+        "<!-- SOCIAL:START -->\n"
+        f'<link rel="icon" type="image/svg+xml" href="{prefix}assets/favicon.svg">\n'
+        f'<link rel="apple-touch-icon" href="{prefix}assets/favicon.svg">\n'
+        '<meta property="og:type" content="website">\n'
+        f'<meta property="og:site_name" content="{esc_attr(SITE_NAME)}">\n'
+        f'<meta property="og:locale" content="{LOCALE}">\n'
+        f'<meta property="og:title" content="{t}">\n'
+        f'<meta property="og:description" content="{d}">\n'
+        f'<meta property="og:url" content="{u}">\n'
+        f'<meta property="og:image" content="{OG_IMAGE}">\n'
+        f'<meta property="og:image:width" content="1200">\n'
+        f'<meta property="og:image:height" content="630">\n'
+        '<meta name="twitter:card" content="summary_large_image">\n'
+        f'<meta name="twitter:title" content="{t}">\n'
+        f'<meta name="twitter:description" content="{d}">\n'
+        f'<meta name="twitter:image" content="{OG_IMAGE}">\n'
+        "<!-- SOCIAL:END -->\n"
+    )
+
+
+def process(rel: str, do_write: bool) -> str:
+    path = os.path.join(HERE, rel)
+    if not os.path.exists(path):
+        return f"  {rel:<24} 跳过（文件不存在）"
+
+    s = open(path, encoding="utf-8").read()
+
+    m = re.search(r"<title>(.*?)</title>", s, re.S)
+    if not m:
+        return f"  {rel:<24} 跳过（无 <title>）"
+    title = re.sub(r"\s+", " ", m.group(1)).strip()
+
+    block = build_block(rel, title)
+    if BLOCK_RE.search(s):
+        new = BLOCK_RE.sub(lambda _: block, s, count=1)
+        action = "更新"
+    else:
+        # 未注入过：插到 </head> 之前；没有 </head> 则插到 <body> 之前
+        anchor = "</head>" if "</head>" in s else "<body"
+        idx = s.find(anchor)
+        new = s[:idx] + block + s[idx:]
+        action = "注入"
+
+    if new == s:
+        return f"  {rel:<24} 无变化"
+    if do_write:
+        open(path, "w", encoding="utf-8").write(new)
+    return f"  {rel:<24} {action} ✓"
+
+
+def main():
+    do_write = "--check" not in sys.argv
+    print(("检查" if not do_write else "处理") + f" {len(PAGES)} 个页面（站点根 {SITE_URL}）")
+    for rel in PAGES:
+        print(process(rel, do_write))
+    if not do_write:
+        print("\n（--check 模式，未写入任何文件）")
+
+
+if __name__ == "__main__":
+    main()
