@@ -1,0 +1,1852 @@
+{
+ "meta": {
+  "title": "合规标准知识库",
+  "updated": "",
+  "topics": [
+   "个人信息保护",
+   "数据安全",
+   "网络安全",
+   "算法与AI合规",
+   "移动应用合规",
+   "数据跨境",
+   "平台合规"
+  ],
+  "levels": [
+   "法律",
+   "行政法规",
+   "部门规章",
+   "规范性文件",
+   "强制性国家标准",
+   "推荐性国家标准",
+   "国家标准化指导性技术文件",
+   "指引/指南"
+  ],
+  "statuses": [
+   "现行有效",
+   "即将实施",
+   "已废止",
+   "征求意见中"
+  ]
+ },
+ "duties": [
+  {
+   "name": "告知同意",
+   "topic": "个人信息保护",
+   "desc": "处理前以显著方式、清晰易懂语言真实准确完整告知，并取得自愿明确同意；变更须重新取得同意。"
+  },
+  {
+   "name": "最小必要",
+   "topic": "个人信息保护",
+   "desc": "收集限于实现处理目的的最小范围，不得一揽子授权；权限动态申请、拒绝后不得影响基本功能。"
+  },
+  {
+   "name": "敏感个人信息",
+   "topic": "个人信息保护",
+   "desc": "单独同意、必要性说明、影响告知；生物识别、医疗健康、金融账户、行踪轨迹及不满十四周岁未成年人信息。"
+  },
+  {
+   "name": "未成年人个人信息",
+   "topic": "个人信息保护",
+   "desc": "专门处理规则、监护人同意、年龄分层措施，防沉迷与防欺凌要求。"
+  },
+  {
+   "name": "个人权利响应",
+   "topic": "个人信息保护",
+   "desc": "查阅、复制、更正、补充、删除、撤回同意、注销、转移等请求的受理机制与 15 个工作日时限。"
+  },
+  {
+   "name": "个人信息保护影响评估",
+   "topic": "个人信息保护",
+   "desc": "处理敏感信息、自动化决策、委托处理/对外提供/公开、跨境提供、其他重大影响情形前应开展 PIA 并留存三年。"
+  },
+  {
+   "name": "委托与共同处理",
+   "topic": "个人信息保护",
+   "desc": "约定处理目的、方式、种类、保护措施与权利义务，监督受托方，记录处理情况。"
+  },
+  {
+   "name": "第三方共享",
+   "topic": "个人信息保护",
+   "desc": "向第三方提供须单独同意、共享清单公示、签署协议并监督；SDK 纳入同等管理。"
+  },
+  {
+   "name": "个人信息保护合规审计",
+   "topic": "个人信息保护",
+   "desc": "定期审计处理活动合法性；处理超 1000 万人信息者每两年至少一次，可由内部或外部机构执行。"
+  },
+  {
+   "name": "内部管理制度",
+   "topic": "个人信息保护",
+   "desc": "分类管理、权限审批、教育培训、应急预案、负责人制度与履职记录。"
+  },
+  {
+   "name": "数据分类分级",
+   "topic": "数据安全",
+   "desc": "建立分类分级制度与目录，识别重要数据并按级采取保护措施。"
+  },
+  {
+   "name": "重要数据保护",
+   "topic": "数据安全",
+   "desc": "识别申报、风险评估、出境管制，重要数据处理者应设数据安全负责人与管理机构。"
+  },
+  {
+   "name": "数据安全风险评估",
+   "topic": "数据安全",
+   "desc": "定期开展并向主管部门报送；重要数据与大规模个人信息处理活动为高频触发场景。"
+  },
+  {
+   "name": "数据出境",
+   "topic": "数据跨境",
+   "desc": "安全评估、标准合同、保护认证三条路径的适用条件与申报流程，有效期届满需重新申报。"
+  },
+  {
+   "name": "网络安全等级保护",
+   "topic": "网络安全",
+   "desc": "定级备案、建设整改、等级测评、监督检查；二级以上系统需定期测评。"
+  },
+  {
+   "name": "安全事件应急处置",
+   "topic": "网络安全",
+   "desc": "应急预案、演练、事件报告（个人信息泄露须通知个人与主管部门）、处置记录留存。"
+  },
+  {
+   "name": "网络安全漏洞管理",
+   "topic": "网络安全",
+   "desc": "漏洞发现、验证、修补、发布与报送机制，不得违规发布或使用漏洞。"
+  },
+  {
+   "name": "关键信息基础设施",
+   "topic": "网络安全",
+   "desc": "识别认定、安全防护、检测评估、采购审查与年度检查。"
+  },
+  {
+   "name": "算法备案与公示",
+   "topic": "算法与AI合规",
+   "desc": "算法推荐、深度合成、生成式 AI 服务均须备案并公示算法基本原理与目的意图。"
+  },
+  {
+   "name": "自动化决策",
+   "topic": "算法与AI合规",
+   "desc": "保证透明与结果公平公正，提供关闭选项与不针对个人特征的选项，不得实施不合理差别待遇。"
+  },
+  {
+   "name": "训练数据合法来源",
+   "topic": "算法与AI合规",
+   "desc": "来源合法、尊重知识产权、涉及个人信息须取得同意，提升数据质量与真实性。"
+  },
+  {
+   "name": "内容标识",
+   "topic": "算法与AI合规",
+   "desc": "AI 生成内容添加显式与隐式标识，深度合成服务须核验使用者身份。"
+  },
+  {
+   "name": "应用备案",
+   "topic": "移动应用合规",
+   "desc": "App 主办者与分发平台备案、真实身份信息公示、分发平台审核与上架合规。"
+  },
+  {
+   "name": "App 全生命周期管理",
+   "topic": "移动应用合规",
+   "desc": "需求设计、开发、上架、运营、下架各阶段的安全与个人信息保护要求，SDK 纳入管理。"
+  },
+  {
+   "name": "权限动态申请",
+   "topic": "移动应用合规",
+   "desc": "运行时申请、最小权限、拒绝后不强制退出，不得频繁索权或捆绑授权。"
+  },
+  {
+   "name": "平台规则",
+   "topic": "平台合规",
+   "desc": "平台服务协议与交易规则公开、公平，不得利用规则或数据优势实施不正当竞争。"
+  }
+ ],
+ "items": [
+  {
+   "code": "GB/Z28828-2012",
+   "name": "信息安全技术 公共及商用服务信息系统个人信息保护指南",
+   "level": "国家标准化指导性技术文件",
+   "topic": "个人信息保护",
+   "status": "已废止",
+   "pub": "2012-11-05",
+   "impl": "",
+   "issuer": "国家市场监督管理总局、国家标准化管理委员会",
+   "url": "https://openstd.samr.gov.cn/bzgk/gb/newGbInfo?hcno=FB51A65B69F70BC3AF9F5AC95F5FEF48",
+   "point": "",
+   "duty": [
+    "告知同意",
+    "个人权利响应"
+   ],
+   "note": "",
+   "kind": "标准"
+  },
+  {
+   "code": "GB/T35273-2017",
+   "name": "信息安全技术 个人信息安全规范",
+   "level": "推荐性国家标准",
+   "topic": "个人信息保护",
+   "status": "已废止",
+   "pub": "2017-12-29",
+   "impl": "2018-05-01",
+   "issuer": "国家市场监督管理总局、国家标准化管理委员会",
+   "url": "https://openstd.samr.gov.cn/bzgk/gb/newGbInfo?hcno=4FFAA51D63BA21B9EE40C51DD3CC40BE",
+   "point": "",
+   "duty": [
+    "告知同意",
+    "个人权利响应"
+   ],
+   "note": "",
+   "kind": "标准"
+  },
+  {
+   "code": "GB/T37964-2019",
+   "name": "信息安全技术 个人信息去标识化指南",
+   "level": "推荐性国家标准",
+   "topic": "个人信息保护",
+   "status": "现行有效",
+   "pub": "2019-08-30",
+   "impl": "2020-03-01",
+   "issuer": "国家市场监督管理总局、国家标准化管理委员会",
+   "url": "https://openstd.samr.gov.cn/bzgk/gb/newGbInfo?hcno=C8DF1BC2FB43C6EC0E602EB65EF0BC66",
+   "point": "",
+   "duty": [
+    "告知同意",
+    "个人权利响应"
+   ],
+   "note": "",
+   "kind": "标准"
+  },
+  {
+   "code": "GB/T35273-2020",
+   "name": "信息安全技术 个人信息安全规范",
+   "level": "推荐性国家标准",
+   "topic": "个人信息保护",
+   "status": "现行有效",
+   "pub": "2020-03-06",
+   "impl": "2020-10-01",
+   "issuer": "国家市场监督管理总局、国家标准化管理委员会",
+   "url": "https://openstd.samr.gov.cn/bzgk/gb/newGbInfo?hcno=4568F276E0F8346EB0FBA097AA0CE05E",
+   "point": "",
+   "duty": [
+    "告知同意",
+    "个人权利响应"
+   ],
+   "note": "",
+   "kind": "标准"
+  },
+  {
+   "code": "GB/T39335-2020",
+   "name": "信息安全技术 个人信息安全影响评估指南",
+   "level": "推荐性国家标准",
+   "topic": "个人信息保护",
+   "status": "现行有效",
+   "pub": "2020-11-19",
+   "impl": "2021-06-01",
+   "issuer": "国家市场监督管理总局、国家标准化管理委员会",
+   "url": "https://openstd.samr.gov.cn/bzgk/gb/newGbInfo?hcno=9EA84C0C3C2DBD3997B23F8E6C8ECA35",
+   "point": "",
+   "duty": [
+    "告知同意",
+    "个人权利响应"
+   ],
+   "note": "",
+   "kind": "标准"
+  },
+  {
+   "code": "GB/T41817-2022",
+   "name": "信息安全技术 个人信息安全工程指南",
+   "level": "推荐性国家标准",
+   "topic": "个人信息保护",
+   "status": "现行有效",
+   "pub": "2022-10-14",
+   "impl": "2023-05-01",
+   "issuer": "国家市场监督管理总局、国家标准化管理委员会",
+   "url": "https://openstd.samr.gov.cn/bzgk/gb/newGbInfo?hcno=62C795EBF1BF0200A7161718CEFAABA8",
+   "point": "",
+   "duty": [
+    "告知同意",
+    "个人权利响应"
+   ],
+   "note": "",
+   "kind": "标准"
+  },
+  {
+   "code": "GB/T42460-2023",
+   "name": "信息安全技术 个人信息去标识化效果评估指南",
+   "level": "推荐性国家标准",
+   "topic": "个人信息保护",
+   "status": "现行有效",
+   "pub": "2023-03-17",
+   "impl": "2023-10-01",
+   "issuer": "国家市场监督管理总局、国家标准化管理委员会",
+   "url": "https://openstd.samr.gov.cn/bzgk/gb/newGbInfo?hcno=E1A4E7943D64346D9EF1E3D0855F8496",
+   "point": "",
+   "duty": [
+    "告知同意",
+    "个人权利响应"
+   ],
+   "note": "",
+   "kind": "标准"
+  },
+  {
+   "code": "GB/T42574-2023",
+   "name": "信息安全技术 个人信息处理中告知和同意的实施指南",
+   "level": "推荐性国家标准",
+   "topic": "个人信息保护",
+   "status": "现行有效",
+   "pub": "2023-05-23",
+   "impl": "2023-12-01",
+   "issuer": "国家市场监督管理总局、国家标准化管理委员会",
+   "url": "https://openstd.samr.gov.cn/bzgk/gb/newGbInfo?hcno=09255E6D24E0BAB7F391472C6995EC56",
+   "point": "",
+   "duty": [
+    "告知同意",
+    "个人权利响应"
+   ],
+   "note": "",
+   "kind": "标准"
+  },
+  {
+   "code": "GB/T37988-2019",
+   "name": "信息安全技术 数据安全能力成熟度模型",
+   "level": "推荐性国家标准",
+   "topic": "数据安全",
+   "status": "现行有效",
+   "pub": "2019-08-30",
+   "impl": "2020-03-01",
+   "issuer": "国家市场监督管理总局、国家标准化管理委员会",
+   "url": "https://openstd.samr.gov.cn/bzgk/gb/newGbInfo?hcno=3CFD5E5A14C24D303EA1E139E6EB75C8",
+   "point": "",
+   "duty": [
+    "数据分类分级",
+    "数据安全风险评估"
+   ],
+   "note": "",
+   "kind": "标准"
+  },
+  {
+   "code": "GB/T37932-2019",
+   "name": "信息安全技术 数据交易服务安全要求",
+   "level": "推荐性国家标准",
+   "topic": "数据安全",
+   "status": "已废止",
+   "pub": "2019-08-30",
+   "impl": "2020-03-01",
+   "issuer": "国家市场监督管理总局、国家标准化管理委员会",
+   "url": "https://openstd.samr.gov.cn/bzgk/gb/newGbInfo?hcno=3731C917A6C627CA28E5D8B20B0344F7",
+   "point": "",
+   "duty": [
+    "数据分类分级",
+    "数据安全风险评估"
+   ],
+   "note": "",
+   "kind": "标准"
+  },
+  {
+   "code": "GB/T41819-2022",
+   "name": "信息安全技术 人脸识别数据安全要求",
+   "level": "推荐性国家标准",
+   "topic": "数据安全",
+   "status": "现行有效",
+   "pub": "2022-10-14",
+   "impl": "2023-05-01",
+   "issuer": "国家市场监督管理总局、国家标准化管理委员会",
+   "url": "https://openstd.samr.gov.cn/bzgk/gb/newGbInfo?hcno=BE74B9780B8C4852D62CF47F282478B6",
+   "point": "",
+   "duty": [
+    "数据分类分级",
+    "数据安全风险评估"
+   ],
+   "note": "",
+   "kind": "标准"
+  },
+  {
+   "code": "GB/T42775-2023",
+   "name": "证券期货业数据安全风险防控 数据分类分级指引",
+   "level": "推荐性国家标准",
+   "topic": "数据安全",
+   "status": "现行有效",
+   "pub": "2023-08-06",
+   "impl": "2023-08-06",
+   "issuer": "国家市场监督管理总局、国家标准化管理委员会",
+   "url": "https://openstd.samr.gov.cn/bzgk/gb/newGbInfo?hcno=DB820CE40307DA73731814F2AB0E2DD6",
+   "point": "",
+   "duty": [
+    "数据分类分级",
+    "数据安全风险评估"
+   ],
+   "note": "",
+   "kind": "标准"
+  },
+  {
+   "code": "GB/T43697-2024",
+   "name": "数据安全技术 数据分类分级规则",
+   "level": "推荐性国家标准",
+   "topic": "数据安全",
+   "status": "现行有效",
+   "pub": "2024-03-15",
+   "impl": "2024-10-01",
+   "issuer": "国家市场监督管理总局、国家标准化管理委员会",
+   "url": "https://openstd.samr.gov.cn/bzgk/gb/newGbInfo?hcno=F0C385EDC38CBF277AEC021F23126ADE",
+   "point": "",
+   "duty": [
+    "数据分类分级",
+    "数据安全风险评估"
+   ],
+   "note": "",
+   "kind": "标准"
+  },
+  {
+   "code": "GB/T44109-2024",
+   "name": "信息技术 大数据 数据治理实施指南",
+   "level": "推荐性国家标准",
+   "topic": "数据安全",
+   "status": "现行有效",
+   "pub": "2024-05-28",
+   "impl": "2024-12-01",
+   "issuer": "国家市场监督管理总局、国家标准化管理委员会",
+   "url": "https://openstd.samr.gov.cn/bzgk/gb/newGbInfo?hcno=D3B354CD2E0ECF1821C1D8B4204BEE7C",
+   "point": "",
+   "duty": [
+    "数据分类分级",
+    "数据安全风险评估"
+   ],
+   "note": "",
+   "kind": "标准"
+  },
+  {
+   "code": "GB/T45404-2025",
+   "name": "数据安全技术 大型互联网企业内设个人信息保护监督机构要求",
+   "level": "推荐性国家标准",
+   "topic": "数据安全",
+   "status": "现行有效",
+   "pub": "2025-03-28",
+   "impl": "2025-10-01",
+   "issuer": "国家市场监督管理总局、国家标准化管理委员会",
+   "url": "https://openstd.samr.gov.cn/bzgk/gb/newGbInfo?hcno=7052550E2FAD11FA92BD62BD796C6436",
+   "point": "",
+   "duty": [
+    "数据分类分级",
+    "数据安全风险评估"
+   ],
+   "note": "",
+   "kind": "标准"
+  },
+  {
+   "code": "GB/T45577-2025",
+   "name": "数据安全技术 数据安全风险评估方法",
+   "level": "推荐性国家标准",
+   "topic": "数据安全",
+   "status": "现行有效",
+   "pub": "2025-04-25",
+   "impl": "2025-11-01",
+   "issuer": "国家市场监督管理总局、国家标准化管理委员会",
+   "url": "https://openstd.samr.gov.cn/bzgk/gb/newGbInfo?hcno=71923A8E691AC036E819300BEF9FD986",
+   "point": "",
+   "duty": [
+    "数据分类分级",
+    "数据安全风险评估"
+   ],
+   "note": "",
+   "kind": "标准"
+  },
+  {
+   "code": "GB/T45574-2025",
+   "name": "数据安全技术 敏感个人信息处理安全要求",
+   "level": "推荐性国家标准",
+   "topic": "数据安全",
+   "status": "现行有效",
+   "pub": "2025-04-25",
+   "impl": "2025-11-01",
+   "issuer": "国家市场监督管理总局、国家标准化管理委员会",
+   "url": "https://openstd.samr.gov.cn/bzgk/gb/newGbInfo?hcno=F9F3A2EBF49E9B4D73AD8C8912986D5A",
+   "point": "",
+   "duty": [
+    "数据分类分级",
+    "数据安全风险评估"
+   ],
+   "note": "",
+   "kind": "标准"
+  },
+  {
+   "code": "GB/T46068-2025",
+   "name": "数据安全技术 个人信息跨境处理活动安全认证要求",
+   "level": "推荐性国家标准",
+   "topic": "数据安全",
+   "status": "现行有效",
+   "pub": "2025-08-29",
+   "impl": "2026-03-01",
+   "issuer": "国家市场监督管理总局、国家标准化管理委员会",
+   "url": "https://openstd.samr.gov.cn/bzgk/gb/newGbInfo?hcno=A8F79E35B8DB5AF698D623C1724415B4",
+   "point": "",
+   "duty": [
+    "数据分类分级",
+    "数据安全风险评估"
+   ],
+   "note": "",
+   "kind": "标准"
+  },
+  {
+   "code": "GB/T46071-2025",
+   "name": "数据安全技术 数据安全和个人信息保护社会责任指南",
+   "level": "推荐性国家标准",
+   "topic": "数据安全",
+   "status": "现行有效",
+   "pub": "2025-08-29",
+   "impl": "2026-03-01",
+   "issuer": "国家市场监督管理总局、国家标准化管理委员会",
+   "url": "https://openstd.samr.gov.cn/bzgk/gb/newGbInfo?hcno=6573F5E43A8A68F8FBDBDC81EC945D17",
+   "point": "",
+   "duty": [
+    "数据分类分级",
+    "数据安全风险评估"
+   ],
+   "note": "",
+   "kind": "标准"
+  },
+  {
+   "code": "GB/T46353-2025",
+   "name": "信息技术 大数据 数据资产价值评估",
+   "level": "推荐性国家标准",
+   "topic": "数据安全",
+   "status": "现行有效",
+   "pub": "2025-10-05",
+   "impl": "2026-05-01",
+   "issuer": "国家市场监督管理总局、国家标准化管理委员会",
+   "url": "https://openstd.samr.gov.cn/bzgk/gb/newGbInfo?hcno=8173F6D7E7A03FB87621EEEE254EDDDE",
+   "point": "",
+   "duty": [
+    "数据分类分级",
+    "数据安全风险评估"
+   ],
+   "note": "",
+   "kind": "标准"
+  },
+  {
+   "code": "GB/T46903-2025",
+   "name": "数据安全技术 个人信息保护合规审计要求",
+   "level": "推荐性国家标准",
+   "topic": "数据安全",
+   "status": "现行有效",
+   "pub": "2025-12-31",
+   "impl": "2026-07-01",
+   "issuer": "国家市场监督管理总局、国家标准化管理委员会",
+   "url": "https://openstd.samr.gov.cn/bzgk/gb/newGbInfo?hcno=EC64C138A5B6A52AA5DC5A60188FC07E",
+   "point": "",
+   "duty": [
+    "数据分类分级",
+    "数据安全风险评估"
+   ],
+   "note": "",
+   "kind": "标准"
+  },
+  {
+   "code": "GB/T46901-2025",
+   "name": "数据安全技术 基于个人请求的个人信息转移要求",
+   "level": "推荐性国家标准",
+   "topic": "数据安全",
+   "status": "现行有效",
+   "pub": "2025-12-31",
+   "impl": "2026-07-01",
+   "issuer": "国家市场监督管理总局、国家标准化管理委员会",
+   "url": "https://openstd.samr.gov.cn/bzgk/gb/newGbInfo?hcno=50F585ED815873E9630EB382921742CD",
+   "point": "",
+   "duty": [
+    "数据分类分级",
+    "数据安全风险评估"
+   ],
+   "note": "",
+   "kind": "标准"
+  },
+  {
+   "code": "GB/T37932-2025",
+   "name": "数据安全技术 数据交易服务安全要求",
+   "level": "推荐性国家标准",
+   "topic": "数据安全",
+   "status": "现行有效",
+   "pub": "2025-12-02",
+   "impl": "2026-07-01",
+   "issuer": "国家市场监督管理总局、国家标准化管理委员会",
+   "url": "https://openstd.samr.gov.cn/bzgk/gb/newGbInfo?hcno=6FC2CE8DF87F3E8B309D1969619F021A",
+   "point": "",
+   "duty": [
+    "数据分类分级",
+    "数据安全风险评估"
+   ],
+   "note": "",
+   "kind": "标准"
+  },
+  {
+   "code": "GB/T46796-2025",
+   "name": "数据安全技术 数据接口安全风险监测方法",
+   "level": "推荐性国家标准",
+   "topic": "数据安全",
+   "status": "现行有效",
+   "pub": "2025-12-02",
+   "impl": "2026-07-01",
+   "issuer": "国家市场监督管理总局、国家标准化管理委员会",
+   "url": "https://openstd.samr.gov.cn/bzgk/gb/newGbInfo?hcno=B69781C16C2797709E5D5FFEEAB731B7",
+   "point": "",
+   "duty": [
+    "数据分类分级",
+    "数据安全风险评估"
+   ],
+   "note": "",
+   "kind": "标准"
+  },
+  {
+   "code": "GB46864-2025",
+   "name": "数据安全技术 电子产品信息清除技术要求",
+   "level": "强制性国家标准",
+   "topic": "数据安全",
+   "status": "即将实施",
+   "pub": "2025-12-02",
+   "impl": "2027-01-01",
+   "issuer": "国家市场监督管理总局、国家标准化管理委员会",
+   "url": "https://openstd.samr.gov.cn/bzgk/gb/newGbInfo?hcno=5C4386F0FACDE55499DA42891EA3A9D5",
+   "point": "",
+   "duty": [
+    "数据分类分级",
+    "数据安全风险评估"
+   ],
+   "note": "",
+   "kind": "标准"
+  },
+  {
+   "code": "GB/T32927-2016",
+   "name": "信息安全技术 移动智能终端安全架构",
+   "level": "推荐性国家标准",
+   "topic": "移动应用合规",
+   "status": "现行有效",
+   "pub": "2016-08-29",
+   "impl": "2017-03-01",
+   "issuer": "国家市场监督管理总局、国家标准化管理委员会",
+   "url": "https://openstd.samr.gov.cn/bzgk/gb/newGbInfo?hcno=27BFD935D75B74D1FEEB448E7AE9BA73",
+   "point": "",
+   "duty": [
+    "应用备案",
+    "App 全生命周期管理"
+   ],
+   "note": "",
+   "kind": "标准"
+  },
+  {
+   "code": "GB/T34978-2017",
+   "name": "信息安全技术 移动智能终端个人信息保护技术要求",
+   "level": "推荐性国家标准",
+   "topic": "移动应用合规",
+   "status": "现行有效",
+   "pub": "2017-11-01",
+   "impl": "2018-05-01",
+   "issuer": "国家市场监督管理总局、国家标准化管理委员会",
+   "url": "https://openstd.samr.gov.cn/bzgk/gb/newGbInfo?hcno=45D688024CCE2CDAF2FE570237757781",
+   "point": "",
+   "duty": [
+    "应用备案",
+    "App 全生命周期管理"
+   ],
+   "note": "",
+   "kind": "标准"
+  },
+  {
+   "code": "GB/T34975-2017",
+   "name": "信息安全技术 移动智能终端应用软件安全技术要求和测试评价方法",
+   "level": "推荐性国家标准",
+   "topic": "移动应用合规",
+   "status": "现行有效",
+   "pub": "2017-11-01",
+   "impl": "2018-05-01",
+   "issuer": "国家市场监督管理总局、国家标准化管理委员会",
+   "url": "https://openstd.samr.gov.cn/bzgk/gb/newGbInfo?hcno=D00C1CE888B129CF3F00B6618AF2897E",
+   "point": "",
+   "duty": [
+    "应用备案",
+    "App 全生命周期管理"
+   ],
+   "note": "",
+   "kind": "标准"
+  },
+  {
+   "code": "GB/T34976-2017",
+   "name": "信息安全技术 移动智能终端操作系统安全技术要求和测试评价方法",
+   "level": "推荐性国家标准",
+   "topic": "移动应用合规",
+   "status": "现行有效",
+   "pub": "2017-11-01",
+   "impl": "2018-05-01",
+   "issuer": "国家市场监督管理总局、国家标准化管理委员会",
+   "url": "https://openstd.samr.gov.cn/bzgk/gb/newGbInfo?hcno=D95EF3840CECE4264BE55093F12D3729",
+   "point": "",
+   "duty": [
+    "应用备案",
+    "App 全生命周期管理"
+   ],
+   "note": "",
+   "kind": "标准"
+  },
+  {
+   "code": "GB/T34977-2017",
+   "name": "信息安全技术 移动智能终端数据存储安全技术要求与测试评价方法",
+   "level": "推荐性国家标准",
+   "topic": "移动应用合规",
+   "status": "现行有效",
+   "pub": "2017-11-01",
+   "impl": "2018-05-01",
+   "issuer": "国家市场监督管理总局、国家标准化管理委员会",
+   "url": "https://openstd.samr.gov.cn/bzgk/gb/newGbInfo?hcno=1633240BF29F52FB817D715FCF4458FB",
+   "point": "",
+   "duty": [
+    "应用备案",
+    "App 全生命周期管理"
+   ],
+   "note": "",
+   "kind": "标准"
+  },
+  {
+   "code": "GB/T38542-2020",
+   "name": "信息安全技术 基于生物特征识别的移动智能终端身份鉴别技术框架",
+   "level": "推荐性国家标准",
+   "topic": "移动应用合规",
+   "status": "现行有效",
+   "pub": "2020-03-06",
+   "impl": "2020-10-01",
+   "issuer": "国家市场监督管理总局、国家标准化管理委员会",
+   "url": "https://openstd.samr.gov.cn/bzgk/gb/newGbInfo?hcno=3F32CAE5C4585572F238222160FA6385",
+   "point": "",
+   "duty": [
+    "应用备案",
+    "App 全生命周期管理"
+   ],
+   "note": "",
+   "kind": "标准"
+  },
+  {
+   "code": "GB/T39720-2020",
+   "name": "信息安全技术 移动智能终端安全技术要求及测试评价方法",
+   "level": "推荐性国家标准",
+   "topic": "移动应用合规",
+   "status": "现行有效",
+   "pub": "2020-12-14",
+   "impl": "2021-07-01",
+   "issuer": "国家市场监督管理总局、国家标准化管理委员会",
+   "url": "https://openstd.samr.gov.cn/bzgk/gb/newGbInfo?hcno=17F20359ACEE14EE9C60B014C13F7BD7",
+   "point": "",
+   "duty": [
+    "应用备案",
+    "App 全生命周期管理"
+   ],
+   "note": "",
+   "kind": "标准"
+  },
+  {
+   "code": "GB/T41391-2022",
+   "name": "信息安全技术 移动互联网应用程序（App）收集个人信息基本要求",
+   "level": "推荐性国家标准",
+   "topic": "移动应用合规",
+   "status": "现行有效",
+   "pub": "2022-04-15",
+   "impl": "2022-11-01",
+   "issuer": "国家市场监督管理总局、国家标准化管理委员会",
+   "url": "https://openstd.samr.gov.cn/bzgk/gb/newGbInfo?hcno=977D9EBB32ABF0A7DD6A1215969FE57A",
+   "point": "",
+   "duty": [
+    "应用备案",
+    "App 全生命周期管理"
+   ],
+   "note": "",
+   "kind": "标准"
+  },
+  {
+   "code": "GB/T42582-2023",
+   "name": "信息安全技术 移动互联网应用程序（App）个人信息安全测评规范",
+   "level": "推荐性国家标准",
+   "topic": "移动应用合规",
+   "status": "现行有效",
+   "pub": "2023-05-23",
+   "impl": "2023-12-01",
+   "issuer": "国家市场监督管理总局、国家标准化管理委员会",
+   "url": "https://openstd.samr.gov.cn/bzgk/gb/newGbInfo?hcno=B1B6FAA01F3FB7B428B8D28AACC46C6C",
+   "point": "",
+   "duty": [
+    "应用备案",
+    "App 全生命周期管理"
+   ],
+   "note": "",
+   "kind": "标准"
+  },
+  {
+   "code": "GB/T42884-2023",
+   "name": "信息安全技术 移动互联网应用程序（App）生命周期安全管理指南",
+   "level": "推荐性国家标准",
+   "topic": "移动应用合规",
+   "status": "现行有效",
+   "pub": "2023-08-06",
+   "impl": "2024-03-01",
+   "issuer": "国家市场监督管理总局、国家标准化管理委员会",
+   "url": "https://openstd.samr.gov.cn/bzgk/gb/newGbInfo?hcno=B7DEC309A80EFF716052588358D7C041",
+   "point": "",
+   "duty": [
+    "应用备案",
+    "App 全生命周期管理"
+   ],
+   "note": "",
+   "kind": "标准"
+  },
+  {
+   "code": "GB/T43435-2023",
+   "name": "信息安全技术 移动互联网应用程序（App）软件开发工具包（SDK）安全要求",
+   "level": "推荐性国家标准",
+   "topic": "移动应用合规",
+   "status": "现行有效",
+   "pub": "2023-11-27",
+   "impl": "2024-06-01",
+   "issuer": "国家市场监督管理总局、国家标准化管理委员会",
+   "url": "https://openstd.samr.gov.cn/bzgk/gb/newGbInfo?hcno=E82DD873485F22C9AEC222289D51817A",
+   "point": "",
+   "duty": [
+    "应用备案",
+    "App 全生命周期管理"
+   ],
+   "note": "",
+   "kind": "标准"
+  },
+  {
+   "code": "GB/T43445-2023",
+   "name": "信息安全技术 移动智能终端预置应用软件基本安全要求",
+   "level": "推荐性国家标准",
+   "topic": "移动应用合规",
+   "status": "现行有效",
+   "pub": "2023-11-27",
+   "impl": "2024-06-01",
+   "issuer": "国家市场监督管理总局、国家标准化管理委员会",
+   "url": "https://openstd.samr.gov.cn/bzgk/gb/newGbInfo?hcno=D3621735BFEFC3AAD8F24E6E75C1AECD",
+   "point": "",
+   "duty": [
+    "应用备案",
+    "App 全生命周期管理"
+   ],
+   "note": "",
+   "kind": "标准"
+  },
+  {
+   "code": "GB/T47469-2026",
+   "name": "数据安全技术 移动智能终端的移动互联网应用程序（App）个人信息处理活动管理指南",
+   "level": "推荐性国家标准",
+   "topic": "移动应用合规",
+   "status": "即将实施",
+   "pub": "2026-04-30",
+   "impl": "2026-11-01",
+   "issuer": "国家市场监督管理总局、国家标准化管理委员会",
+   "url": "https://openstd.samr.gov.cn/bzgk/gb/newGbInfo?hcno=A3323548957FF3B39553E738E25EB553",
+   "point": "",
+   "duty": [
+    "应用备案",
+    "App 全生命周期管理"
+   ],
+   "note": "",
+   "kind": "标准"
+  },
+  {
+   "code": "GB/T43555-2023",
+   "name": "智能服务 预测性维护 算法测评方法",
+   "level": "推荐性国家标准",
+   "topic": "算法与AI合规",
+   "status": "现行有效",
+   "pub": "2023-12-28",
+   "impl": "2024-07-01",
+   "issuer": "国家市场监督管理总局、国家标准化管理委员会",
+   "url": "https://openstd.samr.gov.cn/bzgk/gb/newGbInfo?hcno=395F219783373CA4A85A5D1559F34F0F",
+   "point": "",
+   "duty": [
+    "算法备案与公示",
+    "自动化决策"
+   ],
+   "note": "",
+   "kind": "标准"
+  },
+  {
+   "code": "GB/T45225-2025",
+   "name": "人工智能 深度学习算法评估",
+   "level": "推荐性国家标准",
+   "topic": "算法与AI合规",
+   "status": "现行有效",
+   "pub": "2025-01-24",
+   "impl": "2025-01-24",
+   "issuer": "国家市场监督管理总局、国家标准化管理委员会",
+   "url": "https://openstd.samr.gov.cn/bzgk/gb/newGbInfo?hcno=A53A9ED19FC16A692D1B200E5AB0F407",
+   "point": "",
+   "duty": [
+    "算法备案与公示",
+    "自动化决策"
+   ],
+   "note": "",
+   "kind": "标准"
+  },
+  {
+   "code": "GB/T45123-2024",
+   "name": "公共安全 生物特征识别应用 算法评测数据库要求",
+   "level": "推荐性国家标准",
+   "topic": "算法与AI合规",
+   "status": "现行有效",
+   "pub": "2024-12-31",
+   "impl": "2025-07-01",
+   "issuer": "国家市场监督管理总局、国家标准化管理委员会",
+   "url": "https://openstd.samr.gov.cn/bzgk/gb/newGbInfo?hcno=9331D12E0392304F34E85D2C43C93FDE",
+   "point": "",
+   "duty": [
+    "算法备案与公示",
+    "自动化决策"
+   ],
+   "note": "",
+   "kind": "标准"
+  },
+  {
+   "code": "GB/T46351-2025",
+   "name": "人工智能 多算法管理技术要求",
+   "level": "推荐性国家标准",
+   "topic": "算法与AI合规",
+   "status": "现行有效",
+   "pub": "2025-10-05",
+   "impl": "2025-10-05",
+   "issuer": "国家市场监督管理总局、国家标准化管理委员会",
+   "url": "https://openstd.samr.gov.cn/bzgk/gb/newGbInfo?hcno=AECA22287C72EEA1C8744B5556026D6C",
+   "point": "",
+   "duty": [
+    "算法备案与公示",
+    "自动化决策"
+   ],
+   "note": "",
+   "kind": "标准"
+  },
+  {
+   "code": "GB/T45674-2025",
+   "name": "网络安全技术 生成式人工智能数据标注安全规范",
+   "level": "推荐性国家标准",
+   "topic": "算法与AI合规",
+   "status": "现行有效",
+   "pub": "2025-04-25",
+   "impl": "2025-11-01",
+   "issuer": "国家市场监督管理总局、国家标准化管理委员会",
+   "url": "https://openstd.samr.gov.cn/bzgk/gb/newGbInfo?hcno=407584DD0FA2BA19E62E85D3469290B0",
+   "point": "",
+   "duty": [
+    "算法备案与公示",
+    "自动化决策"
+   ],
+   "note": "",
+   "kind": "标准"
+  },
+  {
+   "code": "GB/T45652-2025",
+   "name": "网络安全技术 生成式人工智能预训练和优化训练数据安全规范",
+   "level": "推荐性国家标准",
+   "topic": "算法与AI合规",
+   "status": "现行有效",
+   "pub": "2025-04-25",
+   "impl": "2025-11-01",
+   "issuer": "国家市场监督管理总局、国家标准化管理委员会",
+   "url": "https://openstd.samr.gov.cn/bzgk/gb/newGbInfo?hcno=82710B59110419C285BDC48AB4D7D1F3",
+   "point": "",
+   "duty": [
+    "算法备案与公示",
+    "自动化决策"
+   ],
+   "note": "",
+   "kind": "标准"
+  },
+  {
+   "code": "GB/T45654-2025",
+   "name": "网络安全技术 生成式人工智能服务安全基本要求",
+   "level": "推荐性国家标准",
+   "topic": "算法与AI合规",
+   "status": "现行有效",
+   "pub": "2025-04-25",
+   "impl": "2025-11-01",
+   "issuer": "国家市场监督管理总局、国家标准化管理委员会",
+   "url": "https://openstd.samr.gov.cn/bzgk/gb/newGbInfo?hcno=F67D3F376E0A0A0FF5317FB36B32A30A",
+   "point": "",
+   "duty": [
+    "算法备案与公示",
+    "自动化决策"
+   ],
+   "note": "",
+   "kind": "标准"
+  },
+  {
+   "code": "GB/T46800-2025",
+   "name": "生成式人工智能技术应用社会影响 评估指南",
+   "level": "推荐性国家标准",
+   "topic": "算法与AI合规",
+   "status": "现行有效",
+   "pub": "2025-12-02",
+   "impl": "2025-12-02",
+   "issuer": "国家市场监督管理总局、国家标准化管理委员会",
+   "url": "https://openstd.samr.gov.cn/bzgk/gb/newGbInfo?hcno=BEE34B0A6DB8FA01AD8CCDBA180FBAE7",
+   "point": "",
+   "duty": [
+    "算法备案与公示",
+    "自动化决策"
+   ],
+   "note": "",
+   "kind": "标准"
+  },
+  {
+   "code": "GB/Z201-2026",
+   "name": "人工智能 大模型选型和应用指南",
+   "level": "国家标准化指导性技术文件",
+   "topic": "算法与AI合规",
+   "status": "现行有效",
+   "pub": "2026-07-30",
+   "impl": "",
+   "issuer": "国家市场监督管理总局、国家标准化管理委员会",
+   "url": "https://openstd.samr.gov.cn/bzgk/gb/newGbInfo?hcno=33E043AB70991ED18FEC825C96535E4C",
+   "point": "",
+   "duty": [
+    "算法备案与公示",
+    "自动化决策"
+   ],
+   "note": "",
+   "kind": "标准"
+  },
+  {
+   "code": "GB/T47863-2026",
+   "name": "生成式人工智能技术应用社会影响 服务提供者合规管理指南",
+   "level": "推荐性国家标准",
+   "topic": "算法与AI合规",
+   "status": "即将实施",
+   "pub": "2026-07-02",
+   "impl": "2026-11-01",
+   "issuer": "国家市场监督管理总局、国家标准化管理委员会",
+   "url": "https://openstd.samr.gov.cn/bzgk/gb/newGbInfo?hcno=E880E14431A653F5B2E96A40817400EB",
+   "point": "",
+   "duty": [
+    "算法备案与公示",
+    "自动化决策"
+   ],
+   "note": "",
+   "kind": "标准"
+  },
+  {
+   "code": "GB/T35275-2026",
+   "name": "网络安全技术 SM2密码算法加密签名消息格式",
+   "level": "推荐性国家标准",
+   "topic": "算法与AI合规",
+   "status": "即将实施",
+   "pub": "2026-04-30",
+   "impl": "2026-11-01",
+   "issuer": "国家市场监督管理总局、国家标准化管理委员会",
+   "url": "https://openstd.samr.gov.cn/bzgk/gb/newGbInfo?hcno=28A18B702BDC318803E598F5E502E2CC",
+   "point": "",
+   "duty": [
+    "算法备案与公示",
+    "自动化决策"
+   ],
+   "note": "",
+   "kind": "标准"
+  },
+  {
+   "code": "GB/T47471-2026",
+   "name": "网络安全技术 SM9密码算法加密签名消息格式",
+   "level": "推荐性国家标准",
+   "topic": "算法与AI合规",
+   "status": "即将实施",
+   "pub": "2026-04-30",
+   "impl": "2026-11-01",
+   "issuer": "国家市场监督管理总局、国家标准化管理委员会",
+   "url": "https://openstd.samr.gov.cn/bzgk/gb/newGbInfo?hcno=B98E7D5903B9BEF57ACE1CD6D2A95709",
+   "point": "",
+   "duty": [
+    "算法备案与公示",
+    "自动化决策"
+   ],
+   "note": "",
+   "kind": "标准"
+  },
+  {
+   "code": "GB/T47849-2026",
+   "name": "人工智能 边端设备模型部署工具链功能要求",
+   "level": "推荐性国家标准",
+   "topic": "算法与AI合规",
+   "status": "即将实施",
+   "pub": "2026-07-02",
+   "impl": "2027-02-01",
+   "issuer": "国家市场监督管理总局、国家标准化管理委员会",
+   "url": "https://openstd.samr.gov.cn/bzgk/gb/newGbInfo?hcno=CB5C95FDAA134493900FD0331886097E",
+   "point": "",
+   "duty": [
+    "算法备案与公示",
+    "自动化决策"
+   ],
+   "note": "",
+   "kind": "标准"
+  },
+  {
+   "code": "GB/T47941.1-2026",
+   "name": "人工智能医疗器械 质量要求和评价 第1部分：术语",
+   "level": "推荐性国家标准",
+   "topic": "算法与AI合规",
+   "status": "即将实施",
+   "pub": "2026-07-30",
+   "impl": "2027-08-01",
+   "issuer": "国家市场监督管理总局、国家标准化管理委员会",
+   "url": "https://openstd.samr.gov.cn/bzgk/gb/newGbInfo?hcno=E4C6AC190179662A34731DCC3433BB36",
+   "point": "",
+   "duty": [
+    "算法备案与公示",
+    "自动化决策"
+   ],
+   "note": "",
+   "kind": "标准"
+  },
+  {
+   "code": "GB/T35279-2017",
+   "name": "信息安全技术 云计算安全参考架构",
+   "level": "推荐性国家标准",
+   "topic": "网络安全",
+   "status": "现行有效",
+   "pub": "2017-12-29",
+   "impl": "2018-07-01",
+   "issuer": "国家市场监督管理总局、国家标准化管理委员会",
+   "url": "https://openstd.samr.gov.cn/bzgk/gb/newGbInfo?hcno=BE773D63CBEBE06FB3FF9D1C22700337",
+   "point": "",
+   "duty": [
+    "网络安全等级保护",
+    "安全事件应急处置"
+   ],
+   "note": "",
+   "kind": "标准"
+  },
+  {
+   "code": "GB/T36627-2018",
+   "name": "信息安全技术 网络安全等级保护测试评估技术指南",
+   "level": "推荐性国家标准",
+   "topic": "网络安全",
+   "status": "现行有效",
+   "pub": "2018-09-17",
+   "impl": "2019-04-01",
+   "issuer": "国家市场监督管理总局、国家标准化管理委员会",
+   "url": "https://openstd.samr.gov.cn/bzgk/gb/newGbInfo?hcno=D58BC3A7EFF62876D20514C359B13755",
+   "point": "",
+   "duty": [
+    "网络安全等级保护",
+    "安全事件应急处置"
+   ],
+   "note": "",
+   "kind": "标准"
+  },
+  {
+   "code": "GB/T28449-2018",
+   "name": "信息安全技术 网络安全等级保护测评过程指南",
+   "level": "推荐性国家标准",
+   "topic": "网络安全",
+   "status": "现行有效",
+   "pub": "2018-12-28",
+   "impl": "2019-07-01",
+   "issuer": "国家市场监督管理总局、国家标准化管理委员会",
+   "url": "https://openstd.samr.gov.cn/bzgk/gb/newGbInfo?hcno=CEC24F959F301862A3516CAAF117E70F",
+   "point": "",
+   "duty": [
+    "网络安全等级保护",
+    "安全事件应急处置"
+   ],
+   "note": "",
+   "kind": "标准"
+  },
+  {
+   "code": "GB/T36958-2018",
+   "name": "信息安全技术 网络安全等级保护安全管理中心技术要求",
+   "level": "推荐性国家标准",
+   "topic": "网络安全",
+   "status": "现行有效",
+   "pub": "2018-12-28",
+   "impl": "2019-07-01",
+   "issuer": "国家市场监督管理总局、国家标准化管理委员会",
+   "url": "https://openstd.samr.gov.cn/bzgk/gb/newGbInfo?hcno=081F6A31FA3A7254DB8CFC080CED167A",
+   "point": "",
+   "duty": [
+    "网络安全等级保护",
+    "安全事件应急处置"
+   ],
+   "note": "",
+   "kind": "标准"
+  },
+  {
+   "code": "GB/T36959-2018",
+   "name": "信息安全技术 网络安全等级保护测评机构能力要求和评估规范",
+   "level": "推荐性国家标准",
+   "topic": "网络安全",
+   "status": "现行有效",
+   "pub": "2018-12-28",
+   "impl": "2019-07-01",
+   "issuer": "国家市场监督管理总局、国家标准化管理委员会",
+   "url": "https://openstd.samr.gov.cn/bzgk/gb/newGbInfo?hcno=13CA0E1F3BB48A0B8AA68B80DF790067",
+   "point": "",
+   "duty": [
+    "网络安全等级保护",
+    "安全事件应急处置"
+   ],
+   "note": "",
+   "kind": "标准"
+  },
+  {
+   "code": "GB/T37044-2018",
+   "name": "信息安全技术 物联网安全参考模型及通用要求",
+   "level": "推荐性国家标准",
+   "topic": "网络安全",
+   "status": "现行有效",
+   "pub": "2018-12-28",
+   "impl": "2019-07-01",
+   "issuer": "国家市场监督管理总局、国家标准化管理委员会",
+   "url": "https://openstd.samr.gov.cn/bzgk/gb/newGbInfo?hcno=BBE3572A88B87C3D92AF6DE2C424E0BB",
+   "point": "",
+   "duty": [
+    "网络安全等级保护",
+    "安全事件应急处置"
+   ],
+   "note": "",
+   "kind": "标准"
+  },
+  {
+   "code": "GB/T25070-2019",
+   "name": "信息安全技术 网络安全等级保护安全设计技术要求",
+   "level": "推荐性国家标准",
+   "topic": "网络安全",
+   "status": "现行有效",
+   "pub": "2019-05-10",
+   "impl": "2019-12-01",
+   "issuer": "国家市场监督管理总局、国家标准化管理委员会",
+   "url": "https://openstd.samr.gov.cn/bzgk/gb/newGbInfo?hcno=9FB6EE8597B21436D0E99BF44FD42C4D",
+   "point": "",
+   "duty": [
+    "网络安全等级保护",
+    "安全事件应急处置"
+   ],
+   "note": "",
+   "kind": "标准"
+  },
+  {
+   "code": "GB/T22239-2019",
+   "name": "信息安全技术 网络安全等级保护基本要求",
+   "level": "推荐性国家标准",
+   "topic": "网络安全",
+   "status": "现行有效",
+   "pub": "2019-05-10",
+   "impl": "2019-12-01",
+   "issuer": "国家市场监督管理总局、国家标准化管理委员会",
+   "url": "https://openstd.samr.gov.cn/bzgk/gb/newGbInfo?hcno=BAFB47E8874764186BDB7865E8344DAF",
+   "point": "",
+   "duty": [
+    "网络安全等级保护",
+    "安全事件应急处置"
+   ],
+   "note": "",
+   "kind": "标准"
+  },
+  {
+   "code": "GB/T28448-2019",
+   "name": "信息安全技术 网络安全等级保护测评要求",
+   "level": "推荐性国家标准",
+   "topic": "网络安全",
+   "status": "现行有效",
+   "pub": "2019-05-10",
+   "impl": "2019-12-01",
+   "issuer": "国家市场监督管理总局、国家标准化管理委员会",
+   "url": "https://openstd.samr.gov.cn/bzgk/gb/newGbInfo?hcno=7E736CDF4502B6FF1258DD250AA3EC8C",
+   "point": "",
+   "duty": [
+    "网络安全等级保护",
+    "安全事件应急处置"
+   ],
+   "note": "",
+   "kind": "标准"
+  },
+  {
+   "code": "GB/T25058-2019",
+   "name": "信息安全技术 网络安全等级保护实施指南",
+   "level": "推荐性国家标准",
+   "topic": "网络安全",
+   "status": "现行有效",
+   "pub": "2019-08-30",
+   "impl": "2020-03-01",
+   "issuer": "国家市场监督管理总局、国家标准化管理委员会",
+   "url": "https://openstd.samr.gov.cn/bzgk/gb/newGbInfo?hcno=1E5827B2858401572CFF3A6FA711ACC9",
+   "point": "",
+   "duty": [
+    "网络安全等级保护",
+    "安全事件应急处置"
+   ],
+   "note": "",
+   "kind": "标准"
+  },
+  {
+   "code": "GB/T22240-2020",
+   "name": "信息安全技术 网络安全等级保护定级指南",
+   "level": "推荐性国家标准",
+   "topic": "网络安全",
+   "status": "现行有效",
+   "pub": "2020-04-28",
+   "impl": "2020-11-01",
+   "issuer": "国家市场监督管理总局、国家标准化管理委员会",
+   "url": "https://openstd.samr.gov.cn/bzgk/gb/newGbInfo?hcno=63B89FFF7CC97EBBBED8A403396F0F00",
+   "point": "",
+   "duty": [
+    "网络安全等级保护",
+    "安全事件应急处置"
+   ],
+   "note": "",
+   "kind": "标准"
+  },
+  {
+   "code": "GB/T30276-2020",
+   "name": "信息安全技术 网络安全漏洞管理规范",
+   "level": "推荐性国家标准",
+   "topic": "网络安全",
+   "status": "现行有效",
+   "pub": "2020-11-19",
+   "impl": "2021-06-01",
+   "issuer": "国家市场监督管理总局、国家标准化管理委员会",
+   "url": "https://openstd.samr.gov.cn/bzgk/gb/newGbInfo?hcno=7EF97931115A518655DCD136653CBD74",
+   "point": "",
+   "duty": [
+    "网络安全等级保护",
+    "安全事件应急处置"
+   ],
+   "note": "",
+   "kind": "标准"
+  },
+  {
+   "code": "GB/T30279-2020",
+   "name": "信息安全技术 网络安全漏洞分类分级指南",
+   "level": "推荐性国家标准",
+   "topic": "网络安全",
+   "status": "现行有效",
+   "pub": "2020-11-19",
+   "impl": "2021-06-01",
+   "issuer": "国家市场监督管理总局、国家标准化管理委员会",
+   "url": "https://openstd.samr.gov.cn/bzgk/gb/newGbInfo?hcno=458BACCE700CA8E0B728CFB5F762DE7A",
+   "point": "",
+   "duty": [
+    "网络安全等级保护",
+    "安全事件应急处置"
+   ],
+   "note": "",
+   "kind": "标准"
+  },
+  {
+   "code": "GB/T28458-2020",
+   "name": "信息安全技术 网络安全漏洞标识与描述规范",
+   "level": "推荐性国家标准",
+   "topic": "网络安全",
+   "status": "现行有效",
+   "pub": "2020-11-19",
+   "impl": "2021-06-01",
+   "issuer": "国家市场监督管理总局、国家标准化管理委员会",
+   "url": "https://openstd.samr.gov.cn/bzgk/gb/newGbInfo?hcno=B502AB26F48381AD94C8CE37281F3C8B",
+   "point": "",
+   "duty": [
+    "网络安全等级保护",
+    "安全事件应急处置"
+   ],
+   "note": "",
+   "kind": "标准"
+  },
+  {
+   "code": "GB/T39204-2022",
+   "name": "信息安全技术 关键信息基础设施安全保护要求",
+   "level": "推荐性国家标准",
+   "topic": "网络安全",
+   "status": "现行有效",
+   "pub": "2022-10-12",
+   "impl": "2023-05-01",
+   "issuer": "国家市场监督管理总局、国家标准化管理委员会",
+   "url": "https://openstd.samr.gov.cn/bzgk/gb/newGbInfo?hcno=1D986D9DCCC518D19DAD9431DD76053E",
+   "point": "",
+   "duty": [
+    "网络安全等级保护",
+    "安全事件应急处置"
+   ],
+   "note": "",
+   "kind": "标准"
+  },
+  {
+   "code": "GB/T47687-2026",
+   "name": "网络安全技术 秘密分享技术机制",
+   "level": "推荐性国家标准",
+   "topic": "网络安全",
+   "status": "即将实施",
+   "pub": "2026-05-25",
+   "impl": "2026-12-01",
+   "issuer": "国家市场监督管理总局、国家标准化管理委员会",
+   "url": "https://openstd.samr.gov.cn/bzgk/gb/newGbInfo?hcno=4677FDF78B70DB714582BB382F8CBB87",
+   "point": "",
+   "duty": [
+    "网络安全等级保护",
+    "安全事件应急处置"
+   ],
+   "note": "",
+   "kind": "标准"
+  },
+  {
+   "code": "GB/T47686-2026",
+   "name": "网络安全技术 政务云安全配置基线要求",
+   "level": "推荐性国家标准",
+   "topic": "网络安全",
+   "status": "即将实施",
+   "pub": "2026-05-25",
+   "impl": "2026-12-01",
+   "issuer": "国家市场监督管理总局、国家标准化管理委员会",
+   "url": "https://openstd.samr.gov.cn/bzgk/gb/newGbInfo?hcno=EB153BD289631D7940F58F5491F9612C",
+   "point": "",
+   "duty": [
+    "网络安全等级保护",
+    "安全事件应急处置"
+   ],
+   "note": "",
+   "kind": "标准"
+  },
+  {
+   "code": "GB/T35278-2026",
+   "name": "网络安全技术 移动终端安全技术规范",
+   "level": "推荐性国家标准",
+   "topic": "网络安全",
+   "status": "即将实施",
+   "pub": "2026-07-30",
+   "impl": "2027-02-01",
+   "issuer": "国家市场监督管理总局、国家标准化管理委员会",
+   "url": "https://openstd.samr.gov.cn/bzgk/gb/newGbInfo?hcno=E868B61B63106B92077764E3AB74B1D6",
+   "point": "",
+   "duty": [
+    "网络安全等级保护",
+    "安全事件应急处置"
+   ],
+   "note": "",
+   "kind": "标准"
+  },
+  {
+   "code": "GB/T20985.2-2026",
+   "name": "网络安全技术 网络安全事件管理 第2部分：事件响应规划和准备指南",
+   "level": "推荐性国家标准",
+   "topic": "网络安全",
+   "status": "即将实施",
+   "pub": "2026-07-02",
+   "impl": "2027-02-01",
+   "issuer": "国家市场监督管理总局、国家标准化管理委员会",
+   "url": "https://openstd.samr.gov.cn/bzgk/gb/newGbInfo?hcno=374270E559AB80CDD66A33FCA64902A3",
+   "point": "",
+   "duty": [
+    "网络安全等级保护",
+    "安全事件应急处置"
+   ],
+   "note": "",
+   "kind": "标准"
+  },
+  {
+   "code": "GB/T37002-2026",
+   "name": "网络安全技术 电子邮件系统安全技术规范",
+   "level": "推荐性国家标准",
+   "topic": "网络安全",
+   "status": "即将实施",
+   "pub": "2026-07-02",
+   "impl": "2027-02-01",
+   "issuer": "国家市场监督管理总局、国家标准化管理委员会",
+   "url": "https://openstd.samr.gov.cn/bzgk/gb/newGbInfo?hcno=CC149DBFEDC35CE74FC8F57100F210F5",
+   "point": "",
+   "duty": [
+    "网络安全等级保护",
+    "安全事件应急处置"
+   ],
+   "note": "",
+   "kind": "标准"
+  },
+  {
+   "code": "GB/T44886.5-2026",
+   "name": "网络安全技术 网络安全产品互联互通 第5部分：行为信息格式",
+   "level": "推荐性国家标准",
+   "topic": "网络安全",
+   "status": "即将实施",
+   "pub": "2026-07-02",
+   "impl": "2027-02-01",
+   "issuer": "国家市场监督管理总局、国家标准化管理委员会",
+   "url": "https://openstd.samr.gov.cn/bzgk/gb/newGbInfo?hcno=E09F1AD17FEA4FAB59EDD1BF9B07C670",
+   "point": "",
+   "duty": [
+    "网络安全等级保护",
+    "安全事件应急处置"
+   ],
+   "note": "",
+   "kind": "标准"
+  },
+  {
+   "code": "GB/T47744-2026",
+   "name": "网络安全技术 互联网恶意软件定义与描述格式",
+   "level": "推荐性国家标准",
+   "topic": "网络安全",
+   "status": "即将实施",
+   "pub": "2026-07-02",
+   "impl": "2027-02-01",
+   "issuer": "国家市场监督管理总局、国家标准化管理委员会",
+   "url": "https://openstd.samr.gov.cn/bzgk/gb/newGbInfo?hcno=ED82017E4797B53E2AEBB8B16A8B1B78",
+   "point": "",
+   "duty": [
+    "网络安全等级保护",
+    "安全事件应急处置"
+   ],
+   "note": "",
+   "kind": "标准"
+  },
+  {
+   "code": "GB/T44886.4-2026",
+   "name": "网络安全技术 网络安全产品互联互通 第4部分：威胁信息格式",
+   "level": "推荐性国家标准",
+   "topic": "网络安全",
+   "status": "即将实施",
+   "pub": "2026-07-02",
+   "impl": "2027-02-01",
+   "issuer": "国家市场监督管理总局、国家标准化管理委员会",
+   "url": "https://openstd.samr.gov.cn/bzgk/gb/newGbInfo?hcno=7422EBDF73CC9AA143BD60334CB945F9",
+   "point": "",
+   "duty": [
+    "网络安全等级保护",
+    "安全事件应急处置"
+   ],
+   "note": "",
+   "kind": "标准"
+  },
+  {
+   "code": "GB/T20985.1-2026",
+   "name": "网络安全技术 网络安全事件管理 第1部分：原理和过程",
+   "level": "推荐性国家标准",
+   "topic": "网络安全",
+   "status": "即将实施",
+   "pub": "2026-07-02",
+   "impl": "2027-02-01",
+   "issuer": "国家市场监督管理总局、国家标准化管理委员会",
+   "url": "https://openstd.samr.gov.cn/bzgk/gb/newGbInfo?hcno=7F289B77C36BEE1614B302452D5F0EA3",
+   "point": "",
+   "duty": [
+    "网络安全等级保护",
+    "安全事件应急处置"
+   ],
+   "note": "",
+   "kind": "标准"
+  },
+  {
+   "code": "GB/T41400-2026",
+   "name": "网络安全技术 工业控制系统网络安全防护能力成熟度模型",
+   "level": "推荐性国家标准",
+   "topic": "网络安全",
+   "status": "即将实施",
+   "pub": "2026-07-02",
+   "impl": "2027-02-01",
+   "issuer": "国家市场监督管理总局、国家标准化管理委员会",
+   "url": "https://openstd.samr.gov.cn/bzgk/gb/newGbInfo?hcno=38341A6B2B97C9672859CC1F3F64EEEA",
+   "point": "",
+   "duty": [
+    "网络安全等级保护",
+    "安全事件应急处置"
+   ],
+   "note": "",
+   "kind": "标准"
+  },
+  {
+   "code": "法律",
+   "name": "中华人民共和国网络安全法",
+   "level": "法律",
+   "topic": "网络安全",
+   "status": "现行有效",
+   "pub": "2016-11-07",
+   "impl": "2017-06-01",
+   "issuer": "全国人民代表大会常务委员会",
+   "url": "http://www.npc.gov.cn/npc/c2/c30834/201905/t20190521_296285.html",
+   "point": "网络运营者安全保护义务、等级保护制度、个人信息收集使用规则、关键信息基础设施保护的基础法。",
+   "duty": [
+    "网络安全等级保护",
+    "个人信息告知同意",
+    "安全事件应急处置"
+   ],
+   "note": "2025 年修正，自 2026-01-01 起施行：提高处罚上限、与《数据安全法》《个人信息保护法》衔接。",
+   "kind": "法规"
+  },
+  {
+   "code": "法律",
+   "name": "中华人民共和国数据安全法",
+   "level": "法律",
+   "topic": "数据安全",
+   "status": "现行有效",
+   "pub": "2021-06-10",
+   "impl": "2021-09-01",
+   "issuer": "全国人民代表大会常务委员会",
+   "url": "http://www.npc.gov.cn/npc/c2/c30834/202106/t20210610_311888.html",
+   "point": "确立数据分类分级保护、重要数据目录、数据安全风险评估与出口管制、政务数据开放制度。",
+   "duty": [
+    "数据分类分级",
+    "重要数据保护",
+    "数据安全风险评估",
+    "数据出境"
+   ],
+   "kind": "法规",
+   "note": ""
+  },
+  {
+   "code": "法律",
+   "name": "中华人民共和国个人信息保护法",
+   "level": "法律",
+   "topic": "个人信息保护",
+   "status": "现行有效",
+   "pub": "2021-08-20",
+   "impl": "2021-11-01",
+   "issuer": "全国人民代表大会常务委员会",
+   "url": "http://www.npc.gov.cn/npc/c2/c30834/202108/t20210820_313088.html",
+   "point": "处理规则、告知同意、敏感个人信息、自动化决策、跨境提供、个人权利响应、大型平台特别义务。",
+   "duty": [
+    "个人信息告知同意",
+    "敏感个人信息",
+    "自动化决策",
+    "个人权利响应",
+    "数据出境",
+    "个人信息保护影响评估"
+   ],
+   "kind": "法规",
+   "note": ""
+  },
+  {
+   "code": "行政法规",
+   "name": "网络数据安全管理条例",
+   "level": "行政法规",
+   "topic": "数据安全",
+   "status": "现行有效",
+   "pub": "2024-09-30",
+   "impl": "2025-01-01",
+   "issuer": "国务院",
+   "url": "https://www.gov.cn/zhengce/content/202409/content_6977766.htm",
+   "point": "细化网络数据处理者义务：分类分级、重要数据识别申报、安全事件报告、平台规则、数据跨境。",
+   "duty": [
+    "数据分类分级",
+    "重要数据保护",
+    "个人信息告知同意",
+    "数据出境",
+    "平台规则"
+   ],
+   "kind": "法规",
+   "note": ""
+  },
+  {
+   "code": "行政法规",
+   "name": "未成年人网络保护条例",
+   "level": "行政法规",
+   "topic": "个人信息保护",
+   "status": "现行有效",
+   "pub": "2023-10-16",
+   "impl": "2024-01-01",
+   "issuer": "国务院",
+   "url": "https://www.gov.cn/gongbao/2023/issue_10806/202311/content_6913813.html",
+   "point": "未成年人个人信息处理、防沉迷、网络欺凌治理；处理不满十四周岁个人信息须取得监护人同意并制定专门规则。",
+   "duty": [
+    "未成年人个人信息",
+    "个人信息告知同意"
+   ],
+   "kind": "法规",
+   "note": ""
+  },
+  {
+   "code": "部门规章",
+   "name": "互联网信息服务算法推荐管理规定",
+   "level": "部门规章",
+   "topic": "算法与AI合规",
+   "status": "现行有效",
+   "pub": "2022-01-04",
+   "impl": "2022-03-01",
+   "issuer": "国家互联网信息办公室等四部门",
+   "url": "https://www.cac.gov.cn/2022-01/04/c_1642894606364259.htm",
+   "point": "算法备案与公示、用户标签管理、关闭算法推荐选项、不得利用算法实施不合理差别待遇（大数据杀熟）。",
+   "duty": [
+    "算法备案与公示",
+    "自动化决策",
+    "用户标签管理"
+   ],
+   "kind": "法规",
+   "note": ""
+  },
+  {
+   "code": "部门规章",
+   "name": "互联网信息服务深度合成管理规定",
+   "level": "部门规章",
+   "topic": "算法与AI合规",
+   "status": "现行有效",
+   "pub": "2022-11-25",
+   "impl": "2023-01-10",
+   "issuer": "国家互联网信息办公室等三部门",
+   "url": "https://www.cac.gov.cn/2022-12/11/c_1672221949354811.htm",
+   "point": "深度合成服务提供者需对生成内容添加标识、核验使用者身份、建立辟谣机制。",
+   "duty": [
+    "算法备案与公示",
+    "内容标识",
+    "实名认证"
+   ],
+   "kind": "法规",
+   "note": ""
+  },
+  {
+   "code": "部门规章",
+   "name": "生成式人工智能服务管理暂行办法",
+   "level": "部门规章",
+   "topic": "算法与AI合规",
+   "status": "现行有效",
+   "pub": "2023-07-13",
+   "impl": "2023-08-15",
+   "issuer": "国家互联网信息办公室等七部门",
+   "url": "https://www.cac.gov.cn/2023-07/13/c_1690898327029107.htm",
+   "point": "训练数据合法性、标注规则、服务备案、内容标识、未成年人保护、投诉举报机制。",
+   "duty": [
+    "算法备案与公示",
+    "训练数据合法来源",
+    "内容标识",
+    "未成年人个人信息"
+   ],
+   "kind": "法规",
+   "note": ""
+  },
+  {
+   "code": "部门规章",
+   "name": "数据出境安全评估办法",
+   "level": "部门规章",
+   "topic": "数据跨境",
+   "status": "现行有效",
+   "pub": "2022-07-07",
+   "impl": "2022-09-01",
+   "issuer": "国家互联网信息办公室",
+   "url": "https://www.gov.cn/gongbao/content/2022/content_5707283.htm",
+   "point": "重要数据及达量级个人信息出境须申报安全评估，有效期 2 年，届满需重新申报。",
+   "duty": [
+    "数据出境",
+    "重要数据保护"
+   ],
+   "kind": "法规",
+   "note": ""
+  },
+  {
+   "code": "部门规章",
+   "name": "促进和规范数据跨境流动规定",
+   "level": "部门规章",
+   "topic": "数据跨境",
+   "status": "现行有效",
+   "pub": "2024-03-22",
+   "impl": "2024-03-22",
+   "issuer": "国家互联网信息办公室",
+   "url": "https://www.cac.gov.cn/2024-03/22/c_1712776611775634.htm",
+   "point": "明确豁免情形（国际贸易、跨境运输、人力资源管理必需等），缩小安全评估适用范围。",
+   "duty": [
+    "数据出境"
+   ],
+   "kind": "法规",
+   "note": ""
+  },
+  {
+   "code": "规范性文件",
+   "name": "App违法违规收集使用个人信息行为认定方法",
+   "level": "规范性文件",
+   "topic": "移动应用合规",
+   "status": "现行有效",
+   "pub": "2019-11-28",
+   "impl": "2019-11-28",
+   "issuer": "国家互联网信息办公室等四部门",
+   "url": "https://www.cac.gov.cn/2019-12/27/c_1578986455686625.htm",
+   "point": "六类违法违规行为的认定标准：未公开规则、未明示目的、未经同意、超出必要范围等，是 App 检测的直接标尺；配套《常见类型移动互联网应用程序必要个人信息范围规定》按 39 类 App 界定必要个人信息（网上购物类需手机号/收货人信息与支付信息，餐饮外卖类同）。",
+   "duty": [
+    "个人信息告知同意",
+    "最小必要",
+    "个人权利响应"
+   ],
+   "kind": "文件",
+   "note": ""
+  },
+  {
+   "code": "部门规章",
+   "name": "个人信息保护合规审计管理办法",
+   "level": "部门规章",
+   "topic": "个人信息保护",
+   "status": "现行有效",
+   "pub": "2025-02-12",
+   "impl": "2025-05-01",
+   "issuer": "国家互联网信息办公室",
+   "url": "https://www.cac.gov.cn/2025-02/14/c_1741233507681519.htm",
+   "point": "处理超 1000 万人个人信息者应每两年至少审计一次；明确审计机构、程序、报告与整改要求。",
+   "duty": [
+    "个人信息保护合规审计",
+    "内部管理制度"
+   ],
+   "kind": "法规",
+   "note": ""
+  },
+  {
+   "code": "部门规章",
+   "name": "网络安全审查办法",
+   "level": "部门规章",
+   "topic": "网络安全",
+   "status": "现行有效",
+   "pub": "2021-12-28",
+   "impl": "2022-02-15",
+   "issuer": "国家互联网信息办公室等十三部门",
+   "url": "https://www.cac.gov.cn/2022-01/04/c_1642894606364259.htm",
+   "point": "关键信息基础设施运营者采购网络产品服务、平台赴国外上市等情形须申报网络安全审查。",
+   "duty": [
+    "关键信息基础设施",
+    "供应链安全"
+   ],
+   "kind": "法规",
+   "note": ""
+  },
+  {
+   "code": "法律",
+   "name": "中华人民共和国电子商务法",
+   "level": "法律",
+   "topic": "平台合规",
+   "status": "现行有效",
+   "pub": "2018-08-31",
+   "impl": "2019-01-01",
+   "issuer": "全国人民代表大会常务委员会",
+   "url": "http://www.npc.gov.cn/npc/c2/c30834/201905/t20190521_296285.html",
+   "point": "平台经营者义务、消费者保护、知识产权保护、商品服务质量责任。",
+   "duty": [
+    "平台规则",
+    "消费者权益"
+   ],
+   "kind": "法规",
+   "note": ""
+  },
+  {
+   "code": "部门规章",
+   "name": "个人信息出境标准合同办法",
+   "level": "部门规章",
+   "topic": "数据跨境",
+   "status": "现行有效",
+   "pub": "2023-02-22",
+   "impl": "2023-06-01",
+   "issuer": "国家互联网信息办公室",
+   "url": "https://www.cac.gov.cn/2023-02/24/c_1678884830036813.htm",
+   "point": "个人信息出境标准合同范本与备案要求，含 PIA 前置义务。",
+   "duty": [
+    "数据出境",
+    "个人信息保护影响评估"
+   ],
+   "kind": "法规",
+   "note": ""
+  },
+  {
+   "code": "规范性文件",
+   "name": "互联网信息服务算法备案（系统）",
+   "level": "指引/指南",
+   "topic": "算法与AI合规",
+   "status": "现行有效",
+   "pub": "2022-03-01",
+   "impl": "2022-03-01",
+   "issuer": "国家互联网信息办公室",
+   "url": "https://beian.cac.gov.cn/",
+   "point": "算法推荐、深度合成、生成式 AI 服务提供者的备案入口与公示查询系统。",
+   "duty": [
+    "算法备案与公示"
+   ],
+   "kind": "文件",
+   "note": ""
+  }
+ ]
+}

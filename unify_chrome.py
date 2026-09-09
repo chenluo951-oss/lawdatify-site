@@ -28,6 +28,7 @@ PAGES = [
     "news/briefs.html",
     "analysis/index.html",
     "kb/index.html",
+    "kb/standards.html",
     "kb/benchmarks.html",
     "radar/index.html",
     "radar/calendar.html",
