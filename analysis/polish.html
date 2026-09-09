@@ -58,12 +58,39 @@
 
 <div class="wrap">
   <div class="pol-summary">
-    <div class="pol-stat"><div class="n">27</div><div class="l">打磨记录</div></div>
-    <div class="pol-stat"><div class="n">2026-09-07 17:36</div><div class="l">最新一次</div></div>
+    <div class="pol-stat"><div class="n">30</div><div class="l">打磨记录</div></div>
+    <div class="pol-stat"><div class="n">2026-09-08 17:58</div><div class="l">最新一次</div></div>
     <div class="pol-stat"><div class="n">每 30 分钟</div><div class="l">巡检频率</div></div>
   </div>
 
   <div style="margin-top:18px"><div class="pol-card">
+  <div class="pol-head">
+    <span class="pol-date">2026-09-08</span>
+    <span class="pol-time">17:58</span>
+    <span class="qa pass">通过</span>
+    <span class="pol-title">尾部「信息来源与免责声明」从新页起（独占末页 · 对齐对标库 C⑤「防孤行规则化」）</span>
+  </div>
+  <div class="pol-body"><div class="pol-row"><div class="pol-k">改动文件/函数</div><div class="pol-v">- `gen_report_pdf.py`：① import 增补 `PageBreak`（原仅 `CondPageBreak`）；② 新增共享 helper `disclaimer_section(S, kind="本简报", new_page=True)` → 返回 `[PageBreak(), KeepTogether([Paragraph("信息来源与免责声明", S["h3"]), disclaimer_block(S, kind)])]`，并保留 `new_page=False` 的原行为分支（`[Spacer(SP_L), KeepTogether([...])]`）作为一键回滚/特例复用开关。</div></div><div class="pol-row"><div class="pol-k">改动前 → 改动后</div><div class="pol-v">- 前：四件套（简版/深度版 × PDF/DOCX）的尾部法务声明栏均紧随正文末节（简版紧随「前瞻」列表、深度版紧随三索引附录），仅以一个 `Spacer(SP_L)` / 空段落分隔。声明标题虽有 `keepWithNext=1`，但「标题 + 四条声明框」整体未成组，页尾空间不足时会出现「声明栏被挤到下一页、上一页尾留大片空白」或「声明栏与业务正文（要点/影响分析/应对建议）同页混排」两类形态。</div></div><div class="pol-row"><div class="pol-k">改动依据</div><div class="pol-v">`benchmark_reports.md` 第二批 **C⑤「防孤行规则化」** 明确列出四条券商研报规则——「无孤立标题」「空间不足时每个主要部分从新页开始」「风险提示从新页起」「**免责声明从新页起**」。前两条早已落地（h1/h2/h3 keepWithNext + h1_block.keepWithNext + 深度版逐章 PageBreak），但「免责声明从新页起」子项**从未实现**（代码级确认：两版 PDF 声明前均无 PageBreak、两版 DOCX 为空段落分隔），属 C⑤ 唯一遗留子项。纯版式改动：不改声明文案、不改 `disclaimer_block` 本身，不引入任何内容数据（policy/penalties/pupu_items/matrix_rows/CASE_REFS 等一律未动），亦不新增任何字符（对字体子集化与缺字检测零影响）。</div></div><div class="pol-row"><div class="pol-k">预期提升</div><div class="pol-v">① 对外发送的四件套尾部法务声明独占末页，业务部门翻到末页即完整看到「信息来源/用途限制/时效性/版权」四条，不会与业务分析条目混排，符合券商研报与律所报告的尾部声明页惯例；② 杜绝「声明标题在页尾、声明框跨到下一页」的拆分风险，落实用户「零排版错误（含标题孤行）」硬性要求；③ 抽象为共享 helper 后，日报/周报/月报 × 简版/深度版共 6 条生成路径由单点控制，后续调整声明版式只需改 1 处；`new_page=False` 分支提供无需改调用方的即时回滚开关。</div></div><div class="pol-row"><div class="pol-k">QA 验证</div><div class="pol-v">重生成 0906 全部四件套 + 实跑 `qa_strict.py daily_data_0906` → 官网首页根链接 0 / **简版 20 页**（与改动前持平，未增页）/ **深度版 60 页**（59→60，+1 末页，仍 ≥30）/ 缺字 0 / tofu 0 / PDF 内根链接 0 / 章节齐全 / 图示 5/5（水位矩阵✅ 食安快检✅ 价格展示✅ 要点框架✅ 自检矩阵✅）/ DOCX 简版 18951 字·深度版 47455 字（与改动前完全一致，证明零内容变动）·缺字 0·tofu 0 → **全部通过，允许交付**。</div></div></div>
+  
+</div><div class="pol-card">
+  <div class="pol-head">
+    <span class="pol-date">2026-09-08</span>
+    <span class="pol-time">16:52</span>
+    <span class="qa pass">通过</span>
+    <span class="pol-title">深度版图1/图3/图4 统一 KeepTogether 图注同页绑定</span>
+  </div>
+  <div class="pol-body"><div class="pol-row"><div class="pol-k">改动文件/函数</div><div class="pol-v">`gen_deep_pdf.py :: build()` 中「四（补）、具像化合规参考图示与样例」段落的三处图块（图1 行业合规水位对比矩阵 / 图3 食安快检准入 SOP / 图4 价格展示合规样例）</div></div><div class="pol-row"><div class="pol-k">改动前 → 改动后</div><div class="pol-v">- 前：图1/图3/图4 的「标题(h3) + 图(fig_*) + 图注(Paragraph S["fig"]) + 资料来源(src_note)」四个 flowable 各自独立 `story.append(...)`，未成组；仅图2/图5/图6 已用 `KeepTogether([...])` 整体成组。</div></div><div class="pol-row"><div class="pol-k">改动依据</div><div class="pol-v">候选清单「图与图注同页」维度（虽已标记 [x]，但代码巡检发现深度版图1/图3/图4 实际未纳入 KeepTogether，属该维度残留的未覆盖缺口）；对齐对标库「图表与图注同页、图例不与图孤立分页」的通用排版规范。纯展示分组改动，不改任何图内文字、图注文案与来源字符串（qa_strict.py 硬编码图注字符串不受影响）。</div></div><div class="pol-row"><div class="pol-k">预期提升</div><div class="pol-v">消除图1/图3/图4「图渲染在页尾、图注/来源被挤到下一页」的跨页孤儿风险，使深度版 6 张图示（图1–图6）的「图—图注—资料来源」始终同页呈现，与图2/图5/图6 及周报版热力矩阵（早已 KeepTogether 成组）的呈现一致，强化「零排版错误」硬性要求。</div></div><div class="pol-row"><div class="pol-k">QA 验证</div><div class="pol-v">重生成 0906 深度版 PDF + 实跑 `qa_strict.py daily_data_0906` → 简版 20 页 / 深度版 59 页(≥30) / 缺字 0 / tofu 0 / 官网首页根链接 0 / 图示 5/5（水位矩阵✅ 食安快检✅ 价格展示✅ 要点框架✅ 自检矩阵✅）/ DOCX 简版 18951 字·深度版 47455 字·缺字·tofu 0 → **全部通过，允许交付**。pypdf 复核 6 张图注与来源字符串均在位、未因分组丢失；页数 59 与改动前一致，证明仅影响分页绑定、未引入内容或字符变动。改动可回滚（原脚本备份于 `/tmp/cbr_polish_20260908_1648/`）。</div></div></div>
+  
+</div><div class="pol-card">
+  <div class="pol-head">
+    <span class="pol-date">2026-09-08</span>
+    <span class="pol-time">14:29</span>
+    <span class="qa pass">通过</span>
+    <span class="pol-title">深度版 DOCX 目录对齐正文（动态节取 M["sections"] + 前瞻节移至文末）</span>
+  </div>
+  <div class="pol-body"><div class="pol-row"><div class="pol-k">改动文件/函数</div><div class="pol-v">`gen_deep_docx.py :: main()` 目录绘制块（lines 149–160）</div></div><div class="pol-row"><div class="pol-k">改动前 → 改动后</div><div class="pol-v">- 前：目录为硬编码固定列表 `["一、本期综述", "二、六大领域动态回顾", "三、监管通报与处罚汇总", "四、朴朴超市业务专题", "五、前瞻（含深度情景）", "六…十六、关联延伸", "附录、索引与术语对照"]`，存在两处与正文脱节：① 一/三/五 的标签与正文实际 `M["sections"]` 标题不一致（日报正文为「一、今日综述 / 三、监管通报与处罚汇总 / 五、明日前瞻」，周报为「本周综述 / 下周前瞻」）；②「五、前瞻」被置于目录第 5 位，但正文实际将其置于「十六、关联延伸」之后（文末），目录与正文阅读顺序不符。</div></div><div class="pol-row"><div class="pol-k">改动依据</div><div class="pol-v">本自动化 2026-09-07 17:36 巡检日志明确将该 DOCX 深度版静态目录的「标签字面对齐差」列为**残留观察（留待后续单独评估）**；属「自动目录与页码对齐」维度中唯一尚未落地的纯展示缺口。简版 DOCX 目录早已用 `M["sections"].values()` 动态生成（正确），PDF 双交付目录由 h1 自动生成（正确），唯深度版 DOCX 仍硬编码、与正文脱节——故本次补齐该最后缺口，使双交付（PDF+DOCX）×（简版+深度版）目录完全对齐。纯展示改动，不引入任何内容数据（不改 policy/penalties/pupu_items/matrix_rows 等）。</div></div><div class="pol-row"><div class="pol-k">预期提升</div><div class="pol-v">对外深度版 DOCX 目录的章节标题与顺序与正文 100% 一致，消除「目录写『本期综述』但正文是『今日综述』」「目录把前瞻放第 5 章而正文在最后」的专业度硬伤（业务部门在目录里看到与正文对不上的标题即属缺陷，违反用户「零排版错误」要求）；动态取 `M["sections"]` 后，日报/周报深度版目录均自动适配，无需为不同期次维护两套硬编码。</div></div><div class="pol-row"><div class="pol-k">QA 验证</div><div class="pol-v">重生成 0906 双版 PDF+DOCX + 实跑 `qa_strict.py daily_data_0906` → 简版 20 页 / 深度版 59 页(≥30) / 缺字 0 / tofu 0 / 官网首页根链接 0 / 图示 5/5 / DOCX 简版 18951 字·深度版 47455 字·缺字·tofu 0 → **全部通过，允许交付**。python-docx 复核深度版 DOCX 目录条目依次为「一、今日综述 / 二、六大领域动态回顾 / 三、监管通报与处罚汇总 / 四、朴朴超市业务专题 / 六…十六、关联延伸 / 五、明日前瞻 / 附录、索引与术语对照」，与正文 h1 标题及出现顺序完全一致；旧硬编码标签「一、本期综述 / 五、前瞻（含深度情景）」及其目录中间错位均已消除。改动可回滚（原脚本备份于 `/tmp/cbr_polish_20260908_1426/`）。</div></div></div>
+  
+</div><div class="pol-card">
   <div class="pol-head">
     <span class="pol-date">2026-09-07</span>
     <span class="pol-time">17:36</span>
@@ -308,7 +335,7 @@
   
 </div></div>
 
-  <p class="pol-hint">本页由「站点模块生成脚本」同步 · 最后更新 2026-09-08 14:27 · 数据源：references/polish_changelog.md</p>
+  <p class="pol-hint">本页由「站点模块生成脚本」同步 · 最后更新 2026-09-08 18:03 · 数据源：references/polish_changelog.md</p>
 </div>
 <footer><div class="inner">
   <div>lawdatify.site · 法律合规主站</div>

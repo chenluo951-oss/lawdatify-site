@@ -32,8 +32,10 @@ PAT = re.compile(
 )
 KIND_ORDER = {"月报": 0, "周报": 1, "日报": 2, "简报": 3, "补编": 4}
 FMT_LABEL = {"html": "网页版", "pdf": "PDF", "docx": "Word"}
-# 在线展示优先 html，其次 pdf；docx 仅作本地下载不复制（减小站点体积）
-ONLINE_FMTS = ("html", "pdf")
+# 站点只发布网页版：PDF/DOCX 一律保留在本机，不上传（2026-09-08 用户决定）。
+# 原因：PDF 单份 200KB~1.1MB，是打爆 Netlify 带宽额度、拖慢境外主机访问的主因；
+# 网页版单份仅 20~130KB，且可直接在线阅读，对外分享体验更好。
+ONLINE_FMTS = ("html",)
 
 
 def esc(s):
@@ -117,8 +119,8 @@ def sync_reports(groups, base=None):
     size = 0
     for g in groups.values():
         for ver, fmts in g["files"].items():
-            # 归档页会为「存在的每一种格式」渲染链接，因此 html 与 pdf 都必须同步，
-            # 否则会出现「页面有 PDF 链接、reports/ 里却没有文件」的 404。
+            # 只同步 ONLINE_FMTS 内的格式；归档页也只为这些格式渲染链接，
+            # 因此不会出现「页面有链接、reports/ 里却没文件」的 404。
             for fmt in ONLINE_FMTS:
                 if fmt not in fmts:
                     continue
@@ -159,7 +161,10 @@ def build_briefs(groups):
         reverse=True,
     )
     n_web = sum(1 for g in items if any("html" in v for v in g["files"].values()))
-    n_pdf = sum(1 for g in items if any("pdf" in v for v in g["files"].values()))
+    n_deep = sum(
+        1 for g in items
+        if any(ver == "深度分析版" and "html" in fmts for ver, fmts in g["files"].items())
+    )
     latest = items[0]["period"] if items else "—"
 
     rows = []
@@ -170,6 +175,9 @@ def build_briefs(groups):
             if ver not in g["files"]:
                 continue
             fmts = g["files"][ver]
+            # 该版本只有 PDF/DOCX（未上网站）时整行跳过，避免出现「点不开的空记录」
+            if not any(ext in fmts for ext in ONLINE_FMTS):
+                continue
             btns = []
             for ext in ONLINE_FMTS:
                 if ext in fmts:
@@ -249,14 +257,14 @@ table.idx tbody tr:hover{{background:#e8f0fa}}
 <div class="pagehead"><div class="inner">
   <div class="crumb"><a href="../index.html">首页</a> / <a href="index.html">资讯索引</a> / 合规简报归档</div>
   <h1>合规简报归档</h1>
-  <p>聚合自动化合规资讯（日报 / 周报 / 月报 / 补编）全部历史与最新期次，含网页版与 PDF，按类型与关键词检索。由自动化任务每日同步更新。</p>
+  <p>聚合自动化合规资讯（日报 / 周报 / 月报 / 补编）全部历史与最新期次，提供网页版在线阅读（PDF/Word 版保留在本机，不对外发布），按类型与关键词检索。由自动化任务每日同步更新。</p>
 </div></div>
 
 <div class="wrap">
   <div class="bf-stats">
     <div class="bf-stat"><div class="n">{len(items)}</div><div class="l">报告期次</div></div>
     <div class="bf-stat"><div class="n">{n_web}</div><div class="l">有网页版</div></div>
-    <div class="bf-stat"><div class="n">{n_pdf}</div><div class="l">PDF 归档</div></div>
+    <div class="bf-stat"><div class="n">{n_deep}</div><div class="l">深度分析版</div></div>
     <div class="bf-stat"><div class="n">{esc(latest)}</div><div class="l">最新期次</div></div>
   </div>
 
@@ -264,7 +272,7 @@ table.idx tbody tr:hover{{background:#e8f0fa}}
     <input id="bq" type="search" placeholder="搜索期次、类型、章节关键词，如 2026-09 / 周报 / 数据合规…"/>
   </div>
   <div class="bf-tools" style="margin-top:0">{"".join(chips)}</div>
-  <p class="bf-hint">共 <span id="cnt">{len(rows)}</span> 条记录 · 网页版可直接在浏览器打开；未生成网页版的历史期次链接到 PDF 归档</p>
+  <p class="bf-hint">共 <span id="cnt">{len(rows)}</span> 条记录 · 全部为网页版，点开即读（PDF/Word 仅本机留存，不上传站点）</p>
 
   <table class="idx">
     <thead><tr>
@@ -306,14 +314,19 @@ q.addEventListener('input', apply);
 """
     with open(BRIEFS, "w", encoding="utf-8") as f:
         f.write(doc)
-    return len(items), len(rows), n_web, n_pdf, latest
+    # 期次数只统计「站点上真的有内容」的期次，避免与记录条数对不上
+    n_online = sum(
+        1 for g in items
+        if any(ext in fmts for fmts in g["files"].values() for ext in ONLINE_FMTS)
+    )
+    return n_online, len(rows), n_web, n_deep, latest
 
 
 def update_manifest():
     entry = {
         "title": "合规简报归档",
         "url": "news/briefs.html",
-        "desc": "自动化合规资讯（日报/周报/月报/补编）全期次归档，含网页版与PDF，按类型与关键词检索。",
+        "desc": "自动化合规资讯（日报/周报/月报/补编）全期次归档，网页版在线阅读，按类型与关键词检索。",
         "cat": "资讯索引",
         "tags": ["日报", "周报", "月报", "简报", "归档"],
     }
@@ -340,8 +353,8 @@ def main():
         return
     copied, skipped, size = sync_reports(groups)
     print(f"报告同步：新增复制 {copied} 份，跳过 {skipped} 份，本次复制 {size/1024/1024:.1f} MB")
-    n_items, n_rows, n_web, n_pdf, latest = build_briefs(groups)
-    print(f"简报归档页生成：期次 {n_items} · 记录 {n_rows} · 网页版 {n_web} · PDF {n_pdf} · 最新 {latest}")
+    n_items, n_rows, n_web, n_deep, latest = build_briefs(groups)
+    print(f"简报归档页生成：期次 {n_items} · 记录 {n_rows} · 网页版 {n_web} · 深度版 {n_deep} · 最新 {latest}")
     m = update_manifest()
     print("搜索索引 manifest:", m)
     print("完成 →", BRIEFS)
