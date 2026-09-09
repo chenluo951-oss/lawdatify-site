@@ -90,7 +90,9 @@ def build_footer(rel: str) -> str:
 
 
 NAV_RE = re.compile(r'<nav class="topnav">.*?</nav>', re.S)
-FOOT_RE = re.compile(r'<footer>.*?</footer>', re.S)
+# footer 标签可能带任意属性（CMS 导出的 data-page-node-id 等），必须 [^>]*
+# 且要处理「页面里出现多个 footer」的情况（只保留一个，其余删除）
+FOOT_RE = re.compile(r'<footer[^>]*>.*?</footer>', re.S)
 UPD_RE = re.compile(r'(<!-- UPDATED:START -->).*?(<!-- UPDATED:END -->)', re.S)
 
 
@@ -101,7 +103,15 @@ def process(rel: str, do_write: bool) -> str:
     s = open(path, encoding="utf-8").read()
     new = NAV_RE.sub(lambda _: build_nav(rel), s, count=1)
     if FOOT_RE.search(new):
-        new = FOOT_RE.sub(lambda _: build_footer(rel), new, count=1)
+        first = [True]
+
+        def _repl(_):
+            if first[0]:
+                first[0] = False
+                return build_footer(rel)
+            return ""  # 多余的 footer 直接删除，避免重复
+
+        new = FOOT_RE.sub(_repl, new)
     else:
         # 没有 footer 的页面（理论上没有）：补在 </body> 前
         new = new.replace("</body>", build_footer(rel) + "\n</body>", 1)

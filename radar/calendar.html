@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>合规日历 · lawdatify</title>
-<meta name="description" content="法律施行日、征求意见截止与申报节点的倒计时清单，覆盖中国与主要海外辖区。">
+<meta name="description" content="法律施行日、征求意见截止与申报节点的月历视图，覆盖中国与主要海外辖区。">
 <link rel="stylesheet" href="../assets/style.css">
 <!-- SOCIAL:START -->
 <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
@@ -41,14 +41,33 @@
 <div class="pagehead"><div class="inner">
   <div class="crumb"><a href="../index.html">首页</a> / <a href="index.html">合规雷达</a> / 合规日历</div>
   <h1>合规日历</h1>
-  <p>把散落在各机构的公开信息按时间轴重排：哪些规定即将施行、哪些意见正在征集、哪些申报节点会过期。每条附发布机构原文深链，可直接点开核对。</p>
+  <p>把散落在各机构的公开信息重排到一张月历上：哪些规定即将施行、哪些意见正在征集、哪些申报节点会过期。每条附发布机构原文深链，可直接点开核对。</p>
 </div></div>
 
 <main class="wrap">
 <div class="rd-stats"><div class="rd-stat"><b>13</b><span>未来节点</span></div><div class="rd-stat"><b>7 个</b><span>覆盖辖区</span></div><div class="rd-stat"><b>2026-09-11</b><span>最近节点</span></div><div class="rd-stat"><b>24</b><span>已跟踪总量</span></div></div>
-<p class="rd-note">按倒计时排列。<b>官方原文</b>指发布机构官网的具体公告/全文页面；<b>专业解读</b>指暂未获取原文深链时采用的可溯源专业评述页面，两者在点开的链接属性上已明确区分，不做混同。日期以官方文件为准，征求意见稿不作为生效规则。</p>
-<div class="rd-filters"><span class="rd-flabel">领域</span><button class="rd-fchip on" data-fg="dom" data-fv="ALL">全部</button><button class="rd-fchip" data-fg="dom" data-fv="数据合规">数据合规</button><button class="rd-fchip" data-fg="dom" data-fv="AI合规">AI合规</button><button class="rd-fchip" data-fg="dom" data-fv="算法合规">算法合规</button><button class="rd-fchip" data-fg="dom" data-fv="平台合规">平台合规</button><button class="rd-fchip" data-fg="dom" data-fv="产品合规">产品合规</button></div>
-<div class="rd-list"><div class="rd-item" data-region="KR" data-domain="数据合规">
+<p class="rd-note"><b>月历视图</b>：色条为该日节点，按领域着色；点击日期格查看当日详情，点击条目标题直达原文。<b>官方原文</b>指发布机构官网的具体公告/全文页面；<b>专业解读</b>指暂未获取原文深链时采用的可溯源专业评述页面，两者已明确区分，不做混同。日期以官方文件为准，征求意见稿不作为生效规则。</p>
+
+<div class="cal" id="calMount">
+  <div class="cal-head">
+    <div class="cal-title-wrap"><span class="cal-title"></span><span class="cal-sub"></span></div>
+    <div class="cal-btns">
+      <button class="cal-nav cal-today-btn" type="button">今天</button>
+      <button class="cal-nav cal-prev" type="button" aria-label="上个月">‹</button>
+      <button class="cal-nav cal-next" type="button" aria-label="下个月">›</button>
+    </div>
+  </div>
+  <div class="cal-doms"></div>
+  <div class="cal-dow-row"><span>一</span><span>二</span><span>三</span><span>四</span><span>五</span><span>六</span><span>日</span></div>
+  <div class="cal-body"></div>
+</div>
+<div id="calDetail" class="cal-detail"></div>
+
+<script>window.CAL_DATA = {"domains":{"数据合规":"#1b4f8a","AI合规":"#7c3aed","算法合规":"#0f766e","平台合规":"#b45309","产品合规":"#15803d","价格合规":"#b03a48"},"items":[{"date":"2026-02-01","title":"《网络交易平台规则监督管理办法》《直播电商监督管理办法》施行（总局令第116、117号）","type":"正式施行","domain":"平台合规","region":"CN","regionName":"中国","issuer":"国家市场监督管理总局、国家互联网信息办公室","note":"116 号令规范平台规则的制定、公示与执行；117 号令规范直播电商活动，明确数字人主播等人工智能生成内容必须全程显著标识，避免新技术成为生成或传播虚假信息的「挡箭牌」。","url":"https://www.cac.gov.cn/2026-07/24/c_1786639233766083.htm","src":"official"},{"date":"2026-03-20","title":"《直播电商经营者落实食品安全主体责任监督管理规定》施行（总局令第120号）","type":"正式施行","domain":"产品合规","region":"CN","regionName":"中国","issuer":"国家市场监督管理总局","note":"划定食品直播红线：严禁滤镜篡改食品外观、夸大保健功效、混淆食品与药品宣传。与《直播电商监督管理办法》配套，数字人主播等 AI 生成内容须全程显著标识。","url":"https://www.mldw.gov.cn/OpennessContent/show/572352.html","src":"official"},{"date":"2026-05-20","title":"《网络食品销售经营者落实食品安全主体责任监督管理规定》施行（总局令第124号）","type":"正式施行","domain":"产品合规","region":"CN","regionName":"中国","issuer":"国家市场监督管理总局","note":"面向电商、社区团购等线上零售渠道，规范预包装食品仓储、流转、销售过程。第20条要求入网食品销售者在主页面显著位置持续公示食品生产经营许可或仅销售预包装食品备案信息，并展示食品标签信息（散装食品须展示名称、生产经营者的名称地址联系方式），页面标签信息须与实际销售的标签一致——这是前置仓标品运营的一项硬性展示义务。","url":"https://www.jiemian.com/article/14907107.html","src":"analysis"},{"date":"2026-06-01","title":"《网络餐饮服务经营者落实食品安全主体责任监督管理规定》施行（总局令第123号）","type":"正式施行","domain":"产品合规","region":"CN","regionName":"中国","issuer":"国家市场监督管理总局","note":"首次以部门规章形式系统明确平台与入网餐饮商家的主体责任。平台侧：须设独立食品安全管理机构并配备食品安全总监/安全员、入网商家资质上线前核验且每 6 个月线上线下实地复核、无堂食店铺须标注、接入明厨亮灶监控、订单记录留存不少于 3 年、每年 1 月和 7 月向监管报送全部入网商家资质信息。商家侧：线下门店与线上地址三者一致、禁止挂靠套证与家庭作坊出餐。同时废止 2017 年版《网络餐饮服务食品安全监督管理办法》。","url":"https://www.beijing.gov.cn/zhengce/zhengcefagui/qtwj/202604/t20260428_4620380.html","src":"official"},{"date":"2026-07-10","title":"日本《个人信息保护法》（APPI）修订案通过，创设行政课征金制度","type":"立法通过","domain":"数据合规","region":"JP","regionName":"日本","issuer":"日本个人信息保护委员会（PPC）","note":"2026-04-07 阁议通过、07-10 国会通过、07-17 公布（令和8年法律第56号）。要点：①创设课征金制度，PPC 首次获得直接金钱制裁权（五要件：属特定违法类型、获得对价、未尽合理注意、权益侵害重大、影响 1000 人以上）；②16 岁以下个人信息的同意/通知原则上须向法定代理人作出；③新增「特定生物识别个人信息」类别并设置事前通知义务；④新增「统计制作」例外，大型数据集用于统计分析/AI 训练数据可不经同意对外提供（附公示义务）。原则上自公布之日起两年内由政令指定施行日。","url":"https://www.jdsupra.com/legalnews/amendments-to-the-act-on-the-protection-9567482/","src":"analysis"},{"date":"2026-08-02","title":"欧盟《人工智能法》第50条透明度义务适用，AI Office 取得执法权","type":"义务适用","domain":"AI合规","region":"EU","regionName":"欧盟","issuer":"欧盟委员会 / AI Office","note":"直接面向用户的 AI 交互须明确告知对方正在与机器对话；AI 生成内容须添加可见标识与机器可读标记；深度伪造须明确标注。自本日起 AI Office 可对 GPAI 提供者开展调查、调阅文档并实施处罚；罚款上限为 1500 万欧元或全球营业额 3%（取高者），违反禁止性实践箅 3500 万欧元或 7%。处罚框架自 2025-08-02 已适用，本日只是新增了可咬合的义务。","url":"https://digital-strategy.ec.europa.eu/en/policies/regulatory-framework-ai","src":"official"},{"date":"2026-09-01","title":"《小型个人信息处理者个人信息保护简化措施规定》施行","type":"正式施行","domain":"数据合规","region":"CN","regionName":"中国","issuer":"国家互联网信息办公室","note":"适用于处理不满 10 万人个人信息的处理者。简化内容包括：以公示处理规则替代复杂的告知同意、合规审计周期放宽至至少每 5 年一次、个人信息保护影响评估改用简化清单、向境外提供个人信息在满足条件时豁免标准合同/安全评估/认证三条路径。该规定与针对大型个人信息处理者的征求意见稿共同构成「分级分类」监管框架：小的减负，大的加压。","url":"https://www.cac.gov.cn/2026-07/24/c_1786638889443160.htm","src":"official"},{"date":"2026-09-01","title":"《互联网信息内容多渠道分发服务管理规定》施行","type":"正式施行","domain":"平台合规","region":"CN","regionName":"中国","issuer":"国家互联网信息办公室","note":"规范互联网信息内容多渠道分发服务。对多平台/多账号分发矩阵式内容运营的组织有直接约束，含账号信息真实性、分发秩序与主体责任要求。","url":"https://www.cac.gov.cn/2026-05/29/c_1781795864412597.htm","src":"official"},{"date":"2026-09-01","title":"《促进和规范电子单证应用规定》施行","type":"正式施行","domain":"平台合规","region":"CN","regionName":"中国","issuer":"国家互联网信息办公室","note":"规范电子单证系统和数据安全管理，覆盖贸易与运输场景。对供应链电子化、电子签收/电子回单等业务链路提出合规要求。","url":"https://www.cac.gov.cn/2026-04/17/c_1778166821033721.htm","src":"official"},{"date":"2026-09-07","title":"《大型个人信息处理者个人信息保护规定（征求意见稿）》意见反馈截止","type":"意见征集截止","domain":"数据合规","region":"CN","regionName":"中国","issuer":"国家互联网信息办公室","note":"适用于处理 1000 万人以上个人信息、提供重要互联网服务或多业务线且处理活动影响重大的处理者。核心要求：隐私政策结构化清单化（含第三方 SDK 名称/版本/政策链接）、设立个人信息保护负责人与监督机构、严格数据本地化、强化投诉处理。认定非自动触发，需自评并向网信部门申请认定。参考解读：处理规模达 1000 万人的门槛在全国人口基数下极易达到，电商、智能终端、金融服务几乎必然落入，宜尽早启动就绪度评估。","url":"https://www.cac.gov.cn/2026-08/07/c_1787851071612596.htm","src":"official"},{"date":"2026-09-07","title":"最高人民法院《关于依法审理涉人工智能纠纷案件的意见》发布","type":"司法文件","domain":"AI合规","region":"CN","regionName":"中国","issuer":"最高人民法院","note":"法发〔2026〕10号，首部最高审判机关涉 AI 司法裁判规则，共 5 部分 24 条。涵盖 AI 换脸拟声、网络开盒、模型训练涉及的个人信息、大数据杀熟、自动驾驶事故、开源软件责任、AI 证据审查等。是使用 AI 生成内容、AI 客服与算法定价业务的重要裁判风向。","url":"https://www.court.gov.cn/zixun/xiangqing/511101.html","src":"official"},{"date":"2026-09-11","title":"韩国《个人信息保护法》修正案主体条款施行（法律第21445号）","type":"正式施行","domain":"数据合规","region":"KR","regionName":"韩国","issuer":"韩国个人信息保护委员会（PIPC）","note":"2026-02-12 国会通过、03-10 公布，主体自 09-11 施行。新增加重罚则档：故意或重大过失三年内重复违法、受害人数达 1000 万以上、或不遵从更正措施命令导致泄露的，罚款上限由「全体营业额 3%」提高至 10%；引入代表人/经营者个人监督责任（CEO 问责）；CPO 指定须经董事会决议并向监管报备。与认证义务化相关的部分条文延至 2027-07-01 施行。","url":"https://cn-sec.com/archives/5418009.html","src":"analysis"},{"date":"2026-09-14","title":"进口打印复印办公设备国家安全调查利害关系方答卷截止","type":"申报 / 答卷截止","domain":"平台合规","region":"CN","regionName":"中国","issuer":"商务部贸易救济调查局","note":"须于北京时间 17 时前通过贸易救济调查信息化平台注册并提交答卷。调查对象为装有外国个人或实体开发、测试或维护的驱动软件与嵌入式软件，且具有打印、复印功能的进口办公设备。","url":"https://trb.mofcom.gov.cn/mybldc/art/2026/art_839692c0d02b49cdac0717b48df85a92.html","src":"official"},{"date":"2026-09-17","title":"巴西 ECA Digital 首份透明度报告披露截止（未成年用户超百万的平台）","type":"报告披露截止","domain":"数据合规","region":"BR","regionName":"巴西","issuer":"巴西国家数据保护局（ANPD）","note":"面向巴西未成年用户超过 100 万的数字平台，须在此日期前发布首份 ECA Digital 透明度报告。属即时生效型合规节点，逾期即构成违规敞口。","url":"https://securiti.ai/privacy-roundup/august-2026","src":"analysis"},{"date":"2026-09-30","title":"《金融产品网络营销管理办法》施行","type":"正式施行","domain":"平台合规","region":"CN","regionName":"中国","issuer":"国家互联网信息办公室等","note":"规范金融机构及第三方互联网平台的网络营销活动。对涉及信贷、理财、保险等金融类目的内容与引流方式有直接约束，电商平台的金融频道、联合营销页面需同步自查。","url":"https://www.cac.gov.cn/2026-04/24/c_1778769008779432.htm","src":"official"},{"date":"2026-11-13","title":"印度 DPDP 第二阶段：同意管理器（Consent Manager）注册机制开启","type":"制度启用","domain":"数据合规","region":"IN","regionName":"印度","issuer":"印度电子和信息技术部（MeitY）","note":"DPDP Rules 2025 于 2025-11-13 公布，第二阶段启用同意管理器注册框架。注意：并非所有设有同意弹窗的企业都需注册为同意管理器——该类主体是代表数据 principal 统一行使同意管理的独立角色。多数企业的实质性义务仍在第三阶段。","url":"https://www.meity.gov.in/data-protection-framework","src":"official"},{"date":"2026-12-01","title":"《食品召回管理办法》施行（市场监管总局令第122号）","type":"正式施行","domain":"产品合规","region":"CN","regionName":"中国","issuer":"国家市场监督管理总局","note":"2026-01-27 公布，自 2026-12-01 起施行。召回按风险严重程度分为三级（可能导致急性中毒、亚急性中毒、严重健康损害或死亡的须启动一级召回）；委托生产的由委托方实施召回、受托方配合。对生鲜短保商品的问题批次处置链条影响直接：发现不符合食品安全标准或有证据表明可能危害人体健康的，须立即停止经营并依法召回，同时通知相关生产经营者和消费者并记录情况。前置仓业态建议在此前台盘点点前完成召回预案、分级标准与通知话术的准备。","url":"https://www.samr.gov.cn/zw/zfxxgk/fdzdgknr/fgs/art/2026/art_d285e36b03ce4ce68832a098be50782f.html","src":"official"},{"date":"2026-12-02","title":"欧盟《人工智能法》第50(2)条：既有系统 AI 生成内容机器可读标记合规截止","type":"宽限期截止","domain":"AI合规","region":"EU","regionName":"欧盟","issuer":"欧盟委员会 / AI Office","note":"2026-08-02 前已在欧盟市场投放的系统，其 AI 生成内容机器可读标记义务可宽限至本日。同日新增第5条禁止性规定（未经同意的亲密影像、CSAM 相关 AI 系统）适用。宽限期已不足 3 个月，涉及出海 content pipeline 的需优先排期。","url":"https://digital-strategy.ec.europa.eu/en/policies/regulatory-framework-ai","src":"official"},{"date":"2027-01-01","title":"美国加州 ADMT 自动化决策技术规则适用（CCPA/CPRA）","type":"义务适用","domain":"算法合规","region":"US","regionName":"美国","issuer":"加州隐私保护局（CPPA）","note":"使用 ADMT 就金融、住房、教育、就业、医疗等「重大决定」作出决策的企业，须提供事前通知、允许消费者获取决策逻辑说明、并提供退出权与人工复核通道。既有系统需在此日期前完成合规改造；此日期后部署的系统须在用前合规。","url":"https://oag.ca.gov/privacy/ccpa","src":"official"},{"date":"2027-05-13","title":"印度 DPDP 第三阶段：实质性义务与罚则全面生效","type":"全面执行","domain":"数据合规","region":"IN","regionName":"印度","issuer":"印度数据保护委员会（DPBI）","note":"通知、有效同意、合法使用、安全保障、数据泄露响应、数据 principal 权利、儿童数据、重要数据受托人义务及留存规则等全面适用；罚则生效，单项最高 25 亿卢比（约 3,000 万美元）。2026 年被普遍视为「建设与测试年」，2027 年才是真正咬合的年份。","url":"https://www.meity.gov.in/data-protection-framework","src":"official"},{"date":"2027-07-01","title":"韩国 PIPA 认证义务化相关条文施行","type":"义务适用","domain":"数据合规","region":"KR","regionName":"韩国","issuer":"韩国个人信息保护委员会（PIPC）","note":"2026-09-11 主体施行后，与认证义务化相关的部分条文延后至本日适用。已在韩运营或处理韩国居民个人信息的，需确认自身是否落入指定主体的认证范围。","url":"https://cn-sec.com/archives/5418009.html","src":"analysis"},{"date":"2027-12-02","title":"欧盟《人工智能法》附件III 高风险 AI 系统义务适用","type":"义务适用","domain":"AI合规","region":"EU","regionName":"欧盟","issuer":"欧盟委员会 / AI Office","note":"经 (EU) 2026/1744 号修订条例（DTOmnibus on AI，2026-07-27 生效）由 2026 年延后至此日。涵盖招聘筛选、信用评分、教育与基本公共服务准入等独立高风险场景。注意：这是排期变更而非豁免，且履行 conformity 所需的合规证据需从现在起累积——系统今天跑的数据链路决定 2027 年能否拿出审计轨迹。","url":"https://artificialintelligenceact.eu/implementation-timeline/","src":"analysis"},{"date":"2027-12-31","title":"加州 CCPA 风险评估：存量高风险处理活动的首次评估截止","type":"评估截止","domain":"数据合规","region":"US","regionName":"美国","issuer":"加州隐私保护局（CPPA）","note":"2026-01-01 前已开展的覆盖处理活动须在此日期前完成风险评估；首次向 CPPA 提交证明与摘要的时点为 2028-04-01（覆盖 2026、2027 两个年度），此后每年提交。","url":"https://oag.ca.gov/privacy/ccpa","src":"official"},{"date":"2028-08-02","title":"欧盟《人工智能法》附件I 嵌入式高风险 AI 义务适用","type":"义务适用","domain":"AI合规","region":"EU","regionName":"欧盟","issuer":"欧盟委员会 / AI Office","note":"由原 2026 年延后至此日，适用于嵌入医疗器械、工业机械、车辆等受监管产品的 AI 系统。","url":"https://artificialintelligenceact.eu/implementation-timeline/","src":"analysis"}]};</script>
+<script src="../assets/radar-cal.js"></script>
+<script>RadarCal.init('#calMount');</script>
+<details class="cal-fold"><summary>清单视图：全部 24 个节点（按倒计时排列）</summary>
+<div class="rd-list" style="margin-top:16px"><div class="rd-item" data-region="KR" data-domain="数据合规">
   <div class="rd-date"><b>09.11</b><i>2026</i></div>
   <div class="rd-body">
     <div class="rd-row"><span class="rd-badge b-green">正式施行</span>
@@ -58,8 +77,7 @@
     <div class="rd-meta">韩国个人信息保护委员会（PIPC）</div>
     <p>2026-02-12 国会通过、03-10 公布，主体自 09-11 施行。新增加重罚则档：故意或重大过失三年内重复违法、受害人数达 1000 万以上、或不遵从更正措施命令导致泄露的，罚款上限由「全体营业额 3%」提高至 10%；引入代表人/经营者个人监督责任（CEO 问责）；CPO 指定须经董事会决议并向监管报备。与认证义务化相关的部分条文延至 2027-07-01 施行。</p>
   </div>
-</div>
-<div class="rd-item" data-region="CN" data-domain="平台合规">
+</div><div class="rd-item" data-region="CN" data-domain="平台合规">
   <div class="rd-date"><b>09.14</b><i>2026</i></div>
   <div class="rd-body">
     <div class="rd-row"><span class="rd-badge b-amber">申报 / 答卷截止</span>
@@ -69,8 +87,7 @@
     <div class="rd-meta">商务部贸易救济调查局</div>
     <p>须于北京时间 17 时前通过贸易救济调查信息化平台注册并提交答卷。调查对象为装有外国个人或实体开发、测试或维护的驱动软件与嵌入式软件，且具有打印、复印功能的进口办公设备。</p>
   </div>
-</div>
-<div class="rd-item" data-region="BR" data-domain="数据合规">
+</div><div class="rd-item" data-region="BR" data-domain="数据合规">
   <div class="rd-date"><b>09.17</b><i>2026</i></div>
   <div class="rd-body">
     <div class="rd-row"><span class="rd-badge b-amber">报告披露截止</span>
@@ -80,8 +97,7 @@
     <div class="rd-meta">巴西国家数据保护局（ANPD）</div>
     <p>面向巴西未成年用户超过 100 万的数字平台，须在此日期前发布首份 ECA Digital 透明度报告。属即时生效型合规节点，逾期即构成违规敞口。</p>
   </div>
-</div>
-<div class="rd-item" data-region="CN" data-domain="平台合规">
+</div><div class="rd-item" data-region="CN" data-domain="平台合规">
   <div class="rd-date"><b>09.30</b><i>2026</i></div>
   <div class="rd-body">
     <div class="rd-row"><span class="rd-badge b-green">正式施行</span>
@@ -91,8 +107,7 @@
     <div class="rd-meta">国家互联网信息办公室等</div>
     <p>规范金融机构及第三方互联网平台的网络营销活动。对涉及信贷、理财、保险等金融类目的内容与引流方式有直接约束，电商平台的金融频道、联合营销页面需同步自查。</p>
   </div>
-</div>
-<div class="rd-item" data-region="IN" data-domain="数据合规">
+</div><div class="rd-item" data-region="IN" data-domain="数据合规">
   <div class="rd-date"><b>11.13</b><i>2026</i></div>
   <div class="rd-body">
     <div class="rd-row"><span class="rd-badge b-purple">制度启用</span>
@@ -102,8 +117,7 @@
     <div class="rd-meta">印度电子和信息技术部（MeitY）</div>
     <p>DPDP Rules 2025 于 2025-11-13 公布，第二阶段启用同意管理器注册框架。注意：并非所有设有同意弹窗的企业都需注册为同意管理器——该类主体是代表数据 principal 统一行使同意管理的独立角色。多数企业的实质性义务仍在第三阶段。</p>
   </div>
-</div>
-<div class="rd-item" data-region="CN" data-domain="产品合规">
+</div><div class="rd-item" data-region="CN" data-domain="产品合规">
   <div class="rd-date"><b>12.01</b><i>2026</i></div>
   <div class="rd-body">
     <div class="rd-row"><span class="rd-badge b-green">正式施行</span>
@@ -113,8 +127,7 @@
     <div class="rd-meta">国家市场监督管理总局</div>
     <p>2026-01-27 公布，自 2026-12-01 起施行。召回按风险严重程度分为三级（可能导致急性中毒、亚急性中毒、严重健康损害或死亡的须启动一级召回）；委托生产的由委托方实施召回、受托方配合。对生鲜短保商品的问题批次处置链条影响直接：发现不符合食品安全标准或有证据表明可能危害人体健康的，须立即停止经营并依法召回，同时通知相关生产经营者和消费者并记录情况。前置仓业态建议在此前台盘点点前完成召回预案、分级标准与通知话术的准备。</p>
   </div>
-</div>
-<div class="rd-item" data-region="EU" data-domain="AI合规">
+</div><div class="rd-item" data-region="EU" data-domain="AI合规">
   <div class="rd-date"><b>12.02</b><i>2026</i></div>
   <div class="rd-body">
     <div class="rd-row"><span class="rd-badge b-amber">宽限期截止</span>
@@ -124,8 +137,7 @@
     <div class="rd-meta">欧盟委员会 / AI Office</div>
     <p>2026-08-02 前已在欧盟市场投放的系统，其 AI 生成内容机器可读标记义务可宽限至本日。同日新增第5条禁止性规定（未经同意的亲密影像、CSAM 相关 AI 系统）适用。宽限期已不足 3 个月，涉及出海 content pipeline 的需优先排期。</p>
   </div>
-</div>
-<div class="rd-item" data-region="US" data-domain="算法合规">
+</div><div class="rd-item" data-region="US" data-domain="算法合规">
   <div class="rd-date"><b>01.01</b><i>2027</i></div>
   <div class="rd-body">
     <div class="rd-row"><span class="rd-badge b-green">义务适用</span>
@@ -135,8 +147,7 @@
     <div class="rd-meta">加州隐私保护局（CPPA）</div>
     <p>使用 ADMT 就金融、住房、教育、就业、医疗等「重大决定」作出决策的企业，须提供事前通知、允许消费者获取决策逻辑说明、并提供退出权与人工复核通道。既有系统需在此日期前完成合规改造；此日期后部署的系统须在用前合规。</p>
   </div>
-</div>
-<div class="rd-item" data-region="IN" data-domain="数据合规">
+</div><div class="rd-item" data-region="IN" data-domain="数据合规">
   <div class="rd-date"><b>05.13</b><i>2027</i></div>
   <div class="rd-body">
     <div class="rd-row"><span class="rd-badge b-green">全面执行</span>
@@ -146,8 +157,7 @@
     <div class="rd-meta">印度数据保护委员会（DPBI）</div>
     <p>通知、有效同意、合法使用、安全保障、数据泄露响应、数据 principal 权利、儿童数据、重要数据受托人义务及留存规则等全面适用；罚则生效，单项最高 25 亿卢比（约 3,000 万美元）。2026 年被普遍视为「建设与测试年」，2027 年才是真正咬合的年份。</p>
   </div>
-</div>
-<div class="rd-item" data-region="KR" data-domain="数据合规">
+</div><div class="rd-item" data-region="KR" data-domain="数据合规">
   <div class="rd-date"><b>07.01</b><i>2027</i></div>
   <div class="rd-body">
     <div class="rd-row"><span class="rd-badge b-green">义务适用</span>
@@ -157,8 +167,7 @@
     <div class="rd-meta">韩国个人信息保护委员会（PIPC）</div>
     <p>2026-09-11 主体施行后，与认证义务化相关的部分条文延后至本日适用。已在韩运营或处理韩国居民个人信息的，需确认自身是否落入指定主体的认证范围。</p>
   </div>
-</div>
-<div class="rd-item" data-region="EU" data-domain="AI合规">
+</div><div class="rd-item" data-region="EU" data-domain="AI合规">
   <div class="rd-date"><b>12.02</b><i>2027</i></div>
   <div class="rd-body">
     <div class="rd-row"><span class="rd-badge b-green">义务适用</span>
@@ -168,8 +177,7 @@
     <div class="rd-meta">欧盟委员会 / AI Office</div>
     <p>经 (EU) 2026/1744 号修订条例（DTOmnibus on AI，2026-07-27 生效）由 2026 年延后至此日。涵盖招聘筛选、信用评分、教育与基本公共服务准入等独立高风险场景。注意：这是排期变更而非豁免，且履行 conformity 所需的合规证据需从现在起累积——系统今天跑的数据链路决定 2027 年能否拿出审计轨迹。</p>
   </div>
-</div>
-<div class="rd-item" data-region="US" data-domain="数据合规">
+</div><div class="rd-item" data-region="US" data-domain="数据合规">
   <div class="rd-date"><b>12.31</b><i>2027</i></div>
   <div class="rd-body">
     <div class="rd-row"><span class="rd-badge b-amber">评估截止</span>
@@ -179,8 +187,7 @@
     <div class="rd-meta">加州隐私保护局（CPPA）</div>
     <p>2026-01-01 前已开展的覆盖处理活动须在此日期前完成风险评估；首次向 CPPA 提交证明与摘要的时点为 2028-04-01（覆盖 2026、2027 两个年度），此后每年提交。</p>
   </div>
-</div>
-<div class="rd-item" data-region="EU" data-domain="AI合规">
+</div><div class="rd-item" data-region="EU" data-domain="AI合规">
   <div class="rd-date"><b>08.02</b><i>2028</i></div>
   <div class="rd-body">
     <div class="rd-row"><span class="rd-badge b-green">义务适用</span>
@@ -190,9 +197,7 @@
     <div class="rd-meta">欧盟委员会 / AI Office</div>
     <p>由原 2026 年延后至此日，适用于嵌入医疗器械、工业机械、车辆等受监管产品的 AI 系统。</p>
   </div>
-</div></div>
-<div class="rd-fold"><h4>已过节点（11 项，作为生效状态与裁判风向的对照保留）</h4><div class="rd-list">
-<div class="rd-item" data-region="CN" data-domain="平台合规">
+</div><div class="rd-item" data-region="CN" data-domain="平台合规">
   <div class="rd-date"><b>02.01</b><i>2026</i></div>
   <div class="rd-body">
     <div class="rd-row"><span class="rd-badge b-green">正式施行</span>
@@ -202,8 +207,7 @@
     <div class="rd-meta">国家市场监督管理总局、国家互联网信息办公室</div>
     <p>116 号令规范平台规则的制定、公示与执行；117 号令规范直播电商活动，明确数字人主播等人工智能生成内容必须全程显著标识，避免新技术成为生成或传播虚假信息的「挡箭牌」。</p>
   </div>
-</div>
-<div class="rd-item" data-region="CN" data-domain="产品合规">
+</div><div class="rd-item" data-region="CN" data-domain="产品合规">
   <div class="rd-date"><b>03.20</b><i>2026</i></div>
   <div class="rd-body">
     <div class="rd-row"><span class="rd-badge b-green">正式施行</span>
@@ -213,8 +217,7 @@
     <div class="rd-meta">国家市场监督管理总局</div>
     <p>划定食品直播红线：严禁滤镜篡改食品外观、夸大保健功效、混淆食品与药品宣传。与《直播电商监督管理办法》配套，数字人主播等 AI 生成内容须全程显著标识。</p>
   </div>
-</div>
-<div class="rd-item" data-region="CN" data-domain="产品合规">
+</div><div class="rd-item" data-region="CN" data-domain="产品合规">
   <div class="rd-date"><b>05.20</b><i>2026</i></div>
   <div class="rd-body">
     <div class="rd-row"><span class="rd-badge b-green">正式施行</span>
@@ -224,8 +227,7 @@
     <div class="rd-meta">国家市场监督管理总局</div>
     <p>面向电商、社区团购等线上零售渠道，规范预包装食品仓储、流转、销售过程。第20条要求入网食品销售者在主页面显著位置持续公示食品生产经营许可或仅销售预包装食品备案信息，并展示食品标签信息（散装食品须展示名称、生产经营者的名称地址联系方式），页面标签信息须与实际销售的标签一致——这是前置仓标品运营的一项硬性展示义务。</p>
   </div>
-</div>
-<div class="rd-item" data-region="CN" data-domain="产品合规">
+</div><div class="rd-item" data-region="CN" data-domain="产品合规">
   <div class="rd-date"><b>06.01</b><i>2026</i></div>
   <div class="rd-body">
     <div class="rd-row"><span class="rd-badge b-green">正式施行</span>
@@ -235,8 +237,7 @@
     <div class="rd-meta">国家市场监督管理总局</div>
     <p>首次以部门规章形式系统明确平台与入网餐饮商家的主体责任。平台侧：须设独立食品安全管理机构并配备食品安全总监/安全员、入网商家资质上线前核验且每 6 个月线上线下实地复核、无堂食店铺须标注、接入明厨亮灶监控、订单记录留存不少于 3 年、每年 1 月和 7 月向监管报送全部入网商家资质信息。商家侧：线下门店与线上地址三者一致、禁止挂靠套证与家庭作坊出餐。同时废止 2017 年版《网络餐饮服务食品安全监督管理办法》。</p>
   </div>
-</div>
-<div class="rd-item" data-region="JP" data-domain="数据合规">
+</div><div class="rd-item" data-region="JP" data-domain="数据合规">
   <div class="rd-date"><b>07.10</b><i>2026</i></div>
   <div class="rd-body">
     <div class="rd-row"><span class="rd-badge b-blue">立法通过</span>
@@ -246,8 +247,7 @@
     <div class="rd-meta">日本个人信息保护委员会（PPC）</div>
     <p>2026-04-07 阁议通过、07-10 国会通过、07-17 公布（令和8年法律第56号）。要点：①创设课征金制度，PPC 首次获得直接金钱制裁权（五要件：属特定违法类型、获得对价、未尽合理注意、权益侵害重大、影响 1000 人以上）；②16 岁以下个人信息的同意/通知原则上须向法定代理人作出；③新增「特定生物识别个人信息」类别并设置事前通知义务；④新增「统计制作」例外，大型数据集用于统计分析/AI 训练数据可不经同意对外提供（附公示义务）。原则上自公布之日起两年内由政令指定施行日。</p>
   </div>
-</div>
-<div class="rd-item" data-region="EU" data-domain="AI合规">
+</div><div class="rd-item" data-region="EU" data-domain="AI合规">
   <div class="rd-date"><b>08.02</b><i>2026</i></div>
   <div class="rd-body">
     <div class="rd-row"><span class="rd-badge b-green">义务适用</span>
@@ -257,8 +257,7 @@
     <div class="rd-meta">欧盟委员会 / AI Office</div>
     <p>直接面向用户的 AI 交互须明确告知对方正在与机器对话；AI 生成内容须添加可见标识与机器可读标记；深度伪造须明确标注。自本日起 AI Office 可对 GPAI 提供者开展调查、调阅文档并实施处罚；罚款上限为 1500 万欧元或全球营业额 3%（取高者），违反禁止性实践箅 3500 万欧元或 7%。处罚框架自 2025-08-02 已适用，本日只是新增了可咬合的义务。</p>
   </div>
-</div>
-<div class="rd-item" data-region="CN" data-domain="数据合规">
+</div><div class="rd-item" data-region="CN" data-domain="数据合规">
   <div class="rd-date"><b>09.01</b><i>2026</i></div>
   <div class="rd-body">
     <div class="rd-row"><span class="rd-badge b-green">正式施行</span>
@@ -268,8 +267,7 @@
     <div class="rd-meta">国家互联网信息办公室</div>
     <p>适用于处理不满 10 万人个人信息的处理者。简化内容包括：以公示处理规则替代复杂的告知同意、合规审计周期放宽至至少每 5 年一次、个人信息保护影响评估改用简化清单、向境外提供个人信息在满足条件时豁免标准合同/安全评估/认证三条路径。该规定与针对大型个人信息处理者的征求意见稿共同构成「分级分类」监管框架：小的减负，大的加压。</p>
   </div>
-</div>
-<div class="rd-item" data-region="CN" data-domain="平台合规">
+</div><div class="rd-item" data-region="CN" data-domain="平台合规">
   <div class="rd-date"><b>09.01</b><i>2026</i></div>
   <div class="rd-body">
     <div class="rd-row"><span class="rd-badge b-green">正式施行</span>
@@ -279,8 +277,7 @@
     <div class="rd-meta">国家互联网信息办公室</div>
     <p>规范互联网信息内容多渠道分发服务。对多平台/多账号分发矩阵式内容运营的组织有直接约束，含账号信息真实性、分发秩序与主体责任要求。</p>
   </div>
-</div>
-<div class="rd-item" data-region="CN" data-domain="平台合规">
+</div><div class="rd-item" data-region="CN" data-domain="平台合规">
   <div class="rd-date"><b>09.01</b><i>2026</i></div>
   <div class="rd-body">
     <div class="rd-row"><span class="rd-badge b-green">正式施行</span>
@@ -290,8 +287,7 @@
     <div class="rd-meta">国家互联网信息办公室</div>
     <p>规范电子单证系统和数据安全管理，覆盖贸易与运输场景。对供应链电子化、电子签收/电子回单等业务链路提出合规要求。</p>
   </div>
-</div>
-<div class="rd-item" data-region="CN" data-domain="数据合规">
+</div><div class="rd-item" data-region="CN" data-domain="数据合规">
   <div class="rd-date"><b>09.07</b><i>2026</i></div>
   <div class="rd-body">
     <div class="rd-row"><span class="rd-badge b-blue">意见征集截止</span>
@@ -301,8 +297,7 @@
     <div class="rd-meta">国家互联网信息办公室</div>
     <p>适用于处理 1000 万人以上个人信息、提供重要互联网服务或多业务线且处理活动影响重大的处理者。核心要求：隐私政策结构化清单化（含第三方 SDK 名称/版本/政策链接）、设立个人信息保护负责人与监督机构、严格数据本地化、强化投诉处理。认定非自动触发，需自评并向网信部门申请认定。参考解读：处理规模达 1000 万人的门槛在全国人口基数下极易达到，电商、智能终端、金融服务几乎必然落入，宜尽早启动就绪度评估。</p>
   </div>
-</div>
-<div class="rd-item" data-region="CN" data-domain="AI合规">
+</div><div class="rd-item" data-region="CN" data-domain="AI合规">
   <div class="rd-date"><b>09.07</b><i>2026</i></div>
   <div class="rd-body">
     <div class="rd-row"><span class="rd-badge b-purple">司法文件</span>
@@ -312,30 +307,7 @@
     <div class="rd-meta">最高人民法院</div>
     <p>法发〔2026〕10号，首部最高审判机关涉 AI 司法裁判规则，共 5 部分 24 条。涵盖 AI 换脸拟声、网络开盒、模型训练涉及的个人信息、大数据杀熟、自动驾驶事故、开源软件责任、AI 证据审查等。是使用 AI 生成内容、AI 客服与算法定价业务的重要裁判风向。</p>
   </div>
-</div>
-</div></div>
-<script>
-(function(){
-  document.querySelectorAll('.rd-filters').forEach(function(bar){
-    bar.addEventListener('click',function(e){
-      var b=e.target.closest('.rd-fchip'); if(!b) return;
-      var fg=b.getAttribute('data-fg'), fv=b.getAttribute('data-fv');
-      bar.querySelectorAll('.rd-fchip').forEach(function(x){x.classList.remove('on');});
-      b.classList.add('on');
-      document.querySelectorAll('.rd-list, .rd-glist').forEach(function(list){
-        var any=list.querySelector('.rd-item'); if(!any) return;
-        if(list.classList.contains('rd-glist')) return;
-        list.querySelectorAll('.rd-item').forEach(function(it){
-          var key = fg==='dom' ? 'domain' : fg;
-          var attr = (fg==='dom') ? (it.getAttribute('data-domain')||'')
-                                  : (it.getAttribute('data-'+fg)||'');
-          it.style.display = (fv==='ALL'||attr===fv) ? '' : 'none';
-        });
-      });
-    });
-  });
-})();
-</script>
+</div></div></details>
 <script>
 (function(){var t=new Date();t.setHours(0,0,0,0);
 document.querySelectorAll('.rd-count[data-d]').forEach(function(el){

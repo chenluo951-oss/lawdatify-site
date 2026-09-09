@@ -408,3 +408,159 @@ footer .inner{flex-direction:column;align-items:flex-start;gap:10px}
   .rd-item{break-inside:avoid;box-shadow:none}
   .rd-soon{break-inside:avoid}
 }
+
+/* ================================================================
+   设计系统 v2 —— 首页重构 / 合规雷达（真月历 + 真地图）
+   ================================================================ */
+
+/* ---------------- hero v2：更深、更有质感 ---------------- */
+.hero{background:linear-gradient(128deg,#0d2b4e 0%,#14456f 44%,#0d5f57 100%);
+  padding:78px 0 54px}
+.hero::before{content:"";position:absolute;inset:0;
+  background-image:radial-gradient(rgba(255,255,255,.13) 1px,transparent 1.4px);
+  background-size:26px 26px;opacity:.35;pointer-events:none}
+.hero::after{content:"";position:absolute;right:-140px;top:-110px;width:520px;height:520px;
+  background:radial-gradient(circle,rgba(94,209,190,.16),transparent 60%);
+  border-radius:50%}
+.hero h1{font-size:40px;letter-spacing:2px;margin:0 0 12px}
+.hero-lead{margin:0;color:#c8dcea;max-width:780px;font-size:16px;line-height:1.9}
+.hero-lead b{color:#fff;border-bottom:2px solid rgba(255,255,255,.35);padding-bottom:1px}
+.hero .searchbox{margin-top:24px}
+.hero-stats{display:flex;flex-wrap:wrap;gap:12px;margin-top:34px}
+.hs{background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.18);
+  backdrop-filter:blur(4px);border-radius:12px;padding:14px 22px;min-width:150px}
+.hs b{display:block;font-size:26px;font-weight:800;color:#fff;line-height:1.25;
+  font-variant-numeric:tabular-nums}
+.hs b i{font-style:normal;font-size:14px;font-weight:600;opacity:.75}
+.hs span{font-size:12.5px;color:#b9cfdf;letter-spacing:.4px}
+
+/* ---------------- 驾驶舱 deck ---------------- */
+.deck{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:26px 0 8px}
+.deck-col{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+  padding:18px 18px 14px;box-shadow:var(--shadow)}
+.deck-h{display:flex;align-items:center;gap:9px;font-size:15px;font-weight:700;
+  color:var(--ink);margin-bottom:12px}
+.deck-h a{margin-left:auto;font-size:12.5px;font-weight:600}
+.deck-ico{width:30px;height:30px;border-radius:9px;display:inline-flex;
+  align-items:center;justify-content:center;font-size:15px}
+.deck .rd-soon{border:0;background:transparent}
+.deck .rd-rowline{padding:9px 2px;border-bottom:1px dashed var(--line-2)}
+.deck .rd-rowline:last-child{border-bottom:0}
+.deck .rd-when{flex:0 0 92px;font-size:12.5px}
+.deck .rd-rowline a{font-size:13.6px;display:-webkit-box;-webkit-line-clamp:1;
+  -webkit-box-orient:vertical;overflow:hidden}
+
+/* ---------------- 地图 ---------------- */
+.geo-frame{background:linear-gradient(180deg,#f4f8fc 0%,#e9f0f7 100%);
+  border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;
+  box-shadow:var(--shadow);position:relative}
+.geo-frame svg{display:block;width:100%;height:auto}
+.geo-other path{fill:#dfe6ee;stroke:#fff;stroke-width:.5}
+.geo path{stroke:#fff;stroke-width:.5;transition:filter .12s,cursor .12s;cursor:default}
+.geo.geo-has path{cursor:pointer}
+.geo.hv0 path{fill:#d5dde6}
+.geo.hv1 path{fill:#b9d0e6}
+.geo.hv2 path{fill:#7fa5cd}
+.geo.hv3 path{fill:#1b4f8a}
+.geo:hover path,.geo:focus path{filter:brightness(.86)}
+.geo.on path{fill:#0f7b6c;filter:none}
+.geo.on .geo-dot{fill:#0f7b6c}
+.geo .geo-dot{stroke:#fff;stroke-width:1.5;transition:r .12s}
+.geo:hover .geo-dot{r:9}
+.geo-tip{position:fixed;z-index:99;display:none;pointer-events:none;
+  background:rgba(13,32,53,.94);color:#fff;border-radius:9px;padding:9px 13px;
+  font-size:12.8px;line-height:1.55;box-shadow:0 8px 26px rgba(9,20,34,.35);max-width:260px}
+.geo-tip b{display:block;font-size:13.5px;margin-bottom:1px}
+.geo-tip span{color:#9fb8cd}
+.geo-tip i{display:block;font-style:normal;color:#d3e2ee;font-size:11.5px;margin-top:2px}
+.geo-legend{display:flex;flex-wrap:wrap;align-items:center;gap:16px;margin:16px 2px 12px;
+  font-size:12.5px;color:var(--muted)}
+.gl{display:inline-block;width:15px;height:15px;border-radius:4px;margin-right:5px;
+  vertical-align:-3px;border:1px solid rgba(0,0,0,.06)}
+.gl.hv0{background:#d5dde6}.gl.hv1{background:#b9d0e6}
+.gl.hv2{background:#7fa5cd}.gl.hv3{background:#1b4f8a}
+.gl-note{color:var(--faint);font-size:11.5px;margin-left:auto}
+.geo-home{margin-top:20px}
+
+/* ---------------- 月历 ---------------- */
+.cal{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+  overflow:hidden;box-shadow:var(--shadow)}
+.cal-head{display:flex;align-items:center;gap:14px;padding:15px 18px;
+  border-bottom:1px solid var(--line);flex-wrap:wrap}
+.cal-title-wrap{display:flex;align-items:baseline;gap:11px}
+.cal-title{font-weight:800;font-size:19px;color:var(--ink);font-variant-numeric:tabular-nums}
+.cal-sub{font-size:12.5px;color:var(--faint)}
+.cal-btns{margin-left:auto;display:flex;gap:7px}
+.cal-nav{border:1px solid var(--line);background:#fff;color:var(--ink-2);
+  border-radius:9px;min-width:34px;height:34px;font-size:16px;cursor:pointer;
+  font-family:inherit;transition:.13s;display:inline-flex;align-items:center;
+  justify-content:center}
+.cal-nav:hover{border-color:var(--brand);color:var(--brand)}
+.cal-doms{display:flex;flex-wrap:wrap;gap:8px;padding:12px 18px;
+  border-bottom:1px solid var(--line-2);background:var(--bg)}
+.cal-dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:6px;
+  vertical-align:1px}
+.cal-dow-row{display:grid;grid-template-columns:repeat(7,1fr);
+  border-bottom:1px solid var(--line);background:#fbfcfe}
+.cal-dow-row span{padding:8px 0;text-align:center;font-size:12px;color:var(--faint);
+  font-weight:600}
+.cal-body{display:grid;grid-template-columns:repeat(7,1fr)}
+.cal-row{display:contents}
+.cal-cell{min-height:96px;border-right:1px solid var(--line-2);border-top:1px solid var(--line-2);
+  padding:7px 8px;position:relative;cursor:pointer;transition:background .12s}
+.cal-cell:nth-child(7n){border-right:0}
+.cal-cell:hover{background:#f3f8fd}
+.cal-cell.out{background:#fafbfd;cursor:default}
+.cal-cell.out .cal-d{color:#c3ccd6}
+.cal-cell.picked{background:#eef6fb;box-shadow:inset 0 0 0 2px var(--brand)}
+.cal-d{font-size:13.5px;font-weight:700;color:var(--ink-2);display:inline-flex;
+  align-items:center;justify-content:center;min-width:24px;height:24px;
+  border-radius:999px;font-variant-numeric:tabular-nums}
+.cal-cell.today .cal-d{background:var(--brand);color:#fff}
+.cal-badge{position:absolute;top:7px;right:8px;font-size:10.5px;font-weight:700;
+  color:var(--brand);background:#eef6fb;border-radius:8px;padding:0 6px}
+.cal-evs{margin-top:5px;display:grid;gap:3px}
+.cal-ev{display:flex;align-items:center;font-size:11px;color:var(--ink-2);
+  background:var(--bg);border-radius:5px;padding:2px 7px;overflow:hidden;
+  white-space:nowrap;text-overflow:ellipsis;display:block}
+.cal-ev i{display:inline-block;width:7px;height:7px;border-radius:2px;margin-right:5px}
+.cal-ev:hover{background:#eef6fb;color:var(--brand);text-decoration:none}
+.cal-more{font-size:10.5px;color:var(--faint);padding-left:2px}
+.cal-detail{margin-top:16px}
+.cal-detail-h{display:flex;align-items:center;gap:10px;font-size:14.5px;font-weight:700;
+  color:var(--ink);margin:0 0 12px}
+.cal-close{margin-left:auto;border:1px solid var(--line);background:#fff;
+  border-radius:8px;width:28px;height:28px;font-size:15px;color:var(--muted);
+  cursor:pointer;font-family:inherit}
+.cal-close:hover{color:var(--brand);border-color:var(--brand)}
+.cal-fold{margin-top:26px}
+.cal-fold summary{cursor:pointer;font-size:14px;color:var(--muted);font-weight:600;
+  padding:10px 0;border-bottom:1px solid var(--line);list-style-position:inside}
+.cal-fold summary:hover{color:var(--brand)}
+
+/* ---------------- 领域六宫格 ---------------- */
+.dgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:22px 0 8px}
+.dcard{background:var(--card);border:1px solid var(--line);border-radius:var(--radius-s);
+  padding:18px 20px;display:flex;flex-direction:column;gap:3px;position:relative;
+  overflow:hidden;transition:transform .16s,box-shadow .16s,border-color .16s;
+  box-shadow:var(--shadow)}
+.dcard::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;
+  background:var(--dc,var(--brand))}
+.dcard b{font-size:16px;color:var(--ink)}
+.dcard span{font-size:12.8px;color:var(--muted)}
+.dcard:hover{transform:translateY(-2px);box-shadow:var(--shadow-h);
+  border-color:var(--dc,var(--brand));text-decoration:none}
+.dcard:hover b{color:var(--dc,var(--brand))}
+
+@media(max-width:860px){
+  .deck{grid-template-columns:1fr}
+  .dgrid{grid-template-columns:repeat(2,1fr)}
+  .cal-cell{min-height:64px;padding:4px 5px}
+  .cal-ev{font-size:9.5px}
+  .hs{min-width:calc(50% - 12px)}
+  .hero h1{font-size:31px}
+}
+@media print{
+  .geo-frame,.cal-doms,.cal-btns{display:none}
+  .deck{grid-template-columns:1fr 1fr 1fr}
+}
