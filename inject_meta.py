@@ -30,7 +30,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 SITE_URL = "https://chenluo951-oss.github.io/lawdatify-site"
 OG_IMAGE = f"{SITE_URL}/assets/og-cover.png"
 
-SITE_NAME = "lawdatify · 法律合规主站"
+SITE_NAME = "lawdatify · 即时零售合规主站"
 LOCALE = "zh_CN"
 
 # 需要处理的页面（相对仓库根）。_quarantine/ 与 news/reports/ 下不入列。
@@ -57,8 +57,8 @@ PAGES = [
 
 # 每页的分享描述。社交卡片上显示的就是这段文字，因此按受众重写而非沿用页面 description。
 OG_DESC = {
-    "index.html": "面向即时零售业务的合规主站：每日更新六大领域监管动态，附官方深链逐条可溯源，"
-                  "并沉淀可执行的合规行动要点。",
+    "index.html": "面向即时零售的合规主站：129 项义务逐条配条款原文、标杆做法与可套用文案；"
+                  "今日更新、监管雷达、合规资讯逐条附官方深链。",
     "prm.html": "平台规则与协议管理中心（PRM）：面向法务的统一规则资产台账与流程标准化方案。",
     "search.html": "站内全文检索：法规、动态、知识要点一站搜。",
     "about.html": "关于本站：内容来源、选择标准、更新频率、链接核验机制与免责声明。",

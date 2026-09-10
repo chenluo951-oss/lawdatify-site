@@ -80,7 +80,7 @@ def build_footer(rel: str) -> str:
     p = "../" * rel.count("/")
     return (
         '<footer><div class="inner">\n'
-        '  <div class="foot-brand">law<span>datify</span> · 法律合规主站</div>\n'
+        '  <div class="foot-brand">law<span>datify</span> · 即时零售合规主站</div>\n'
         '  <div class="foot-desc">由法务团队维护 · 内容基于监管机构官网公开信息整理，逐条附原文深链</div>\n'
         '  <div class="foot-links">\n'
         f'    <a href="{p}updates/index.html">今日更新</a>·\n'

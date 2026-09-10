@@ -888,3 +888,68 @@ footer .inner{flex-direction:column;align-items:flex-start;gap:10px}
   .up-table thead th,.up-table td,.kv-table td,.kv-table thead th{padding:9px 10px}
 }
 .src-plain{color:var(--faint);font-size:12px;cursor:default}
+
+/* ============================================================ 条款原文 */
+.art-box{margin:9px 0 0;border-top:1px dashed var(--line)}
+.art-box>summary{cursor:pointer;padding:7px 0 5px;font-size:12.3px;color:var(--brand);
+  font-weight:600;display:flex;align-items:center;gap:7px;list-style:none}
+.art-box>summary::-webkit-details-marker{display:none}
+.art-box>summary::before{content:"›";display:inline-block;transition:.18s;font-size:14px;
+  color:var(--brand);opacity:.7}
+.art-box[open]>summary::before{transform:rotate(90deg)}
+.art-box>summary i{font-style:normal;font-size:11px;color:var(--faint);
+  background:#eef3fb;border-radius:9px;padding:1px 8px}
+.art-body{padding:4px 0 10px}
+.art-item{margin:0 0 10px;padding:9px 12px;background:#fbfcfe;
+  border:1px solid var(--line);border-left:3px solid var(--brand);border-radius:0 6px 6px 0}
+.art-hd{display:flex;flex-wrap:wrap;align-items:baseline;gap:8px;margin-bottom:5px}
+.art-src{font-size:12.2px;font-weight:700;color:var(--ink)}
+.art-no{font-size:11.4px;color:#fff;background:var(--brand);border-radius:4px;padding:1px 7px}
+.art-quote{margin:0;font-size:12.4px;line-height:1.95;color:var(--ink-2);
+  white-space:pre-wrap;word-break:break-word}
+
+/* ============================================================ 标杆做法 */
+.prac{margin:0 0 14px;padding:13px 15px;background:#fafcfe;border:1px solid #d5e3f3;
+  border-radius:var(--radius-s)}
+.prac-hd{font-size:12.4px;font-weight:700;color:var(--brand);margin-bottom:10px;
+  padding-bottom:8px;border-bottom:1px solid #dfe9f5;letter-spacing:.4px}
+.prac-sec{margin:0 0 12px}
+.prac-sec:last-child{margin-bottom:0}
+.prac-tag{display:inline-block;font-size:10.6px;font-weight:700;color:#fff;
+  background:var(--brand-2);border-radius:4px;padding:2px 8px;margin-bottom:7px;letter-spacing:.5px}
+.prac-txt p{margin:0 0 6px;font-size:12.6px;line-height:1.9;color:var(--ink-2)}
+.prac-txt p:last-child{margin-bottom:0}
+.prac-fig{margin:0;background:var(--card);border:1px solid var(--line);
+  border-radius:8px;padding:12px 12px 8px}
+.prac-fig svg{display:block;width:100%;height:auto}
+.prac-fig figcaption{margin-top:9px;padding-top:8px;border-top:1px dashed var(--line);
+  font-size:11.4px;color:var(--muted);line-height:1.7}
+.prac-copy{margin:0;padding:11px 13px;background:#f6f8fb;border:1px solid var(--line);
+  border-radius:6px;font-size:12.2px;line-height:1.9;color:var(--ink-2);
+  white-space:pre-wrap;word-break:break-word;font-family:inherit;overflow-x:auto}
+.prac-ul{margin:0;padding-left:18px}
+.prac-ul li{font-size:12.5px;line-height:1.85;color:var(--ink-2);margin-bottom:4px}
+.prac-ul li:last-child{margin-bottom:0}
+
+@media(max-width:720px){
+  .art-quote,.prac-txt p,.prac-copy{font-size:12px}
+  .prac{padding:11px 12px}
+}
+
+/* ============================================================ 首页义务速览 */
+.duty-teaser{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:11px}
+.dt-item{display:block;background:var(--card);border:1px solid var(--line);
+  border-left:3px solid var(--dt,#1b4f8a);border-radius:0 var(--radius-s) var(--radius-s) 0;
+  padding:12px 15px;box-shadow:var(--shadow);transition:.18s;text-decoration:none}
+.dt-item:hover{box-shadow:var(--shadow-h);transform:translateX(3px)}
+.dt-tag{display:inline-block;font-size:11.4px;font-weight:700;color:var(--dt,#1b4f8a);
+  background:color-mix(in srgb,var(--dt,#1b4f8a) 9%,transparent);
+  border:1px solid color-mix(in srgb,var(--dt,#1b4f8a) 24%,transparent);
+  border-radius:4px;padding:1px 8px;margin-right:8px;white-space:nowrap}
+.dt-t{font-size:12.7px;line-height:1.85;color:var(--ink-2)}
+.dt-more{margin:14px 0 0;text-align:center}
+.dt-more a{display:inline-block;font-size:13px;font-weight:600;color:var(--brand);
+  background:#eef3fb;border:1px solid #d8e4f5;border-radius:20px;padding:8px 20px;
+  text-decoration:none;transition:.18s}
+.dt-more a:hover{background:var(--brand);color:#fff;border-color:var(--brand)}
+@media(max-width:720px){.duty-teaser{grid-template-columns:1fr}}

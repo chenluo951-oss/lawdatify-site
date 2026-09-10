@@ -125,7 +125,7 @@ NAV_KB = """<nav class="topnav"><div class="inner">
 </div></nav>"""
 
 FOOT = """<footer><div class="inner">
-  <div>lawdatify.site · 法律合规主站</div>
+  <div>lawdatify.site · 即时零售合规主站</div>
   <div><a href="../index.html">首页</a> · <a href="../news/index.html">资讯索引</a> · <a href="../analysis/index.html">法律分析</a> · <a href="../kb/index.html">知识库</a> · <a href="../prm.html">PRM</a></div>
 </div></footer>"""
 

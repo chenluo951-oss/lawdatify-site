@@ -314,6 +314,73 @@ def find_refs(refs, items, n=2):
     return out
 
 
+# --------------------------------------------------- 条款原文 / 标杆做法渲染
+def render_articles(arts):
+    """义务对应的「法律/标准名称 + 条款号 + 条款原文」。原文取自本机语料库，逐字不改写。"""
+    arts = [a for a in (arts or []) if a.get("quote")]
+    if not arts:
+        return ""
+    lis = []
+    for a in arts:
+        lis.append(
+            f'<div class="art-item">'
+            f'<div class="art-hd"><span class="art-src">{esc(a.get("src") or "")}</span>'
+            f'<span class="art-no">{esc(a.get("art") or "")}</span></div>'
+            f'<blockquote class="art-quote">{esc(a.get("quote") or "")}</blockquote></div>')
+    return ('<details class="art-box"><summary>条款原文'
+            f'<i>{len(arts)} 条</i></summary>'
+            f'<div class="art-body">{"".join(lis)}</div></details>')
+
+
+_PRACTICES = None
+_MOCKUPS = None
+
+
+def _load_practices():
+    global _PRACTICES, _MOCKUPS
+    if _PRACTICES is None:
+        p = os.path.join(HERE, "sources", "standards", "practices.json")
+        _PRACTICES = json.load(open(p, encoding="utf-8")).get("practices", {}) \
+            if os.path.exists(p) else {}
+    if _MOCKUPS is None:
+        try:
+            import duty_mockups
+            _MOCKUPS = duty_mockups
+        except Exception:
+            _MOCKUPS = False
+    return _PRACTICES, _MOCKUPS
+
+
+def render_practice(pkey):
+    """场景级「标杆做法 / 参考设计 / 参考文案 / 自查点」。"""
+    pr, mk = _load_practices()
+    d = pr.get(pkey)
+    if not d:
+        return ""
+    out = ['<div class="prac"><div class="prac-hd">标杆做法 · 参考设计与文案</div>']
+    if d.get("peer"):
+        seg = "".join(f"<p>{esc(x)}</p>" for x in d["peer"].split("\n") if x.strip())
+        out.append(f'<div class="prac-sec"><span class="prac-tag">标杆做法</span>'
+                   f'<div class="prac-txt">{seg}</div></div>')
+    key = d.get("design")
+    if key and mk:
+        got = mk.render(key)
+        if got:
+            title, svg = got
+            out.append(f'<div class="prac-sec"><span class="prac-tag">参考设计</span>'
+                       f'<figure class="prac-fig">{svg}'
+                       f'<figcaption>{esc(title)}　·　示意图，仅用于说明合规要点，'
+                       f'不还原任何具体产品界面</figcaption></figure></div>')
+    if d.get("copy"):
+        out.append(f'<div class="prac-sec"><span class="prac-tag">参考文案</span>'
+                   f'<pre class="prac-copy">{esc(d["copy"])}</pre></div>')
+    if d.get("check"):
+        out.append('<div class="prac-sec"><span class="prac-tag">自查点</span><ul class="prac-ul">'
+                   + "".join(f"<li>{esc(x)}</li>" for x in d["check"]) + "</ul></div>")
+    out.append("</div>")
+    return "".join(out)
+
+
 def render_duty_tree(cats, items):
     """合规义务主干：主题大类 → 场景 → 具体义务 三级。"""
     chips = ['<button class="rd-fchip on" data-dcat="ALL">全部</button>']
@@ -348,11 +415,15 @@ def render_duty_tree(cats, items):
                 rows.append(
                     f'<div class="lb-d2" data-risk="{esc(risk)}">'
                     f'<div class="lb-d2-t">{rk}<b>{esc(d["t"])}</b></div>'
-                    f'<div class="lb-d2-d">{esc(d["d"])}</div>{ref_html}</div>')
+                    f'<div class="lb-d2-d">{esc(d["d"])}</div>{ref_html}'
+                    f'{render_articles(d.get("articles"))}</div>')
+
+            pkey = f'{c["id"]}|{s["name"]}'
             scenes_html.append(
                 f'<details class="lb-s" {"open" if ci == 0 and si < 2 else ""}>'
                 f'<summary><b>{esc(s["name"])}</b><i>{len(s.get("duties", []))} 项</i></summary>'
-                f'<div class="lb-s-body">{"".join(rows)}</div></details>')
+                f'<div class="lb-s-body">{render_practice(pkey)}'
+                f'{"".join(rows)}</div></details>')
 
         n_s = len(c.get("scenes", []))
         n_d = sum(len(x.get("duties", [])) for x in c.get("scenes", []))

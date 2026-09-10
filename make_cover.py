@@ -113,7 +113,7 @@ def main():
     d.text((L, 150), "LEGAL & COMPLIANCE HUB", font=f_eye, fill=(255, 255, 255, 165))
 
     # 标题略带字距感：Pillow 无字距参数，用逐字绘制实现
-    title = "法律合规主站"
+    title = "即时零售合规主站"
     x = L
     y = 208
     for ch in title:
