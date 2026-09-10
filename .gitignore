@@ -30,3 +30,6 @@ _quarantine/
 
 # 非公开页面（仅本人本机可见，不上传站点）
 _private/
+
+# 原文语料库：只存本机，不上传（标准正文受版权保护，站点仅放元数据+章节）
+sources/library/corpus/

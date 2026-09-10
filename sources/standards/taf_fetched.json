@@ -1,0 +1,679 @@
+{
+ "TTAF023": {
+  "code": "T/TAF 023—2018",
+  "name": "移动智能终端应用软件安全与质量要求",
+  "pub": "2019-5-20",
+  "uid": "abbec0c4-b897-4d05-a20d-df6771394da1",
+  "url": "https://www.taf.org.cn/StdDetail.aspx?uid=abbec0c4-b897-4d05-a20d-df6771394da1&stdType=TAF",
+  "status": "",
+  "impl": ""
+ },
+ "TTAF047": {
+  "code": "T/TAF 047—2022",
+  "name": "移动智能终端安全能力测试细则",
+  "pub": "2022-9-15",
+  "uid": "fb9d1219-28a9-4a26-aecb-a3049d785539",
+  "url": "https://www.taf.org.cn/StdDetail.aspx?uid=fb9d1219-28a9-4a26-aecb-a3049d785539&stdType=TAF",
+  "status": "有效",
+  "impl": "2022-09-15"
+ },
+ "TTAF049": {
+  "code": "T/TAF 049—2019",
+  "name": "移动智能终端应用软件行为规范",
+  "pub": "2019-5-27",
+  "uid": "6e67786f-0af9-4107-b83d-68f9f5916acc",
+  "url": "https://www.taf.org.cn/StdDetail.aspx?uid=6e67786f-0af9-4107-b83d-68f9f5916acc&stdType=TAF",
+  "status": "有效",
+  "impl": "2019-12-26"
+ },
+ "TTAF050": {
+  "code": "T/TAF 050—2022",
+  "name": "移动智能终端及应用软件用户个人信息保护实施指南 第2部分：个人信息分类分级",
+  "pub": "2022-9-15",
+  "uid": "228be866-d71a-4453-9dd0-c5c4314b0f82",
+  "url": "https://www.taf.org.cn/StdDetail.aspx?uid=228be866-d71a-4453-9dd0-c5c4314b0f82&stdType=TAF",
+  "status": "有效",
+  "impl": "2022-09-15"
+ },
+ "TTAF051": {
+  "code": "T/TAF 051—2021",
+  "name": "移动智能终端及应用软件用户个人信息保护实施指南 第5部分：终端权限管理",
+  "pub": "2021-5-12",
+  "uid": "f3ef387b-956a-4eff-beb8-026fd666df80",
+  "url": "https://www.taf.org.cn/StdDetail.aspx?uid=f3ef387b-956a-4eff-beb8-026fd666df80&stdType=TAF",
+  "status": "有效",
+  "impl": "2021-05-12"
+ },
+ "TTAF057": {
+  "code": "T/TAF 057—2020",
+  "name": "移动智能终端应用软件SDK安全技术要求",
+  "pub": "2019-6-2",
+  "uid": "9fc9b097-f7e2-49b2-90cf-0e59618557cf",
+  "url": "https://www.taf.org.cn/StdDetail.aspx?uid=9fc9b097-f7e2-49b2-90cf-0e59618557cf&stdType=TAF",
+  "status": "有效",
+  "impl": "2020-04-09"
+ },
+ "TTAF065": {
+  "code": "T/TAF 065—2020",
+  "name": "移动智能终端与应用软件用户个人信息保护实施指南 第 3 部分：终端告知同意",
+  "pub": "2019-6-5",
+  "uid": "ca992ee4-3777-4de5-af68-ced64e0ac36d",
+  "url": "https://www.taf.org.cn/StdDetail.aspx?uid=ca992ee4-3777-4de5-af68-ced64e0ac36d&stdType=TAF",
+  "status": "有效",
+  "impl": "2020-08-24"
+ },
+ "TTAF066": {
+  "code": "T/TAF 066—2020",
+  "name": "移动智能终端及应用软件用户个人信息保护实施指南 第 4 部分：应用软件告知同意",
+  "pub": "2019-6-6",
+  "uid": "36eba2c2-5b3f-42a9-83fa-c95826460227",
+  "url": "https://www.taf.org.cn/StdDetail.aspx?uid=36eba2c2-5b3f-42a9-83fa-c95826460227&stdType=TAF",
+  "status": "有效",
+  "impl": "2020-08-24"
+ },
+ "TTAF067": {
+  "code": "T/TAF 067—2020",
+  "name": "移动智能终端与应用软件用户个人信息保护实施指南 第 6 部分：应用软件权限规范",
+  "pub": "2019-6-7",
+  "uid": "90e178ca-374c-4800-896a-5194b0900750",
+  "url": "https://www.taf.org.cn/StdDetail.aspx?uid=90e178ca-374c-4800-896a-5194b0900750&stdType=TAF",
+  "status": "有效",
+  "impl": "2020-08-24"
+ },
+ "TTAF068": {
+  "code": "T/TAF 068—2020",
+  "name": "移动智能终端及应用软件用户个人信息保护实施指南 第8部分：隐私政策",
+  "pub": "2020-8-24",
+  "uid": "b55868cc-a013-417f-a8aa-4b63770bfcf1",
+  "url": "https://www.taf.org.cn/StdDetail.aspx?uid=b55868cc-a013-417f-a8aa-4b63770bfcf1&stdType=TAF",
+  "status": "被代替",
+  "impl": "2020-08-24"
+ },
+ "TTAF070": {
+  "code": "T/TAF 070—2020",
+  "name": "移动智能终端及应用软件用户个人信息保护实施指南 第1部分：总则",
+  "pub": "2020-9-14",
+  "uid": "6c9f4148-84aa-4990-a3f8-6b11ad13d237",
+  "url": "https://www.taf.org.cn/StdDetail.aspx?uid=6c9f4148-84aa-4990-a3f8-6b11ad13d237&stdType=TAF",
+  "status": "有效",
+  "impl": "2020-09-14"
+ },
+ "TTAF076": {
+  "code": "T/TAF 076—2020",
+  "name": "移动终端权限申请目的说明实施指南",
+  "pub": "2020-11-26",
+  "uid": "b0253bc8-dd8f-440b-a27e-e2096ca4532e",
+  "url": "https://www.taf.org.cn/StdDetail.aspx?uid=b0253bc8-dd8f-440b-a27e-e2096ca4532e&stdType=TAF",
+  "status": "有效",
+  "impl": "2020-11-26"
+ },
+ "TTAF077.1": {
+  "code": "T/TAF 077.1—2022",
+  "name": "APP收集使用个人信息最小必要评估规范 第1部分：总则",
+  "pub": "2022-11-25",
+  "uid": "b27480c7-9044-43b5-a74b-01cfeb415893",
+  "url": "https://www.taf.org.cn/StdDetail.aspx?uid=b27480c7-9044-43b5-a74b-01cfeb415893&stdType=TAF",
+  "status": "有效",
+  "impl": "2022-11-25"
+ },
+ "TTAF077.10": {
+  "code": "T/TAF 077.10—2021",
+  "name": "APP收集使用个人信息最小必要评估规范 录音信息",
+  "pub": "2021-1-8",
+  "uid": "8fbab2ec-7587-4f44-abf0-bff697e6ae83",
+  "url": "https://www.taf.org.cn/StdDetail.aspx?uid=8fbab2ec-7587-4f44-abf0-bff697e6ae83&stdType=TAF",
+  "status": "有效",
+  "impl": "2021-01-08"
+ },
+ "TTAF077.11": {
+  "code": "T/TAF 077.11—2022",
+  "name": "APP收集使用个人信息最小必要评估规范 第11部分：通话记录",
+  "pub": "2022-9-15",
+  "uid": "893262cf-b87d-4a63-a6b1-6bd42bd463f1",
+  "url": "https://www.taf.org.cn/StdDetail.aspx?uid=893262cf-b87d-4a63-a6b1-6bd42bd463f1&stdType=TAF",
+  "status": "有效",
+  "impl": "2022-09-15"
+ },
+ "TTAF077.12": {
+  "code": "T/TAF 077.12—2026",
+  "name": "APP收集使用个人信息最小必要评估规范 第12部分：好友列表",
+  "pub": "2026-8-26",
+  "uid": "8c7da50f-a150-469f-8dce-c497acc089b8",
+  "url": "https://www.taf.org.cn/StdDetail.aspx?uid=8c7da50f-a150-469f-8dce-c497acc089b8&stdType=TAF",
+  "status": "有效",
+  "impl": "2026-08-26"
+ },
+ "TTAF077.13": {
+  "code": "T/TAF 077.13—2021",
+  "name": "APP收集使用个人信息最小必要评估规范 传感器信息",
+  "pub": "2021-1-15",
+  "uid": "a11ca982-3efc-40f7-a390-654651f4ca26",
+  "url": "https://www.taf.org.cn/StdDetail.aspx?uid=a11ca982-3efc-40f7-a390-654651f4ca26&stdType=TAF",
+  "status": "有效",
+  "impl": "2021-01-15"
+ },
+ "TTAF077.14": {
+  "code": "T/TAF 077.14—2021",
+  "name": "APP收集使用个人信息最小必要评估规范 应用日志信息",
+  "pub": "2021-1-15",
+  "uid": "9969b113-ecdd-4dd0-b9a0-7b5c203177ec",
+  "url": "https://www.taf.org.cn/StdDetail.aspx?uid=9969b113-ecdd-4dd0-b9a0-7b5c203177ec&stdType=TAF",
+  "status": "有效",
+  "impl": "2021-01-15"
+ },
+ "TTAF077.15": {
+  "code": "T/TAF 077.15—2021",
+  "name": "APP收集使用个人信息最小必要评估规范 房产信息",
+  "pub": "2021-1-15",
+  "uid": "209bfada-d07f-4c7f-9ef0-c609267ccf14",
+  "url": "https://www.taf.org.cn/StdDetail.aspx?uid=209bfada-d07f-4c7f-9ef0-c609267ccf14&stdType=TAF",
+  "status": "有效",
+  "impl": "2021-01-15"
+ },
+ "TTAF077.16": {
+  "code": "T/TAF 077.16—2021",
+  "name": "APP收集使用个人信息最小必要评估规范 交易记录",
+  "pub": "2021-1-15",
+  "uid": "ceda44a6-a64c-4acc-8fa7-3b21bc53e7e8",
+  "url": "https://www.taf.org.cn/StdDetail.aspx?uid=ceda44a6-a64c-4acc-8fa7-3b21bc53e7e8&stdType=TAF",
+  "status": "有效",
+  "impl": "2021-01-15"
+ },
+ "TTAF077.17": {
+  "code": "T/TAF 077.17—2021",
+  "name": "APP收集使用个人信息最小必要评估规范 身份信息",
+  "pub": "2021-1-15",
+  "uid": "8a304838-7558-462b-a2e0-a1ecea0e4618",
+  "url": "https://www.taf.org.cn/StdDetail.aspx?uid=8a304838-7558-462b-a2e0-a1ecea0e4618&stdType=TAF",
+  "status": "有效",
+  "impl": "2021-01-15"
+ },
+ "TTAF077.2": {
+  "code": "T/TAF 077.2—2020",
+  "name": "APP收集使用个人信息最小必要评估规范 位置信息",
+  "pub": "2020-11-26",
+  "uid": "1816a699-18bf-491a-aeed-03a6e936c8fd",
+  "url": "https://www.taf.org.cn/StdDetail.aspx?uid=1816a699-18bf-491a-aeed-03a6e936c8fd&stdType=TAF",
+  "status": "有效",
+  "impl": "2020-11-26"
+ },
+ "TTAF077.3": {
+  "code": "T/TAF 077.3—2022",
+  "name": "APP收集使用个人信息最小必要评估规范 第3部分：图片信息",
+  "pub": "2022-2-23",
+  "uid": "b8556156-03af-46c8-b1c8-d565faae3944",
+  "url": "https://www.taf.org.cn/StdDetail.aspx?uid=b8556156-03af-46c8-b1c8-d565faae3944&stdType=TAF",
+  "status": "有效",
+  "impl": "2022-02-23"
+ },
+ "TTAF077.4": {
+  "code": "T/TAF 077.4—2020",
+  "name": "APP收集使用个人信息最小必要评估规范 终端通讯录",
+  "pub": "2020-11-26",
+  "uid": "1f2a0be8-ca27-4de6-b096-c4493e4cda17",
+  "url": "https://www.taf.org.cn/StdDetail.aspx?uid=1f2a0be8-ca27-4de6-b096-c4493e4cda17&stdType=TAF",
+  "status": "有效",
+  "impl": "2020-11-26"
+ },
+ "TTAF077.5": {
+  "code": "T/TAF 077.5—2022",
+  "name": "APP收集使用个人信息最小必要评估规范 第5部分：设备信息",
+  "pub": "2022-9-15",
+  "uid": "81cb4049-3cc8-4807-8690-fbc228cb3cf7",
+  "url": "https://www.taf.org.cn/StdDetail.aspx?uid=81cb4049-3cc8-4807-8690-fbc228cb3cf7&stdType=TAF",
+  "status": "有效",
+  "impl": "2022-09-15"
+ },
+ "TTAF077.6": {
+  "code": "T/TAF 077.6—2020",
+  "name": "APP收集使用个人信息最小必要评估规范 软件列表",
+  "pub": "2020-11-26",
+  "uid": "8ebe18ca-10c0-4300-b425-fdc43a9305ed",
+  "url": "https://www.taf.org.cn/StdDetail.aspx?uid=8ebe18ca-10c0-4300-b425-fdc43a9305ed&stdType=TAF",
+  "status": "有效",
+  "impl": "2020-11-26"
+ },
+ "TTAF077.7": {
+  "code": "T/TAF 077.7—2020",
+  "name": "APP收集使用个人信息最小必要评估规范 人脸信息",
+  "pub": "2020-11-26",
+  "uid": "154d98f0-9f96-48b1-b01d-2afee80006fb",
+  "url": "https://www.taf.org.cn/StdDetail.aspx?uid=154d98f0-9f96-48b1-b01d-2afee80006fb&stdType=TAF",
+  "status": "有效",
+  "impl": "2020-11-26"
+ },
+ "TTAF077.8": {
+  "code": "T/TAF 077.8—2022",
+  "name": "APP收集使用个人信息最小必要评估规范 第8部分：录像信息",
+  "pub": "2022-9-15",
+  "uid": "8483171e-6a4f-469a-9538-0473a3b7667e",
+  "url": "https://www.taf.org.cn/StdDetail.aspx?uid=8483171e-6a4f-469a-9538-0473a3b7667e&stdType=TAF",
+  "status": "有效",
+  "impl": "2022-09-15"
+ },
+ "TTAF077.9": {
+  "code": "T/TAF 077.9—2022",
+  "name": "APP收集使用个人信息最小必要评估规范 第9部分：短信信息",
+  "pub": "2022-2-23",
+  "uid": "18542907-fca6-4b7a-a79d-bcb5fd939f2b",
+  "url": "https://www.taf.org.cn/StdDetail.aspx?uid=18542907-fca6-4b7a-a79d-bcb5fd939f2b&stdType=TAF",
+  "status": "有效",
+  "impl": "2022-02-23"
+ },
+ "TTAF078.1": {
+  "code": "T/TAF 078.1—2026",
+  "name": "APP用户权益保护测评规范 第1部分：超范围收集个人信息",
+  "pub": "2026-3-27",
+  "uid": "e47ad926-0f84-40b3-97aa-46900db1d5a4",
+  "url": "https://www.taf.org.cn/StdDetail.aspx?uid=e47ad926-0f84-40b3-97aa-46900db1d5a4&stdType=TAF",
+  "status": "有效",
+  "impl": "2026-03-27"
+ },
+ "TTAF078.10": {
+  "code": "T/TAF 078.10—2023",
+  "name": "APP用户权益保护测评规范 第10部分：自启动和关联启动行为",
+  "pub": "2023-6-26",
+  "uid": "52a1aa69-ec19-4c4a-9689-847b3aa6bd9c",
+  "url": "https://www.taf.org.cn/StdDetail.aspx?uid=52a1aa69-ec19-4c4a-9689-847b3aa6bd9c&stdType=TAF",
+  "status": "有效",
+  "impl": "2023-06-26"
+ },
+ "TTAF078.2": {
+  "code": "T/TAF 078.2—2026",
+  "name": "APP用户权益保护测评规范 第2部分：定向推送",
+  "pub": "2026-3-27",
+  "uid": "eaaa1143-d1a0-4d20-b929-10461e3fed39",
+  "url": "https://www.taf.org.cn/StdDetail.aspx?uid=eaaa1143-d1a0-4d20-b929-10461e3fed39&stdType=TAF",
+  "status": "有效",
+  "impl": "2026-03-27"
+ },
+ "TTAF078.3": {
+  "code": "T/TAF 078.3—2025",
+  "name": "APP用户权益保护测评规范 第3部分：个人信息获取行为",
+  "pub": "2025-7-7",
+  "uid": "dae962d7-3a6a-4ff1-830a-1e412d2fe918",
+  "url": "https://www.taf.org.cn/StdDetail.aspx?uid=dae962d7-3a6a-4ff1-830a-1e412d2fe918&stdType=TAF",
+  "status": "有效",
+  "impl": "2025-07-07"
+ },
+ "TTAF078.4": {
+  "code": "T/TAF 078.4—2023",
+  "name": "APP用户权益保护测评规范 第4部分：权限索取行为",
+  "pub": "2023-6-26",
+  "uid": "c0e4df61-641d-442a-8c6e-f67eb4ffaae6",
+  "url": "https://www.taf.org.cn/StdDetail.aspx?uid=c0e4df61-641d-442a-8c6e-f67eb4ffaae6&stdType=TAF",
+  "status": "有效",
+  "impl": "2023-06-26"
+ },
+ "TTAF078.5": {
+  "code": "T/TAF 078.5—2026",
+  "name": "APP用户权益保护测评规范 第5部分：违规使用个人信息",
+  "pub": "2026-3-27",
+  "uid": "af427481-1168-4630-aa45-84dabf316e29",
+  "url": "https://www.taf.org.cn/StdDetail.aspx?uid=af427481-1168-4630-aa45-84dabf316e29&stdType=TAF",
+  "status": "有效",
+  "impl": "2026-03-27"
+ },
+ "TTAF078.6": {
+  "code": "T/TAF 078.6—2026",
+  "name": "APP用户权益保护测评规范 第6部分：违规收集个人信息",
+  "pub": "2026-3-27",
+  "uid": "15d062c1-1dcf-47b3-a99c-d58c7de5efd6",
+  "url": "https://www.taf.org.cn/StdDetail.aspx?uid=15d062c1-1dcf-47b3-a99c-d58c7de5efd6&stdType=TAF",
+  "status": "有效",
+  "impl": "2026-03-27"
+ },
+ "TTAF078.7": {
+  "code": "T/TAF 078.7—2026",
+  "name": "APP用户权益保护测评规范 第7部分：欺骗误导强迫行为",
+  "pub": "2026-3-27",
+  "uid": "0769ba4a-ee79-4af4-849b-28c4beac4ff0",
+  "url": "https://www.taf.org.cn/StdDetail.aspx?uid=0769ba4a-ee79-4af4-849b-28c4beac4ff0&stdType=TAF",
+  "status": "有效",
+  "impl": "2026-03-27"
+ },
+ "TTAF078.8": {
+  "code": "T/TAF 078.8—2025",
+  "name": "APP用户权益保护测评规范 第8部分：移动应用分发平台管理",
+  "pub": "2025-7-7",
+  "uid": "23d64b2c-0d81-45ae-950f-b80560fe7f2f",
+  "url": "https://www.taf.org.cn/StdDetail.aspx?uid=23d64b2c-0d81-45ae-950f-b80560fe7f2f&stdType=TAF",
+  "status": "有效",
+  "impl": "2025-07-07"
+ },
+ "TTAF078.9": {
+  "code": "T/TAF 078.9—2023",
+  "name": "APP用户权益保护测评规范 第9部分：移动应用分发平台信息展示",
+  "pub": "2023-6-26",
+  "uid": "826eb59a-b8aa-4c77-bc1f-4ae91c8acb8d",
+  "url": "https://www.taf.org.cn/StdDetail.aspx?uid=826eb59a-b8aa-4c77-bc1f-4ae91c8acb8d&stdType=TAF",
+  "status": "有效",
+  "impl": "2023-06-26"
+ },
+ "TTAF079": {
+  "code": "T/TAF 079—2021",
+  "name": "移动智能终端及应用软件生物特征识别安全规范",
+  "pub": "2021-1-8",
+  "uid": "9223875a-4e14-45f9-974a-5e3fc4d68d5b",
+  "url": "https://www.taf.org.cn/StdDetail.aspx?uid=9223875a-4e14-45f9-974a-5e3fc4d68d5b&stdType=TAF",
+  "status": "有效",
+  "impl": "2021-01-08"
+ },
+ "TTAF080": {
+  "code": "T/TAF 080—2021",
+  "name": "移动智能终端及应用软件用户个人信息保护实施指南 第7部分：定向推送",
+  "pub": "2021-1-8",
+  "uid": "82096502-1f2d-4cbc-ba53-922574174292",
+  "url": "https://www.taf.org.cn/StdDetail.aspx?uid=82096502-1f2d-4cbc-ba53-922574174292&stdType=TAF",
+  "status": "有效",
+  "impl": "2021-01-08"
+ },
+ "TTAF081.1": {
+  "code": "T/TAF 081.1—2021",
+  "name": "移动智能终端应用软件调用行为记录能力要求 总则",
+  "pub": "2021-1-8",
+  "uid": "2845e326-bf25-48ed-9ed2-2f16e3ebbe79",
+  "url": "https://www.taf.org.cn/StdDetail.aspx?uid=2845e326-bf25-48ed-9ed2-2f16e3ebbe79&stdType=TAF",
+  "status": "有效",
+  "impl": "2021-01-08"
+ },
+ "TTAF084.3": {
+  "code": "T/TAF 084.3—2021",
+  "name": "安卓应用程序认证签名技术规范 第3部分：数字签名格式规范",
+  "pub": "2021-5-12",
+  "uid": "dfddf933-edeb-42e3-bb1f-e4884c4087e4",
+  "url": "https://www.taf.org.cn/StdDetail.aspx?uid=dfddf933-edeb-42e3-bb1f-e4884c4087e4&stdType=TAF",
+  "status": "有效",
+  "impl": "2021-05-12"
+ },
+ "TTAF209.1": {
+  "code": "T/TAF 209.1—2024",
+  "name": "移动互联网应用程序（APP）合规开发管理测评规范 第1部分：总则",
+  "pub": "2024-2-23",
+  "uid": "ff1f3984-5bf9-4663-acdb-5993ac19ba41",
+  "url": "https://www.taf.org.cn/StdDetail.aspx?uid=ff1f3984-5bf9-4663-acdb-5993ac19ba41&stdType=TAF",
+  "status": "有效",
+  "impl": "2024-02-23"
+ },
+ "TTAF209.2": {
+  "code": "T/TAF 209.2—2024",
+  "name": "移动互联网应用程序（APP）合规开发管理测评规范 第2部分：需求设计",
+  "pub": "2024-2-23",
+  "uid": "2b7c0cd9-4299-447a-b1cf-54be4c236491",
+  "url": "https://www.taf.org.cn/StdDetail.aspx?uid=2b7c0cd9-4299-447a-b1cf-54be4c236491&stdType=TAF",
+  "status": "有效",
+  "impl": "2024-02-23"
+ },
+ "TTAF209.3": {
+  "code": "T/TAF 209.3—2024",
+  "name": "移动互联网应用程序（APP）合规开发管理测评规范 第3部分：功能测试",
+  "pub": "2024-2-23",
+  "uid": "28739e9a-a652-45e4-8498-945b87fe8482",
+  "url": "https://www.taf.org.cn/StdDetail.aspx?uid=28739e9a-a652-45e4-8498-945b87fe8482&stdType=TAF",
+  "status": "有效",
+  "impl": "2024-02-23"
+ },
+ "TTAF209.4": {
+  "code": "T/TAF 209.4—2024",
+  "name": "移动互联网应用程序（APP）合规开发管理测评规范 第4部分：代码审计",
+  "pub": "2024-2-23",
+  "uid": "76bf89c4-1a00-48a1-83cf-e273657105b5",
+  "url": "https://www.taf.org.cn/StdDetail.aspx?uid=76bf89c4-1a00-48a1-83cf-e273657105b5&stdType=TAF",
+  "status": "有效",
+  "impl": "2024-02-23"
+ },
+ "TTAF209.5": {
+  "code": "T/TAF 209.5—2024",
+  "name": "移动互联网应用程序（APP）合规开发管理测评规范 第5部分：对外接口管理",
+  "pub": "2024-2-23",
+  "uid": "c219590a-19fd-41cb-9c11-595476f2dac0",
+  "url": "https://www.taf.org.cn/StdDetail.aspx?uid=c219590a-19fd-41cb-9c11-595476f2dac0&stdType=TAF",
+  "status": "有效",
+  "impl": "2024-02-23"
+ },
+ "TTAF209.6": {
+  "code": "T/TAF 209.6—2024",
+  "name": "移动互联网应用程序（APP）合规开发管理测评规范 第6部分：应用编程接口（API）管理",
+  "pub": "2024-2-23",
+  "uid": "03ab78b4-677e-4dc6-b180-a422aec83165",
+  "url": "https://www.taf.org.cn/StdDetail.aspx?uid=03ab78b4-677e-4dc6-b180-a422aec83165&stdType=TAF",
+  "status": "有效",
+  "impl": "2024-02-23"
+ },
+ "TTAF209.7": {
+  "code": "T/TAF 209.7—2024",
+  "name": "移动互联网应用程序（APP）合规开发管理测评规范 第7部分：更新升级管理",
+  "pub": "2024-2-23",
+  "uid": "e54edecf-b91c-4bd9-8411-f5c5ac5dff81",
+  "url": "https://www.taf.org.cn/StdDetail.aspx?uid=e54edecf-b91c-4bd9-8411-f5c5ac5dff81&stdType=TAF",
+  "status": "有效",
+  "impl": "2024-02-23"
+ },
+ "TTAF209.8": {
+  "code": "T/TAF 209.8—2024",
+  "name": "移动互联网应用程序（APP）合规开发管理测评规范 第8部分：数据使用管理",
+  "pub": "2024-2-23",
+  "uid": "f7640bc4-b464-42f3-a958-5afe1a7cdef7",
+  "url": "https://www.taf.org.cn/StdDetail.aspx?uid=f7640bc4-b464-42f3-a958-5afe1a7cdef7&stdType=TAF",
+  "status": "有效",
+  "impl": "2024-02-23"
+ },
+ "TTAF209.9": {
+  "code": "T/TAF 209.9—2024",
+  "name": "移动互联网应用程序（APP）合规开发管理测评规范 第9部分：算法模型",
+  "pub": "2024-2-23",
+  "uid": "68046565-430e-4c45-b80a-534ec0418504",
+  "url": "https://www.taf.org.cn/StdDetail.aspx?uid=68046565-430e-4c45-b80a-534ec0418504&stdType=TAF",
+  "status": "有效",
+  "impl": "2024-02-23"
+ },
+ "TTAF238": null,
+ "TTAF267": null,
+ "TTAF268.1": {
+  "code": "T/TAF 268.1—2025",
+  "name": "生成式人工智能个人信息保护技术要求 第1部分：总则",
+  "pub": "2025-2-10",
+  "uid": "c0938bc4-fcb5-4e4f-9839-e461f332f991",
+  "url": "https://www.taf.org.cn/StdDetail.aspx?uid=c0938bc4-fcb5-4e4f-9839-e461f332f991&stdType=TAF",
+  "status": "有效",
+  "impl": "2025-02-10"
+ },
+ "TTAF268.2": {
+  "code": "T/TAF 268.2—2025",
+  "name": "生成式人工智能个人信息保护技术要求 第2部分：隐私声明告知",
+  "pub": "2025-2-10",
+  "uid": "fcac9b50-571a-4617-9200-b3cb99099268",
+  "url": "https://www.taf.org.cn/StdDetail.aspx?uid=fcac9b50-571a-4617-9200-b3cb99099268&stdType=TAF",
+  "status": "有效",
+  "impl": "2025-02-10"
+ },
+ "TTAF268.3": {
+  "code": "T/TAF 268.3—2025",
+  "name": "生成式人工智能个人信息保护技术要求 第3部分：训练数据构建",
+  "pub": "2025-2-10",
+  "uid": "55ca9b53-0303-4815-b15b-d377c2200b97",
+  "url": "https://www.taf.org.cn/StdDetail.aspx?uid=55ca9b53-0303-4815-b15b-d377c2200b97&stdType=TAF",
+  "status": "有效",
+  "impl": "2025-02-10"
+ },
+ "TTAF268.4": {
+  "code": "T/TAF 268.4—2025",
+  "name": "生成式人工智能个人信息保护技术要求 第4部分：模型规制控制",
+  "pub": "2025-2-10",
+  "uid": "122bf228-5249-4e29-bb21-73388c92a1b9",
+  "url": "https://www.taf.org.cn/StdDetail.aspx?uid=122bf228-5249-4e29-bb21-73388c92a1b9&stdType=TAF",
+  "status": "有效",
+  "impl": "2025-02-10"
+ },
+ "TTAF268.5": {
+  "code": "T/TAF 268.5—2025",
+  "name": "生成式人工智能个人信息保护技术要求 第5部分：二次开发管理",
+  "pub": "2025-2-10",
+  "uid": "11dab1e5-0e88-427e-b7d9-9dbee5db7e03",
+  "url": "https://www.taf.org.cn/StdDetail.aspx?uid=11dab1e5-0e88-427e-b7d9-9dbee5db7e03&stdType=TAF",
+  "status": "有效",
+  "impl": "2025-02-10"
+ },
+ "TTAF268.6": {
+  "code": "T/TAF 268.6—2025",
+  "name": "生成式人工智能个人信息保护技术要求 第6部分：输出阶段管理",
+  "pub": "2025-2-10",
+  "uid": "9e0ca944-e886-4d03-966f-9c84049b5221",
+  "url": "https://www.taf.org.cn/StdDetail.aspx?uid=9e0ca944-e886-4d03-966f-9c84049b5221&stdType=TAF",
+  "status": "有效",
+  "impl": "2025-02-10"
+ },
+ "TTAF268.7": {
+  "code": "T/TAF 268.7—2025",
+  "name": "生成式人工智能个人信息保护技术要求 第7部分：个人权利响应",
+  "pub": "2025-2-10",
+  "uid": "f6f48b43-91ba-492b-a209-bde818dd15a7",
+  "url": "https://www.taf.org.cn/StdDetail.aspx?uid=f6f48b43-91ba-492b-a209-bde818dd15a7&stdType=TAF",
+  "status": "有效",
+  "impl": "2025-02-10"
+ },
+ "TTAF268.8": {
+  "code": "T/TAF 268.8—2025",
+  "name": "生成式人工智能个人信息保护技术要求 第8部分：供应链管理",
+  "pub": "2025-2-10",
+  "uid": "0bc2fcfd-8e2f-4ce7-a6c0-8217a6503731",
+  "url": "https://www.taf.org.cn/StdDetail.aspx?uid=0bc2fcfd-8e2f-4ce7-a6c0-8217a6503731&stdType=TAF",
+  "status": "有效",
+  "impl": "2025-02-10"
+ },
+ "TTAF238.6": {
+  "code": "T/TAF 238.6—2025",
+  "name": "未成年人个人信息网络保护要求 第6部分：分发平台管理",
+  "pub": "2025-2-10",
+  "uid": "9816e27b-8a65-4dc9-b2ab-1fc34abb5e76",
+  "url": "https://www.taf.org.cn/StdDetail.aspx?uid=9816e27b-8a65-4dc9-b2ab-1fc34abb5e76&stdType=TAF",
+  "status": "",
+  "impl": ""
+ },
+ "TTAF238.4": {
+  "code": "T/TAF 238.4—2025",
+  "name": "未成年人个人信息网络保护要求 第4部分：合规审计",
+  "pub": "2025-2-10",
+  "uid": "d41b019e-d587-4579-8ede-023363579405",
+  "url": "https://www.taf.org.cn/StdDetail.aspx?uid=d41b019e-d587-4579-8ede-023363579405&stdType=TAF",
+  "status": "",
+  "impl": ""
+ },
+ "TTAF238.3": {
+  "code": "T/TAF 238.3—2025",
+  "name": "未成年人个人信息网络保护要求 第3部分：个人权利响应",
+  "pub": "2025-2-10",
+  "uid": "b70696a7-6692-4a2b-8b4d-54465acd7cd9",
+  "url": "https://www.taf.org.cn/StdDetail.aspx?uid=b70696a7-6692-4a2b-8b4d-54465acd7cd9&stdType=TAF",
+  "status": "",
+  "impl": ""
+ },
+ "TTAF238.2": {
+  "code": "T/TAF 238.2—2025",
+  "name": "未成年人个人信息网络保护要求 第2部分：最小必要",
+  "pub": "2025-2-10",
+  "uid": "cbd8328e-43bf-4a49-8b4b-4c40725c8686",
+  "url": "https://www.taf.org.cn/StdDetail.aspx?uid=cbd8328e-43bf-4a49-8b4b-4c40725c8686&stdType=TAF",
+  "status": "",
+  "impl": ""
+ },
+ "TTAF238.5": {
+  "code": "T/TAF 238.5—2024",
+  "name": "未成年人个人信息网络保护要求 第5部分：应急响应保障",
+  "pub": "2024-9-2",
+  "uid": "967e3dad-4725-47e4-91ba-aae522d727da",
+  "url": "https://www.taf.org.cn/StdDetail.aspx?uid=967e3dad-4725-47e4-91ba-aae522d727da&stdType=TAF",
+  "status": "",
+  "impl": ""
+ },
+ "TTAF238.1": {
+  "code": "T/TAF 238.1—2024",
+  "name": "未成年人个人信息网络保护要求 第1部分：身份核验",
+  "pub": "2024-9-2",
+  "uid": "1cd661f0-ba4b-46c6-ba61-62ab30df17f8",
+  "url": "https://www.taf.org.cn/StdDetail.aspx?uid=1cd661f0-ba4b-46c6-ba61-62ab30df17f8&stdType=TAF",
+  "status": "",
+  "impl": ""
+ },
+ "TTAF267.9": {
+  "code": "T/TAF 267.9—2026",
+  "name": "软件开发工具包（SDK）用户权益和个人信息保护技术要求 第9部分：第三方登录类",
+  "pub": "2026-2-9",
+  "uid": "cc93d2e3-2335-458a-a453-b8f02db4080d",
+  "url": "https://www.taf.org.cn/StdDetail.aspx?uid=cc93d2e3-2335-458a-a453-b8f02db4080d&stdType=TAF",
+  "status": "",
+  "impl": ""
+ },
+ "TTAF267.8": {
+  "code": "T/TAF 267.8—2025",
+  "name": "软件开发工具包（SDK）用户权益和个人信息保护技术要求 第8部分：性能监控类",
+  "pub": "2025-11-17",
+  "uid": "5d41cae9-b03b-4412-aa6a-5f41971a2a1d",
+  "url": "https://www.taf.org.cn/StdDetail.aspx?uid=5d41cae9-b03b-4412-aa6a-5f41971a2a1d&stdType=TAF",
+  "status": "",
+  "impl": ""
+ },
+ "TTAF267.7": {
+  "code": "T/TAF 267.7—2025",
+  "name": "软件开发工具包（SDK）用户权益和个人信息保护技术要求 第7部分：游戏联运类",
+  "pub": "2025-11-17",
+  "uid": "1b8c1d15-3e9d-4d40-83af-26b4b7238490",
+  "url": "https://www.taf.org.cn/StdDetail.aspx?uid=1b8c1d15-3e9d-4d40-83af-26b4b7238490&stdType=TAF",
+  "status": "",
+  "impl": ""
+ },
+ "TTAF267.6": {
+  "code": "T/TAF 267.6—2025",
+  "name": "软件开发工具包（SDK）用户权益和个人信息保护技术要求 第6部分：实时音视频类",
+  "pub": "2025-11-17",
+  "uid": "eda583fd-0215-4a0a-9f37-04b173d3f9e6",
+  "url": "https://www.taf.org.cn/StdDetail.aspx?uid=eda583fd-0215-4a0a-9f37-04b173d3f9e6&stdType=TAF",
+  "status": "",
+  "impl": ""
+ },
+ "TTAF267.5": {
+  "code": "T/TAF 267.5—2025",
+  "name": "软件开发工具包（SDK）用户权益和个人信息保护技术要求 第5部分：统计类",
+  "pub": "2025-2-10",
+  "uid": "a002f068-1621-4cad-9ad8-d8e9d1de3342",
+  "url": "https://www.taf.org.cn/StdDetail.aspx?uid=a002f068-1621-4cad-9ad8-d8e9d1de3342&stdType=TAF",
+  "status": "",
+  "impl": ""
+ },
+ "TTAF267.4": {
+  "code": "T/TAF 267.4—2025",
+  "name": "软件开发工具包（SDK）用户权益和个人信息保护技术要求 第4部分：支付类",
+  "pub": "2025-2-10",
+  "uid": "47ef5c5e-848f-4db2-a4d7-fb7e3a935b3e",
+  "url": "https://www.taf.org.cn/StdDetail.aspx?uid=47ef5c5e-848f-4db2-a4d7-fb7e3a935b3e&stdType=TAF",
+  "status": "",
+  "impl": ""
+ },
+ "TTAF267.3": {
+  "code": "T/TAF 267.3—2025",
+  "name": "软件开发工具包（SDK）用户权益和个人信息保护技术要求 第3部分：地图类",
+  "pub": "2025-2-10",
+  "uid": "a6b69662-15c1-4014-926c-c0be943852c2",
+  "url": "https://www.taf.org.cn/StdDetail.aspx?uid=a6b69662-15c1-4014-926c-c0be943852c2&stdType=TAF",
+  "status": "",
+  "impl": ""
+ },
+ "TTAF267.2": {
+  "code": "T/TAF 267.2—2025",
+  "name": "软件开发工具包（SDK）用户权益和个人信息保护技术要求 第2部分：推送类",
+  "pub": "2025-2-10",
+  "uid": "e813f23d-88a2-4277-b466-61a02b0cae4f",
+  "url": "https://www.taf.org.cn/StdDetail.aspx?uid=e813f23d-88a2-4277-b466-61a02b0cae4f&stdType=TAF",
+  "status": "",
+  "impl": ""
+ },
+ "TTAF267.1": {
+  "code": "T/TAF 267.1—2025",
+  "name": "软件开发工具包（SDK）用户权益和个人信息保护技术要求 第1部分：广告类",
+  "pub": "2025-2-10",
+  "uid": "5e3b6ad4-b60f-4fdd-8730-0ca3dc2b1004",
+  "url": "https://www.taf.org.cn/StdDetail.aspx?uid=5e3b6ad4-b60f-4fdd-8730-0ca3dc2b1004&stdType=TAF",
+  "status": "",
+  "impl": ""
+ }
+}

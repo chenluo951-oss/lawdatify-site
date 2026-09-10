@@ -16,6 +16,7 @@
 对方看到的就只有一个没有标题、没有摘要、没有封面的秃链接。
 """
 
+import glob
 import os
 import re
 import sys
@@ -147,10 +148,20 @@ def process(rel: str, do_write: bool) -> str:
     return f"  {rel:<24} {action} ✓"
 
 
+def all_pages():
+    """主导航页 + news/reports/ 下的报告页（动态生成，数量不固定）。"""
+    extra = sorted(
+        os.path.relpath(p, HERE).replace(os.sep, "/")
+        for p in glob.glob(os.path.join(HERE, "news", "reports", "*.html"))
+    )
+    return PAGES + [p for p in extra if p not in PAGES]
+
+
 def main():
     do_write = "--check" not in sys.argv
-    print(("检查" if not do_write else "处理") + f" {len(PAGES)} 个页面（站点根 {SITE_URL}）")
-    for rel in PAGES:
+    pages = all_pages()
+    print(("检查" if not do_write else "处理") + f" {len(pages)} 个页面（站点根 {SITE_URL}）")
+    for rel in pages:
         print(process(rel, do_write))
     if not do_write:
         print("\n（--check 模式，未写入任何文件）")

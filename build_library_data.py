@@ -114,6 +114,52 @@ LAWS = [
          url="https://beian.cac.gov.cn/",
          point="算法推荐、深度合成、生成式 AI 服务提供者的备案入口与公示查询系统。",
          duty=["算法备案与公示"]),
+    # ---- 以下 2026-09-09 自本机 Documents 法规资料库挖掘补充（深链均经实测可达）----
+    dict(code="部门规章", name="寄递服务用户个人信息安全管理规定（2023 修订）", level="部门规章", topic="个人信息保护",
+         status="现行有效", pub="2022-12", impl="2023-02-13",
+         issuer="国家邮政局",
+         url="https://gz.spb.gov.cn/gzsyzglj/c105350/c105356/202503/d7da44b74799476092f84293c0537de5.shtml",
+         point="寄递企业最小必要收集、运单去标识化（虚拟安全号）、批量导出审核、境内存储、保护负责人报送；2014 版同时废止。",
+         duty=["个人信息告知同意", "最小必要", "委托与共同处理", "数据出境"],
+         note="电商寄递场景（面单信息、快递柜、代收代投）直接相关。"),
+    dict(code="规范性文件", name="国务院关于加强数字政府建设的指导意见", level="指引/指南", topic="数据安全",
+         status="现行有效", pub="2022-06-23", impl="2022-06-23",
+         issuer="国务院（国发〔2022〕14号）",
+         url="https://www.gov.cn/zhengce/zhengceku/2022-06/23/content_5697299.htm",
+         point="数字政府全景框架：数据分类分级保护、风险评估、密评与等保、重要数据出境管理、算法审核运用等安全制度要求。",
+         duty=["数据分类分级", "数据安全风险评估", "网络安全等级保护"]),
+    dict(code="TC260-PG-20244A", name="网络安全标准实践指南——敏感个人信息识别指南", level="指引/指南", topic="个人信息保护",
+         status="现行有效", pub="2024-09-14", impl="2024-09-14",
+         issuer="全国网络安全标准化技术委员会秘书处",
+         url="https://www.tc260.org.cn/front/postDetail.html?id=20240918084858",
+         point="给出敏感个人信息识别规则与常见类别示例（生物识别、医疗健康、金融账户、行踪轨迹、不满十四周岁未成年人信息等），是 PIA 与分级分类的操作标尺。",
+         duty=["敏感个人信息", "个人信息保护影响评估", "数据分类分级"]),
+    dict(code="TC260-PG-20235", name="网络安全标准实践指南——生成式人工智能服务内容标识方法", level="指引/指南", topic="算法与AI合规",
+         status="现行有效", pub="2023-08-25", impl="2023-08-25",
+         issuer="全国网络安全标准化技术委员会秘书处",
+         url="https://www.tc260.org.cn/upload/2023-08-25/1692961404507050376.pdf",
+         point="围绕文本、图片、音频、视频四类生成内容给出显式/隐式水印标识方法；已被 GB 45438-2025 强标与《人工智能生成合成内容标识办法》体系承接。",
+         duty=["内容标识"]),
+    dict(code="TC260 实践指南", name="网络安全标准实践指南——人工智能生成合成内容标识 服务提供者编码规则", level="指引/指南", topic="算法与AI合规",
+         status="现行有效", pub="2025-03-14", impl="2025-03-14",
+         issuer="全国网络安全标准化技术委员会秘书处",
+         url="https://www.tc260.org.cn/front/postDetail.html?id=20250303215504",
+         point="规定生成合成服务提供者与传播服务提供者的平台编码规则，为文件元数据隐式标识提供编码指引（网安秘字〔2025〕29号）。",
+         duty=["内容标识"]),
+    dict(code="网安秘字〔2025〕118号", name="人工智能生成合成内容标识方法 文件元数据隐式标识系列实践指南（6 项：文本/图片/音频/视频/安全防护/检测框架）", level="指引/指南", topic="算法与AI合规",
+         status="现行有效", pub="2025-08-28", impl="2025-08-28",
+         issuer="全国网络安全标准化技术委员会秘书处",
+         url="https://www.tc260.org.cn/portal/cms/work/10/303",
+         point="落实《人工智能生成合成内容标识办法》与 GB 45438-2025：明确各格式文件元数据隐式标识方法、元数据安全防护技术指南及生成合成内容检测框架。",
+         duty=["内容标识"],
+         note="发布通知及 6 项文本可在网安标委官网『实践指南』栏目检索（网安秘字〔2025〕118号）。"),
+    dict(code="粤数资管系列", name="广东省数据流通交易管理办法（试行）系列文件（含合规登记、监管规则、数据经纪人、技术安全规范 5 件）", level="指引/指南", topic="数据跨境",
+         status="征求意见中", pub="2023-04-04", impl="",
+         issuer="广东省政务服务数据管理局",
+         url="https://zfsg.gd.gov.cn/hdjlpt/yjzj/answer/mobile/27595",
+         point="数据流通交易地方治理样本：进场交易与禁止交易清单、数据资产合规登记（普通/简易程序）、数据经纪人遴选、原始数据不出域等。",
+         duty=["数据分类分级", "第三方共享"],
+         note="截至挖掘时点未见正式印发文本，按征求意见状态维护。"),
 ]
 
 # ---------------------------------------------------------------- 合规义务主干
@@ -147,16 +193,32 @@ DUTIES = [
 ]
 
 def load_std():
-    p = "/tmp/std_clean.json"
+    p = os.path.join(SRC, "std_clean.json")
     if not os.path.exists(p):
-        print("缺少 /tmp/std_clean.json，请先运行清洗脚本")
+        p = "/tmp/std_clean.json"
+    if not os.path.exists(p):
+        print("缺少 std_clean.json，请先运行清洗脚本")
         sys.exit(1)
     return json.load(open(p, encoding="utf-8"))
 
+def load_docs_std():
+    """本机 Documents 法规资料库挖掘的新增标准（openstd/行标平台/TAF 官网抓取）"""
+    p = os.path.join(SRC, "docs_items.json")
+    if not os.path.exists(p):
+        return []
+    return json.load(open(p, encoding="utf-8"))
+
+def norm_code(c):
+    c = re.sub(r"[\s—–.-]+", "", c or "").upper()
+    return c.replace("GB/T", "GBT").replace("YD/T", "YDT").replace("JR/T", "JRT").replace("T/TAF", "TTAF")
+
 def main():
     std = load_std()
+    docs = load_docs_std()
     items = []
+    have = set()
     for x in std:
+        have.add(norm_code(x["code"]))
         items.append(dict(
             code=x["code"], name=x["name"], level=x["level"], topic=x["topic"],
             status={"现行": "现行有效", "即将实施": "即将实施", "废止": "已废止"}.get(x["status"], x["status"]),
@@ -164,6 +226,16 @@ def main():
             issuer="国家市场监督管理总局、国家标准化管理委员会",
             url=x["url"], point="", duty=[], note="", kind="标准",
         ))
+    # 本机 Documents 法规资料库挖掘新增（去重后并入）
+    added = 0
+    for x in docs:
+        k = norm_code(x["code"])
+        if k in have:
+            continue
+        have.add(k)
+        items.append(x)
+        added += 1
+    print(f"  本机资料库新增标准 {added} 条（候选 {len(docs)}）")
     for l in LAWS:
         d = dict(l)
         d["kind"] = "法规" if l["level"] in ("法律", "行政法规", "部门规章") else "文件"
@@ -177,6 +249,7 @@ def main():
         "网络安全": ["网络安全等级保护", "安全事件应急处置", "网络安全漏洞管理"],
         "算法与AI合规": ["算法备案与公示", "自动化决策", "内容标识"],
         "移动应用合规": ["应用备案", "App 全生命周期管理", "权限动态申请"],
+        "产品与食安合规": ["食品安全自查", "食品留样"],
     }
     for it in items:
         if not it["duty"]:
@@ -187,9 +260,10 @@ def main():
             "title": "合规标准知识库",
             "updated": "",
             "topics": ["个人信息保护", "数据安全", "网络安全", "算法与AI合规", "移动应用合规",
-                       "数据跨境", "平台合规"],
+                       "数据跨境", "平台合规", "产品与食安合规"],
             "levels": ["法律", "行政法规", "部门规章", "规范性文件", "强制性国家标准",
-                       "推荐性国家标准", "国家标准化指导性技术文件", "指引/指南"],
+                       "推荐性国家标准", "国家标准化指导性技术文件", "行业标准", "团体标准",
+                       "指引/指南"],
             "statuses": ["现行有效", "即将实施", "已废止", "征求意见中"],
         },
         "duties": [{"name": n, "topic": t, "desc": d} for n, t, d in DUTIES],

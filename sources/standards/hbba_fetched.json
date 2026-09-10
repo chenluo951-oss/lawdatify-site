@@ -1,0 +1,47 @@
+{
+ "YD/T 3746-2020": {
+  "code": "YD/T 3746-2020",
+  "name": "车联网信息服务 用户个人信息保护要求",
+  "status": "现行",
+  "pub": "2020-08-31",
+  "impl": "2020-10-01",
+  "issuer": "工业和信息化部",
+  "url": "https://hbba.sacinfo.org.cn/stdDetail/8d76034e5e096ca04fe35b5068affde10d9ff23a117f15be2f8efac2b0e2ee79"
+ },
+ "YD/T 3751-2020": {
+  "code": "YD/T 3751-2020",
+  "name": "车联网信息服务 数据安全技术要求",
+  "status": "现行",
+  "pub": "2020-08-31",
+  "impl": "2020-10-01",
+  "issuer": "工业和信息化部",
+  "url": "https://hbba.sacinfo.org.cn/stdDetail/3d11cb523e29e574b6190366232d04f6d6d37de3f009f13ddc83a47bdc0fb805"
+ },
+ "YD/T 4981-2024": {
+  "code": "YD/T 4981-2024",
+  "name": "工业领域重要数据识别指南",
+  "status": "现行",
+  "pub": "2024-12-10",
+  "impl": "2025-04-01",
+  "issuer": "工业和信息化部",
+  "url": "https://hbba.sacinfo.org.cn/stdDetail/05ea7f790c0d7d15c9993db7679082d156d25bd4835f22fdf7d229979a6a3d67"
+ },
+ "JR/T 0158-2018": {
+  "code": "JR/T 0158-2018",
+  "name": "证券期货业数据分类分级指引",
+  "status": "现行",
+  "pub": "2018-09-27",
+  "impl": "2018-09-27",
+  "issuer": "中国人民银行",
+  "url": "https://hbba.sacinfo.org.cn/stdDetail/33ae941df25f4f23b503ecf87adc23d3"
+ },
+ "JR/T 0171-2020": {
+  "code": "JR/T 0171-2020",
+  "name": "个人金融信息保护技术规范",
+  "status": "现行",
+  "pub": "2020-02-13",
+  "impl": "2020-02-13",
+  "issuer": "中国人民银行",
+  "url": "https://hbba.sacinfo.org.cn/stdDetail/69bfa34620e1e22425450fa511bc155a386fbbb4caee58ed0687cf50782fa3d8"
+ }
+}

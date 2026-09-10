@@ -1,0 +1,223 @@
+{
+ "updated": "2026-09-09",
+ "items": [
+  {
+   "name": "网络安全技术 人工智能应用安全分类分级方法",
+   "kind": "国家标准草案",
+   "issuer": "全国网络安全标准化技术委员会（TC260）",
+   "start": "2026-07-15",
+   "end": "2026-09-13",
+   "days_left": 4,
+   "status": "征求意见中",
+   "url": "https://www.tc260.org.cn/tc260/bzzqyj/bzkdetail.shtml?id=80&type=gjbzjh",
+   "note": "关于国家标准《网络安全技术 人工智能应用安全分类分级方法》征求意见稿征求意见的通知"
+  },
+  {
+   "name": "网络安全技术 SM9标识密码算法 第2部分：算法",
+   "kind": "国家标准草案",
+   "issuer": "全国网络安全标准化技术委员会（TC260）",
+   "start": "2026-07-15",
+   "end": "2026-09-13",
+   "days_left": 4,
+   "status": "征求意见中",
+   "url": "https://www.tc260.org.cn/tc260/bzzqyj/bzkdetail.shtml?id=81&type=gjbzjh",
+   "note": "关于国家标准《网络安全技术 SM9标识密码算法 第2部分：算法》征求意见稿征求意见的通知"
+  },
+  {
+   "name": "信息技术 安全技术 匿名实体鉴别 第4部分：基于弱秘密的机制",
+   "kind": "国家标准草案",
+   "issuer": "全国网络安全标准化技术委员会（TC260）",
+   "start": "2026-07-15",
+   "end": "2026-09-13",
+   "days_left": 4,
+   "status": "征求意见中",
+   "url": "https://www.tc260.org.cn/tc260/bzzqyj/bzkdetail.shtml?id=82&type=gjbzjh",
+   "note": "关于国家标准《信息技术 安全技术 匿名实体鉴别 第4部分：基于弱秘密的机制》征求意见稿征求意见的通知"
+  },
+  {
+   "name": "数据安全技术 数据提供、委托处理、共同处理实施指南",
+   "kind": "国家标准草案",
+   "issuer": "全国网络安全标准化技术委员会（TC260）",
+   "start": "2026-07-15",
+   "end": "2026-09-13",
+   "days_left": 4,
+   "status": "征求意见中",
+   "url": "https://www.tc260.org.cn/tc260/bzzqyj/bzkdetail.shtml?id=83&type=gjbzjh",
+   "note": "关于国家标准《数据安全技术 数据提供、委托处理、共同处理实施指南》征求意见稿征求意见的通知"
+  },
+  {
+   "name": "网络安全技术 消费类智能联网设备分级要求",
+   "kind": "国家标准草案",
+   "issuer": "全国网络安全标准化技术委员会（TC260）",
+   "start": "2026-08-04",
+   "end": "2026-10-03",
+   "days_left": 24,
+   "status": "征求意见中",
+   "url": "https://www.tc260.org.cn/tc260/bzzqyj/bzkdetail.shtml?id=75&type=gjbzjh",
+   "note": "关于国家标准《网络安全技术 消费类智能联网设备分级要求》征求意见稿征求意见的通知"
+  },
+  {
+   "name": "网络安全技术 移动终端安全管理平台技术要求",
+   "kind": "国家标准草案",
+   "issuer": "全国网络安全标准化技术委员会（TC260）",
+   "start": "2026-08-04",
+   "end": "2026-10-03",
+   "days_left": 24,
+   "status": "征求意见中",
+   "url": "https://www.tc260.org.cn/tc260/bzzqyj/bzkdetail.shtml?id=76&type=gjbzjh",
+   "note": "关于国家标准《网络安全技术 移动终端安全管理平台技术要求》征求意见稿征求意见的通知"
+  },
+  {
+   "name": "网络安全技术 具有中央处理器的IC卡嵌入式软件安全规范",
+   "kind": "国家标准草案",
+   "issuer": "全国网络安全标准化技术委员会（TC260）",
+   "start": "2026-08-04",
+   "end": "2026-10-03",
+   "days_left": 24,
+   "status": "征求意见中",
+   "url": "https://www.tc260.org.cn/tc260/bzzqyj/bzkdetail.shtml?id=77&type=gjbzjh",
+   "note": "关于国家标准《网络安全技术 具有中央处理器的IC卡嵌入式软件安全规范》征求意见稿征求意见的通知"
+  },
+  {
+   "name": "网络安全技术 政务信息系统网络安全基本要求",
+   "kind": "国家标准草案",
+   "issuer": "全国网络安全标准化技术委员会（TC260）",
+   "start": "2026-08-04",
+   "end": "2026-10-03",
+   "days_left": 24,
+   "status": "征求意见中",
+   "url": "https://www.tc260.org.cn/tc260/bzzqyj/bzkdetail.shtml?id=78&type=gjbzjh",
+   "note": "关于国家标准《网络安全技术 政务信息系统网络安全基本要求》征求意见稿征求意见的通知"
+  },
+  {
+   "name": "网络安全技术 工业控制系统专用防火墙技术要求",
+   "kind": "国家标准草案",
+   "issuer": "全国网络安全标准化技术委员会（TC260）",
+   "start": "2026-08-04",
+   "end": "2026-10-03",
+   "days_left": 24,
+   "status": "征求意见中",
+   "url": "https://www.tc260.org.cn/tc260/bzzqyj/bzkdetail.shtml?id=79&type=gjbzjh",
+   "note": "关于国家标准《网络安全技术 工业控制系统专用防火墙技术规范》征求意见稿征求意见的通知"
+  },
+  {
+   "name": "网络安全技术 工业控制网络监测安全技术要求及测试评价方法",
+   "kind": "国家标准草案",
+   "issuer": "全国网络安全标准化技术委员会（TC260）",
+   "start": "2026-08-26",
+   "end": "2026-10-25",
+   "days_left": 46,
+   "status": "征求意见中",
+   "url": "https://www.tc260.org.cn/tc260/bzzqyj/bzkdetail.shtml?id=68&type=gjbzjh",
+   "note": "关于国家标准《网络安全技术 工业控制网络监测安全技术要求及测试评价方法》征求意见稿征求意见的通知"
+  },
+  {
+   "name": "网络安全技术 工业控制系统安全管理基本要求",
+   "kind": "国家标准草案",
+   "issuer": "全国网络安全标准化技术委员会（TC260）",
+   "start": "2026-08-26",
+   "end": "2026-10-25",
+   "days_left": 46,
+   "status": "征求意见中",
+   "url": "https://www.tc260.org.cn/tc260/bzzqyj/bzkdetail.shtml?id=69&type=gjbzjh",
+   "note": "关于国家标准《网络安全技术 工业控制系统安全管理基本要求》征求意见稿征求意见的通知"
+  },
+  {
+   "name": "网络安全技术 人工智能安全能力成熟度评估方法",
+   "kind": "国家标准草案",
+   "issuer": "全国网络安全标准化技术委员会（TC260）",
+   "start": "2026-08-26",
+   "end": "2026-10-25",
+   "days_left": 46,
+   "status": "征求意见中",
+   "url": "https://www.tc260.org.cn/tc260/bzzqyj/bzkdetail.shtml?id=70&type=gjbzjh",
+   "note": "关于国家标准《网络安全技术 人工智能安全能力成熟度评估方法》征求意见稿征求意见的通知"
+  },
+  {
+   "name": "网络安全技术 网络安全事件管理 第4部分：协同",
+   "kind": "国家标准草案",
+   "issuer": "全国网络安全标准化技术委员会（TC260）",
+   "start": "2026-08-26",
+   "end": "2026-10-25",
+   "days_left": 46,
+   "status": "征求意见中",
+   "url": "https://www.tc260.org.cn/tc260/bzzqyj/bzkdetail.shtml?id=71&type=gjbzjh",
+   "note": "关于国家标准《网络安全技术 网络安全事件管理 第4部分：协同》征求意见稿征求意见的通知"
+  },
+  {
+   "name": "网络安全技术 桌面云安全技术要求",
+   "kind": "国家标准草案",
+   "issuer": "全国网络安全标准化技术委员会（TC260）",
+   "start": "2026-08-26",
+   "end": "2026-10-25",
+   "days_left": 46,
+   "status": "征求意见中",
+   "url": "https://www.tc260.org.cn/tc260/bzzqyj/bzkdetail.shtml?id=72&type=gjbzjh",
+   "note": "关于国家标准《网络安全技术 桌面云安全技术要求》征求意见稿征求意见的通知"
+  },
+  {
+   "name": "网络安全技术 移动通信信号屏蔽器技术规范",
+   "kind": "国家标准草案",
+   "issuer": "全国网络安全标准化技术委员会（TC260）",
+   "start": "2026-08-26",
+   "end": "2026-10-25",
+   "days_left": 46,
+   "status": "征求意见中",
+   "url": "https://www.tc260.org.cn/tc260/bzzqyj/bzkdetail.shtml?id=73&type=gjbzjh",
+   "note": "关于国家标准《网络安全技术 移动通信信号屏蔽器技术规范》征求意见稿征求意见的通知"
+  },
+  {
+   "name": "数据安全技术 数据安全能力成熟度模型",
+   "kind": "国家标准草案",
+   "issuer": "全国网络安全标准化技术委员会（TC260）",
+   "start": "2026-08-26",
+   "end": "2026-10-25",
+   "days_left": 46,
+   "status": "征求意见中",
+   "url": "https://www.tc260.org.cn/tc260/bzzqyj/bzkdetail.shtml?id=74&type=gjbzjh",
+   "note": "关于国家标准《数据安全技术 数据安全能力成熟度模型》征求意见稿征求意见的通知"
+  },
+  {
+   "name": "互联网应用程序个人信息收集使用规定（征求意见稿）",
+   "kind": "部门规章草案",
+   "issuer": "国家互联网信息办公室",
+   "start": "2026-01-10",
+   "end": "2026-02-09",
+   "status": "征求意见已结束，尚未正式发布",
+   "url": "https://www.cac.gov.cn/2026-01/10/c_1769603446094128.htm",
+   "note": "规范 App/SDK/分发平台/智能终端的个人信息收集使用；要求权限仅在使用时调用、禁止超范围与超频度调用、15 个工作日内完成注销。对朴朴 App 与 SDK 治理直接相关。"
+  },
+  {
+   "name": "移动互联网应用程序个人信息保护管理暂行规定（征求意见稿）",
+   "kind": "部门规章草案",
+   "issuer": "工业和信息化部、国家网信办、公安部、市场监管总局",
+   "start": "2021-04-26",
+   "end": "2021-05-26",
+   "status": "长期悬置，至今未正式发布",
+   "url": "https://www.cac.gov.cn/2021-04/26/c_1621018189707703.htm",
+   "note": "确立“知情同意”“最小必要”两项原则，划分 App 开发运营者、分发平台、第三方服务提供者、终端生产企业、网络接入服务提供者五类主体责任。虽未生效，但监管执法长期参照其口径。"
+  },
+  {
+   "name": "中华人民共和国反网络暴力法（征求意见稿）",
+   "kind": "法规/规章草案",
+   "issuer": "国家互联网信息办公室",
+   "start": "",
+   "end": "",
+   "days_left": null,
+   "status": "已结束征求意见",
+   "url": "https://www.cac.gov.cn/2026-07/29/c_1787072711938509.htm",
+   "note": "国家互联网信息办公室关于《中华人民共和国反网络暴力法（征求意见稿）》公开征求意见的通知"
+  },
+  {
+   "name": "互联网信息服务管理办法（修订草案征求意见稿）",
+   "kind": "法规/规章草案",
+   "issuer": "国家互联网信息办公室",
+   "start": "",
+   "end": "",
+   "days_left": null,
+   "status": "已结束征求意见",
+   "url": "https://www.cac.gov.cn/2026-07/03/c_1784822399677167.htm",
+   "note": "国家互联网信息办公室关于《互联网信息服务管理办法（修订草案征求意见稿）》再次公开征求意见的通知"
+  }
+ ]
+}

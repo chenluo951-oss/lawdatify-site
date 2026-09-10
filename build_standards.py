@@ -12,6 +12,7 @@ import os, re, json, html, datetime
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 SRC = os.path.join(HERE, "sources", "standards", "library.json")
+DRAFTS = os.path.join(HERE, "sources", "library", "drafts.json")
 
 
 def esc(s):
@@ -70,19 +71,64 @@ def item_card(it, idx):
     meta = " · ".join(dates)
     note = f'<div class="rd-prog"><b>要点</b>{esc(it["point"])}</div>' if it.get("point") else ""
     extra = f'<div class="rd-prog"><b>注</b>{esc(it["note"])}</div>' if it.get("note") else ""
+    # 标题：有官方深链才做成链接
+    title = esc(it["name"])
+    if it.get("url"):
+        title = (f'<a href="{esc(it["url"])}" target="_blank" rel="noopener">{title}</a>'
+                 f'<span class="lb-ext" title="打开发布机构官网原文">↗</span>')
+    elif it.get("local"):
+        title = f'{title}<span class="lb-local" title="本机存有原文，可离线查阅">本机原文</span>'
+    # 章节目录（可阅读：直接看到标准的结构）
+    toc = it.get("toc") or []
+    toc_html = ""
+    if len(toc) >= 3:
+        lis = "".join(f"<li>{esc(t)}</li>" for t in toc[:40])
+        toc_html = (f'<details class="lb-toc"><summary>章节目录'
+                    f'<i>{len(toc)} 节</i></summary><ol class="lb-toclist">{lis}</ol></details>')
+    metaparts = [p for p in [it.get("code", ""), it.get("issuer", ""), meta] if p]
     return f"""<div class="rd-item lb-item" data-topic="{esc(it.get('topic',''))}" \
 data-level="{esc(lv)}" data-status="{esc(st)}" data-code="{esc(it.get('code',''))}" \
-data-text="{esc((it.get('name','')+' '+it.get('code','')+' '+it.get('issuer','')).lower())}">
+data-text="{esc((it.get('name','')+' '+it.get('code','')+' '+it.get('issuer','')+' '+' '.join(toc)).lower())}">
   <div class="rd-body">
     <div class="rd-row">
       <span class="rd-badge {STATUS_CLS.get(st,'b-ghost')}">{esc(st)}</span>
       <span class="rd-badge {LEVEL_CLS.get(lv,'b-ghost')}">{esc(lv)}</span>
       <span class="rd-tag tg-region">{esc(it.get('topic',''))}</span>
     </div>
-    <h3><a href="{esc(it['url'])}" target="_blank" rel="noopener">{esc(it['name'])}</a></h3>
-    <div class="rd-meta">{esc(it.get('code',''))} · {esc(it.get('issuer',''))}{(' · ' + esc(meta)) if meta else ''}</div>
-    {note}{extra}
+    <h3>{title}</h3>
+    <div class="rd-meta">{esc(' · '.join(metaparts))}</div>
+    {note}{extra}{toc_html}
     <div class="rd-targets">{tags}</div>
+  </div>
+</div>"""
+
+
+def draft_card(d):
+    """草案跟踪卡片：倒计时 + 状态 + 官方征求意见深链"""
+    days = d.get("days_left")
+    if days is not None and days >= 0:
+        cnt = f'<span class="lb-days hot">剩 {days} 天</span>'
+    elif days is not None:
+        cnt = f'<span class="lb-days">已截止</span>'
+    else:
+        cnt = ""
+    st = d.get("status", "")
+    cls = "b-red" if ("未正式发布" in st or "悬置" in st) else ("b-amber" if "中" in st else "b-ghost")
+    span = ""
+    if d.get("start") and d.get("end"):
+        span = f'<span class="lb-when">{esc(d["start"])} → {esc(d["end"])}</span>'
+    note = f'<div class="rd-prog"><b>要点</b>{esc(d["note"])}</div>' if d.get("note") else ""
+    return f"""<div class="rd-item lb-item lb-draft" data-text="{esc((d.get('name','')+' '+d.get('issuer','')+' '+d.get('note','')).lower())}">
+  <div class="rd-body">
+    <div class="rd-row">
+      <span class="rd-badge {cls}">{esc(st)}</span>
+      <span class="rd-badge b-ghost">{esc(d.get('kind',''))}</span>
+      {cnt}
+    </div>
+    <h3><a href="{esc(d['url'])}" target="_blank" rel="noopener">{esc(d['name'])}</a>
+      <span class="lb-ext" title="打开官方征求意见通知">↗</span></h3>
+    <div class="rd-meta">{esc(d.get('issuer',''))}{(' · ' + span) if span else ''}</div>
+    {note}
   </div>
 </div>"""
 
@@ -121,13 +167,24 @@ def main():
 
     n_std = sum(1 for x in items if x.get("kind") == "标准")
     n_law = len(items) - n_std
+    n_local = sum(1 for x in items if x.get("local"))
     topics = data["meta"]["topics"]
+
+    # 草案跟踪
+    drafts = []
+    if os.path.exists(DRAFTS):
+        try:
+            drafts = json.load(open(DRAFTS, encoding="utf-8"))["items"]
+        except Exception:
+            drafts = []
 
     # ---------------- 统计条
     stats = [(k, v) for k, v in [
         ("收录条目", len(items)),
-        ("国家标准", n_std),
+        ("标准", n_std),
         ("法律法规", n_law),
+        ("本机原文", n_local),
+        ("在途草案", f"{len(drafts)} 项"),
         ("合规义务", f"{len(duties)} 项"),
     ]]
     stat_html = ('<div class="rd-stats">' + "".join(
@@ -190,11 +247,17 @@ def main():
     duty_html = "\n".join(
         d for d in (duty_block(x, items, i) for i, x in enumerate(duties)) if d)
 
+    # ---------------- 草案跟踪视图
+    draft_html = "\n".join(draft_card(d) for d in drafts)
+    if not draft_html:
+        draft_html = '<p class="rd-note">暂无在途草案记录。</p>'
+
     body = "\n".join([
         stat_html,
         board,
         '<div class="lb-tabs">'
         '<button class="rd-fchip on" data-tab="lib">资料库</button>'
+        '<button class="rd-fchip" data-tab="draft">草案跟踪<i class="lb-dot"></i></button>'
         '<button class="rd-fchip" data-tab="duty">合规义务主干</button>'
         "</div>",
         '<section class="lb-pane" id="pane-lib">',
@@ -203,6 +266,12 @@ def main():
         bar("level", level_opts, "层级"),
         bar("status", stat_opts, "时效性"),
         f'<div class="rd-list" id="lbList">{cards}</div>',
+        "</section>",
+        '<section class="lb-pane" id="pane-draft" hidden>',
+        '<p class="rd-note">跟踪<b>尚未生效</b>的立法与标准制定动态：国家标准征求意见、部门规章草案、'
+        '以及长期悬置未发布的规范性文件。数据来自全国网络安全标准化技术委员会与中央网信办官网，'
+        '截止日期与剩余天数按页面打开当天计算。<b>草案不产生合规义务</b>，但往往预示监管方向。</p>',
+        f'<div class="rd-list" id="draftList">{draft_html}</div>',
         "</section>",
         '<section class="lb-pane" id="pane-duty" hidden>',
         '<p class="rd-note">以<b>合规义务</b>为主线反查依据：每一项义务下列出可直接引用的法律法规与标准。'
@@ -251,13 +320,14 @@ LIB_JS = """
 <script>
 (function(){
   var tabs=[].slice.call(document.querySelectorAll('.lb-tabs .rd-fchip'));
-  var lib=document.getElementById('pane-lib'), duty=document.getElementById('pane-duty');
+  var panes=[].slice.call(document.querySelectorAll('.lb-pane'));
   tabs.forEach(function(b){
     b.addEventListener('click',function(){
       tabs.forEach(function(x){x.classList.remove('on');});
       b.classList.add('on');
-      var isLib=b.getAttribute('data-tab')==='lib';
-      lib.hidden=!isLib; duty.hidden=isLib;
+      var want='pane-'+b.getAttribute('data-tab');
+      panes.forEach(function(p){ p.hidden = (p.id!==want); });
+      window.scrollTo({top:0,behavior:'smooth'});
     });
   });
 

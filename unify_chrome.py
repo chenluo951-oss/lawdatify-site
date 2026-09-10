@@ -13,6 +13,7 @@
     python3 unify_chrome.py --check    # 只报告差异
 """
 
+import glob
 import os
 import re
 import sys
@@ -138,9 +139,18 @@ def refresh_updated(stamp: str, do_write=True):
     return n
 
 
+def all_pages():
+    """主导航页 + news/reports/ 下的报告页（动态生成，数量不固定）。"""
+    extra = sorted(
+        os.path.relpath(p, HERE).replace(os.sep, "/")
+        for p in glob.glob(os.path.join(HERE, "news", "reports", "*.html"))
+    )
+    return PAGES + [p for p in extra if p not in PAGES]
+
+
 def main():
     do_write = "--check" not in sys.argv
-    for rel in PAGES:
+    for rel in all_pages():
         print(process(rel, do_write))
 
 

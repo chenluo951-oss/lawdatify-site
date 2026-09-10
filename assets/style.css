@@ -644,3 +644,29 @@ footer .inner{flex-direction:column;align-items:flex-start;gap:10px}
 .lb-entry b{font-size:17px}
 .lb-entry span{font-size:13.2px;line-height:1.8}
 .lb-entry .more{margin-top:4px;font-size:13px;color:var(--brand);font-weight:600}
+
+/* ===== 知识库 v3：章节阅读 / 本机原文 / 草案跟踪 ===== */
+.lb-ext{display:inline-block;margin-left:6px;font-size:12px;color:var(--faint);
+  vertical-align:2px;transition:color .15s}
+.lb-item:hover .lb-ext{color:var(--brand)}
+.lb-local{display:inline-block;margin-left:8px;padding:2px 8px;border-radius:999px;
+  background:#eef2f7;color:var(--muted);font-size:11px;font-weight:600;vertical-align:3px;
+  border:1px solid var(--line)}
+.lb-toc{margin:9px 0 0;border-top:1px dashed var(--line);padding-top:9px}
+.lb-toc>summary{cursor:pointer;font-size:12.5px;color:var(--brand);font-weight:600;
+  list-style:none;display:flex;align-items:center;gap:7px}
+.lb-toc>summary::-webkit-details-marker{display:none}
+.lb-toc>summary::before{content:"＋";font-size:12px;color:var(--faint)}
+.lb-toc[open]>summary::before{content:"－"}
+.lb-toc>summary i{font-style:normal;font-weight:500;color:var(--faint);font-size:11.5px}
+.lb-toclist{margin:9px 0 0;padding-left:19px;columns:2;column-gap:26px}
+.lb-toclist li{font-size:12.5px;color:var(--ink-2);line-height:1.75;break-inside:avoid}
+@media(max-width:720px){.lb-toclist{columns:1}}
+/* 草案跟踪 */
+.lb-draft{border-left:3px solid var(--warn)}
+.lb-days{margin-left:auto;padding:2px 10px;border-radius:999px;background:#fdf1e7;
+  color:var(--warn);font-size:11.5px;font-weight:700;white-space:nowrap}
+.lb-days.hot{background:#fde8e6;color:#c0392b}
+.lb-tabs .rd-fchip i.lb-dot{display:inline-block;width:6px;height:6px;border-radius:50%;
+  background:var(--warn);margin-left:6px;vertical-align:middle;font-style:normal}
+.lb-when{font-size:12px;color:var(--faint);margin-right:8px;font-variant-numeric:tabular-nums}
