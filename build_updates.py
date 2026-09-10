@@ -433,8 +433,8 @@ def main():
 </div>
 
 <footer><div class="inner">
-  <div class="foot-brand">law<span>datify</span> · 即时零售合规主站</div>
-  <div class="foot-desc">由法务团队维护 · 内容基于监管机构官网公开信息整理，逐条附原文深链</div>
+  <div class="foot-brand">合规<span>无终点</span> · 法规标准与监管动态库</div>
+  <div class="foot-desc">由个人独立维护 · 内容基于监管机构官网公开信息整理，逐条附原文深链</div>
 </div></footer>
 </body>
 </html>

@@ -81,8 +81,8 @@ def build_footer(rel: str) -> str:
     p = "../" * rel.count("/")
     return (
         '<footer><div class="inner">\n'
-        '  <div class="foot-brand">合规<span>无终点</span> · 即时零售合规知识库</div>\n'
-        '  <div class="foot-desc">由法务团队维护 · 内容基于监管机构官网公开信息整理，逐条附原文深链</div>\n'
+        '  <div class="foot-brand">合规<span>无终点</span> · 法规标准与监管动态库</div>\n'
+        '  <div class="foot-desc">由个人独立维护 · 内容基于监管机构官网公开信息整理，逐条附原文深链</div>\n'
         '  <div class="foot-links">\n'
         f'    <a href="{p}updates/index.html">今日更新</a>·\n'
         f'    <a href="{p}news/index.html">合规资讯</a>·\n'
@@ -99,7 +99,9 @@ def build_footer(rel: str) -> str:
     )
 
 
-NAV_RE = re.compile(r'<nav class="topnav">.*?</nav>', re.S)
+# nav 标签可能带任意属性（CMS 导出的 data-page-node-id 等），必须 [^>]*
+# （about.html 就是这种：品牌名曾残留在 CMS 导出结构里，正则漏匹配 → 导航不统一）
+NAV_RE = re.compile(r'<nav class="topnav"[^>]*>.*?</nav>', re.S)
 # footer 标签可能带任意属性（CMS 导出的 data-page-node-id 等），必须 [^>]*
 # 且要处理「页面里出现多个 footer」的情况（只保留一个，其余删除）
 FOOT_RE = re.compile(r'<footer[^>]*>.*?</footer>', re.S)

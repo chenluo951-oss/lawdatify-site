@@ -82,7 +82,7 @@ def main():
 <div class="pagehead"><div class="inner">
   <div class="crumb"><a href="../index.html">首页</a> / 法律分析</div>
   <h1>法律分析</h1>
-  <p>围绕即时零售业务场景的专题研究：结论先行、逐条附官方原文深链、配产品级合规图示，可直接用于内部沟通与落地改造。</p>
+  <p>围绕合规实务场景的专题研究：结论先行、逐条附官方原文深链、配产品级合规图示，可直接用于内部沟通与落地改造。</p>
 </div></div>
 
 <div class="wrap">
@@ -100,7 +100,7 @@ def main():
 
 <footer><div class="inner">
   <div class="foot-brand">law<span>datify</span> · 合规无终点</div>
-  <div class="foot-desc">由法务团队维护 · 内容基于监管机构官网公开信息整理，逐条附原文深链</div>
+  <div class="foot-desc">由个人独立维护 · 内容基于监管机构官网公开信息整理，逐条附原文深链</div>
 </div></footer>
 </body>
 </html>
