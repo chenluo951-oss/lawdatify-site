@@ -414,9 +414,15 @@ def page_map(g):
       }});
     }});
   }}
+  function resetMount(cls){{
+    var old=document.getElementById('geoMap');
+    var neo=old.cloneNode(false); neo.className=cls;
+    old.parentNode.replaceChild(neo,old);
+  }}
   function enterCN(){{
     if(mode==='cn') return;
     mode='cn';
+    resetMount('geo-frame');
     cnBar.classList.add('show');
     cnPanel.classList.add('show');
     ChinaView.render({{
@@ -434,8 +440,11 @@ def page_map(g):
     mode='world';
     cnBar.classList.remove('show');
     cnPanel.classList.remove('show');
+    resetMount('geo-frame');
     RadarMap.render(opt);
     show(null);
+    var g=document.getElementById('geoMap');
+    if(g) g.scrollIntoView({{behavior:'smooth',block:'center'}});
   }}
   document.getElementById('cnBack').addEventListener('click',exitCN);
   var opt={{
@@ -444,7 +453,16 @@ def page_map(g):
     tipExtra:window.GEO_META.tips,
     onSelect:function(code){{ if(code==='CN'){{ enterCN(); }} else {{ show(code); }} }}
   }};
-  RadarMap.render(opt);
+  /* 支持从首页等处带 #CN 直达省级视图；其他辖区码直接筛选对应条目 */
+  var hash=(location.hash||'').replace('#','').toUpperCase();
+  if(hash==='CN'){{ enterCN(); }}
+  else {{
+    RadarMap.render(opt);
+    if(hash) show(hash);
+  }}
+  window.addEventListener('hashchange',function(){{
+    if((location.hash||'').replace('#','').toUpperCase()==='CN') enterCN();
+  }});
 }})();
 </script>""",
     ])

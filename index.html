@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>合规终点站 · 即时零售合规知识库</title>
 <meta name="description" content="面向即时零售的合规主站：129 项合规义务逐条配法律标准条款原文、行业标杆做法与可套用文案；监管动态与法规更新逐条附官方深链。">
-<link rel="stylesheet" href="assets/style.css?v=1789031589">
+<link rel="stylesheet" href="assets/style.css?v=1789035140">
 <!-- SOCIAL:START -->
 <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
 <link rel="apple-touch-icon" href="assets/favicon.svg">
@@ -122,22 +122,116 @@
 <!-- FEED:END -->
 
   <div class="section-title"><span class="bar"></span>全球监管态势</div>
-  <p class="lead">颜色深浅为各辖区已收录动态密度。点击辖区直达 <a href="radar/map.html">全球监管地图</a> 下钻浏览。</p>
+  <p class="lead">颜色深浅为各辖区已收录动态密度。<b>点击中国可就地展开省市级监管态势</b>，点击其他辖区进入 <a href="radar/map.html">全球监管地图</a> 查看条目。</p>
 <!-- GEOMETA:START -->
 <script>window.GEO_META={counts:{"CN": 6, "EU": 2, "US": 2, "IN": 1, "JP": 1, "KR": 1, "BR": 1, "SG": 1, "VN": 1},names:{"CN": "中国", "JP": "日本", "KR": "韩国", "IN": "印度", "SG": "新加坡", "VN": "越南", "AU": "澳大利亚", "EU": "欧盟", "GB": "英国", "US": "美国", "CA": "加拿大", "BR": "巴西", "AE": "阿联酋", "SA": "沙特", "ZA": "南非"},tips:{"CN": "最近 2026-09-07", "EU": "最近 2026-08-02", "US": "最近 2026-09-01", "IN": "最近 2025-11-13", "JP": "最近 2026-07-17", "KR": "最近 2026-09-11", "BR": "最近 2026-09-17", "SG": "最近 2026-06-01", "VN": "最近 2026-09-01"}};</script>
 <!-- GEOMETA:END -->
 <div class="geo-frame geo-home" id="geoMap"></div>
+<div class="cn-bar" id="cnBar">
+  <button class="cn-back" id="cnBack" type="button">← 返回全球</button>
+  <span class="cn-mode">当前视图：<b>中国 · 省市级监管态势</b>，点击省份查看地方监管动态</span>
+  <a class="cn-more" href="radar/map.html#CN">在监管雷达中查看 →</a>
+</div>
+<div class="cn-panel" id="cnPanel"></div>
 <script src="assets/radar-map.js"></script>
+<script src="assets/china-map.js"></script>
 <script>
 (function(){
-  var opt={
+  var mount=document.getElementById('geoMap'),
+      bar=document.getElementById('cnBar'),
+      panel=document.getElementById('cnPanel'),
+      mode='world', CN=null;
+
+  function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+
+  /* 每次渲染前整体换掉容器：避免反复切换时旧的点击监听叠加 */
+  function resetMount(cls){
+    var old=document.getElementById('geoMap');
+    var neo=old.cloneNode(false);
+    neo.className=cls;
+    old.parentNode.replaceChild(neo,old);
+    mount=neo;
+    return neo;
+  }
+
+  var worldOpt={
     mount:'#geoMap', geoUrl:'sources/radar/geo.json',
     counts:window.GEO_META.counts, names:window.GEO_META.names,
     tipExtra:window.GEO_META.tips,
-    onSelect:function(code){ if(code) location.href='radar/map.html#'+code; }
+    onSelect:function(code){
+      if(code==='CN'){ enterCN(); }
+      else if(code){ location.href='radar/map.html#'+code; }
+    }
   };
-  if(window.RadarMap) RadarMap.render(opt);
-  else document.getElementById('geoMap').innerHTML='';
+
+  function renderPanel(name){
+    if(!CN) return;
+    var provs=CN.provinces||[], total=0, cards='', blocks='';
+    provs.forEach(function(p){
+      if(!p.name||p.name==='南海诸岛') return;
+      var its=p.items||[]; total+=its.length;
+      if(!its.length) return;
+      var rows=its.map(function(it){
+        return '<div class="rd-item rd-gitem"><div class="rd-body"><div class="rd-row">'
+          +'<span class="rd-badge b-blue">'+esc(it.type||'监管动态')+'</span>'
+          +'<span class="rd-tags"><span class="rd-tag">'+esc(it.domain||'')+'</span></span>'
+          +'<span class="rd-count past">'+esc(it.date||'')+'</span></div>'
+          +'<h3><a href="'+esc(it.url)+'" target="_blank" rel="noopener">'+esc(it.title)+'</a>'
+          +'<span class="rd-src src-off">官方原文</span></h3>'
+          +'<p>'+esc(it.note||'')+'</p></div></div>';
+      }).join('');
+      cards+='<div class="cn-card" data-prov="'+esc(p.name)+'"><div class="cn-n">'+its.length
+        +'<em>条动态</em></div><b>'+esc(p.short)+'</b><span>'+esc(its[0]?its[0].title:'')+'</span></div>';
+      blocks+='<div class="rd-gblock cn-block" data-prov="'+esc(p.name)+'" style="display:none">'
+        +'<h4 class="rd-gh">'+esc(p.name)+'<span>'+its.length+'</span></h4>'+rows+'</div>';
+    });
+    var nprov=provs.filter(function(p){ return (p.items||[]).length; }).length;
+    panel.innerHTML='<p class="rd-note">已收录 <b>'+total+'</b> 条省级地方监管动态，覆盖 '+nprov
+      +' 个省级行政区。全国性法律法规与部门规章适用于全部省份，'
+      +'此处仅列<b>省级市场监管部门的属地监管动作</b>。</p>'
+      +'<div class="cn-grid">'+cards+'</div>'+blocks;
+    Array.prototype.forEach.call(panel.querySelectorAll('.cn-card'),function(c){
+      c.addEventListener('click',function(){
+        var on=c.getAttribute('data-prov');
+        Array.prototype.forEach.call(panel.querySelectorAll('.cn-block'),function(b){ b.style.display='none'; });
+        var blk=panel.querySelector('.cn-block[data-prov="'+on+'"]');
+        if(blk){ blk.style.display=''; blk.scrollIntoView({behavior:'smooth',block:'nearest'}); }
+      });
+    });
+    if(name){
+      Array.prototype.forEach.call(panel.querySelectorAll('.cn-block'),function(b){ b.style.display='none'; });
+      var blk=panel.querySelector('.cn-block[data-prov="'+name+'"]');
+      if(blk) blk.style.display='';
+    }
+  }
+
+  function enterCN(){
+    if(mode==='cn') return;
+    mode='cn';
+    resetMount('geo-frame geo-home cn-mode');
+    bar.classList.add('show');
+    panel.classList.add('show');
+    if(window.ChinaView) ChinaView.render({
+      mount:'#geoMap', dataUrl:'sources/radar/china.json',
+      onProvClick:function(name,n){ renderPanel(n>0?name:null); },
+      onReady:function(d){ CN=d; renderPanel(null); }
+    });
+  }
+
+  function exitCN(){
+    if(mode==='world') return;
+    mode='world';
+    bar.classList.remove('show');
+    panel.classList.remove('show');
+    panel.innerHTML='';
+    resetMount('geo-frame geo-home');
+    if(window.RadarMap) RadarMap.render(worldOpt);
+    mount.scrollIntoView({behavior:'smooth',block:'center'});
+  }
+  document.getElementById('cnBack').addEventListener('click',exitCN);
+  if(window.RadarMap) RadarMap.render(worldOpt);
+  else mount.innerHTML='';
 })();
 </script>
 
