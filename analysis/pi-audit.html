@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>个保合规审计：1000 万门槛下的「每两年一次」到底怎么做 · 法律分析 · lawdatify</title>
+<link rel="stylesheet" href="../assets/style.css">
+<!-- SOCIAL:START -->
+<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+<link rel="apple-touch-icon" href="../assets/favicon.svg">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="lawdatify · 法律合规主站">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:title" content="个保合规审计：1000 万门槛下的「每两年一次」到底怎么做 · 法律分析 · lawdatify">
+<meta property="og:description" content="个保合规审计：1000 万门槛、三档频次、两条触发路径与八项审计重点，含监管要求审计的执行链路图。">
+<meta property="og:url" content="https://chenluo951-oss.github.io/lawdatify-site/analysis/pi-audit.html/">
+<meta property="og:image" content="https://chenluo951-oss.github.io/lawdatify-site/assets/og-cover.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="个保合规审计：1000 万门槛下的「每两年一次」到底怎么做 · 法律分析 · lawdatify">
+<meta name="twitter:description" content="个保合规审计：1000 万门槛、三档频次、两条触发路径与八项审计重点，含监管要求审计的执行链路图。">
+<meta name="twitter:image" content="https://chenluo951-oss.github.io/lawdatify-site/assets/og-cover.png">
+<!-- SOCIAL:END -->
+</head>
+<body>
+
+<nav class="topnav"><div class="inner">
+  <a class="brand" href="../index.html">law<span>datify</span></a>
+  <div class="navlinks">
+    <a href="../index.html">首页</a>
+    <a href="../updates/index.html">今日更新</a>
+    <a href="../radar/index.html">监管雷达</a>
+    <a href="../news/index.html">合规资讯</a>
+    <a href="../analysis/index.html">法律分析</a>
+    <a href="../kb/index.html">合规知识库</a>
+    <a href="../about.html">关于</a>
+  </div>
+</div></nav>
+
+<div class="pagehead"><div class="inner">
+  <div class="crumb"><a href="../index.html">首页</a> / <a href="../index.html">法律分析</a> / 个人信息保护合规审计</div>
+  <h1>个保合规审计：1000 万门槛下的「每两年一次」到底怎么做</h1>
+  <p>从征求意见稿的「100 万人 / 每年」到正式稿的「1000 万人 / 每两年」，再到未成年人条线的「每年」例外——把门槛、频次、触发条件与执行链路一次讲清。</p>
+</div></div>
+
+<div class="wrap">
+<div class="art">
+
+  <div class="art-meta">
+    <span>数据合规</span> · <span>2026-09-10</span> · <span>约 3200 字</span> · <span>依据：网信办令第 18 号、GB/T 46903-2025</span>
+  </div>
+  <div class="art-tags">
+    <span>个人信息保护</span><span>合规审计</span><span>即时零售</span><span>强制义务</span>
+  </div>
+
+  <div class="art-lead">
+    <h2>结论先行</h2>
+    <p><b>一、门槛是「超过 1000 万人」，频次是「每两年至少一次」，不是每年。</b>《个人信息保护合规审计管理办法》（国家互联网信息办公室令第 18 号）第四条的表述是「处理超过 1000 万人个人信息的个人信息处理者，应当每两年至少开展一次个人信息保护合规审计」。征求意见稿曾写「处理超过 100 万人……应当每年至少开展一次」，正式稿把门槛上调了十倍、频次放宽了一倍——网上大量二手解读仍在沿用征求意见稿口径，这是当前最容易被带偏的地方。</p>
+    <p><b>二、但「两年一次」会被两条例外击穿。</b>其一，《未成年人网络保护条例》第三十七条要求处理未成年人个人信息的处理者<b>每年</b>审计一次并及时报告网信等部门——只要业务触达未成年人，这一条会覆盖掉「两年一次」的舒适节奏。其二，《办法》第五条规定，监管发现较大风险、可能侵害众多个人的权益，或发生安全事件导致 <b>100 万人以上个人信息</b>或 <b>10 万人以上敏感个人信息</b>泄露、篡改、丢失、毁损的，可以<b>要求</b>企业委托专业机构审计——此时频次由监管部门决定，与企业自定的周期无关。</p>
+    <p><b>三、对即时零售平台的实际影响：</b>用户量级远超 1000 万人，必然落入第一档；同时存在未成年人用户、外包配送与客服、第三方商家与 SDK 共享、个性化推荐与差别定价四类高频风险面，审计范围基本覆盖《办法》附件指引的全部重点项。</p>
+  </div>
+
+  <h2 class="at">一、制度演进：从部门规章到国家标准的两步走</h2>
+
+  <figure class="art-fig">
+    <svg viewBox="0 0 800 352" role="img" aria-label="个人信息保护合规审计制度时间轴">
+      <line x1="60" y1="40" x2="60" y2="322" stroke="#e6ebf2" stroke-width="2"/>
+      <g font-family="PingFang SC, Microsoft YaHei, sans-serif">
+        <!-- row 1 -->
+        <circle cx="60" cy="45" r="6" fill="#fff" stroke="#94a3b4" stroke-width="2.5"/>
+        <text x="86" y="50" font-size="14" font-weight="700" fill="#6b7a8c">2024-05-20</text>
+        <text x="215" y="50" font-size="13" fill="#33404f">国家网信办 2024 年第 15 次室务会审议通过</text>
+        <!-- row 2 -->
+        <circle cx="60" cy="112" r="6" fill="#fff" stroke="#94a3b4" stroke-width="2.5"/>
+        <text x="86" y="117" font-size="14" font-weight="700" fill="#6b7a8c">2025-02-12</text>
+        <text x="215" y="117" font-size="13" fill="#33404f">国家互联网信息办公室令第 18 号公布</text>
+        <!-- row 3 -->
+        <circle cx="60" cy="179" r="7.5" fill="#1b4f8a"/>
+        <text x="86" y="184" font-size="14" font-weight="700" fill="#1b4f8a">2025-05-01</text>
+        <text x="215" y="184" font-size="13" font-weight="600" fill="#16202c">办法正式施行，第四条确定 1000 万人门槛</text>
+        <!-- row 4 -->
+        <circle cx="60" cy="246" r="6" fill="#fff" stroke="#0f7b6c" stroke-width="2.5"/>
+        <text x="86" y="251" font-size="14" font-weight="700" fill="#0f7b6c">2025-12-31</text>
+        <text x="215" y="251" font-size="13" fill="#33404f">GB/T 46903-2025《数据安全技术 个人信息保护合规审计要求》发布</text>
+        <!-- row 5 -->
+        <circle cx="60" cy="313" r="7.5" fill="#0f7b6c"/>
+        <text x="86" y="318" font-size="14" font-weight="700" fill="#0f7b6c">2026-07-01</text>
+        <text x="215" y="318" font-size="13" font-weight="600" fill="#16202c">GB/T 46903-2025 实施，审计「怎么审」有了国标抓手</text>
+      </g>
+    </svg>
+    <figcaption><b>图 1</b>　个人信息保护合规审计制度时间轴。2025 年 5 月先解决「谁要审、多久审一次」，2026 年 7 月国标实施后进一步解决「审什么、怎么取证」。两部文件构成"频次 + 方法"的完整闭环。</figcaption>
+  </figure>
+
+  <p>值得注意的是配套强制性节奏：<b>规章定频次、国标定方法</b>。GB/T 46903-2025 已于 2026 年 7 月 1 日实施，企业再以"不知道怎么审"作为未开展审计的理由，已难以成立。</p>
+
+  <h2 class="at">二、三档频次：先算清自己处理了多少人</h2>
+
+  <p>国家网信办在 2026 年 4 月发布的《个人信息保护政策法规问答》中进一步明确了两个实操口径：一是法规中「处理超过 1000 万人个人信息」<b>均包含本数</b>，按处理者<b>当前</b>处理个人信息涉及的自然人数量统计，<b>不包括已经删除的个人信息</b>；二是参照 GB/T 46903，对未达 1000 万门槛的处理者给出了推荐频次。</p>
+
+  <table class="kv-table">
+    <thead><tr><th style="width:190px">处理的自然人数量</th><th style="width:150px">合规审计频次</th><th>依据</th></tr></thead>
+    <tbody>
+      <tr><td>超过 1000 万人</td><td><b>每两年至少 1 次</b></td><td>《个人信息保护合规审计管理办法》第四条（强制）</td></tr>
+      <tr><td>100 万 – 1000 万人</td><td>每三年或四年至少 1 次</td><td>GB/T 46903-2025，网信办 2026 年 4 月问答口径</td></tr>
+      <tr><td>不超过 100 万人</td><td>每五年至少 1 次</td><td>GB/T 46903-2025，网信办 2026 年 4 月问答口径</td></tr>
+      <tr><td>处理未成年人个人信息</td><td><b>每年 1 次</b>，并及时报告网信等部门</td><td>《未成年人网络保护条例》第三十七条（强制，覆盖前述档位）</td></tr>
+      <tr><td>触发《办法》第五条情形</td><td>按监管部门要求，委托专业机构审计</td><td>《个人信息保护合规审计管理办法》第五条</td></tr>
+    </tbody>
+  </table>
+
+  <div class="callout">
+    <div class="ct">口径提醒：人数怎么数</div>
+    <p>「当前处理个人信息涉及的自然人数量」——已删除的不计入。这意味着<b>删除权与账号注销的执行质量，会直接影响是否落入更高档位</b>。如果注销流程只做"标记注销"而不真正清除数据，这部分自然人仍会被计入，企业实际上是在为自己在数据删除上的历史欠账买单。这一点在审计中常被忽略，却是最容易带来量级变化的因素。</p>
+  </div>
+
+  <h2 class="at">三、两条触发路径：自行定期 vs 监管要求</h2>
+
+  <figure class="art-fig">
+    <svg viewBox="0 0 800 300" role="img" aria-label="合规审计两条触发路径">
+      <defs>
+        <marker id="ar" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto">
+          <path d="M0,0 L8,3 L0,6 Z" fill="#94a3b4"/>
+        </marker>
+      </defs>
+      <g font-family="PingFang SC, Microsoft YaHei, sans-serif">
+        <text x="400" y="24" text-anchor="middle" font-size="13" font-weight="700" fill="#16202c">路径一：自行定期审计（企业主导周期）</text>
+        <rect x="150" y="38" width="500" height="42" rx="9" fill="#eef3fb" stroke="#c6dcf3"/>
+        <text x="400" y="64" text-anchor="middle" font-size="13" fill="#1b4f8a">建立合规审计制度 · 明确频次（办法第三条）</text>
+        <line x1="400" y1="80" x2="400" y2="100" stroke="#94a3b4" stroke-width="1.6" marker-end="url(#ar)"/>
+        <line x1="180" y1="100" x2="620" y2="100" stroke="#e6ebf2" stroke-width="1.6"/>
+        <line x1="180" y1="100" x2="180" y2="118" stroke="#94a3b4" stroke-width="1.6" marker-end="url(#ar)"/>
+        <line x1="400" y1="100" x2="400" y2="118" stroke="#94a3b4" stroke-width="1.6" marker-end="url(#ar)"/>
+        <line x1="620" y1="100" x2="620" y2="118" stroke="#94a3b4" stroke-width="1.6" marker-end="url(#ar)"/>
+
+        <rect x="88" y="118" width="184" height="62" rx="9" fill="#eaf6f3" stroke="#0f7b6c"/>
+        <text x="180" y="141" text-anchor="middle" font-size="12.5" font-weight="700" fill="#0f7b6c">超过 1000 万人</text>
+        <text x="180" y="163" text-anchor="middle" font-size="12.5" fill="#33404f">每两年至少 1 次</text>
+
+        <rect x="308" y="118" width="184" height="62" rx="9" fill="#ffffff" stroke="#e6ebf2"/>
+        <text x="400" y="141" text-anchor="middle" font-size="12.5" font-weight="700" fill="#16202c">100 万 – 1000 万人</text>
+        <text x="400" y="163" text-anchor="middle" font-size="12.5" fill="#33404f">每三至四年 1 次</text>
+
+        <rect x="528" y="118" width="184" height="62" rx="9" fill="#ffffff" stroke="#e6ebf2"/>
+        <text x="620" y="141" text-anchor="middle" font-size="12.5" font-weight="700" fill="#16202c">不超过 100 万人</text>
+        <text x="620" y="163" text-anchor="middle" font-size="12.5" fill="#33404f">每五年至少 1 次</text>
+
+        <line x1="400" y1="200" x2="400" y2="220" stroke="#94a3b4" stroke-width="1.6" marker-end="url(#ar)"/>
+        <text x="400" y="238" text-anchor="middle" font-size="12.5" fill="#6b7a8c">可由内部机构开展，也可委托专业机构（办法第三条、第五条答问）</text>
+
+        <line x1="60" y1="258" x2="740" y2="258" stroke="#e6ebf2" stroke-width="1.4" stroke-dasharray="5 4"/>
+        <text x="400" y="282" text-anchor="middle" font-size="13" font-weight="700" fill="#16202c">路径二：监管要求审计（周期由监管部门决定）</text>
+      </g>
+    </svg>
+    <figcaption><b>图 2</b>　合规审计的两条触发路径。上方路径由企业按人数自定周期；下方路径一旦触发，企业与机构选择、完成时限、报送义务全部由监管部门驱动，企业只有配合义务。</figcaption>
+  </figure>
+
+  <p><b>路径二的三个触发条件</b>（《办法》第五条）：个人信息处理活动存在严重影响个人权益或者严重缺乏安全措施等<b>较大风险</b>；个人信息处理活动<b>可能侵害众多个人的权益</b>；发生个人信息安全事件，导致 <b>100 万人以上个人信息</b>或者 <b>10 万人以上敏感个人信息</b>泄露、篡改、丢失、毁损。对同一个安全事件或风险，监管部门不得重复要求委托审计。</p>
+
+  <h2 class="at">四、被要求审计时的执行链路与四个硬约束</h2>
+
+  <figure class="art-fig">
+    <svg viewBox="0 0 800 210" role="img" aria-label="监管要求合规审计执行链路">
+      <defs>
+        <marker id="ar2" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto">
+          <path d="M0,0 L8,3 L0,6 Z" fill="#b3541e"/>
+        </marker>
+      </defs>
+      <g font-family="PingFang SC, Microsoft YaHei, sans-serif">
+        <rect x="18" y="52" width="140" height="66" rx="9" fill="#fff7f0" stroke="#f0c9a8"/>
+        <text x="88" y="76" text-anchor="middle" font-size="12.5" font-weight="700" fill="#b3541e">① 监管通知</text>
+        <text x="88" y="98" text-anchor="middle" font-size="11.5" fill="#33404f">发现风险或事件</text>
+
+        <line x1="158" y1="85" x2="182" y2="85" stroke="#b3541e" stroke-width="1.6" marker-end="url(#ar2)"/>
+
+        <rect x="184" y="52" width="140" height="66" rx="9" fill="#fff7f0" stroke="#f0c9a8"/>
+        <text x="254" y="76" text-anchor="middle" font-size="12.5" font-weight="700" fill="#b3541e">② 选定机构</text>
+        <text x="254" y="98" text-anchor="middle" font-size="11.5" fill="#33404f">按要求选定，企业付费</text>
+
+        <line x1="324" y1="85" x2="348" y2="85" stroke="#b3541e" stroke-width="1.6" marker-end="url(#ar2)"/>
+
+        <rect x="350" y="52" width="140" height="66" rx="9" fill="#fff7f0" stroke="#f0c9a8"/>
+        <text x="420" y="76" text-anchor="middle" font-size="12.5" font-weight="700" fill="#b3541e">③ 限期完成</text>
+        <text x="420" y="98" text-anchor="middle" font-size="11.5" fill="#33404f">复杂可报批后延长</text>
+
+        <line x1="490" y1="85" x2="514" y2="85" stroke="#b3541e" stroke-width="1.6" marker-end="url(#ar2)"/>
+
+        <rect x="516" y="52" width="140" height="66" rx="9" fill="#fff7f0" stroke="#f0c9a8"/>
+        <text x="586" y="76" text-anchor="middle" font-size="12.5" font-weight="700" fill="#b3541e">④ 报送报告</text>
+        <text x="586" y="98" text-anchor="middle" font-size="11.5" fill="#33404f">负责人签字 + 公章</text>
+
+        <line x1="656" y1="85" x2="680" y2="85" stroke="#b3541e" stroke-width="1.6" marker-end="url(#ar2)"/>
+
+        <rect x="682" y="52" width="100" height="66" rx="9" fill="#fff7f0" stroke="#f0c9a8"/>
+        <text x="732" y="76" text-anchor="middle" font-size="12.5" font-weight="700" fill="#b3541e">⑤ 整改</text>
+        <text x="732" y="98" text-anchor="middle" font-size="11.5" fill="#33404f">并报送整改情况</text>
+
+        <rect x="150" y="150" width="500" height="40" rx="9" fill="#f6f9ff" stroke="#d8e4f5"/>
+        <text x="400" y="175" text-anchor="middle" font-size="12.5" fill="#1b4f8a">整改完成后 <tspan font-weight="700">15 个工作日内</tspan> 向监管部门报送整改情况报告（办法第十一条）</text>
+      </g>
+    </svg>
+    <figcaption><b>图 3</b>　按监管要求开展合规审计的执行链路。注意：正式稿第九条<b>未规定统一工作日时限</b>，只要求"在限定时间内完成、情况复杂报批准后适当延长"——征求意见稿中的「90 个工作日」已被删除，不要沿用。</figcaption>
+  </figure>
+
+  <p>专业机构一侧还有四个容易被忽略的硬约束，直接决定供应商能否选用：</p>
+  <ul>
+    <li><b>不得转委托。</b>《办法》第十四条明确专业机构不得转委托其他机构开展审计——投标时承诺转包的一律排除。</li>
+    <li><b>连续三次上限。</b>第十五条规定同一专业机构及其关联机构、同一合规审计负责人<b>不得连续三次以上</b>对同一审计对象开展审计。长期合作机构需要提前规划轮换。</li>
+    <li><b>报告签字与盖章。</b>第十条要求报告由专业机构主要负责人、合规审计负责人签字并加盖专业机构公章。</li>
+    <li><b>保密与删除义务。</b>第十三条要求对审计中获得的个人信息、商业秘密、保密商务信息依法保密，审计结束后<b>及时删除</b>相关信息——合同里必须写死数据处理与销毁条款。</li>
+  </ul>
+
+  <h2 class="at">五、组织义务：100 万人以上的两道附加题</h2>
+
+  <p>《办法》第十二条在频次之外另设两项组织义务，常被漏掉：</p>
+  <ul>
+    <li>处理 <b>100 万人以上</b>个人信息的处理者，应当<b>指定个人信息保护负责人</b>，负责合规审计工作。</li>
+    <li><b>提供重要互联网平台服务、用户数量巨大、业务类型复杂</b>的处理者，应当成立<b>主要由外部成员组成的独立机构</b>对合规审计情况进行监督。</li>
+  </ul>
+  <p>对同时具备"平台属性 + 亿级用户 + 多业务线"的即时零售平台而言，第二项意味着不能只靠内部法务与合规部门自证，需要引入外部成员组成监督机构并留下履职记录。</p>
+
+  <h2 class="at">六、审什么：《办法》附件指引中与即时零售最相关的八项</h2>
+
+  <table class="kv-table">
+    <thead><tr><th style="width:170px">审计重点</th><th>在即时零售场景中的典型落点</th></tr></thead>
+    <tbody>
+      <tr><td>告知同意</td><td>注册/下单/履约全链路的告知是否显著、易懂；变更处理目的与方式时是否重新取得同意；单独同意场景（敏感信息、对外提供、公开、跨境）是否落实。</td></tr>
+      <tr><td>自动化决策</td><td>个性化推荐与差别定价的透明度、结果公平公正；是否事前告知处理的信息种类及影响、事前开展 PIA；是否提供便捷的拒绝方式；推送与营销是否同时提供<b>不针对个人特征</b>的选项；是否防止对交易条件实行不合理差别待遇。</td></tr>
+      <tr><td>委托处理</td><td>配送、客服、云服务、代运营等受托方：委托前是否开展 PIA、合同是否约定目的/期限/方式/种类/保护措施、是否定期检查监督受托方。</td></tr>
+      <tr><td>对外提供与共享</td><td>向商家、第三方平台、SDK 提供个人信息是否取得单独同意、是否告知接收方名称与联系方式、是否事前 PIA、是否有共享清单公示。</td></tr>
+      <tr><td>敏感个人信息</td><td>人脸/声纹门禁、精确位置、健康与支付信息：是否事前单独同意、目的是否合法正当必要、是否事前 PIA、是否告知必要性与影响。</td></tr>
+      <tr><td>未成年人信息</td><td>是否制定专门处理规则；是否向未成年人及监护人告知必要性与保护措施；是否存在强制同意处理非必要信息的情形。</td></tr>
+      <tr><td>删除权与注销</td><td>处理目的实现/无法实现、停止服务或注销、保存期届满、撤回同意等情形下是否及时删除；技术难以删除时是否停止除存储与安全保护之外的处理。</td></tr>
+      <tr><td>个人权利响应</td><td>是否建立便捷的申请受理与处理机制；是否及时完整准确告知处理意见或执行结果；拒绝时是否说明理由。</td></tr>
+    </tbody>
+  </table>
+
+  <h2 class="at">七、落地清单</h2>
+  <ol class="checklist">
+    <li><span class="n">1</span><div><b>先算人数，留证据。</b>按"当前涉及的自然人数量、不含已删除"口径出具一份统计说明，注明统计口径、系统来源与计算时间，作为确定档位的底稿。</div></li>
+    <li><span class="n">2</span><div><b>把频次写进制度。</b>《办法》要求建立合规审计制度并明确频度；制度文件里必须出现具体数字（如"每两年至少一次"）与责任人，避免只写"定期开展"。</div></li>
+    <li><span class="n">3</span><div><b>未成年人条线单列。</b>只要存在未成年人用户，就按《未成年人网络保护条例》第三十七条走"每年一次 + 报告网信等部门"，不要与成年人条线合并计数。</div></li>
+    <li><span class="n">4</span><div><b>指定个人信息保护负责人。</b>处理 100 万人以上即触发，需有正式任命文件与职责说明，并在隐私政策中公示联系方式。</div></li>
+    <li><span class="n">5</span><div><b>评估是否需设外部监督机构。</b>对照"重要互联网平台服务 / 用户数量巨大 / 业务类型复杂"三项，如落入，需组建主要由外部成员组成的独立机构并留存履职记录。</div></li>
+    <li><span class="n">6</span><div><b>按 GB/T 46903-2025 重做审计底稿模板。</b>国标已实施，沿用旧模板会被认为方法不合规；重点补齐自动化决策、委托处理、跨境三块取证清单。</div></li>
+    <li><span class="n">7</span><div><b>建立机构轮换台账。</b>记录历次审计机构与负责人，避免触碰"连续三次以上"红线；同时核查拟选机构是否存在转委托安排。</div></li>
+    <li><span class="n">8</span><div><b>预置监管触发应急预案。</b>一旦发生 100 万人以上信息或 10 万人以上敏感信息泄露事件，应能立即启动"选定机构—限期完成—报送—整改—15 个工作日内报送整改情况"的链路。</div></li>
+  </ol>
+
+  <div class="callout">
+    <div class="ct">常见误区</div>
+    <p><b>误区一：把正式稿当成征求意见稿。</b>「100 万人 / 每年一次」是 2023 年征求意见稿的表述，正式稿已改为「1000 万人 / 每两年一次」。按旧口径做预算与排期，会导致资源错配。</p>
+    <p><b>误区二：认为"两年一次"意味着 2027 年才需要启动首轮。</b>《办法》未规定首轮审计的具体时点，但要求"建立制度并明确频度"；且 GB/T 46903-2025 已于 2026 年 7 月实施。建议在本年度内完成首轮，避免被认定为"未建立制度"而非"周期未到"。</p>
+    <p><b>误区三：把合规审计等同于安全评估或等保测评。</b>合规审计是对"处理活动是否遵守法律、行政法规"的审查与评价，覆盖告知同意、自动化决策、委托处理、权利响应等合法性事项，与等保的技术安全测评不是同一件事，不能互相替代。</p>
+  </div>
+
+  <div class="srcbox">
+    <h3>参考来源（均为发布机构原文深链，已逐条核验可达）</h3>
+    <ol>
+      <li><span class="srct">《个人信息保护合规审计管理办法》（国家互联网信息办公室令第 18 号）</span>，2025-02-12 公布、2025-05-01 施行，含附件《个人信息保护合规审计指引》。<br><a href="https://www.cac.gov.cn/2025-02/14/c_1741233507681519.htm" target="_blank" rel="noopener">https://www.cac.gov.cn/2025-02/14/c_1741233507681519.htm</a></li>
+      <li><span class="srct">《个人信息保护合规审计管理办法》答记者问</span>，中国政府网，2025-02-14（明确审计两种情形、频次与专业机构要求）。<br><a href="https://www.gov.cn/zhengce/202502/content_7003769.htm" target="_blank" rel="noopener">https://www.gov.cn/zhengce/202502/content_7003769.htm</a></li>
+      <li><span class="srct">《个人信息保护合规审计管理办法（征求意见稿）》</span>，司法部征求意见系统（第四条原为"100 万人 / 每年"，用于对比正式稿口径变化）。<br><a href="https://zqyj.chinalaw.gov.cn/h5/readmore?listType=&id=5305" target="_blank" rel="noopener">https://zqyj.chinalaw.gov.cn/h5/readmore?listType=&id=5305</a></li>
+      <li><span class="srct">GB/T 46903-2025《数据安全技术 个人信息保护合规审计要求》</span>，2025-12-31 发布、2026-07-01 实施。<br><a href="https://openstd.samr.gov.cn/bzgk/gb/newGbInfo?hcno=EC64C138A5B6A52AA5DC5A60188FC07E" target="_blank" rel="noopener">https://openstd.samr.gov.cn/bzgk/gb/newGbInfo?hcno=EC64C138A5B6A52AA5DC5A60188FC07E</a></li>
+      <li><span class="srct">《未成年人网络保护条例》</span>，国务院令第 766 号，2023-10-16 公布、2024-01-01 施行（第三十七条：未成年人个人信息每年审计并报告）。<br><a href="https://www.gov.cn/gongbao/2023/issue_10806/202311/content_6913813.html" target="_blank" rel="noopener">https://www.gov.cn/gongbao/2023/issue_10806/202311/content_6913813.html</a></li>
+      <li><span class="srct">《网络数据安全管理条例》</span>，国务院令第 790 号，2024-09-30 公布、2025-01-01 施行（第二十七条合规审计义务的上位依据）。<br><a href="https://www.gov.cn/zhengce/content/202409/content_6977766.htm" target="_blank" rel="noopener">https://www.gov.cn/zhengce/content/202409/content_6977766.htm</a></li>
+      <li><span class="srct">个人信息保护政策法规问答（2026 年 4 月）</span>，国家互联网信息办公室发布，明确"1000 万含本数、按当前自然人数量统计、不含已删除"及未达门槛的推荐频次（中国网信网发布，央广网转载）。<br><a href="https://www.toutiao.com/article/7681188644404773382" target="_blank" rel="noopener">https://www.toutiao.com/article/7681188644404773382</a></li>
+    </ol>
+  </div>
+
+  <p style="margin-top:26px;font-size:12.5px;color:var(--faint)">本文为合规研究性分析，基于监管机构公开信息整理，不构成法律意见。具体义务适用请结合企业实际处理活动判断。</p>
+
+</div>
+</div>
+
+<footer><div class="inner">
+  <div class="foot-brand">law<span>datify</span> · 法律合规主站</div>
+  <div class="foot-desc">由法务团队维护 · 内容基于监管机构官网公开信息整理，逐条附原文深链</div>
+  <div class="foot-links">
+    <a href="../updates/index.html">今日更新</a>·
+    <a href="../news/index.html">合规资讯</a>·
+    <a href="../kb/index.html">知识库</a>·
+    <a href="../analysis/index.html">法律分析</a>·
+    <a href="../news/briefs.html">简报归档</a>·
+    <a href="../search.html">搜索</a>·
+    <a href="../about.html">关于本站</a>
+  </div>
+  <div class="foot-meta">数据更新至 <span class="upd"><!-- UPDATED:START -->2026-09-10<!-- UPDATED:END --></span> · 本站内容不构成法律意见 · © 2026 lawdatify</div>
+</div></footer>
+</body>
+</html>

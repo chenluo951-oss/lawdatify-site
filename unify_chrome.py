@@ -23,12 +23,16 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 
 PAGES = [
     "index.html",
+    "updates/index.html",
     "search.html",
     "about.html",
     "news/index.html",
     "news/briefs.html",
     "news/actions.html",
     "analysis/index.html",
+    "analysis/pi-audit.html",
+    "analysis/ai-label.html",
+    "analysis/food-label.html",
     "kb/index.html",
     "kb/standards.html",
     "kb/benchmarks.html",
@@ -42,6 +46,7 @@ PAGES = [
 # 监管雷达三子页（立法日历 / 监管动向 / 全球监管地图）在雷达总览页内互链，不占主导航。
 NAV_ITEMS = [
     ("index.html", "首页"),
+    ("updates/index.html", "今日更新"),
     ("radar/index.html", "监管雷达"),
     ("news/index.html", "合规资讯"),
     ("analysis/index.html", "法律分析"),
@@ -78,6 +83,7 @@ def build_footer(rel: str) -> str:
         '  <div class="foot-brand">law<span>datify</span> · 法律合规主站</div>\n'
         '  <div class="foot-desc">由法务团队维护 · 内容基于监管机构官网公开信息整理，逐条附原文深链</div>\n'
         '  <div class="foot-links">\n'
+        f'    <a href="{p}updates/index.html">今日更新</a>·\n'
         f'    <a href="{p}news/index.html">合规资讯</a>·\n'
         f'    <a href="{p}kb/index.html">知识库</a>·\n'
         f'    <a href="{p}analysis/index.html">法律分析</a>·\n'

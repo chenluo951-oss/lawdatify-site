@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI 生成内容标识：从「该不该标」到「怎么标才算合规」 · 法律分析 · lawdatify</title>
+<link rel="stylesheet" href="../assets/style.css">
+<!-- SOCIAL:START -->
+<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+<link rel="apple-touch-icon" href="../assets/favicon.svg">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="lawdatify · 法律合规主站">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:title" content="AI 生成内容标识：从「该不该标」到「怎么标才算合规」 · 法律分析 · lawdatify">
+<meta property="og:description" content="AI 生成内容标识：四类主体义务分工、显式与隐式双标识、传播端「属于/可能为/疑似」三档判定流程。">
+<meta property="og:url" content="https://chenluo951-oss.github.io/lawdatify-site/analysis/ai-label.html/">
+<meta property="og:image" content="https://chenluo951-oss.github.io/lawdatify-site/assets/og-cover.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="AI 生成内容标识：从「该不该标」到「怎么标才算合规」 · 法律分析 · lawdatify">
+<meta name="twitter:description" content="AI 生成内容标识：四类主体义务分工、显式与隐式双标识、传播端「属于/可能为/疑似」三档判定流程。">
+<meta name="twitter:image" content="https://chenluo951-oss.github.io/lawdatify-site/assets/og-cover.png">
+<!-- SOCIAL:END -->
+</head>
+<body>
+
+<nav class="topnav"><div class="inner">
+  <a class="brand" href="../index.html">law<span>datify</span></a>
+  <div class="navlinks">
+    <a href="../index.html">首页</a>
+    <a href="../updates/index.html">今日更新</a>
+    <a href="../radar/index.html">监管雷达</a>
+    <a href="../news/index.html">合规资讯</a>
+    <a href="../analysis/index.html">法律分析</a>
+    <a href="../kb/index.html">合规知识库</a>
+    <a href="../about.html">关于</a>
+  </div>
+</div></nav>
+
+<div class="pagehead"><div class="inner">
+  <div class="crumb"><a href="../index.html">首页</a> / <a href="../index.html">法律分析</a> / AI 生成合成内容标识</div>
+  <h1>AI 生成内容标识：从「该不该标」到「怎么标才算合规」</h1>
+  <p>《人工智能生成合成内容标识办法》施行已满一年。对电商而言，真正的风险不在"有没有用 AI"，而在传播端的三档判定与留痕义务。</p>
+</div></div>
+
+<div class="wrap">
+<div class="art">
+
+  <div class="art-meta">
+    <span>AI 合规</span> · <span>2026-09-10</span> · <span>约 3000 字</span> · <span>依据：国信办通字〔2025〕2 号</span>
+  </div>
+  <div class="art-tags">
+    <span>生成式 AI</span><span>内容标识</span><span>深度合成</span><span>平台义务</span>
+  </div>
+
+  <div class="art-lead">
+    <h2>结论先行</h2>
+    <p><b>一、义务已经不是"要不要标"，而是"标在哪、标给谁看"。</b>《人工智能生成合成内容标识办法》（国信办通字〔2025〕2 号）由网信办、工信部、公安部、广电总局四部门联合印发，2025 年 9 月 1 日起施行。它把<b>生成服务提供者、内容传播平台、App 分发平台、终端用户</b>四类主体拉进同一个治理框架，各自承担不同环节的标识义务。</p>
+    <p><b>二、双标识结构：显式 + 隐式。</b>显式标识是用户能明显感知的文字、声音、图形提示；隐式标识是写进<b>文件元数据</b>的属性信息、服务提供者名称或编码、内容编号。只做前端角标、不写元数据，属于只完成了一半。</p>
+    <p><b>三、传播端有一套"三档判定"逻辑，这是平台最容易踩坑的地方。</b>第六条规定：元数据里有隐式标识的，提示"属于"；元数据里没有但用户声明了的，提示"可能为"；元数据里没有、用户也没声明、但平台检测到显式标识或其他生成合成痕迹的，识别为<b>疑似</b>并提示。三档对应三种措辞，不能一律用"疑似"敷衍，也不能一律不标。</p>
+    <p><b>四、电商场景的隐形雷区：AI 商品图、AI 营销文案、智能客服话术、数字人直播。</b>这些都属于"利用人工智能技术生成、合成的文本、图片、音频、视频"，只要对外发布就落入标识义务范围；而《办法》第九条留下的"不添加显式标识"出口，代价是必须留存提供对象信息日志<b>不少于六个月</b>。</p>
+  </div>
+
+  <h2 class="at">一、四类主体的义务分工</h2>
+
+  <figure class="art-fig">
+    <svg viewBox="0 0 800 250" role="img" aria-label="AI 生成合成内容标识四类主体义务分工">
+      <defs>
+        <marker id="ab" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto">
+          <path d="M0,0 L8,3 L0,6 Z" fill="#94a3b4"/>
+        </marker>
+      </defs>
+      <g font-family="PingFang SC, Microsoft YaHei, sans-serif">
+        <text x="400" y="18" text-anchor="middle" font-size="12.5" fill="#6b7a8c">标识办法构建的全流程责任链：生成 → 传播 → 分发 → 使用</text>
+
+        <!-- 生成端 -->
+        <rect x="12" y="34" width="176" height="152" rx="10" fill="#eef3fb" stroke="#c6dcf3"/>
+        <text x="100" y="58" text-anchor="middle" font-size="13" font-weight="700" fill="#1b4f8a">生成服务提供者</text>
+        <text x="100" y="84" text-anchor="middle" font-size="11.6" fill="#33404f">对文本 / 音频 / 图片 /</text>
+        <text x="100" y="102" text-anchor="middle" font-size="11.6" fill="#33404f">视频 / 虚拟场景添加</text>
+        <text x="100" y="120" text-anchor="middle" font-size="11.6" font-weight="700" fill="#16202c">显式标识</text>
+        <text x="100" y="144" text-anchor="middle" font-size="11.6" fill="#33404f">文件元数据写入</text>
+        <text x="100" y="162" text-anchor="middle" font-size="11.6" font-weight="700" fill="#16202c">隐式标识</text>
+        <text x="100" y="180" text-anchor="middle" font-size="11.2" fill="#6b7a8c">第四条、第五条</text>
+
+        <line x1="190" y1="110" x2="206" y2="110" stroke="#94a3b4" stroke-width="1.6" marker-end="url(#ab)"/>
+
+        <!-- 传播端 -->
+        <rect x="212" y="34" width="176" height="152" rx="10" fill="#eaf6f3" stroke="#0f7b6c"/>
+        <text x="300" y="58" text-anchor="middle" font-size="13" font-weight="700" fill="#0f7b6c">内容传播平台</text>
+        <text x="300" y="84" text-anchor="middle" font-size="11.6" fill="#33404f">核验元数据中的</text>
+        <text x="300" y="102" text-anchor="middle" font-size="11.6" font-weight="700" fill="#16202c">隐式标识</text>
+        <text x="300" y="126" text-anchor="middle" font-size="11.6" fill="#33404f">按「属于 / 可能为 /</text>
+        <text x="300" y="144" text-anchor="middle" font-size="11.6" fill="#33404f">疑似」三档加提示</text>
+        <text x="300" y="168" text-anchor="middle" font-size="11.6" fill="#33404f">元数据写入传播要素</text>
+        <text x="300" y="186" text-anchor="middle" font-size="11.2" fill="#6b7a8c">第六条</text>
+
+        <line x1="390" y1="110" x2="406" y2="110" stroke="#94a3b4" stroke-width="1.6" marker-end="url(#ab)"/>
+
+        <!-- 分发端 -->
+        <rect x="412" y="34" width="176" height="152" rx="10" fill="#fff7f0" stroke="#f0c9a8"/>
+        <text x="500" y="58" text-anchor="middle" font-size="13" font-weight="700" fill="#b3541e">App 分发平台</text>
+        <text x="500" y="84" text-anchor="middle" font-size="11.6" fill="#33404f">上架 / 上线审核时</text>
+        <text x="500" y="102" text-anchor="middle" font-size="11.6" fill="#33404f">要求说明是否提供</text>
+        <text x="500" y="120" text-anchor="middle" font-size="11.6" font-weight="700" fill="#16202c">AI 生成合成服务</text>
+        <text x="500" y="144" text-anchor="middle" font-size="11.6" fill="#33404f">并核验其标识</text>
+        <text x="500" y="162" text-anchor="middle" font-size="11.6" font-weight="700" fill="#16202c">相关材料</text>
+        <text x="500" y="180" text-anchor="middle" font-size="11.2" fill="#6b7a8c">第七条</text>
+
+        <line x1="590" y1="110" x2="606" y2="110" stroke="#94a3b4" stroke-width="1.6" marker-end="url(#ab)"/>
+
+        <!-- 用户 -->
+        <rect x="612" y="34" width="176" height="152" rx="10" fill="#ffffff" stroke="#e6ebf2"/>
+        <text x="700" y="58" text-anchor="middle" font-size="13" font-weight="700" fill="#16202c">用户</text>
+        <text x="700" y="84" text-anchor="middle" font-size="11.6" fill="#33404f">发布时</text>
+        <text x="700" y="102" text-anchor="middle" font-size="11.6" font-weight="700" fill="#16202c">主动声明</text>
+        <text x="700" y="126" text-anchor="middle" font-size="11.6" fill="#33404f">使用平台提供的</text>
+        <text x="700" y="144" text-anchor="middle" font-size="11.6" fill="#33404f">标识功能</text>
+        <text x="700" y="168" text-anchor="middle" font-size="11.6" fill="#33404f">不得恶意删除篡改</text>
+        <text x="700" y="186" text-anchor="middle" font-size="11.2" fill="#6b7a8c">第十条</text>
+
+        <text x="400" y="216" text-anchor="middle" font-size="12" fill="#6b7a8c">《办法》第二条：符合《算法推荐规定》《深度合成规定》《生成式 AI 服务管理暂行办法》规定情形的服务提供者，均适用本办法</text>
+        <text x="400" y="238" text-anchor="middle" font-size="11.6" fill="#94a3b4">配套强制性国家标准《网络安全技术 人工智能生成合成内容标识方法》同步发布</text>
+      </g>
+    </svg>
+    <figcaption><b>图 1</b>　《标识办法》的四类主体义务分工。电商企业往往<b>同时</b>是生成端（自己用 AI 做图写文案）与传播端（用户评价、社区内容、商家素材），两条义务需分别建立流程，不可用一套规则覆盖。</figcaption>
+  </figure>
+
+  <h2 class="at">二、显式标识：五类内容各自标在哪</h2>
+
+  <p>《办法》第四条的落地要点是"位置 + 感知度"——标识必须放在用户能看见的位置，且下载、复制、导出的文件中也必须含有满足要求的显式标识。</p>
+
+  <table class="kv-table">
+    <thead><tr><th style="width:110px">内容类型</th><th>显式标识的位置要求</th></tr></thead>
+    <tbody>
+      <tr><td>文本</td><td>在起始、末尾或中间适当位置添加文字提示或通用符号提示；或在交互场景界面、文字周边添加显著提示标识。</td></tr>
+      <tr><td>音频</td><td>在起始、末尾或中间适当位置添加语音提示或音频节奏提示；或在交互场景界面中添加显著提示标识。</td></tr>
+      <tr><td>图片</td><td>在图片的<b>适当位置</b>添加显著的提示标识。</td></tr>
+      <tr><td>视频</td><td>在<b>起始画面</b>和视频播放周边的适当位置添加显著提示标识；可在视频末尾和中间适当位置添加。</td></tr>
+      <tr><td>虚拟场景</td><td>呈现时在<b>起始画面</b>适当位置添加显著提示标识；可在持续服务过程中的适当位置添加。</td></tr>
+      <tr><td>下载 / 复制 / 导出</td><td>提供上述功能时，应当确保<b>文件中含有</b>满足要求的显式标识（第四条第二款）。</td></tr>
+    </tbody>
+  </table>
+
+  <div class="callout">
+    <div class="ct">电商场景的直接推论</div>
+    <p>用 AI 生成商品主图、详情页长图、短视频素材时，标识必须<b>烧进画面</b>（图片的适当位置、视频的起始画面），而不是只在后台打一个字段。素材一旦支持下载或转发给商家使用，导出文件中仍需保留显式标识——这决定了水印必须是像素级嵌入，而非前端叠加层。</p>
+  </div>
+
+  <h2 class="at">三、传播端的三档判定：措辞不能错</h2>
+
+  <figure class="art-fig">
+    <svg viewBox="0 0 800 440" role="img" aria-label="内容传播平台三档判定流程">
+      <defs>
+        <marker id="ac" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto">
+          <path d="M0,0 L8,3 L0,6 Z" fill="#94a3b4"/>
+        </marker>
+      </defs>
+      <g font-family="PingFang SC, Microsoft YaHei, sans-serif">
+        <rect x="60" y="16" width="680" height="42" rx="9" fill="#eef3fb" stroke="#c6dcf3"/>
+        <text x="400" y="42" text-anchor="middle" font-size="13" font-weight="700" fill="#1b4f8a">内容进入传播平台</text>
+
+        <line x1="400" y1="58" x2="400" y2="74" stroke="#94a3b4" stroke-width="1.6" marker-end="url(#ac)"/>
+
+        <!-- 判定 1 -->
+        <rect x="60" y="76" width="420" height="52" rx="9" fill="#ffffff" stroke="#e6ebf2"/>
+        <text x="270" y="98" text-anchor="middle" font-size="12.8" font-weight="700" fill="#16202c">① 核验文件元数据</text>
+        <text x="270" y="117" text-anchor="middle" font-size="12.2" fill="#33404f">是否含有隐式标识？</text>
+
+        <line x1="480" y1="102" x2="498" y2="102" stroke="#94a3b4" stroke-width="1.6" marker-end="url(#ac)"/>
+        <text x="489" y="94" text-anchor="middle" font-size="11" fill="#0f7b6c">是</text>
+
+        <rect x="500" y="76" width="240" height="52" rx="9" fill="#eaf6f3" stroke="#0f7b6c"/>
+        <text x="620" y="98" text-anchor="middle" font-size="12.4" font-weight="700" fill="#0f7b6c">添加显著提示</text>
+        <text x="620" y="117" text-anchor="middle" font-size="12.2" fill="#33404f">「属于生成合成内容」</text>
+
+        <line x1="270" y1="128" x2="270" y2="166" stroke="#94a3b4" stroke-width="1.6" marker-end="url(#ac)"/>
+        <text x="258" y="152" text-anchor="middle" font-size="11" fill="#94a3b4">否</text>
+
+        <!-- 判定 2 -->
+        <rect x="60" y="168" width="420" height="52" rx="9" fill="#ffffff" stroke="#e6ebf2"/>
+        <text x="270" y="190" text-anchor="middle" font-size="12.8" font-weight="700" fill="#16202c">② 用户是否主动声明</text>
+        <text x="270" y="209" text-anchor="middle" font-size="12.2" fill="#33404f">该内容为生成合成内容？</text>
+
+        <line x1="480" y1="194" x2="498" y2="194" stroke="#94a3b4" stroke-width="1.6" marker-end="url(#ac)"/>
+        <text x="489" y="186" text-anchor="middle" font-size="11" fill="#0f7b6c">是</text>
+
+        <rect x="500" y="168" width="240" height="52" rx="9" fill="#eaf6f3" stroke="#0f7b6c"/>
+        <text x="620" y="190" text-anchor="middle" font-size="12.4" font-weight="700" fill="#0f7b6c">添加提示</text>
+        <text x="620" y="209" text-anchor="middle" font-size="12.2" fill="#33404f">「可能为生成合成内容」</text>
+
+        <line x1="270" y1="220" x2="270" y2="258" stroke="#94a3b4" stroke-width="1.6" marker-end="url(#ac)"/>
+        <text x="258" y="244" text-anchor="middle" font-size="11" fill="#94a3b4">否</text>
+
+        <!-- 判定 3 -->
+        <rect x="60" y="260" width="420" height="52" rx="9" fill="#ffffff" stroke="#e6ebf2"/>
+        <text x="270" y="282" text-anchor="middle" font-size="12.8" font-weight="700" fill="#16202c">③ 平台是否检测到显式标识</text>
+        <text x="270" y="301" text-anchor="middle" font-size="12.2" fill="#33404f">或其他生成合成痕迹？</text>
+
+        <line x1="480" y1="286" x2="498" y2="286" stroke="#94a3b4" stroke-width="1.6" marker-end="url(#ac)"/>
+        <text x="489" y="278" text-anchor="middle" font-size="11" fill="#0f7b6c">是</text>
+
+        <rect x="500" y="260" width="240" height="52" rx="9" fill="#eaf6f3" stroke="#0f7b6c"/>
+        <text x="620" y="282" text-anchor="middle" font-size="12.4" font-weight="700" fill="#0f7b6c">识别为疑似并提示</text>
+        <text x="620" y="301" text-anchor="middle" font-size="12.2" fill="#33404f">「疑似生成合成内容」</text>
+
+        <!-- 通用义务 -->
+        <rect x="60" y="352" width="680" height="62" rx="9" fill="#f6f9ff" stroke="#d8e4f5"/>
+        <text x="400" y="376" text-anchor="middle" font-size="12.6" font-weight="700" fill="#1b4f8a">④ 贯穿性义务（第六条第（四）项）</text>
+        <text x="400" y="398" text-anchor="middle" font-size="12.2" fill="#33404f">无论识别结果如何，均须提供必要的标识功能，并提醒用户主动声明发布内容中是否包含生成合成内容</text>
+
+        <text x="400" y="432" text-anchor="middle" font-size="11.4" fill="#94a3b4">发生①—③任一情形的，还应当在文件元数据中添加生成合成内容属性信息、传播平台名称或编码、内容编号等传播要素信息</text>
+      </g>
+    </svg>
+    <figcaption><b>图 2</b>　内容传播平台的三档判定流程。措辞是合规要点：「属于」「可能为」「疑似」对应不同的确定程度，混用会同时带来"提示不足"与"不当标识损害他人权益"两类风险。</figcaption>
+  </figure>
+
+  <h2 class="at">四、第九条出口：不标显式的代价</h2>
+
+  <p>《办法》第九条留了一个口子：用户申请服务提供者提供<b>没有添加显式标识</b>的生成合成内容的，服务提供者可以在<b>通过用户协议明确用户的标识义务和使用责任后</b>提供不含显式标识的内容，但必须<b>依法留存提供对象信息等相关日志不少于六个月</b>。</p>
+
+  <div class="callout">
+    <div class="ct">实务判断</div>
+    <p>这个出口常被误读为"用户要求就可以不标"。实际上它设置了三重条件：<b>用户主动申请</b>（不是平台默认勾选）、<b>用户协议已明确用户的标识义务与使用责任</b>、<b>留存提供对象信息日志不少于六个月</b>。对 B 端商家批量生成素材的场景，如果平台提供"去标识"开关，就必须同步具备六个月的日志留存与调取能力——否则该开关本身就是违规设计。</p>
+  </div>
+
+  <h2 class="at">五、与算法备案、安全评估的衔接</h2>
+
+  <p>《办法》第十二条规定，服务提供者在履行<b>算法备案、安全评估</b>等手续时，应当按照本办法提供生成合成内容标识相关材料，并加强标识信息共享。同时第八条规定，用户服务协议中应当明确说明生成合成内容标识的<b>方法、样式</b>等规范内容，并提示用户仔细阅读并理解。</p>
+
+  <p>这意味着标识不是一次性的产品改动，而是需要同步更新三类材料：<b>备案材料</b>（算法备案时提交标识方案）、<b>用户协议</b>（写清标识方法与样式）、<b>内部留痕</b>（去标识场景的对象信息日志）。</p>
+
+  <h2 class="at">六、监管态势：清朗专项已进入第二阶段</h2>
+
+  <p>2026 年 4 月起，中央网信办启动"清朗·整治 AI 应用乱象专项行动"，为期 4 个月，分两阶段推进：第一阶段聚焦 AI 应用服务源头治理，涵盖未按规定履行大模型备案登记义务、平台安全与审核过滤能力不足、训练语料安全、AI 数据投毒、<b>生成合成内容标识落实不到位</b>、滥用 AI 技术开展违法违规活动、开源模型安全管理不到位等 7 类问题；第二阶段整治 AI 信息内容乱象。</p>
+
+  <p>值得注意的是，专项行动把"生成合成内容标识落实不到位"明确列为源头治理的重点之一——<b>标识已经从"新规合规项"变成了"专项执法检查项"</b>。对已有 AI 生成能力的业务，此时补做标识方案的窗口成本远低于被检查后整改。</p>
+
+  <h2 class="at">七、落地清单</h2>
+  <ol class="checklist">
+    <li><span class="n">1</span><div><b>先盘 AI 触点。</b>梳理商品图/详情页生成、营销文案、智能客服话术、数字人直播、评价与晒图审核等全部 AI 触点，逐项标注属于生成端还是传播端。</div></li>
+    <li><span class="n">2</span><div><b>显式标识烧进素材。</b>图片在适当位置、视频在起始画面嵌入像素级标识，确保下载/复制/导出后仍保留；不要依赖前端叠加层。</div></li>
+    <li><span class="n">3</span><div><b>打通元数据写入。</b>生成侧写入内容属性、服务提供者名称或编码、内容编号；传播侧在触发①—③时追加传播平台名称或编码、内容编号。</div></li>
+    <li><span class="n">4</span><div><b>实现三档判定与三种措辞。</b>在内容发布链路里落实"属于 / 可能为 / 疑似"的判定逻辑与对应提示文案，并留存判定日志。</div></li>
+    <li><span class="n">5</span><div><b>提供用户声明入口。</b>发布流程中增加"是否包含 AI 生成内容"的主动声明项，并提示用户使用标识功能。</div></li>
+    <li><span class="n">6</span><div><b>改造"去标识"开关。</b>如保留第九条出口，须在用户协议中明确用户标识义务与使用责任，并具备不少于六个月的提供对象信息日志留存与调取能力。</div></li>
+    <li><span class="n">7</span><div><b>同步更新三类材料。</b>算法备案/安全评估材料、用户服务协议（标识方法与样式）、内部标识规范文档。</div></li>
+    <li><span class="n">8</span><div><b>建立违规处置闭环。</b>对恶意删除、篡改、伪造、隐匿标识的行为设置检测与处置流程，并保留记录以回应可能的监管问询。</div></li>
+  </ol>
+
+  <div class="callout">
+    <div class="ct">常见误区</div>
+    <p><b>误区一：只在前端加角标就算完成。</b>显式标识只是其中一半；文件元数据的隐式标识是另一半，且是传播端判定的依据。缺了元数据，下游平台无法核验，整条链路断裂。</p>
+    <p><b>误区二：认为只有"AI 公司"才需要合规。</b>《办法》约束的是"开展人工智能生成合成内容标识活动"的网络信息服务提供者与内容传播平台。电商平台只要使用 AI 生成对外发布的素材，或承载用户发布的 AI 内容，就已在适用范围内。</p>
+    <p><b>误区三：把"疑似"当万能措辞。</b>元数据明确标明为生成合成内容的，应当"明确提醒公众该内容属于生成合成内容"，用"疑似"降级提示反而构成提示不足。</p>
+  </div>
+
+  <div class="srcbox">
+    <h3>参考来源（均为发布机构原文深链，已逐条核验可达）</h3>
+    <ol>
+      <li><span class="srct">《人工智能生成合成内容标识办法》（国信办通字〔2025〕2 号）</span>，国家互联网信息办公室、工业和信息化部、公安部、国家广播电视总局，2025-03-07 印发、2025-09-01 施行。<br><a href="https://www.cac.gov.cn/2025-03/14/c_1743654684782215.htm" target="_blank" rel="noopener">https://www.cac.gov.cn/2025-03/14/c_1743654684782215.htm</a></li>
+      <li><span class="srct">《强化全流程管理 引导技术向善——〈人工智能生成合成内容标识办法〉解读》</span>，中国政府网，2025-03-16（明确办法解决"哪些是生成的""谁生成的""从哪里生成的"三个问题）。<br><a href="https://www.gov.cn/zhengce/202503/content_7014281.htm" target="_blank" rel="noopener">https://www.gov.cn/zhengce/202503/content_7014281.htm</a></li>
+      <li><span class="srct">《关于印发〈人工智能生成合成内容标识办法〉的通知》</span>，中国政府网政策文件库（国务院公报版全文）。<br><a href="https://www.gov.cn/zhengce/zhengceku/202503/content_7014286.htm" target="_blank" rel="noopener">https://www.gov.cn/zhengce/zhengceku/202503/content_7014286.htm</a></li>
+      <li><span class="srct">《互联网信息服务深度合成管理规定》</span>，国家互联网信息办公室令第 12 号，2022-12-11 公布、2023-01-10 施行（第十六条隐式标识、第十七条显式标识，与《办法》第四、五条直接衔接）。<br><a href="https://www.cac.gov.cn/2022-12/11/c_1672221949354811.htm" target="_blank" rel="noopener">https://www.cac.gov.cn/2022-12/11/c_1672221949354811.htm</a></li>
+      <li><span class="srct">《生成式人工智能服务管理暂行办法》</span>，国家互联网信息办公室等七部门令第 15 号，2023-07-13 公布、2023-08-15 施行（《办法》第二条援引的适用情形来源之一）。<br><a href="https://www.cac.gov.cn/2023-07/13/c_1690898327029107.htm" target="_blank" rel="noopener">https://www.cac.gov.cn/2023-07/13/c_1690898327029107.htm</a></li>
+      <li><span class="srct">《互联网信息服务算法推荐管理规定》</span>，国家互联网信息办公室等四部门令第 9 号，2022-01-04 公布、2022-03-01 施行（《办法》第二条援引的适用情形来源之一）。<br><a href="https://www.cac.gov.cn/2022-01/04/c_1642894606364259.htm" target="_blank" rel="noopener">https://www.cac.gov.cn/2022-01/04/c_1642894606364259.htm</a></li>
+      <li><span class="srct">"清朗·整治 AI 应用乱象专项行动"</span>，中央网信办 2026 年 4 月启动，为期 4 个月；分两阶段共 14 类整治重点，第一阶段第 5 类为"生成合成内容标识落实不到位"。专项进展数据与原文出处见本站 <a href="../radar/actions.html">监管雷达 · 监管动向</a>。</li>
+    </ol>
+  </div>
+
+  <p style="margin-top:26px;font-size:12.5px;color:var(--faint)">本文为合规研究性分析，基于监管机构公开信息整理，不构成法律意见。具体义务适用请结合企业实际业务形态判断。</p>
+
+</div>
+</div>
+
+<footer><div class="inner">
+  <div class="foot-brand">law<span>datify</span> · 法律合规主站</div>
+  <div class="foot-desc">由法务团队维护 · 内容基于监管机构官网公开信息整理，逐条附原文深链</div>
+  <div class="foot-links">
+    <a href="../updates/index.html">今日更新</a>·
+    <a href="../news/index.html">合规资讯</a>·
+    <a href="../kb/index.html">知识库</a>·
+    <a href="../analysis/index.html">法律分析</a>·
+    <a href="../news/briefs.html">简报归档</a>·
+    <a href="../search.html">搜索</a>·
+    <a href="../about.html">关于本站</a>
+  </div>
+  <div class="foot-meta">数据更新至 <span class="upd"><!-- UPDATED:START -->2026-09-10<!-- UPDATED:END --></span> · 本站内容不构成法律意见 · © 2026 lawdatify</div>
+</div></footer>
+</body>
+</html>

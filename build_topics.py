@@ -296,17 +296,51 @@ def snippet(text, n=180):
     return cut + "…"
 
 
+# ---------------------------------------------------------------------------
+# 深链覆盖表：简报里偶有条目只留了机构官网根域名（如 https://www.cac.gov.cn/），
+# 这属于"来源不可溯源"，必须换成发布机构的具体公告页。
+# 键是标题里的特征词，值是人工检索并 curl 实测过的官网具体页面。
+# 新增覆盖时务必先验证 HTTP 200，不要凭印象填 URL。
+# ---------------------------------------------------------------------------
+URL_OVERRIDE = [
+    ("App／SDK 侵害用户权益",
+     "https://wap.miit.gov.cn/xwfb/gxdt/sjdt/art/2026/art_b0879936348c4018a1e54f1c773514a5.html"),
+    ("App/SDK 侵害用户权益",
+     "https://wap.miit.gov.cn/xwfb/gxdt/sjdt/art/2026/art_b0879936348c4018a1e54f1c773514a5.html"),
+    ("大模型备案",
+     "https://www.cac.gov.cn/2024-04/02/c_1713729983803145.htm"),
+]
+
+
+def is_root_url(u):
+    """判断是否为官网首页根域名——这类链接不可溯源，不能作为来源展示。"""
+    if not u:
+        return True
+    p = re.sub(r"^https?://(www\.)?", "", u)
+    return "/" not in p or p.rstrip("/").count("/") == 0
+
+
 def render_item_card(it, idx):
     """单条资讯卡片。"""
     color = DOMAIN_COLOR.get(it["domain"], "#1b4f8a")
     url = it["url"]
+    # 根域名先用覆盖表换成具体公告页
+    if is_root_url(url):
+        for kw, deep in URL_OVERRIDE:
+            if kw in it.get("title", ""):
+                url = deep
+                break
     link_html = ""
     if url:
         host = re.sub(r"^https?://(www\.)?", "", url).split("/")[0]
-        link_html = (
-            f'<a class="src" href="{esc(url)}" target="_blank" rel="noopener">'
-            f'{esc(host)} <span class="arw">↗</span></a>'
-        )
+        if is_root_url(url):
+            # 仍没有可用深链：只显示机构名，不做成链接，绝不指向官网首页
+            link_html = f'<span class="src src-plain">{esc(host)}</span>'
+        else:
+            link_html = (
+                f'<a class="src" href="{esc(url)}" target="_blank" rel="noopener">'
+                f'{esc(host)} <span class="arw">↗</span></a>'
+            )
 
     ana_html = ""
     if it["analysis"]:
