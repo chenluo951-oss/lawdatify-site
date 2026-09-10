@@ -207,7 +207,7 @@ footer a{color:var(--muted)}
 @media(max-width:900px){
   .cards{grid-template-columns:1fr}
   .kb-grid{grid-template-columns:1fr}
-  .hero h1{font-size:27px}
+  .hero h1{font-size:40px}
   .navlinks{gap:15px;font-size:13.5px}
   .ftabs{margin-left:0;width:100%}
   #q{max-width:none}
@@ -415,17 +415,20 @@ footer .inner{flex-direction:column;align-items:flex-start;gap:10px}
 
 /* ---------------- hero v2：更深、更有质感 ---------------- */
 .hero{background:linear-gradient(128deg,#0d2b4e 0%,#14456f 44%,#0d5f57 100%);
-  padding:78px 0 54px}
+  padding:104px 0 84px}
 .hero::before{content:"";position:absolute;inset:0;
   background-image:radial-gradient(rgba(255,255,255,.13) 1px,transparent 1.4px);
   background-size:26px 26px;opacity:.35;pointer-events:none}
 .hero::after{content:"";position:absolute;right:-140px;top:-110px;width:520px;height:520px;
   background:radial-gradient(circle,rgba(94,209,190,.16),transparent 60%);
   border-radius:50%}
-.hero h1{font-size:40px;letter-spacing:2px;margin:0 0 12px}
+.hero h1{font-size:62px;letter-spacing:-.5px;line-height:1.06;margin:0 0 14px}
+.hero .hero-sub{margin:0;color:#bcd8e6;font-size:17px;letter-spacing:.6px}
 .hero-lead{margin:0;color:#c8dcea;max-width:780px;font-size:16px;line-height:1.9}
 .hero-lead b{color:#fff;border-bottom:2px solid rgba(255,255,255,.35);padding-bottom:1px}
-.hero .searchbox{margin-top:24px}
+.hero .searchbox{margin-top:30px;max-width:860px}
+.hero .searchbox input{padding:17px 22px;font-size:16px}
+.hero .searchbox button{padding:0 34px;font-size:15px}
 .hero-stats{display:flex;flex-wrap:wrap;gap:12px;margin-top:34px}
 .hs{background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.18);
   backdrop-filter:blur(4px);border-radius:12px;padding:14px 22px;min-width:150px}
@@ -588,7 +591,9 @@ footer .inner{flex-direction:column;align-items:flex-start;gap:10px}
   .cal-cell{min-height:64px;padding:4px 5px}
   .cal-ev{font-size:9.5px}
   .hs{min-width:calc(50% - 12px)}
-  .hero h1{font-size:31px}
+  .hero h1{font-size:36px}
+  .hero .hero-sub{font-size:15px}
+  .hero{padding:76px 0 60px}
 }
 @media print{
   .geo-frame,.cal-doms,.cal-btns{display:none}
@@ -993,11 +998,11 @@ footer .inner{flex-direction:column;align-items:flex-start;gap:10px}
 @media(max-width:720px){.duty-teaser{grid-template-columns:1fr}}
 
 /* 首页 hero 关键词 */
-.hero-kw{margin-top:16px;display:flex;flex-wrap:wrap;gap:8px;align-items:center}
-.hk-l{font-size:12px;color:#9fd8cf;letter-spacing:.5px;margin-right:2px}
-.hero-kw .hk{display:inline-block;font-size:12.5px;color:#fff;text-decoration:none;
+.hero-kw{margin-top:24px;display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.hk-l{font-size:13px;color:#a9e0d6;letter-spacing:.5px;margin-right:4px}
+.hero-kw .hk{display:inline-block;font-size:13.5px;color:#fff;text-decoration:none;
   background:rgba(255,255,255,.20);border:1px solid rgba(255,255,255,.34);
-  padding:4px 11px;border-radius:999px;transition:.18s}
+  padding:8px 16px;border-radius:999px;transition:.18s}
 .hero-kw .hk:hover{background:rgba(255,255,255,.26);color:#fff}
 
 /* 关联义务 */

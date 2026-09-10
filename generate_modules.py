@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""合规终点站 站点 · 模块生成脚本（打磨日志 + 对标库）
+"""合规无终点 站点 · 模块生成脚本（打磨日志 + 对标库）
 
 读取：
   ~/.workbuddy/skills/compliance-report-generator/references/polish_changelog.md
@@ -125,7 +125,7 @@ NAV_KB = """<nav class="topnav"><div class="inner">
 </div></nav>"""
 
 FOOT = """<footer><div class="inner">
-  <div>合规终点站.site · 即时零售合规主站</div>
+  <div>合规无终点.site · 即时零售合规主站</div>
   <div><a href="../index.html">首页</a> · <a href="../news/index.html">资讯索引</a> · <a href="../analysis/index.html">法律分析</a> · <a href="../kb/index.html">知识库</a> · <a href="../prm.html">PRM</a></div>
 </div></footer>"""
 
@@ -273,7 +273,7 @@ def render_polish(entries):
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>报告排版打磨日志 · 合规终点站</title>
+<title>报告排版打磨日志 · 合规无终点</title>
 <link rel="stylesheet" href="../assets/style.css">
 <style>
 .pol-summary{{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:22px 0 6px}}
@@ -441,7 +441,7 @@ def render_bench(cats):
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>行业报告排版对标库 · 合规终点站</title>
+<title>行业报告排版对标库 · 合规无终点</title>
 <link rel="stylesheet" href="../assets/style.css">
 <style>
 .bm-summary{{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:22px 0 6px}}

@@ -71,7 +71,7 @@ def build_nav(rel: str) -> str:
         links.append(f'    <a href="{p}{target}"{active}>{label}</a>')
     return (
         '<nav class="topnav"><div class="inner">\n'
-        f'  <a class="brand" href="{p}index.html">合规<span>终点站</span></a>\n'
+        f'  <a class="brand" href="{p}index.html">合规<span>无终点</span></a>\n'
         '  <div class="navlinks">\n' + "\n".join(links) + "\n  </div>\n"
         '</div></nav>'
     )
@@ -81,7 +81,7 @@ def build_footer(rel: str) -> str:
     p = "../" * rel.count("/")
     return (
         '<footer><div class="inner">\n'
-        '  <div class="foot-brand">合规<span>终点站</span> · 即时零售合规知识库</div>\n'
+        '  <div class="foot-brand">合规<span>无终点</span> · 即时零售合规知识库</div>\n'
         '  <div class="foot-desc">由法务团队维护 · 内容基于监管机构官网公开信息整理，逐条附原文深链</div>\n'
         '  <div class="foot-links">\n'
         f'    <a href="{p}updates/index.html">今日更新</a>·\n'
@@ -94,7 +94,7 @@ def build_footer(rel: str) -> str:
         '  </div>\n'
         '  <div class="foot-meta">数据更新至 <span class="upd"><!-- UPDATED:START -->'
         f'{TODAY}<!-- UPDATED:END --></span>'
-        ' · 本站内容不构成法律意见 · © 2026 合规终点站</div>\n'
+        ' · 本站内容不构成法律意见 · © 2026 合规无终点</div>\n'
         '</div></footer>'
     )
 
