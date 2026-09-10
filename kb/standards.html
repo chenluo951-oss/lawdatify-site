@@ -14487,18 +14487,21 @@ AIGC: true / Generator: [服务名] / ProducedAt: [时间]
 (function(){
   var tabs=[].slice.call(document.querySelectorAll('.lb-tabs > .rd-fchip'));
   var panes=[].slice.call(document.querySelectorAll('.lb-pane'));
+  var noSmooth=false;
   tabs.forEach(function(b){
     b.addEventListener('click',function(){
       tabs.forEach(function(x){x.classList.remove('on');});
       b.classList.add('on');
       var want='pane-'+b.getAttribute('data-tab');
       panes.forEach(function(p){ p.hidden = (p.id!==want); });
-      window.scrollTo({top:0,behavior:'smooth'});
+      if(noSmooth){ window.scrollTo(0,0); }
+      else { window.scrollTo({top:0,behavior:'smooth'}); }
     });
   });
   function activateTab(name){
     var b=tabs.filter(function(x){return x.getAttribute('data-tab')===name;})[0];
-    if(b) b.click();
+    if(!b) return;
+    noSmooth=true; b.click(); noSmooth=false;   // 深链直达时直接定位，不做滚动动画
   }
   var hm=/^#pane-(lib|draft|duty)$/.exec(location.hash||'');
   if(hm) activateTab(hm[1]);
