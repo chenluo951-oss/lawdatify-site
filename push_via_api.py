@@ -84,39 +84,59 @@ def main():
                     if t.get("type") == "blob"}
     print(f"远端文件 {len(remote_files)} 个")
 
-    EXCLUDE_DIRS = (".git", "_private", "_quarantine", "__pycache__", "node_modules")
-    local_files = {}
-    for dp, dn, fn in os.walk(HERE):
-        dn[:] = [d for d in dn if d not in EXCLUDE_DIRS]
-        for x in fn:
-            if x in (".DS_Store",):
-                continue
-            full = os.path.join(dp, x)
-            rel = os.path.relpath(full, HERE)
-            local_files[rel] = full
-    print(f"本地待发布文件 {len(local_files)} 个")
+    # 只发布「git 已跟踪」的文件：语料库、私有文档、本地产物一律不外传
+    # （os.walk 会把 gitignore 的 4000+ 语料库文件也算进来，进而触发沙箱敏感内容拦截）
+    raw = subprocess.run(["git", "-C", HERE, "ls-files", "-s", "-z"],
+                         capture_output=True).stdout.decode("utf-8", "surrogateescape")
+    local_entries = []          # (mode, blob_sha, path)
+    for rec in raw.split("\0"):
+        if not rec:
+            continue
+        meta, tab, path = rec.partition("\t")
+        if not tab:
+            continue
+        parts = meta.split()
+        if len(parts) < 2:
+            continue
+        mode, sha = parts[0], parts[1]
+        if mode not in ("100644", "100755"):
+            continue
+        local_entries.append((mode, sha, path))
+    print(f"本地跟踪文件 {len(local_entries)} 个")
+
+    remote_map = {t["path"]: t["sha"] for t in remote.get("tree", [])
+                  if t.get("type") == "blob"}
+    local_paths = {p for _, _, p in local_entries}
 
     tree_entries = []
-    to_delete = sorted(remote_files - set(local_files))
+    to_delete = sorted(set(remote_map) - local_paths)
     for rel in to_delete:
         tree_entries.append({"path": rel, "mode": "100644",
                              "type": "blob", "sha": None})
-    failed = 0
-    for rel, full in sorted(local_files.items()):
-        with open(full, "rb") as f:
+
+    # blob sha 相同 = 内容一致 → 直接复用远端对象，不产生任何 API 调用
+    reused = changed = failed = 0
+    for mode, sha, path in sorted(local_entries, key=lambda x: x[2]):
+        if remote_map.get(path) == sha:
+            tree_entries.append({"path": path, "mode": mode,
+                                 "type": "blob", "sha": sha})
+            reused += 1
+            continue
+        with open(os.path.join(HERE, path), "rb") as f:
             content = base64.b64encode(f.read()).decode()
         blob = api("POST", f"/repos/{REPO}/git/blobs",
                    {"content": content, "encoding": "base64"})
         if "sha" not in blob:
-            print(f"  blob 创建失败 {rel}: {blob}")
+            print(f"  blob 创建失败 {path}: {blob}")
             failed += 1
             if failed > 2:
                 return 1
             continue
-        tree_entries.append({"path": rel, "mode": "100644",
+        tree_entries.append({"path": path, "mode": mode,
                              "type": "blob", "sha": blob["sha"]})
+        changed += 1
     print(f"待写入 {len(tree_entries)} 个路径（删除 {len(to_delete)} / "
-          f"新增或修改 {len(local_files)}）")
+          f"新建 blob {changed} / 复用 {reused}）")
     for rel in to_delete[:8]:
         print("    删除:", rel)
 
