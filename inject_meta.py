@@ -30,7 +30,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 SITE_URL = "https://chenluo951-oss.github.io/lawdatify-site"
 OG_IMAGE = f"{SITE_URL}/assets/og-cover.png"
 
-SITE_NAME = "lawdatify · 即时零售合规主站"
+SITE_NAME = "合规无终点"
 LOCALE = "zh_CN"
 
 # 需要处理的页面（相对仓库根）。_quarantine/ 与 news/reports/ 下不入列。

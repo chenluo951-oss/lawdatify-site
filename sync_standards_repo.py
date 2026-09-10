@@ -58,7 +58,14 @@ def main():
 
     if not os.path.isdir(STORE):
         sys.exit(f"本机标准库不存在：{STORE}（先跑 fetch_standards.py）")
-    files = sorted(f for f in os.listdir(STORE) if f.lower().endswith((".txt", ".md")))
+    # 递归收集（含 TAF标准/ 等子目录），保留相对路径
+    files = []
+    for root, _dirs, fns in os.walk(STORE):
+        for fn in fns:
+            if fn.lower().endswith((".txt", ".md")):
+                rel = os.path.relpath(os.path.join(root, fn), STORE)
+                files.append(rel.replace(os.sep, "/"))
+    files = sorted(files)
     if not files:
         sys.exit("本机标准库为空")
 

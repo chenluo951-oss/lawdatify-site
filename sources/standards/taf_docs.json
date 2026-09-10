@@ -1,0 +1,594 @@
+{
+ "T/TAF 023—2018": {
+  "name": "移动智能终端应用软件安全与质量要求",
+  "url": "https://www.taf.org.cn/StdDetail.aspx?uid=abbec0c4-b897-4d05-a20d-df6771394da1&stdType=TAF",
+  "pdf": "https://www.taf.org.cn/upload/AssociationStandard/TTAF%20023-2018%20%E7%A7%BB%E5%8A%A8%E6%99%BA%E8%83%BD%E7%BB%88%E7%AB%AF%E5%BA%94%E7%94%A8%E8%BD%AF%E4%BB%B6%E5%AE%89%E5%85%A8%E4%B8%8E%E8%B4%A8%E9%87%8F%E8%A6%81%E6%B1%82.pdf",
+  "corpus_id": "23c0274a966a",
+  "chars": 16839,
+  "local": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/TAF标准/T_TAF_023—2018_移动智能终端应用软件安全与质量要求.pdf"
+ },
+ "T/TAF 047—2022": {
+  "name": "移动智能终端安全能力测试细则",
+  "url": "https://www.taf.org.cn/StdDetail.aspx?uid=fb9d1219-28a9-4a26-aecb-a3049d785539&stdType=TAF",
+  "pdf": "https://www.taf.org.cn/upload/AssociationStandard/TTAF%20047%E2%80%942022%20%E7%A7%BB%E5%8A%A8%E6%99%BA%E8%83%BD%E7%BB%88%E7%AB%AF%E5%AE%89%E5%85%A8%E8%83%BD%E5%8A%9B%E6%B5%8B%E8%AF%95%E7%BB%86%E5%88%99.pdf",
+  "corpus_id": "ff491fc6c1ed",
+  "chars": 22373,
+  "local": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/TAF标准/T_TAF_047—2022_移动智能终端安全能力测试细则.pdf"
+ },
+ "T/TAF 049—2019": {
+  "name": "移动智能终端应用软件行为规范",
+  "url": "https://www.taf.org.cn/StdDetail.aspx?uid=6e67786f-0af9-4107-b83d-68f9f5916acc&stdType=TAF",
+  "pdf": "https://www.taf.org.cn/upload/AssociationStandard/TTAF%20049-2019%20%E7%A7%BB%E5%8A%A8%E6%99%BA%E8%83%BD%E7%BB%88%E7%AB%AF%E5%BA%94%E7%94%A8%E8%BD%AF%E4%BB%B6%E8%A1%8C%E4%B8%BA%E8%A7%84%E8%8C%83.pdf",
+  "corpus_id": "3fa669df1fd7",
+  "chars": 10680,
+  "local": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/TAF标准/T_TAF_049—2019_移动智能终端应用软件行为规范.pdf"
+ },
+ "T/TAF 050—2022": {
+  "name": "移动智能终端及应用软件用户个人信息保护实施指南 第2部分：个人信息分类分级",
+  "url": "https://www.taf.org.cn/StdDetail.aspx?uid=228be866-d71a-4453-9dd0-c5c4314b0f82&stdType=TAF",
+  "pdf": "https://www.taf.org.cn/upload/AssociationStandard/TTAF%20050%E2%80%942022%20%E7%A7%BB%E5%8A%A8%E6%99%BA%E8%83%BD%E7%BB%88%E7%AB%AF%E5%8F%8A%E5%BA%94%E7%94%A8%E8%BD%AF%E4%BB%B6%E7%94%A8%E6%88%B7%E4%B8%AA%E4%BA%BA%E4%BF%A1%E6%81%AF%E4%BF%9D%E6%8A%A4%E5%AE%9E%E6%96%BD%E6%8C%87%E5%8D%97%20%20%E7%AC%AC2%E9%83%A8%E5%88%86%EF%BC%9A%E4%B8%AA%E4%BA%BA%E4%BF%A1%E6%81%AF%E5%88%86%E7%B1%BB%E5%88%86%E7%BA%A7.pdf",
+  "corpus_id": "309ff7b1b0e7",
+  "chars": 18564,
+  "local": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/TAF标准/T_TAF_050—2022_移动智能终端及应用软件用户个人信息保护实施指南_第2部分：个人信息分类分级.pdf"
+ },
+ "T/TAF 051—2021": {
+  "name": "移动智能终端及应用软件用户个人信息保护实施指南 第5部分：终端权限管理",
+  "url": "https://www.taf.org.cn/StdDetail.aspx?uid=f3ef387b-956a-4eff-beb8-026fd666df80&stdType=TAF",
+  "pdf": "https://www.taf.org.cn/upload/AssociationStandard/TTAF%20051-2021%20%E7%A7%BB%E5%8A%A8%E6%99%BA%E8%83%BD%E7%BB%88%E7%AB%AF%E5%8F%8A%E5%BA%94%E7%94%A8%E8%BD%AF%E4%BB%B6%E7%94%A8%E6%88%B7%E4%B8%AA%E4%BA%BA%E4%BF%A1%E6%81%AF%E4%BF%9D%E6%8A%A4%E5%AE%9E%E6%96%BD%E6%8C%87%E5%8D%97%20%E7%AC%AC5%E9%83%A8%E5%88%86%EF%BC%9A%E7%BB%88%E7%AB%AF%E6%9D%83%E9%99%90%E7%AE%A1%E7%90%86.pdf",
+  "corpus_id": "50ab46353eb9",
+  "chars": 41160,
+  "local": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/TAF标准/T_TAF_051—2021_移动智能终端及应用软件用户个人信息保护实施指南_第5部分：终端权限管理.pdf"
+ },
+ "T/TAF 057—2020": {
+  "name": "移动智能终端应用软件SDK安全技术要求",
+  "url": "https://www.taf.org.cn/StdDetail.aspx?uid=9fc9b097-f7e2-49b2-90cf-0e59618557cf&stdType=TAF",
+  "pdf": "https://www.taf.org.cn/upload/AssociationStandard/TTAF%20057-2020%20%E7%A7%BB%E5%8A%A8%E6%99%BA%E8%83%BD%E7%BB%88%E7%AB%AF%E5%BA%94%E7%94%A8%E8%BD%AF%E4%BB%B6SDK%E5%AE%89%E5%85%A8%E6%8A%80%E6%9C%AF%E8%A6%81%E6%B1%82.pdf",
+  "corpus_id": "c092b35f0239",
+  "chars": 9797,
+  "local": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/TAF标准/T_TAF_057—2020_移动智能终端应用软件SDK安全技术要求.pdf"
+ },
+ "T/TAF 065—2020": {
+  "name": "移动智能终端与应用软件用户个人信息保护实施指南 第 3 部分：终端告知同意",
+  "url": "https://www.taf.org.cn/StdDetail.aspx?uid=ca992ee4-3777-4de5-af68-ced64e0ac36d&stdType=TAF",
+  "pdf": "https://www.taf.org.cn/upload/AssociationStandard/TTAF%20065-2020%20%E7%A7%BB%E5%8A%A8%E6%99%BA%E8%83%BD%E7%BB%88%E7%AB%AF%E4%B8%8E%E5%BA%94%E7%94%A8%E8%BD%AF%E4%BB%B6%E7%94%A8%E6%88%B7%E4%B8%AA%E4%BA%BA%E4%BF%A1%E6%81%AF%E4%BF%9D%E6%8A%A4%E5%AE%9E%E6%96%BD%E6%8C%87%E5%8D%97%20%E7%AC%AC3%E9%83%A8%E5%88%86%EF%BC%9A%E7%BB%88%E7%AB%AF%E5%91%8A%E7%9F%A5%E5%90%8C%E6%84%8F.pdf",
+  "corpus_id": "f0750423875a",
+  "chars": 8528,
+  "local": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/TAF标准/T_TAF_065—2020_移动智能终端与应用软件用户个人信息保护实施指南_第_3_部分：终端告知同意.pdf"
+ },
+ "T/TAF 066—2020": {
+  "name": "移动智能终端及应用软件用户个人信息保护实施指南 第 4 部分：应用软件告知同意",
+  "url": "https://www.taf.org.cn/StdDetail.aspx?uid=36eba2c2-5b3f-42a9-83fa-c95826460227&stdType=TAF",
+  "pdf": "https://www.taf.org.cn/upload/AssociationStandard/TTAF%20066-2020%20%E7%A7%BB%E5%8A%A8%E6%99%BA%E8%83%BD%E7%BB%88%E7%AB%AF%E5%8F%8A%E5%BA%94%E7%94%A8%E8%BD%AF%E4%BB%B6%E7%94%A8%E6%88%B7%E4%B8%AA%E4%BA%BA%E4%BF%A1%E6%81%AF%E4%BF%9D%E6%8A%A4%E5%AE%9E%E6%96%BD%E6%8C%87%E5%8D%97%EF%BC%9A%E7%AC%AC4%E9%83%A8%E5%88%86%20%E5%BA%94%E7%94%A8%E8%BD%AF%E4%BB%B6%E5%91%8A%E7%9F%A5%E5%90%8C%E6%84%8F.pdf",
+  "corpus_id": "77f69e149efb",
+  "chars": 5880,
+  "local": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/TAF标准/T_TAF_066—2020_移动智能终端及应用软件用户个人信息保护实施指南_第_4_部分：应用软件告知同意.pdf"
+ },
+ "T/TAF 067—2020": {
+  "name": "移动智能终端与应用软件用户个人信息保护实施指南 第 6 部分：应用软件权限规范",
+  "url": "https://www.taf.org.cn/StdDetail.aspx?uid=90e178ca-374c-4800-896a-5194b0900750&stdType=TAF",
+  "pdf": "https://www.taf.org.cn/upload/AssociationStandard/TTAF%20067-2020%20%E7%A7%BB%E5%8A%A8%E6%99%BA%E8%83%BD%E7%BB%88%E7%AB%AF%E5%8F%8A%E5%BA%94%E7%94%A8%E8%BD%AF%E4%BB%B6%E7%94%A8%E6%88%B7%E4%B8%AA%E4%BA%BA%E4%BF%A1%E6%81%AF%E4%BF%9D%E6%8A%A4%E5%AE%9E%E6%96%BD%E6%8C%87%E5%8D%97%20%E7%AC%AC6%E9%83%A8%E5%88%86%EF%BC%9A%E5%BA%94%E7%94%A8%E8%BD%AF%E4%BB%B6%E6%95%8F%E6%84%9F%E6%9D%83%E9%99%90%E8%A7%84%E8%8C%83.pdf",
+  "corpus_id": "4fea8c86c161",
+  "chars": 8227,
+  "local": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/TAF标准/T_TAF_067—2020_移动智能终端与应用软件用户个人信息保护实施指南_第_6_部分：应用软件权限规范.pdf"
+ },
+ "T/TAF 068—2020": {
+  "name": "移动智能终端及应用软件用户个人信息保护实施指南 第8部分：隐私政策",
+  "url": "https://www.taf.org.cn/StdDetail.aspx?uid=b55868cc-a013-417f-a8aa-4b63770bfcf1&stdType=TAF",
+  "pdf": "https://www.taf.org.cn/upload/AssociationStandard/TTAF%20068-2020%20%E7%A7%BB%E5%8A%A8%E6%99%BA%E8%83%BD%E7%BB%88%E7%AB%AF%E5%8F%8A%E5%BA%94%E7%94%A8%E8%BD%AF%E4%BB%B6%E7%94%A8%E6%88%B7%E4%B8%AA%E4%BA%BA%E4%BF%A1%E6%81%AF%E4%BF%9D%E6%8A%A4%E5%AE%9E%E6%96%BD%E6%8C%87%E5%8D%97%20%E7%AC%AC8%E9%83%A8%E5%88%86%EF%BC%9A%E9%9A%90%E7%A7%81%E6%94%BF%E7%AD%96%20.pdf",
+  "corpus_id": "6805cb2344f9",
+  "chars": 6216,
+  "local": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/TAF标准/T_TAF_068—2020_移动智能终端及应用软件用户个人信息保护实施指南_第8部分：隐私政策.pdf"
+ },
+ "T/TAF 070—2020": {
+  "name": "移动智能终端及应用软件用户个人信息保护实施指南 第1部分：总则",
+  "url": "https://www.taf.org.cn/StdDetail.aspx?uid=6c9f4148-84aa-4990-a3f8-6b11ad13d237&stdType=TAF",
+  "pdf": "https://www.taf.org.cn/upload/AssociationStandard/TTAF%20070-2020%20%E7%A7%BB%E5%8A%A8%E6%99%BA%E8%83%BD%E7%BB%88%E7%AB%AF%E5%8F%8A%E5%BA%94%E7%94%A8%E8%BD%AF%E4%BB%B6%E7%94%A8%E6%88%B7%E4%B8%AA%E4%BA%BA%E4%BF%A1%E6%81%AF%E4%BF%9D%E6%8A%A4%E5%AE%9E%E6%96%BD%E6%8C%87%E5%8D%97%20%E7%AC%AC1%E9%83%A8%E5%88%86%EF%BC%9A%E6%80%BB%E5%88%99.pdf",
+  "corpus_id": "3c98d2c43fe6",
+  "chars": 6215,
+  "local": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/TAF标准/T_TAF_070—2020_移动智能终端及应用软件用户个人信息保护实施指南_第1部分：总则.pdf"
+ },
+ "T/TAF 076—2020": {
+  "name": "移动终端权限申请目的说明实施指南",
+  "url": "https://www.taf.org.cn/StdDetail.aspx?uid=b0253bc8-dd8f-440b-a27e-e2096ca4532e&stdType=TAF",
+  "pdf": "https://www.taf.org.cn/upload/AssociationStandard/TTAF%20076-2020%20%E7%A7%BB%E5%8A%A8%E7%BB%88%E7%AB%AF%E6%9D%83%E9%99%90%E7%94%B3%E8%AF%B7%E7%9B%AE%E7%9A%84%E8%AF%B4%E6%98%8E%E5%AE%9E%E6%96%BD%E6%8C%87%E5%8D%97.pdf",
+  "corpus_id": "d7072bb8d493",
+  "chars": 8869,
+  "local": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/TAF标准/T_TAF_076—2020_移动终端权限申请目的说明实施指南.pdf"
+ },
+ "T/TAF 077.10—2021": {
+  "name": "APP收集使用个人信息最小必要评估规范 录音信息",
+  "url": "https://www.taf.org.cn/StdDetail.aspx?uid=8fbab2ec-7587-4f44-abf0-bff697e6ae83&stdType=TAF",
+  "pdf": "https://www.taf.org.cn/upload/AssociationStandard/TTAF%20077.10-2021%20APP%E6%94%B6%E9%9B%86%E4%BD%BF%E7%94%A8%E4%B8%AA%E4%BA%BA%E4%BF%A1%E6%81%AF%E6%9C%80%E5%B0%8F%E5%BF%85%E8%A6%81%E8%AF%84%E4%BC%B0%E8%A7%84%E8%8C%83%20%E5%BD%95%E9%9F%B3%E4%BF%A1%E6%81%AF.pdf",
+  "corpus_id": "243dd2bb1dfc",
+  "chars": 5198,
+  "local": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/TAF标准/T_TAF_077.10—2021_APP收集使用个人信息最小必要评估规范_录音信息.pdf"
+ },
+ "T/TAF 077.11—2022": {
+  "name": "APP收集使用个人信息最小必要评估规范 第11部分：通话记录",
+  "url": "https://www.taf.org.cn/StdDetail.aspx?uid=893262cf-b87d-4a63-a6b1-6bd42bd463f1&stdType=TAF",
+  "pdf": "https://www.taf.org.cn/upload/AssociationStandard/TTAF%20077.11%E2%80%942022%20APP%E6%94%B6%E9%9B%86%E4%BD%BF%E7%94%A8%E4%B8%AA%E4%BA%BA%E4%BF%A1%E6%81%AF%E6%9C%80%E5%B0%8F%E5%BF%85%E8%A6%81%E8%AF%84%E4%BC%B0%E8%A7%84%E8%8C%83%20%20%E7%AC%AC11%E9%83%A8%E5%88%86%EF%BC%9A%E9%80%9A%E8%AF%9D%E8%AE%B0%E5%BD%95.pdf",
+  "corpus_id": "6bc2e639beef",
+  "chars": 11240,
+  "local": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/TAF标准/T_TAF_077.11—2022_APP收集使用个人信息最小必要评估规范_第11部分：通话记录.pdf"
+ },
+ "T/TAF 077.12—2026": {
+  "name": "APP收集使用个人信息最小必要评估规范 第12部分：好友列表",
+  "url": "https://www.taf.org.cn/StdDetail.aspx?uid=8c7da50f-a150-469f-8dce-c497acc089b8&stdType=TAF",
+  "pdf": "https://www.taf.org.cn/upload/AssociationStandard/TTAF%20077.12%E2%80%942026%20APP%E6%94%B6%E9%9B%86%E4%BD%BF%E7%94%A8%E4%B8%AA%E4%BA%BA%E4%BF%A1%E6%81%AF%E6%9C%80%E5%B0%8F%E5%BF%85%E8%A6%81%E8%AF%84%E4%BC%B0%E8%A7%84%E8%8C%83%20%E7%AC%AC12%E9%83%A8%E5%88%86%EF%BC%9A%E5%A5%BD%E5%8F%8B%E5%88%97%E8%A1%A8.pdf",
+  "corpus_id": "baa328aedee2",
+  "chars": 13323,
+  "local": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/TAF标准/T_TAF_077.12—2026_APP收集使用个人信息最小必要评估规范_第12部分：好友列表.pdf"
+ },
+ "T/TAF 077.13—2021": {
+  "name": "APP收集使用个人信息最小必要评估规范 传感器信息",
+  "url": "https://www.taf.org.cn/StdDetail.aspx?uid=a11ca982-3efc-40f7-a390-654651f4ca26&stdType=TAF",
+  "pdf": "https://www.taf.org.cn/upload/AssociationStandard/TTAF%20077.13-2021%20APP%E6%94%B6%E9%9B%86%E4%BD%BF%E7%94%A8%E4%B8%AA%E4%BA%BA%E4%BF%A1%E6%81%AF%E6%9C%80%E5%B0%8F%E5%BF%85%E8%A6%81%E8%AF%84%E4%BC%B0%E8%A7%84%E8%8C%83%20%E4%BC%A0%E6%84%9F%E5%99%A8%E4%BF%A1%E6%81%AF.pdf",
+  "corpus_id": "2bf472997a48",
+  "chars": 5777,
+  "local": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/TAF标准/T_TAF_077.13—2021_APP收集使用个人信息最小必要评估规范_传感器信息.pdf"
+ },
+ "T/TAF 077.14—2021": {
+  "name": "APP收集使用个人信息最小必要评估规范 应用日志信息",
+  "url": "https://www.taf.org.cn/StdDetail.aspx?uid=9969b113-ecdd-4dd0-b9a0-7b5c203177ec&stdType=TAF",
+  "pdf": "https://www.taf.org.cn/upload/AssociationStandard/TTAF%20077.14-2021%20APP%E6%94%B6%E9%9B%86%E4%BD%BF%E7%94%A8%E4%B8%AA%E4%BA%BA%E4%BF%A1%E6%81%AF%E6%9C%80%E5%B0%8F%E5%BF%85%E8%A6%81%E8%AF%84%E4%BC%B0%E8%A7%84%E8%8C%83%20%E5%BA%94%E7%94%A8%E6%97%A5%E5%BF%97%E4%BF%A1%E6%81%AF.pdf",
+  "corpus_id": "6c96e2ec94c4",
+  "chars": 4705,
+  "local": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/TAF标准/T_TAF_077.14—2021_APP收集使用个人信息最小必要评估规范_应用日志信息.pdf"
+ },
+ "T/TAF 077.15—2021": {
+  "name": "APP收集使用个人信息最小必要评估规范 房产信息",
+  "url": "https://www.taf.org.cn/StdDetail.aspx?uid=209bfada-d07f-4c7f-9ef0-c609267ccf14&stdType=TAF",
+  "pdf": "https://www.taf.org.cn/upload/AssociationStandard/TTAF%20077.15-2021%20APP%E6%94%B6%E9%9B%86%E4%BD%BF%E7%94%A8%E4%B8%AA%E4%BA%BA%E4%BF%A1%E6%81%AF%E6%9C%80%E5%B0%8F%E5%BF%85%E8%A6%81%E8%AF%84%E4%BC%B0%E8%A7%84%E8%8C%83%20%E6%88%BF%E4%BA%A7%E4%BF%A1%E6%81%AF.pdf",
+  "corpus_id": "2412f6c56738",
+  "chars": 5832,
+  "local": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/TAF标准/T_TAF_077.15—2021_APP收集使用个人信息最小必要评估规范_房产信息.pdf"
+ },
+ "T/TAF 077.16—2021": {
+  "name": "APP收集使用个人信息最小必要评估规范 交易记录",
+  "url": "https://www.taf.org.cn/StdDetail.aspx?uid=ceda44a6-a64c-4acc-8fa7-3b21bc53e7e8&stdType=TAF",
+  "pdf": "https://www.taf.org.cn/upload/AssociationStandard/TTAF%20077.16-2021%20APP%E6%94%B6%E9%9B%86%E4%BD%BF%E7%94%A8%E4%B8%AA%E4%BA%BA%E4%BF%A1%E6%81%AF%E6%9C%80%E5%B0%8F%E5%BF%85%E8%A6%81%E8%AF%84%E4%BC%B0%E8%A7%84%E8%8C%83%20%E4%BA%A4%E6%98%93%E8%AE%B0%E5%BD%95.pdf",
+  "corpus_id": "6aadf5bfdeef",
+  "chars": 5315,
+  "local": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/TAF标准/T_TAF_077.16—2021_APP收集使用个人信息最小必要评估规范_交易记录.pdf"
+ },
+ "T/TAF 077.17—2021": {
+  "name": "APP收集使用个人信息最小必要评估规范 身份信息",
+  "url": "https://www.taf.org.cn/StdDetail.aspx?uid=8a304838-7558-462b-a2e0-a1ecea0e4618&stdType=TAF",
+  "pdf": "https://www.taf.org.cn/upload/AssociationStandard/TTAF%20077.17-2021%20APP%E6%94%B6%E9%9B%86%E4%BD%BF%E7%94%A8%E4%B8%AA%E4%BA%BA%E4%BF%A1%E6%81%AF%E6%9C%80%E5%B0%8F%E5%BF%85%E8%A6%81%E8%AF%84%E4%BC%B0%E8%A7%84%E8%8C%83%20%E8%BA%AB%E4%BB%BD%E4%BF%A1%E6%81%AF.pdf",
+  "corpus_id": "9299df36499b",
+  "chars": 5217,
+  "local": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/TAF标准/T_TAF_077.17—2021_APP收集使用个人信息最小必要评估规范_身份信息.pdf"
+ },
+ "T/TAF 077.2—2020": {
+  "name": "APP收集使用个人信息最小必要评估规范 位置信息",
+  "url": "https://www.taf.org.cn/StdDetail.aspx?uid=1816a699-18bf-491a-aeed-03a6e936c8fd&stdType=TAF",
+  "pdf": "https://www.taf.org.cn/upload/AssociationStandard/TTAF%20077.2-2020%20APP%E6%94%B6%E9%9B%86%E4%BD%BF%E7%94%A8%E4%B8%AA%E4%BA%BA%E4%BF%A1%E6%81%AF%E6%9C%80%E5%B0%8F%E5%BF%85%E8%A6%81%E8%AF%84%E4%BC%B0%E8%A7%84%E8%8C%83%20%E4%BD%8D%E7%BD%AE%E4%BF%A1%E6%81%AF.pdf",
+  "corpus_id": "136423cf149c",
+  "chars": 9498,
+  "local": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/TAF标准/T_TAF_077.2—2020_APP收集使用个人信息最小必要评估规范_位置信息.pdf"
+ },
+ "T/TAF 077.3—2022": {
+  "name": "APP收集使用个人信息最小必要评估规范 第3部分：图片信息",
+  "url": "https://www.taf.org.cn/StdDetail.aspx?uid=b8556156-03af-46c8-b1c8-d565faae3944&stdType=TAF",
+  "pdf": "https://www.taf.org.cn/upload/AssociationStandard/TTAF%20077.3-2022%20APP%E6%94%B6%E9%9B%86%E4%BD%BF%E7%94%A8%E4%B8%AA%E4%BA%BA%E4%BF%A1%E6%81%AF%E6%9C%80%E5%B0%8F%E5%BF%85%E8%A6%81%E8%AF%84%E4%BC%B0%E8%A7%84%E8%8C%83%20%20%E7%AC%AC3%E9%83%A8%E5%88%86%EF%BC%9A%E5%9B%BE%E7%89%87%E4%BF%A1%E6%81%AF.pdf",
+  "corpus_id": "b58e174b6039",
+  "chars": 10356,
+  "local": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/TAF标准/T_TAF_077.3—2022_APP收集使用个人信息最小必要评估规范_第3部分：图片信息.pdf"
+ },
+ "T/TAF 077.4—2020": {
+  "name": "APP收集使用个人信息最小必要评估规范 终端通讯录",
+  "url": "https://www.taf.org.cn/StdDetail.aspx?uid=1f2a0be8-ca27-4de6-b096-c4493e4cda17&stdType=TAF",
+  "pdf": "https://www.taf.org.cn/upload/AssociationStandard/TTAF%20077.4-2020%20APP%E6%94%B6%E9%9B%86%E4%BD%BF%E7%94%A8%E4%B8%AA%E4%BA%BA%E4%BF%A1%E6%81%AF%E6%9C%80%E5%B0%8F%E5%BF%85%E8%A6%81%E8%AF%84%E4%BC%B0%E8%A7%84%E8%8C%83%20%E7%BB%88%E7%AB%AF%E9%80%9A%E8%AE%AF%E5%BD%95.pdf",
+  "corpus_id": "c1af530076dc",
+  "chars": 4879,
+  "local": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/TAF标准/T_TAF_077.4—2020_APP收集使用个人信息最小必要评估规范_终端通讯录.pdf"
+ },
+ "T/TAF 077.5—2022": {
+  "name": "APP收集使用个人信息最小必要评估规范 第5部分：设备信息",
+  "url": "https://www.taf.org.cn/StdDetail.aspx?uid=81cb4049-3cc8-4807-8690-fbc228cb3cf7&stdType=TAF",
+  "pdf": "https://www.taf.org.cn/upload/AssociationStandard/TTAF%20077.5%E2%80%942022%20%20APP%E6%94%B6%E9%9B%86%E4%BD%BF%E7%94%A8%E4%B8%AA%E4%BA%BA%E4%BF%A1%E6%81%AF%E6%9C%80%E5%B0%8F%E5%BF%85%E8%A6%81%E8%AF%84%E4%BC%B0%E8%A7%84%E8%8C%83%20%20%E7%AC%AC5%E9%83%A8%E5%88%86%EF%BC%9A%E8%AE%BE%E5%A4%87%E4%BF%A1%E6%81%AF.pdf",
+  "corpus_id": "9828466396dc",
+  "chars": 12952,
+  "local": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/TAF标准/T_TAF_077.5—2022_APP收集使用个人信息最小必要评估规范_第5部分：设备信息.pdf"
+ },
+ "T/TAF 077.6—2020": {
+  "name": "APP收集使用个人信息最小必要评估规范 软件列表",
+  "url": "https://www.taf.org.cn/StdDetail.aspx?uid=8ebe18ca-10c0-4300-b425-fdc43a9305ed&stdType=TAF",
+  "pdf": "https://www.taf.org.cn/upload/AssociationStandard/TTAF%20077.6-2020%20APP%E6%94%B6%E9%9B%86%E4%BD%BF%E7%94%A8%E4%B8%AA%E4%BA%BA%E4%BF%A1%E6%81%AF%E6%9C%80%E5%B0%8F%E5%BF%85%E8%A6%81%E8%AF%84%E4%BC%B0%E8%A7%84%E8%8C%83%20%E8%BD%AF%E4%BB%B6%E5%88%97%E8%A1%A8.pdf",
+  "corpus_id": "2ff02904d615",
+  "chars": 4843,
+  "local": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/TAF标准/T_TAF_077.6—2020_APP收集使用个人信息最小必要评估规范_软件列表.pdf"
+ },
+ "T/TAF 077.7—2020": {
+  "name": "APP收集使用个人信息最小必要评估规范 人脸信息",
+  "url": "https://www.taf.org.cn/StdDetail.aspx?uid=154d98f0-9f96-48b1-b01d-2afee80006fb&stdType=TAF",
+  "pdf": "https://www.taf.org.cn/upload/AssociationStandard/TTAF%20077.7-2020%20APP%E6%94%B6%E9%9B%86%E4%BD%BF%E7%94%A8%E4%B8%AA%E4%BA%BA%E4%BF%A1%E6%81%AF%E6%9C%80%E5%B0%8F%E5%BF%85%E8%A6%81%E8%AF%84%E4%BC%B0%E8%A7%84%E8%8C%83%20%E4%BA%BA%E8%84%B8%E4%BF%A1%E6%81%AF.pdf",
+  "corpus_id": "6bc9c74c2235",
+  "chars": 5527,
+  "local": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/TAF标准/T_TAF_077.7—2020_APP收集使用个人信息最小必要评估规范_人脸信息.pdf"
+ },
+ "T/TAF 077.8—2022": {
+  "name": "APP收集使用个人信息最小必要评估规范 第8部分：录像信息",
+  "url": "https://www.taf.org.cn/StdDetail.aspx?uid=8483171e-6a4f-469a-9538-0473a3b7667e&stdType=TAF",
+  "pdf": "https://www.taf.org.cn/upload/AssociationStandard/TTAF%20077.8%E2%80%942022%20APP%E6%94%B6%E9%9B%86%E4%BD%BF%E7%94%A8%E4%B8%AA%E4%BA%BA%E4%BF%A1%E6%81%AF%E6%9C%80%E5%B0%8F%E5%BF%85%E8%A6%81%E8%AF%84%E4%BC%B0%E8%A7%84%E8%8C%83%20%20%E7%AC%AC8%E9%83%A8%E5%88%86%EF%BC%9A%E5%BD%95%E5%83%8F%E4%BF%A1%E6%81%AF.pdf",
+  "corpus_id": "78c24d56b212",
+  "chars": 22397,
+  "local": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/TAF标准/T_TAF_077.8—2022_APP收集使用个人信息最小必要评估规范_第8部分：录像信息.pdf"
+ },
+ "T/TAF 077.9—2022": {
+  "name": "APP收集使用个人信息最小必要评估规范 第9部分：短信信息",
+  "url": "https://www.taf.org.cn/StdDetail.aspx?uid=18542907-fca6-4b7a-a79d-bcb5fd939f2b&stdType=TAF",
+  "pdf": "https://www.taf.org.cn/upload/AssociationStandard/TTAF%20077.9-2022%20APP%E6%94%B6%E9%9B%86%E4%BD%BF%E7%94%A8%E4%B8%AA%E4%BA%BA%E4%BF%A1%E6%81%AF%E6%9C%80%E5%B0%8F%E5%BF%85%E8%A6%81%E8%AF%84%E4%BC%B0%E8%A7%84%E8%8C%83%20%20%E7%AC%AC9%E9%83%A8%E5%88%86%EF%BC%9A%E7%9F%AD%E4%BF%A1%E4%BF%A1%E6%81%AF.pdf",
+  "corpus_id": "422fee1c0907",
+  "chars": 12644,
+  "local": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/TAF标准/T_TAF_077.9—2022_APP收集使用个人信息最小必要评估规范_第9部分：短信信息.pdf"
+ },
+ "T/TAF 078.1—2026": {
+  "name": "APP用户权益保护测评规范 第1部分：超范围收集个人信息",
+  "url": "https://www.taf.org.cn/StdDetail.aspx?uid=e47ad926-0f84-40b3-97aa-46900db1d5a4&stdType=TAF",
+  "pdf": "https://www.taf.org.cn/upload/AssociationStandard/TTAF%20078.1%E2%80%942026%20APP%E7%94%A8%E6%88%B7%E6%9D%83%E7%9B%8A%E4%BF%9D%E6%8A%A4%E6%B5%8B%E8%AF%84%E8%A7%84%E8%8C%83%20%20%E7%AC%AC1%E9%83%A8%E5%88%86%EF%BC%9A%E8%B6%85%E8%8C%83%E5%9B%B4%E6%94%B6%E9%9B%86%E4%B8%AA%E4%BA%BA%E4%BF%A1%E6%81%AF.pdf",
+  "corpus_id": "322247ebe399",
+  "chars": 8754,
+  "local": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/TAF标准/T_TAF_078.1—2026_APP用户权益保护测评规范_第1部分：超范围收集个人信息.pdf"
+ },
+ "T/TAF 078.10—2023": {
+  "name": "APP用户权益保护测评规范 第10部分：自启动和关联启动行为",
+  "url": "https://www.taf.org.cn/StdDetail.aspx?uid=52a1aa69-ec19-4c4a-9689-847b3aa6bd9c&stdType=TAF",
+  "pdf": "https://www.taf.org.cn/upload/AssociationStandard/TTAF%20078.10%E2%80%942023%20APP%E7%94%A8%E6%88%B7%E6%9D%83%E7%9B%8A%E4%BF%9D%E6%8A%A4%E6%B5%8B%E8%AF%84%E8%A7%84%E8%8C%83%20%20%E7%AC%AC10%E9%83%A8%E5%88%86%EF%BC%9A%E8%87%AA%E5%90%AF%E5%8A%A8%E5%92%8C%E5%85%B3%E8%81%94%E5%90%AF%E5%8A%A8%E8%A1%8C%E4%B8%BA.pdf",
+  "corpus_id": "dd5e87972806",
+  "chars": 3152,
+  "local": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/TAF标准/T_TAF_078.10—2023_APP用户权益保护测评规范_第10部分：自启动和关联启动行为.pdf"
+ },
+ "T/TAF 078.2—2026": {
+  "name": "APP用户权益保护测评规范 第2部分：定向推送",
+  "url": "https://www.taf.org.cn/StdDetail.aspx?uid=eaaa1143-d1a0-4d20-b929-10461e3fed39&stdType=TAF",
+  "pdf": "https://www.taf.org.cn/upload/AssociationStandard/TTAF%20078.2%E2%80%942026%20APP%E7%94%A8%E6%88%B7%E6%9D%83%E7%9B%8A%E4%BF%9D%E6%8A%A4%E6%B5%8B%E8%AF%84%E8%A7%84%E8%8C%83%20%20%E7%AC%AC2%E9%83%A8%E5%88%86%EF%BC%9A%E5%AE%9A%E5%90%91%E6%8E%A8%E9%80%81.pdf",
+  "corpus_id": "98618fdcf203",
+  "chars": 4553,
+  "local": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/TAF标准/T_TAF_078.2—2026_APP用户权益保护测评规范_第2部分：定向推送.pdf"
+ },
+ "T/TAF 078.3—2025": {
+  "name": "APP用户权益保护测评规范 第3部分：个人信息获取行为",
+  "url": "https://www.taf.org.cn/StdDetail.aspx?uid=dae962d7-3a6a-4ff1-830a-1e412d2fe918&stdType=TAF",
+  "pdf": "https://www.taf.org.cn/upload/AssociationStandard/TTAF%20078.3%E2%80%942025%20APP%E7%94%A8%E6%88%B7%E6%9D%83%E7%9B%8A%E4%BF%9D%E6%8A%A4%E6%B5%8B%E8%AF%84%E8%A7%84%E8%8C%83%20%E7%AC%AC3%E9%83%A8%E5%88%86%EF%BC%9A%E4%B8%AA%E4%BA%BA%E4%BF%A1%E6%81%AF%E8%8E%B7%E5%8F%96%E8%A1%8C%E4%B8%BA.pdf",
+  "corpus_id": "4616d42cb64a",
+  "chars": 3664,
+  "local": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/TAF标准/T_TAF_078.3—2025_APP用户权益保护测评规范_第3部分：个人信息获取行为.pdf"
+ },
+ "T/TAF 078.4—2023": {
+  "name": "APP用户权益保护测评规范 第4部分：权限索取行为",
+  "url": "https://www.taf.org.cn/StdDetail.aspx?uid=c0e4df61-641d-442a-8c6e-f67eb4ffaae6&stdType=TAF",
+  "pdf": "https://www.taf.org.cn/upload/AssociationStandard/TTAF%20078.4%E2%80%942023%20APP%E7%94%A8%E6%88%B7%E6%9D%83%E7%9B%8A%E4%BF%9D%E6%8A%A4%E6%B5%8B%E8%AF%84%E8%A7%84%E8%8C%83%20%20%E7%AC%AC4%E9%83%A8%E5%88%86%EF%BC%9A%E6%9D%83%E9%99%90%E7%B4%A2%E5%8F%96%E8%A1%8C%E4%B8%BA.pdf",
+  "corpus_id": "8f50b22d5b75",
+  "chars": 4092,
+  "local": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/TAF标准/T_TAF_078.4—2023_APP用户权益保护测评规范_第4部分：权限索取行为.pdf"
+ },
+ "T/TAF 078.5—2026": {
+  "name": "APP用户权益保护测评规范 第5部分：违规使用个人信息",
+  "url": "https://www.taf.org.cn/StdDetail.aspx?uid=af427481-1168-4630-aa45-84dabf316e29&stdType=TAF",
+  "pdf": "https://www.taf.org.cn/upload/AssociationStandard/TTAF%20078.5%E2%80%942026%20APP%E7%94%A8%E6%88%B7%E6%9D%83%E7%9B%8A%E4%BF%9D%E6%8A%A4%E6%B5%8B%E8%AF%84%E8%A7%84%E8%8C%83%20%20%E7%AC%AC5%E9%83%A8%E5%88%86%EF%BC%9A%E8%BF%9D%E8%A7%84%E4%BD%BF%E7%94%A8%E4%B8%AA%E4%BA%BA%E4%BF%A1%E6%81%AF.pdf",
+  "corpus_id": "f375efb21881",
+  "chars": 5925,
+  "local": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/TAF标准/T_TAF_078.5—2026_APP用户权益保护测评规范_第5部分：违规使用个人信息.pdf"
+ },
+ "T/TAF 078.6—2026": {
+  "name": "APP用户权益保护测评规范 第6部分：违规收集个人信息",
+  "url": "https://www.taf.org.cn/StdDetail.aspx?uid=15d062c1-1dcf-47b3-a99c-d58c7de5efd6&stdType=TAF",
+  "pdf": "https://www.taf.org.cn/upload/AssociationStandard/TTAF%20078.6%E2%80%942026%20APP%E7%94%A8%E6%88%B7%E6%9D%83%E7%9B%8A%E4%BF%9D%E6%8A%A4%E6%B5%8B%E8%AF%84%E8%A7%84%E8%8C%83%20%20%E7%AC%AC6%E9%83%A8%E5%88%86%EF%BC%9A%E8%BF%9D%E8%A7%84%E6%94%B6%E9%9B%86%E4%B8%AA%E4%BA%BA%E4%BF%A1%E6%81%AF.pdf",
+  "corpus_id": "f25778c4a111",
+  "chars": 8384,
+  "local": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/TAF标准/T_TAF_078.6—2026_APP用户权益保护测评规范_第6部分：违规收集个人信息.pdf"
+ },
+ "T/TAF 078.7—2026": {
+  "name": "APP用户权益保护测评规范 第7部分：欺骗误导强迫行为",
+  "url": "https://www.taf.org.cn/StdDetail.aspx?uid=0769ba4a-ee79-4af4-849b-28c4beac4ff0&stdType=TAF",
+  "pdf": "https://www.taf.org.cn/upload/AssociationStandard/TTAF%20078.7%E2%80%942026%20APP%E7%94%A8%E6%88%B7%E6%9D%83%E7%9B%8A%E4%BF%9D%E6%8A%A4%E6%B5%8B%E8%AF%84%E8%A7%84%E8%8C%83%20%20%E7%AC%AC7%E9%83%A8%E5%88%86%EF%BC%9A%E6%AC%BA%E9%AA%97%E8%AF%AF%E5%AF%BC%E5%BC%BA%E8%BF%AB%E8%A1%8C%E4%B8%BA.pdf",
+  "corpus_id": "0459aae9e4c0",
+  "chars": 5273,
+  "local": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/TAF标准/T_TAF_078.7—2026_APP用户权益保护测评规范_第7部分：欺骗误导强迫行为.pdf"
+ },
+ "T/TAF 078.8—2025": {
+  "name": "APP用户权益保护测评规范 第8部分：移动应用分发平台管理",
+  "url": "https://www.taf.org.cn/StdDetail.aspx?uid=23d64b2c-0d81-45ae-950f-b80560fe7f2f&stdType=TAF",
+  "pdf": "https://www.taf.org.cn/upload/AssociationStandard/TTAF%20078.8%E2%80%942025%20APP%E7%94%A8%E6%88%B7%E6%9D%83%E7%9B%8A%E4%BF%9D%E6%8A%A4%E6%B5%8B%E8%AF%84%E8%A7%84%E8%8C%83%20%E7%AC%AC8%E9%83%A8%E5%88%86%EF%BC%9A%E7%A7%BB%E5%8A%A8%E5%BA%94%E7%94%A8%E5%88%86%E5%8F%91%E5%B9%B3%E5%8F%B0%E7%AE%A1%E7%90%86.pdf",
+  "corpus_id": "fab9b9966dc7",
+  "chars": 3678,
+  "local": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/TAF标准/T_TAF_078.8—2025_APP用户权益保护测评规范_第8部分：移动应用分发平台管理.pdf"
+ },
+ "T/TAF 078.9—2023": {
+  "name": "APP用户权益保护测评规范 第9部分：移动应用分发平台信息展示",
+  "url": "https://www.taf.org.cn/StdDetail.aspx?uid=826eb59a-b8aa-4c77-bc1f-4ae91c8acb8d&stdType=TAF",
+  "pdf": "https://www.taf.org.cn/upload/AssociationStandard/TTAF%20078.9%E2%80%942023%20APP%E7%94%A8%E6%88%B7%E6%9D%83%E7%9B%8A%E4%BF%9D%E6%8A%A4%E6%B5%8B%E8%AF%84%E8%A7%84%E8%8C%83%20%20%E7%AC%AC9%E9%83%A8%E5%88%86%EF%BC%9A%E7%A7%BB%E5%8A%A8%E5%BA%94%E7%94%A8%E5%88%86%E5%8F%91%E5%B9%B3%E5%8F%B0%E4%BF%A1%E6%81%AF%E5%B1%95%E7%A4%BA.pdf",
+  "corpus_id": "ca4ce4d669a9",
+  "chars": 3314,
+  "local": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/TAF标准/T_TAF_078.9—2023_APP用户权益保护测评规范_第9部分：移动应用分发平台信息展示.pdf"
+ },
+ "T/TAF 079—2021": {
+  "name": "移动智能终端及应用软件生物特征识别安全规范",
+  "url": "https://www.taf.org.cn/StdDetail.aspx?uid=9223875a-4e14-45f9-974a-5e3fc4d68d5b&stdType=TAF",
+  "pdf": "https://www.taf.org.cn/upload/AssociationStandard/TTAF%20079-2021%20%E7%A7%BB%E5%8A%A8%E6%99%BA%E8%83%BD%E7%BB%88%E7%AB%AF%E5%8F%8A%E5%BA%94%E7%94%A8%E8%BD%AF%E4%BB%B6%E7%94%9F%E7%89%A9%E7%89%B9%E5%BE%81%E8%AF%86%E5%88%AB%E5%AE%89%E5%85%A8%E8%A7%84%E8%8C%83.pdf",
+  "corpus_id": "c1fac5fa6c05",
+  "chars": 7435,
+  "local": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/TAF标准/T_TAF_079—2021_移动智能终端及应用软件生物特征识别安全规范.pdf"
+ },
+ "T/TAF 080—2021": {
+  "name": "移动智能终端及应用软件用户个人信息保护实施指南 第7部分：定向推送",
+  "url": "https://www.taf.org.cn/StdDetail.aspx?uid=82096502-1f2d-4cbc-ba53-922574174292&stdType=TAF",
+  "pdf": "https://www.taf.org.cn/upload/AssociationStandard/TTAF%20080-2021%20%E7%A7%BB%E5%8A%A8%E6%99%BA%E8%83%BD%E7%BB%88%E7%AB%AF%E5%8F%8A%E5%BA%94%E7%94%A8%E8%BD%AF%E4%BB%B6%E7%94%A8%E6%88%B7%E4%B8%AA%E4%BA%BA%E4%BF%A1%E6%81%AF%E4%BF%9D%E6%8A%A4%E5%AE%9E%E6%96%BD%E6%8C%87%E5%8D%97%20%E7%AC%AC7%E9%83%A8%E5%88%86%20%E5%AE%9A%E5%90%91%E6%8E%A8%E9%80%81.pdf",
+  "corpus_id": "5e53aaaecb45",
+  "chars": 5779,
+  "local": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/TAF标准/T_TAF_080—2021_移动智能终端及应用软件用户个人信息保护实施指南_第7部分：定向推送.pdf"
+ },
+ "T/TAF 081.1—2021": {
+  "name": "移动智能终端应用软件调用行为记录能力要求 总则",
+  "url": "https://www.taf.org.cn/StdDetail.aspx?uid=2845e326-bf25-48ed-9ed2-2f16e3ebbe79&stdType=TAF",
+  "pdf": "https://www.taf.org.cn/upload/AssociationStandard/TTAF%20081.1-2021%20%E7%A7%BB%E5%8A%A8%E6%99%BA%E8%83%BD%E7%BB%88%E7%AB%AF%E5%BA%94%E7%94%A8%E8%BD%AF%E4%BB%B6%E8%B0%83%E7%94%A8%E8%A1%8C%E4%B8%BA%E8%AE%B0%E5%BD%95%E8%83%BD%E5%8A%9B%E8%A6%81%E6%B1%82%20%E6%80%BB%E5%88%99.pdf",
+  "corpus_id": "1a646077e519",
+  "chars": 8040,
+  "local": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/TAF标准/T_TAF_081.1—2021_移动智能终端应用软件调用行为记录能力要求_总则.pdf"
+ },
+ "T/TAF 084.3—2021": {
+  "name": "安卓应用程序认证签名技术规范 第3部分：数字签名格式规范",
+  "url": "https://www.taf.org.cn/StdDetail.aspx?uid=dfddf933-edeb-42e3-bb1f-e4884c4087e4&stdType=TAF",
+  "pdf": "https://www.taf.org.cn/upload/AssociationStandard/TTAF%20084.3-2021%20%E5%AE%89%E5%8D%93%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F%E8%AE%A4%E8%AF%81%E7%AD%BE%E5%90%8D%E6%8A%80%E6%9C%AF%E8%A7%84%E8%8C%83%20%E7%AC%AC3%E9%83%A8%E5%88%86%EF%BC%9A%E6%95%B0%E5%AD%97%E7%AD%BE%E5%90%8D%E6%A0%BC%E5%BC%8F%E8%A7%84%E8%8C%83.pdf",
+  "corpus_id": "9e9d2dbe6bb3",
+  "chars": 5794,
+  "local": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/TAF标准/T_TAF_084.3—2021_安卓应用程序认证签名技术规范_第3部分：数字签名格式规范.pdf"
+ },
+ "T/TAF 209.1—2024": {
+  "name": "移动互联网应用程序（APP）合规开发管理测评规范 第1部分：总则",
+  "url": "https://www.taf.org.cn/StdDetail.aspx?uid=ff1f3984-5bf9-4663-acdb-5993ac19ba41&stdType=TAF",
+  "pdf": "https://www.taf.org.cn/upload/AssociationStandard/TTAF%20209.1%E2%80%942024%20%E7%A7%BB%E5%8A%A8%E4%BA%92%E8%81%94%E7%BD%91%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F%EF%BC%88APP%EF%BC%89%E5%90%88%E8%A7%84%E5%BC%80%E5%8F%91%E7%AE%A1%E7%90%86%E6%B5%8B%E8%AF%84%E8%A7%84%E8%8C%83%20%20%E7%AC%AC1%E9%83%A8%E5%88%86%EF%BC%9A%E6%80%BB%E5%88%99.pdf",
+  "corpus_id": "534957bd7a4f",
+  "chars": 5251,
+  "local": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/TAF标准/T_TAF_209.1—2024_移动互联网应用程序（APP）合规开发管理测评规范_第1部分：总则.pdf"
+ },
+ "T/TAF 209.2—2024": {
+  "name": "移动互联网应用程序（APP）合规开发管理测评规范 第2部分：需求设计",
+  "url": "https://www.taf.org.cn/StdDetail.aspx?uid=2b7c0cd9-4299-447a-b1cf-54be4c236491&stdType=TAF",
+  "pdf": "https://www.taf.org.cn/upload/AssociationStandard/TTAF%20209.2%E2%80%942024%20%E7%A7%BB%E5%8A%A8%E4%BA%92%E8%81%94%E7%BD%91%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F%EF%BC%88APP%EF%BC%89%E5%90%88%E8%A7%84%E5%BC%80%E5%8F%91%E7%AE%A1%E7%90%86%E6%B5%8B%E8%AF%84%E8%A7%84%E8%8C%83%20%20%E7%AC%AC2%E9%83%A8%E5%88%86%EF%BC%9A%E9%9C%80%E6%B1%82%E8%AE%BE%E8%AE%A1.pdf",
+  "corpus_id": "e7018b932671",
+  "chars": 7365,
+  "local": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/TAF标准/T_TAF_209.2—2024_移动互联网应用程序（APP）合规开发管理测评规范_第2部分：需求设计.pdf"
+ },
+ "T/TAF 209.3—2024": {
+  "name": "移动互联网应用程序（APP）合规开发管理测评规范 第3部分：功能测试",
+  "url": "https://www.taf.org.cn/StdDetail.aspx?uid=28739e9a-a652-45e4-8498-945b87fe8482&stdType=TAF",
+  "pdf": "https://www.taf.org.cn/upload/AssociationStandard/TTAF%20209.3%E2%80%942024%20%E7%A7%BB%E5%8A%A8%E4%BA%92%E8%81%94%E7%BD%91%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F%EF%BC%88APP%EF%BC%89%E5%90%88%E8%A7%84%E5%BC%80%E5%8F%91%E7%AE%A1%E7%90%86%E6%B5%8B%E8%AF%84%E8%A7%84%E8%8C%83%20%20%E7%AC%AC3%E9%83%A8%E5%88%86%EF%BC%9A%E5%8A%9F%E8%83%BD%E6%B5%8B%E8%AF%95.pdf",
+  "corpus_id": "9934b18be28e",
+  "chars": 6432,
+  "local": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/TAF标准/T_TAF_209.3—2024_移动互联网应用程序（APP）合规开发管理测评规范_第3部分：功能测试.pdf"
+ },
+ "T/TAF 209.4—2024": {
+  "name": "移动互联网应用程序（APP）合规开发管理测评规范 第4部分：代码审计",
+  "url": "https://www.taf.org.cn/StdDetail.aspx?uid=76bf89c4-1a00-48a1-83cf-e273657105b5&stdType=TAF",
+  "pdf": "https://www.taf.org.cn/upload/AssociationStandard/TTAF%20209.4%E2%80%942024%20%E7%A7%BB%E5%8A%A8%E4%BA%92%E8%81%94%E7%BD%91%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F%EF%BC%88APP%EF%BC%89%E5%90%88%E8%A7%84%E5%BC%80%E5%8F%91%E7%AE%A1%E7%90%86%E6%B5%8B%E8%AF%84%E8%A7%84%E8%8C%83%20%20%E7%AC%AC4%E9%83%A8%E5%88%86%EF%BC%9A%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1.pdf",
+  "corpus_id": "99bb98786e7d",
+  "chars": 12111,
+  "local": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/TAF标准/T_TAF_209.4—2024_移动互联网应用程序（APP）合规开发管理测评规范_第4部分：代码审计.pdf"
+ },
+ "T/TAF 209.5—2024": {
+  "name": "移动互联网应用程序（APP）合规开发管理测评规范 第5部分：对外接口管理",
+  "url": "https://www.taf.org.cn/StdDetail.aspx?uid=c219590a-19fd-41cb-9c11-595476f2dac0&stdType=TAF",
+  "pdf": "https://www.taf.org.cn/upload/AssociationStandard/TTAF%20209.5%E2%80%942024%20%E7%A7%BB%E5%8A%A8%E4%BA%92%E8%81%94%E7%BD%91%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F%EF%BC%88APP%EF%BC%89%E5%90%88%E8%A7%84%E5%BC%80%E5%8F%91%E7%AE%A1%E7%90%86%E6%B5%8B%E8%AF%84%E8%A7%84%E8%8C%83%20%20%E7%AC%AC5%E9%83%A8%E5%88%86%EF%BC%9A%E5%AF%B9%E5%A4%96%E6%8E%A5%E5%8F%A3%E7%AE%A1%E7%90%86.pdf",
+  "corpus_id": "fa243d66f618",
+  "chars": 7100,
+  "local": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/TAF标准/T_TAF_209.5—2024_移动互联网应用程序（APP）合规开发管理测评规范_第5部分：对外接口管理.pdf"
+ },
+ "T/TAF 209.6—2024": {
+  "name": "移动互联网应用程序（APP）合规开发管理测评规范 第6部分：应用编程接口（API）管理",
+  "url": "https://www.taf.org.cn/StdDetail.aspx?uid=03ab78b4-677e-4dc6-b180-a422aec83165&stdType=TAF",
+  "pdf": "https://www.taf.org.cn/upload/AssociationStandard/TTAF%20209.6%E2%80%942024%20%E7%A7%BB%E5%8A%A8%E4%BA%92%E8%81%94%E7%BD%91%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F%EF%BC%88APP%EF%BC%89%E5%90%88%E8%A7%84%E5%BC%80%E5%8F%91%E7%AE%A1%E7%90%86%E6%B5%8B%E8%AF%84%E8%A7%84%E8%8C%83%20%20%E7%AC%AC6%E9%83%A8%E5%88%86%EF%BC%9A%E5%BA%94%E7%94%A8%E7%BC%96%E7%A8%8B%E6%8E%A5%E5%8F%A3%EF%BC%88API%EF%BC%89%E7%AE%A1%E7%90%86.pdf",
+  "corpus_id": "52aa9fbbf8c7",
+  "chars": 9791,
+  "local": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/TAF标准/T_TAF_209.6—2024_移动互联网应用程序（APP）合规开发管理测评规范_第6部分：应用编程接口（API）管理.pdf"
+ },
+ "T/TAF 209.7—2024": {
+  "name": "移动互联网应用程序（APP）合规开发管理测评规范 第7部分：更新升级管理",
+  "url": "https://www.taf.org.cn/StdDetail.aspx?uid=e54edecf-b91c-4bd9-8411-f5c5ac5dff81&stdType=TAF",
+  "pdf": "https://www.taf.org.cn/upload/AssociationStandard/TTAF%20209.7%E2%80%942024%20%E7%A7%BB%E5%8A%A8%E4%BA%92%E8%81%94%E7%BD%91%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F%EF%BC%88APP%EF%BC%89%E5%90%88%E8%A7%84%E5%BC%80%E5%8F%91%E7%AE%A1%E7%90%86%E6%B5%8B%E8%AF%84%E8%A7%84%E8%8C%83%20%20%E7%AC%AC7%E9%83%A8%E5%88%86%EF%BC%9A%E6%9B%B4%E6%96%B0%E5%8D%87%E7%BA%A7%E7%AE%A1%E7%90%86.pdf",
+  "corpus_id": "1af58e825ff9",
+  "chars": 6480,
+  "local": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/TAF标准/T_TAF_209.7—2024_移动互联网应用程序（APP）合规开发管理测评规范_第7部分：更新升级管理.pdf"
+ },
+ "T/TAF 209.8—2024": {
+  "name": "移动互联网应用程序（APP）合规开发管理测评规范 第8部分：数据使用管理",
+  "url": "https://www.taf.org.cn/StdDetail.aspx?uid=f7640bc4-b464-42f3-a958-5afe1a7cdef7&stdType=TAF",
+  "pdf": "https://www.taf.org.cn/upload/AssociationStandard/TTAF%20209.8%E2%80%942024%20%E7%A7%BB%E5%8A%A8%E4%BA%92%E8%81%94%E7%BD%91%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F%EF%BC%88APP%EF%BC%89%E5%90%88%E8%A7%84%E5%BC%80%E5%8F%91%E7%AE%A1%E7%90%86%E6%B5%8B%E8%AF%84%E8%A7%84%E8%8C%83%20%20%E7%AC%AC8%E9%83%A8%E5%88%86%EF%BC%9A%E6%95%B0%E6%8D%AE%E4%BD%BF%E7%94%A8%E7%AE%A1%E7%90%86.pdf",
+  "corpus_id": "2421eab0f009",
+  "chars": 7617,
+  "local": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/TAF标准/T_TAF_209.8—2024_移动互联网应用程序（APP）合规开发管理测评规范_第8部分：数据使用管理.pdf"
+ },
+ "T/TAF 209.9—2024": {
+  "name": "移动互联网应用程序（APP）合规开发管理测评规范 第9部分：算法模型",
+  "url": "https://www.taf.org.cn/StdDetail.aspx?uid=68046565-430e-4c45-b80a-534ec0418504&stdType=TAF",
+  "pdf": "https://www.taf.org.cn/upload/AssociationStandard/TTAF%20209.9%E2%80%942024%20%E7%A7%BB%E5%8A%A8%E4%BA%92%E8%81%94%E7%BD%91%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F%EF%BC%88APP%EF%BC%89%E5%90%88%E8%A7%84%E5%BC%80%E5%8F%91%E7%AE%A1%E7%90%86%E6%B5%8B%E8%AF%84%E8%A7%84%E8%8C%83%20%20%E7%AC%AC9%E9%83%A8%E5%88%86%EF%BC%9A%E7%AE%97%E6%B3%95%E6%A8%A1%E5%9E%8B.pdf",
+  "corpus_id": "38834724841a",
+  "chars": 8205,
+  "local": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/TAF标准/T_TAF_209.9—2024_移动互联网应用程序（APP）合规开发管理测评规范_第9部分：算法模型.pdf"
+ },
+ "T/TAF 268.1—2025": {
+  "name": "生成式人工智能个人信息保护技术要求 第1部分：总则",
+  "url": "https://www.taf.org.cn/StdDetail.aspx?uid=c0938bc4-fcb5-4e4f-9839-e461f332f991&stdType=TAF",
+  "pdf": "https://www.taf.org.cn/upload/AssociationStandard/TTAF%20268.1%E2%80%942025%20%E7%94%9F%E6%88%90%E5%BC%8F%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E4%B8%AA%E4%BA%BA%E4%BF%A1%E6%81%AF%E4%BF%9D%E6%8A%A4%E6%8A%80%E6%9C%AF%E8%A6%81%E6%B1%82%20%20%E7%AC%AC1%E9%83%A8%E5%88%86%EF%BC%9A%E6%80%BB%E5%88%99.pdf",
+  "corpus_id": "03058ef1f1a6",
+  "chars": 5616,
+  "local": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/TAF标准/T_TAF_268.1—2025_生成式人工智能个人信息保护技术要求_第1部分：总则.pdf"
+ },
+ "T/TAF 268.2—2025": {
+  "name": "生成式人工智能个人信息保护技术要求 第2部分：隐私声明告知",
+  "url": "https://www.taf.org.cn/StdDetail.aspx?uid=fcac9b50-571a-4617-9200-b3cb99099268&stdType=TAF",
+  "pdf": "https://www.taf.org.cn/upload/AssociationStandard/TTAF%20268.2%E2%80%942025%20%E7%94%9F%E6%88%90%E5%BC%8F%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E4%B8%AA%E4%BA%BA%E4%BF%A1%E6%81%AF%E4%BF%9D%E6%8A%A4%E6%8A%80%E6%9C%AF%E8%A6%81%E6%B1%82%20%20%E7%AC%AC2%E9%83%A8%E5%88%86%EF%BC%9A%E9%9A%90%E7%A7%81%E5%A3%B0%E6%98%8E%E5%91%8A%E7%9F%A5.pdf",
+  "corpus_id": "3676868c49e0",
+  "chars": 4495,
+  "local": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/TAF标准/T_TAF_268.2—2025_生成式人工智能个人信息保护技术要求_第2部分：隐私声明告知.pdf"
+ },
+ "T/TAF 268.3—2025": {
+  "name": "生成式人工智能个人信息保护技术要求 第3部分：训练数据构建",
+  "url": "https://www.taf.org.cn/StdDetail.aspx?uid=55ca9b53-0303-4815-b15b-d377c2200b97&stdType=TAF",
+  "pdf": "https://www.taf.org.cn/upload/AssociationStandard/TTAF%20268.3%E2%80%942025%20%E7%94%9F%E6%88%90%E5%BC%8F%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E4%B8%AA%E4%BA%BA%E4%BF%A1%E6%81%AF%E4%BF%9D%E6%8A%A4%E6%8A%80%E6%9C%AF%E8%A6%81%E6%B1%82%20%20%E7%AC%AC3%E9%83%A8%E5%88%86%EF%BC%9A%E8%AE%AD%E7%BB%83%E6%95%B0%E6%8D%AE%E6%9E%84%E5%BB%BA.pdf",
+  "corpus_id": "4ba8e215986c",
+  "chars": 4849,
+  "local": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/TAF标准/T_TAF_268.3—2025_生成式人工智能个人信息保护技术要求_第3部分：训练数据构建.pdf"
+ },
+ "T/TAF 268.4—2025": {
+  "name": "生成式人工智能个人信息保护技术要求 第4部分：模型规制控制",
+  "url": "https://www.taf.org.cn/StdDetail.aspx?uid=122bf228-5249-4e29-bb21-73388c92a1b9&stdType=TAF",
+  "pdf": "https://www.taf.org.cn/upload/AssociationStandard/TTAF%20268.4%E2%80%942025%20%E7%94%9F%E6%88%90%E5%BC%8F%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E4%B8%AA%E4%BA%BA%E4%BF%A1%E6%81%AF%E4%BF%9D%E6%8A%A4%E6%8A%80%E6%9C%AF%E8%A6%81%E6%B1%82%20%20%E7%AC%AC4%E9%83%A8%E5%88%86%EF%BC%9A%E6%A8%A1%E5%9E%8B%E8%A7%84%E5%88%B6%E6%8E%A7%E5%88%B6.pdf",
+  "corpus_id": "5b62b53d8ad0",
+  "chars": 4890,
+  "local": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/TAF标准/T_TAF_268.4—2025_生成式人工智能个人信息保护技术要求_第4部分：模型规制控制.pdf"
+ },
+ "T/TAF 268.5—2025": {
+  "name": "生成式人工智能个人信息保护技术要求 第5部分：二次开发管理",
+  "url": "https://www.taf.org.cn/StdDetail.aspx?uid=11dab1e5-0e88-427e-b7d9-9dbee5db7e03&stdType=TAF",
+  "pdf": "https://www.taf.org.cn/upload/AssociationStandard/TTAF%20268.5%E2%80%942025%20%E7%94%9F%E6%88%90%E5%BC%8F%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E4%B8%AA%E4%BA%BA%E4%BF%A1%E6%81%AF%E4%BF%9D%E6%8A%A4%E6%8A%80%E6%9C%AF%E8%A6%81%E6%B1%82%20%20%E7%AC%AC5%E9%83%A8%E5%88%86%EF%BC%9A%E4%BA%8C%E6%AC%A1%E5%BC%80%E5%8F%91%E7%AE%A1%E7%90%86.pdf",
+  "corpus_id": "f9f0559bf981",
+  "chars": 5464,
+  "local": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/TAF标准/T_TAF_268.5—2025_生成式人工智能个人信息保护技术要求_第5部分：二次开发管理.pdf"
+ },
+ "T/TAF 268.6—2025": {
+  "name": "生成式人工智能个人信息保护技术要求 第6部分：输出阶段管理",
+  "url": "https://www.taf.org.cn/StdDetail.aspx?uid=9e0ca944-e886-4d03-966f-9c84049b5221&stdType=TAF",
+  "pdf": "https://www.taf.org.cn/upload/AssociationStandard/TTAF%20268.6%E2%80%942025%20%E7%94%9F%E6%88%90%E5%BC%8F%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E4%B8%AA%E4%BA%BA%E4%BF%A1%E6%81%AF%E4%BF%9D%E6%8A%A4%E6%8A%80%E6%9C%AF%E8%A6%81%E6%B1%82%20%20%E7%AC%AC6%E9%83%A8%E5%88%86%EF%BC%9A%E8%BE%93%E5%87%BA%E9%98%B6%E6%AE%B5%E7%AE%A1%E7%90%86.pdf",
+  "corpus_id": "c70698775305",
+  "chars": 4385,
+  "local": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/TAF标准/T_TAF_268.6—2025_生成式人工智能个人信息保护技术要求_第6部分：输出阶段管理.pdf"
+ },
+ "T/TAF 268.7—2025": {
+  "name": "生成式人工智能个人信息保护技术要求 第7部分：个人权利响应",
+  "url": "https://www.taf.org.cn/StdDetail.aspx?uid=f6f48b43-91ba-492b-a209-bde818dd15a7&stdType=TAF",
+  "pdf": "https://www.taf.org.cn/upload/AssociationStandard/TTAF%20268.7%E2%80%942025%20%E7%94%9F%E6%88%90%E5%BC%8F%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E4%B8%AA%E4%BA%BA%E4%BF%A1%E6%81%AF%E4%BF%9D%E6%8A%A4%E6%8A%80%E6%9C%AF%E8%A6%81%E6%B1%82%20%20%E7%AC%AC7%E9%83%A8%E5%88%86%EF%BC%9A%E4%B8%AA%E4%BA%BA%E6%9D%83%E5%88%A9%E5%93%8D%E5%BA%94.pdf",
+  "corpus_id": "5d8ac312dc76",
+  "chars": 4776,
+  "local": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/TAF标准/T_TAF_268.7—2025_生成式人工智能个人信息保护技术要求_第7部分：个人权利响应.pdf"
+ },
+ "T/TAF 268.8—2025": {
+  "name": "生成式人工智能个人信息保护技术要求 第8部分：供应链管理",
+  "url": "https://www.taf.org.cn/StdDetail.aspx?uid=0bc2fcfd-8e2f-4ce7-a6c0-8217a6503731&stdType=TAF",
+  "pdf": "https://www.taf.org.cn/upload/AssociationStandard/TTAF%20268.8%E2%80%942025%20%E7%94%9F%E6%88%90%E5%BC%8F%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E4%B8%AA%E4%BA%BA%E4%BF%A1%E6%81%AF%E4%BF%9D%E6%8A%A4%E6%8A%80%E6%9C%AF%E8%A6%81%E6%B1%82%20%20%E7%AC%AC8%E9%83%A8%E5%88%86%EF%BC%9A%E4%BE%9B%E5%BA%94%E9%93%BE%E7%AE%A1%E7%90%86.pdf",
+  "corpus_id": "3a50e44d634f",
+  "chars": 9158,
+  "local": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/TAF标准/T_TAF_268.8—2025_生成式人工智能个人信息保护技术要求_第8部分：供应链管理.pdf"
+ },
+ "T/TAF 238.6—2025": {
+  "name": "未成年人个人信息网络保护要求 第6部分：分发平台管理",
+  "url": "https://www.taf.org.cn/StdDetail.aspx?uid=9816e27b-8a65-4dc9-b2ab-1fc34abb5e76&stdType=TAF",
+  "pdf": "https://www.taf.org.cn/upload/AssociationStandard/TTAF%20238.6%E2%80%942025%20%E6%9C%AA%E6%88%90%E5%B9%B4%E4%BA%BA%E4%B8%AA%E4%BA%BA%E4%BF%A1%E6%81%AF%E7%BD%91%E7%BB%9C%E4%BF%9D%E6%8A%A4%E8%A6%81%E6%B1%82%20%20%E7%AC%AC6%E9%83%A8%E5%88%86%EF%BC%9A%E5%88%86%E5%8F%91%E5%B9%B3%E5%8F%B0%E7%AE%A1%E7%90%86.pdf",
+  "corpus_id": "22ad6706355b",
+  "chars": 5585,
+  "local": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/TAF标准/T_TAF_238.6—2025_未成年人个人信息网络保护要求_第6部分：分发平台管理.pdf"
+ },
+ "T/TAF 238.4—2025": {
+  "name": "未成年人个人信息网络保护要求 第4部分：合规审计",
+  "url": "https://www.taf.org.cn/StdDetail.aspx?uid=d41b019e-d587-4579-8ede-023363579405&stdType=TAF",
+  "pdf": "https://www.taf.org.cn/upload/AssociationStandard/TTAF%20238.4%E2%80%942025%20%E6%9C%AA%E6%88%90%E5%B9%B4%E4%BA%BA%E4%B8%AA%E4%BA%BA%E4%BF%A1%E6%81%AF%E7%BD%91%E7%BB%9C%E4%BF%9D%E6%8A%A4%E8%A6%81%E6%B1%82%20%20%E7%AC%AC4%E9%83%A8%E5%88%86%EF%BC%9A%E5%90%88%E8%A7%84%E5%AE%A1%E8%AE%A1.pdf",
+  "corpus_id": "d5d27c4bd601",
+  "chars": 12541,
+  "local": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/TAF标准/T_TAF_238.4—2025_未成年人个人信息网络保护要求_第4部分：合规审计.pdf"
+ },
+ "T/TAF 238.3—2025": {
+  "name": "未成年人个人信息网络保护要求 第3部分：个人权利响应",
+  "url": "https://www.taf.org.cn/StdDetail.aspx?uid=b70696a7-6692-4a2b-8b4d-54465acd7cd9&stdType=TAF",
+  "pdf": "https://www.taf.org.cn/upload/AssociationStandard/TTAF%20238.3%E2%80%942025%20%E6%9C%AA%E6%88%90%E5%B9%B4%E4%BA%BA%E4%B8%AA%E4%BA%BA%E4%BF%A1%E6%81%AF%E7%BD%91%E7%BB%9C%E4%BF%9D%E6%8A%A4%E8%A6%81%E6%B1%82%20%20%E7%AC%AC3%E9%83%A8%E5%88%86%EF%BC%9A%E4%B8%AA%E4%BA%BA%E6%9D%83%E5%88%A9%E5%93%8D%E5%BA%94.pdf",
+  "corpus_id": "66032149b68a",
+  "chars": 5176,
+  "local": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/TAF标准/T_TAF_238.3—2025_未成年人个人信息网络保护要求_第3部分：个人权利响应.pdf"
+ },
+ "T/TAF 238.2—2025": {
+  "name": "未成年人个人信息网络保护要求 第2部分：最小必要",
+  "url": "https://www.taf.org.cn/StdDetail.aspx?uid=cbd8328e-43bf-4a49-8b4b-4c40725c8686&stdType=TAF",
+  "pdf": "https://www.taf.org.cn/upload/AssociationStandard/TTAF%20238.2%E2%80%942025%20%E6%9C%AA%E6%88%90%E5%B9%B4%E4%BA%BA%E4%B8%AA%E4%BA%BA%E4%BF%A1%E6%81%AF%E7%BD%91%E7%BB%9C%E4%BF%9D%E6%8A%A4%E8%A6%81%E6%B1%82%20%20%E7%AC%AC2%E9%83%A8%E5%88%86%EF%BC%9A%E6%9C%80%E5%B0%8F%E5%BF%85%E8%A6%81.pdf",
+  "corpus_id": "3a717906c2f7",
+  "chars": 5825,
+  "local": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/TAF标准/T_TAF_238.2—2025_未成年人个人信息网络保护要求_第2部分：最小必要.pdf"
+ },
+ "T/TAF 238.5—2024": {
+  "name": "未成年人个人信息网络保护要求 第5部分：应急响应保障",
+  "url": "https://www.taf.org.cn/StdDetail.aspx?uid=967e3dad-4725-47e4-91ba-aae522d727da&stdType=TAF",
+  "pdf": "https://www.taf.org.cn/upload/AssociationStandard/TTAF%20238.5%E2%80%942024%20%E6%9C%AA%E6%88%90%E5%B9%B4%E4%BA%BA%E4%B8%AA%E4%BA%BA%E4%BF%A1%E6%81%AF%E7%BD%91%E7%BB%9C%E4%BF%9D%E6%8A%A4%E8%A6%81%E6%B1%82%20%20%E7%AC%AC5%E9%83%A8%E5%88%86%EF%BC%9A%E5%BA%94%E6%80%A5%E5%93%8D%E5%BA%94%E4%BF%9D%E9%9A%9C.pdf",
+  "corpus_id": "d51928f02127",
+  "chars": 7539,
+  "local": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/TAF标准/T_TAF_238.5—2024_未成年人个人信息网络保护要求_第5部分：应急响应保障.pdf"
+ },
+ "T/TAF 238.1—2024": {
+  "name": "未成年人个人信息网络保护要求 第1部分：身份核验",
+  "url": "https://www.taf.org.cn/StdDetail.aspx?uid=1cd661f0-ba4b-46c6-ba61-62ab30df17f8&stdType=TAF",
+  "pdf": "https://www.taf.org.cn/upload/AssociationStandard/TTAF%20238.1%E2%80%942024%20%E6%9C%AA%E6%88%90%E5%B9%B4%E4%BA%BA%E4%B8%AA%E4%BA%BA%E4%BF%A1%E6%81%AF%E7%BD%91%E7%BB%9C%E4%BF%9D%E6%8A%A4%E8%A6%81%E6%B1%82%20%20%E7%AC%AC1%E9%83%A8%E5%88%86%EF%BC%9A%E8%BA%AB%E4%BB%BD%E6%A0%B8%E9%AA%8C.pdf",
+  "corpus_id": "1399357d36d4",
+  "chars": 6359,
+  "local": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/TAF标准/T_TAF_238.1—2024_未成年人个人信息网络保护要求_第1部分：身份核验.pdf"
+ },
+ "T/TAF 267.9—2026": {
+  "name": "软件开发工具包（SDK）用户权益和个人信息保护技术要求 第9部分：第三方登录类",
+  "url": "https://www.taf.org.cn/StdDetail.aspx?uid=cc93d2e3-2335-458a-a453-b8f02db4080d&stdType=TAF",
+  "pdf": "https://www.taf.org.cn/upload/AssociationStandard/TTAF%20267.9%E2%80%942026%20%E8%BD%AF%E4%BB%B6%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7%E5%8C%85%EF%BC%88SDK%EF%BC%89%E7%94%A8%E6%88%B7%E6%9D%83%E7%9B%8A%E5%92%8C%E4%B8%AA%E4%BA%BA%E4%BF%A1%E6%81%AF%E4%BF%9D%E6%8A%A4%E6%8A%80%E6%9C%AF%E8%A6%81%E6%B1%82%20%20%E7%AC%AC9%E9%83%A8%E5%88%86%EF%BC%9A%E7%AC%AC%E4%B8%89%E6%96%B9%E7%99%BB%E5%BD%95%E7%B1%BB.pdf",
+  "corpus_id": "048e23fa0ca9",
+  "chars": 6662,
+  "local": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/TAF标准/T_TAF_267.9—2026_软件开发工具包（SDK）用户权益和个人信息保护技术要求_第9部分：第三方登录类.pdf"
+ },
+ "T/TAF 267.8—2025": {
+  "name": "软件开发工具包（SDK）用户权益和个人信息保护技术要求 第8部分：性能监控类",
+  "url": "https://www.taf.org.cn/StdDetail.aspx?uid=5d41cae9-b03b-4412-aa6a-5f41971a2a1d&stdType=TAF",
+  "pdf": "https://www.taf.org.cn/upload/AssociationStandard/TTAF%20267.8%E2%80%942025%20%E8%BD%AF%E4%BB%B6%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7%E5%8C%85%EF%BC%88SDK%EF%BC%89%E7%94%A8%E6%88%B7%E6%9D%83%E7%9B%8A%E5%92%8C%E4%B8%AA%E4%BA%BA%E4%BF%A1%E6%81%AF%E4%BF%9D%E6%8A%A4%E6%8A%80%E6%9C%AF%E8%A6%81%E6%B1%82%20%20%E7%AC%AC8%E9%83%A8%E5%88%86%EF%BC%9A%E6%80%A7%E8%83%BD%E7%9B%91%E6%8E%A7%E7%B1%BB.pdf",
+  "corpus_id": "46897d373260",
+  "chars": 6987,
+  "local": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/TAF标准/T_TAF_267.8—2025_软件开发工具包（SDK）用户权益和个人信息保护技术要求_第8部分：性能监控类.pdf"
+ },
+ "T/TAF 267.7—2025": {
+  "name": "软件开发工具包（SDK）用户权益和个人信息保护技术要求 第7部分：游戏联运类",
+  "url": "https://www.taf.org.cn/StdDetail.aspx?uid=1b8c1d15-3e9d-4d40-83af-26b4b7238490&stdType=TAF",
+  "pdf": "https://www.taf.org.cn/upload/AssociationStandard/TTAF%20267.7%E2%80%942025%20%E8%BD%AF%E4%BB%B6%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7%E5%8C%85%EF%BC%88SDK%EF%BC%89%E7%94%A8%E6%88%B7%E6%9D%83%E7%9B%8A%E5%92%8C%E4%B8%AA%E4%BA%BA%E4%BF%A1%E6%81%AF%E4%BF%9D%E6%8A%A4%E6%8A%80%E6%9C%AF%E8%A6%81%E6%B1%82%20%20%E7%AC%AC7%E9%83%A8%E5%88%86%EF%BC%9A%E6%B8%B8%E6%88%8F%E8%81%94%E8%BF%90%E7%B1%BB.pdf",
+  "corpus_id": "f0a8034f797a",
+  "chars": 7430,
+  "local": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/TAF标准/T_TAF_267.7—2025_软件开发工具包（SDK）用户权益和个人信息保护技术要求_第7部分：游戏联运类.pdf"
+ },
+ "T/TAF 267.6—2025": {
+  "name": "软件开发工具包（SDK）用户权益和个人信息保护技术要求 第6部分：实时音视频类",
+  "url": "https://www.taf.org.cn/StdDetail.aspx?uid=eda583fd-0215-4a0a-9f37-04b173d3f9e6&stdType=TAF",
+  "pdf": "https://www.taf.org.cn/upload/AssociationStandard/TTAF%20267.6%E2%80%942025%20%E8%BD%AF%E4%BB%B6%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7%E5%8C%85%EF%BC%88SDK%EF%BC%89%E7%94%A8%E6%88%B7%E6%9D%83%E7%9B%8A%E5%92%8C%E4%B8%AA%E4%BA%BA%E4%BF%A1%E6%81%AF%E4%BF%9D%E6%8A%A4%E6%8A%80%E6%9C%AF%E8%A6%81%E6%B1%82%20%20%E7%AC%AC6%E9%83%A8%E5%88%86%EF%BC%9A%E5%AE%9E%E6%97%B6%E9%9F%B3%E8%A7%86%E9%A2%91%E7%B1%BB.pdf",
+  "corpus_id": "1b2d65f9d8ec",
+  "chars": 6915,
+  "local": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/TAF标准/T_TAF_267.6—2025_软件开发工具包（SDK）用户权益和个人信息保护技术要求_第6部分：实时音视频类.pdf"
+ },
+ "T/TAF 267.5—2025": {
+  "name": "软件开发工具包（SDK）用户权益和个人信息保护技术要求 第5部分：统计类",
+  "url": "https://www.taf.org.cn/StdDetail.aspx?uid=a002f068-1621-4cad-9ad8-d8e9d1de3342&stdType=TAF",
+  "pdf": "https://www.taf.org.cn/upload/AssociationStandard/TTAF%20267.5%E2%80%942025%20%E8%BD%AF%E4%BB%B6%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7%E5%8C%85%EF%BC%88SDK%EF%BC%89%E7%94%A8%E6%88%B7%E6%9D%83%E7%9B%8A%E5%92%8C%E4%B8%AA%E4%BA%BA%E4%BF%A1%E6%81%AF%E4%BF%9D%E6%8A%A4%E6%8A%80%E6%9C%AF%E8%A6%81%E6%B1%82%20%20%E7%AC%AC5%E9%83%A8%E5%88%86%EF%BC%9A%E7%BB%9F%E8%AE%A1%E7%B1%BB.pdf",
+  "corpus_id": "661879ba4e58",
+  "chars": 6392,
+  "local": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/TAF标准/T_TAF_267.5—2025_软件开发工具包（SDK）用户权益和个人信息保护技术要求_第5部分：统计类.pdf"
+ },
+ "T/TAF 267.4—2025": {
+  "name": "软件开发工具包（SDK）用户权益和个人信息保护技术要求 第4部分：支付类",
+  "url": "https://www.taf.org.cn/StdDetail.aspx?uid=47ef5c5e-848f-4db2-a4d7-fb7e3a935b3e&stdType=TAF",
+  "pdf": "https://www.taf.org.cn/upload/AssociationStandard/TTAF%20267.4%E2%80%942025%20%E8%BD%AF%E4%BB%B6%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7%E5%8C%85%EF%BC%88SDK%EF%BC%89%E7%94%A8%E6%88%B7%E6%9D%83%E7%9B%8A%E5%92%8C%E4%B8%AA%E4%BA%BA%E4%BF%A1%E6%81%AF%E4%BF%9D%E6%8A%A4%E6%8A%80%E6%9C%AF%E8%A6%81%E6%B1%82%20%20%E7%AC%AC4%E9%83%A8%E5%88%86%EF%BC%9A%E6%94%AF%E4%BB%98%E7%B1%BB.pdf",
+  "corpus_id": "96397c5f65ea",
+  "chars": 5118,
+  "local": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/TAF标准/T_TAF_267.4—2025_软件开发工具包（SDK）用户权益和个人信息保护技术要求_第4部分：支付类.pdf"
+ },
+ "T/TAF 267.3—2025": {
+  "name": "软件开发工具包（SDK）用户权益和个人信息保护技术要求 第3部分：地图类",
+  "url": "https://www.taf.org.cn/StdDetail.aspx?uid=a6b69662-15c1-4014-926c-c0be943852c2&stdType=TAF",
+  "pdf": "https://www.taf.org.cn/upload/AssociationStandard/TTAF%20267.3%E2%80%942025%20%E8%BD%AF%E4%BB%B6%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7%E5%8C%85%EF%BC%88SDK%EF%BC%89%E7%94%A8%E6%88%B7%E6%9D%83%E7%9B%8A%E5%92%8C%E4%B8%AA%E4%BA%BA%E4%BF%A1%E6%81%AF%E4%BF%9D%E6%8A%A4%E6%8A%80%E6%9C%AF%E8%A6%81%E6%B1%82%20%20%E7%AC%AC3%E9%83%A8%E5%88%86%EF%BC%9A%E5%9C%B0%E5%9B%BE%E7%B1%BB.pdf",
+  "corpus_id": "5e466e7fbac6",
+  "chars": 5871,
+  "local": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/TAF标准/T_TAF_267.3—2025_软件开发工具包（SDK）用户权益和个人信息保护技术要求_第3部分：地图类.pdf"
+ },
+ "T/TAF 267.2—2025": {
+  "name": "软件开发工具包（SDK）用户权益和个人信息保护技术要求 第2部分：推送类",
+  "url": "https://www.taf.org.cn/StdDetail.aspx?uid=e813f23d-88a2-4277-b466-61a02b0cae4f&stdType=TAF",
+  "pdf": "https://www.taf.org.cn/upload/AssociationStandard/TTAF%20267.2%E2%80%942025%20%E8%BD%AF%E4%BB%B6%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7%E5%8C%85%EF%BC%88SDK%EF%BC%89%E7%94%A8%E6%88%B7%E6%9D%83%E7%9B%8A%E5%92%8C%E4%B8%AA%E4%BA%BA%E4%BF%A1%E6%81%AF%E4%BF%9D%E6%8A%A4%E6%8A%80%E6%9C%AF%E8%A6%81%E6%B1%82%20%20%E7%AC%AC2%E9%83%A8%E5%88%86%EF%BC%9A%E6%8E%A8%E9%80%81%E7%B1%BB.pdf",
+  "corpus_id": "dbe6e8318bed",
+  "chars": 6360,
+  "local": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/TAF标准/T_TAF_267.2—2025_软件开发工具包（SDK）用户权益和个人信息保护技术要求_第2部分：推送类.pdf"
+ },
+ "T/TAF 267.1—2025": {
+  "name": "软件开发工具包（SDK）用户权益和个人信息保护技术要求 第1部分：广告类",
+  "url": "https://www.taf.org.cn/StdDetail.aspx?uid=5e3b6ad4-b60f-4fdd-8730-0ca3dc2b1004&stdType=TAF",
+  "pdf": "https://www.taf.org.cn/upload/AssociationStandard/TTAF%20267.1%E2%80%942025%20%E8%BD%AF%E4%BB%B6%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7%E5%8C%85%EF%BC%88SDK%EF%BC%89%E7%94%A8%E6%88%B7%E6%9D%83%E7%9B%8A%E5%92%8C%E4%B8%AA%E4%BA%BA%E4%BF%A1%E6%81%AF%E4%BF%9D%E6%8A%A4%E6%8A%80%E6%9C%AF%E8%A6%81%E6%B1%82%20%20%E7%AC%AC1%E9%83%A8%E5%88%86%EF%BC%9A%E5%B9%BF%E5%91%8A%E7%B1%BB.pdf",
+  "corpus_id": "817d189bac2c",
+  "chars": 6322,
+  "local": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/TAF标准/T_TAF_267.1—2025_软件开发工具包（SDK）用户权益和个人信息保护技术要求_第1部分：广告类.pdf"
+ }
+}

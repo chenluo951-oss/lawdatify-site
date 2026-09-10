@@ -124,6 +124,9 @@ class Resolver:
 
 RE_LAW_ART = re.compile(r"(?:^|\n)\s*(第[〇一二三四五六七八九十百零\d]{1,6}条)")
 RE_STD_NUM = re.compile(r"(?:^|\n)\s*(\d{1,2}(?:\.\d{1,2}){0,3})[\s　]+[^\n]{2,40}")
+# 标准/团体标准章节标题行：整行「序号 + 标题」，如「8  欺骗误导强迫点击跳转」
+RE_STD_CHAP = re.compile(
+    r"(?m)^[ \t]*(\d{1,2}(?:\.\d{1,2}){0,2})[ \t　]{1,4}(\S[^\n]{1,38})[ \t　]*$")
 
 STOP = re.compile(r"^(目次|前言|引言|参考文献|附录|索引|ICS|CCS)")
 
@@ -137,16 +140,22 @@ def split_clauses(text):
     else:
         kind = "std"
         marks = []
-        for m in RE_STD_NUM.finditer(text):
+        seen = {}
+        for m in RE_STD_CHAP.finditer(text):
             num = m.group(1)
-            title = text[m.end():m.end() + 40].split("\n")[0].strip()
+            title = m.group(2).strip()
             if re.match(r"^\d{4}[-.]\d{1,2}", num):      # 跳过日期
+                continue
+            if re.search(r"\.{3,}|…", title):            # 跳过目次行
                 continue
             if not title or len(title) < 2:
                 continue
-            if re.match(r"^[\d\.\s]*$", title):
+            if re.match(r"^[\d\.\s]*$", title):          # 纯数字/点 → 页码
                 continue
-            marks.append((m.start(), num + " " + title.strip()))
+            no = num + " " + title
+            # 正文中的章节保留最后一次出现（目次在前、正文在后）
+            seen[no] = (m.start(), no)
+        marks = sorted(seen.values(), key=lambda x: x[0])
     if len(marks) < 3:
         return []
     out = []

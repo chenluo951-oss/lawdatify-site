@@ -128,7 +128,7 @@ def main():
     d.text((L, 382), "可溯源的合规资讯与分析", font=f_sub, fill=(214, 232, 240, 255))
 
     # ---- 右下落款 ----
-    brand = "lawdatify"
+    brand = "合规无终点"
     bw = f_foot.getlength(brand)
     d.text((W - 88 - bw, H - 78), brand, font=f_foot, fill=(255, 255, 255, 200))
     d.line([W - 88 - bw - 18, H - 62, W - 88 - bw - 18, H - 114],

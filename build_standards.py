@@ -29,7 +29,7 @@ def page(title, desc, crumb, h1, lead, body, depth=1):
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>{esc(title)} · lawdatify</title>
+<title>{esc(title)} · 合规无终点</title>
 <meta name="description" content="{esc(desc)}">
 <link rel="stylesheet" href="{prefix}assets/style.css">
 </head>
@@ -397,7 +397,7 @@ def render_duty_tree(cats, items):
         scenes_html = []
         for si, s in enumerate(c.get("scenes", [])):
             rows = []
-            for d in s.get("duties", []):
+            for di, d in enumerate(s.get("duties", [])):
                 risk = d.get("risk", "")
                 rk = (f'<span class="rk {RISK_CLS.get(risk, "r-md")}">{esc(risk)}</span>'
                       if risk else "")
@@ -412,15 +412,16 @@ def render_duty_tree(cats, items):
                     ref_html = ('<div class="lb-refs lb-refs-plain">'
                                 + "".join(f'<span>{esc(r)}</span>' for r in (d.get("refs") or [])[:2])
                                 + "</div>")
+                did = f'd-{c["id"]}-{si}-{di}'
                 rows.append(
-                    f'<div class="lb-d2" data-risk="{esc(risk)}">'
+                    f'<div class="lb-d2" id="{did}" data-risk="{esc(risk)}">'
                     f'<div class="lb-d2-t">{rk}<b>{esc(d["t"])}</b></div>'
                     f'<div class="lb-d2-d">{esc(d["d"])}</div>{ref_html}'
                     f'{render_articles(d.get("articles"))}</div>')
 
             pkey = f'{c["id"]}|{s["name"]}'
             scenes_html.append(
-                f'<details class="lb-s" {"open" if ci == 0 and si < 2 else ""}>'
+                f'<details class="lb-s" id="s-{c["id"]}-{si}" {"open" if ci == 0 and si < 2 else ""}>'
                 f'<summary><b>{esc(s["name"])}</b><i>{len(s.get("duties", []))} 项</i></summary>'
                 f'<div class="lb-s-body">{render_practice(pkey)}'
                 f'{"".join(rows)}</div></details>')
@@ -713,6 +714,23 @@ LIB_JS = """
   });
   if(dq) dq.addEventListener('input',applyDuty);
   applyDuty();
+
+  // ---------- 深链定位：从搜索结果跳转 #d-xxx 时展开父级并高亮 ----------
+  function focusDuty(){
+    var h=(location.hash||'').replace(/^#/,'');
+    if(!/^d-/.test(h)) return;
+    var el=document.getElementById(h);
+    if(!el) return;
+    var p=el.closest('.lb-s'); if(p) p.open=true;
+    var c=el.closest('.lb-cat'); if(c){ c.style.display=''; }
+    [].slice.call(c?c.querySelectorAll('.lb-d2'):[]).forEach(function(d){d.style.display='';});
+    [].slice.call(c?c.querySelectorAll('.lb-s'):[]).forEach(function(s){s.style.display='';});
+    el.scrollIntoView({behavior:'smooth',block:'center'});
+    el.style.transition='background .3s'; el.style.background='#fff8dc';
+    setTimeout(function(){ el.style.background=''; },2600);
+  }
+  window.addEventListener('hashchange',focusDuty);
+  focusDuty();
 })();
 </script>
 """

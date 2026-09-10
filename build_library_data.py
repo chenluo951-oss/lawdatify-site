@@ -327,6 +327,37 @@ def main():
         if not it["duty"]:
             it["duty"] = TOPIC_DUTY.get(it["topic"], [])[:2]
 
+    # ---- 合并 TAF 团体标准（电信终端产业协会，已抓正文并归档）----
+    taf_path = os.path.join(SRC, "taf_fetched.json")
+    n_taf = 0
+    if os.path.exists(taf_path):
+        taf = json.load(open(taf_path, encoding="utf-8"))
+        taf_items = [v for v in (taf.values() if isinstance(taf, dict) else taf) if v]
+
+        have_name = {re.sub(r"\s+", "", i["name"]) for i in items}
+        have_code = {norm_code(i.get("code")) for i in items}
+        for t in taf_items:
+            code = (t.get("code") or "").strip()
+            name = (t.get("name") or "").strip()
+            if not code or not name:
+                continue
+            nc = norm_code(code)
+            # 同编号或同名称已存在 → 跳过（语料库合并阶段可能已带入）
+            if nc in have_code or re.sub(r"\s+", "", name) in have_name:
+                continue
+            have_code.add(nc)
+            full = f"{code} {name}"
+            items.append({
+                "code": code, "name": full, "level": "团体标准",
+                "topic": "移动应用合规", "status": "现行有效",
+                "pub": t.get("pub") or "", "impl": t.get("impl") or "",
+                "issuer": "电信终端产业协会（TAF）",
+                "url": t.get("url") or "", "point": "", "duty": [],
+                "note": "", "kind": "标准",
+            })
+            have.add(re.sub(r"\s+", "", full))
+            n_taf += 1
+
     data = {
         "meta": {
             "title": "合规标准知识库",
