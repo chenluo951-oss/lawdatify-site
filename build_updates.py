@@ -456,6 +456,11 @@ def main():
     print(f"  今日生效 {len(today_eff)} | 30日内 {len(soon30)} | 180日内 {len(soon180)}")
     print(f"  7日内立法节点 {len(cal7)} | 草案截止 {len(dl)} | 进行中行动 {len(ongoing)}")
 
+    # 钩子：重建全站检索索引（不跑则搜索结果会过期）
+    bs = os.path.join(HERE, "build_search.py")
+    if os.path.exists(bs):
+        os.system(f'/usr/bin/python3 "{bs}" >/dev/null 2>&1')
+
     # 钩子：统一导航页脚 + 社交元数据
     for s in ("unify_chrome.py", "inject_meta.py"):
         p = os.path.join(HERE, s)
