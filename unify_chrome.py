@@ -27,6 +27,7 @@ PAGES = [
     "about.html",
     "news/index.html",
     "news/briefs.html",
+    "news/actions.html",
     "analysis/index.html",
     "kb/index.html",
     "kb/standards.html",
@@ -38,10 +39,10 @@ PAGES = [
 ]
 
 # 导航项：(相对站点根路径, 文案)。PRM 与搜索是工具页，不进主导航。
-# 合规雷达三子页（日历 / 行动 / 地图）在雷达总览页内互链，不占主导航。
+# 监管雷达三子页（立法日历 / 监管动向 / 全球监管地图）在雷达总览页内互链，不占主导航。
 NAV_ITEMS = [
     ("index.html", "首页"),
-    ("radar/index.html", "合规雷达"),
+    ("radar/index.html", "监管雷达"),
     ("news/index.html", "合规资讯"),
     ("analysis/index.html", "法律分析"),
     ("kb/index.html", "合规知识库"),

@@ -13,6 +13,8 @@ import os, re, json, html, datetime
 HERE = os.path.dirname(os.path.abspath(__file__))
 SRC = os.path.join(HERE, "sources", "standards", "library.json")
 DRAFTS = os.path.join(HERE, "sources", "library", "drafts.json")
+# 合规义务主干（主题大类 → 场景 → 具体义务 三级），与条目库分开维护
+DUTY_SRC = os.path.join(HERE, "sources", "standards", "duties.json")
 
 
 def esc(s):
@@ -219,9 +221,9 @@ def build_kb_index(items, duties, drafts, soon):
   </div>
   <div class="lb-bound">
     <div class="lb-bd">
-      <div class="lb-bd-h"><b>合规雷达</b><span class="lb-tag t-future">未来 / 进行中</span></div>
-      <p>回答「接下来会发生什么」：立法日程与施行倒计时、监管专项行动与执法态势、全球监管地图。</p>
-      <a href="../radar/index.html">进入合规雷达 →</a>
+      <div class="lb-bd-h"><b>监管雷达</b><span class="lb-tag t-future">未来 / 进行中</span></div>
+      <p>回答「何时生效、何地监管、何种行动」：立法日程与施行倒计时、监管专项行动与执法态势、全球监管地图。</p>
+      <a href="../radar/index.html">进入监管雷达 →</a>
     </div>
     <div class="lb-bd">
       <div class="lb-bd-h"><b>合规资讯</b><span class="lb-tag t-daily">每日更新</span></div>
@@ -250,6 +252,123 @@ def build_kb_index(items, duties, drafts, soon):
     print(f"  kb/index.html        {len(out)} B  ✓  （知识库总览）")
 
 
+RISK_CLS = {"高": "r-hi", "中高": "r-mh", "中": "r-md", "低": "r-lo"}
+
+
+# 泛化词：它们是多份文件的共同前缀，用于名称匹配会张冠李戴（如「网络安全标准实践指南」
+# 会误配到「敏感个人信息识别指南」）。这类词一律不反查链接，只作纯文字标注。
+AMBIGUOUS_REFS = {
+    "网络安全标准实践指南", "数据安全技术", "网络安全技术", "信息安全技术", "信息技术",
+    "移动互联网应用程序", "中国互联网协会", "食品安全国家标准",
+}
+
+
+def norm_code(s):
+    """标准号归一化：去空格/连字符、统一大小写。GB/T 35273 ↔ GB/T35273。"""
+    return re.sub(r"[\s—–－-]+", "", (s or "")).upper()
+
+
+def name_match(ref, name):
+    """法规名匹配。短名（如「广告法」）要求与条目名去掉「中华人民共和国」后完全一致，
+    避免子串误配；长名（≥6 字）允许包含匹配。
+    """
+    name = name or ""
+    if ref not in name:
+        return False
+    if len(ref) >= 6:
+        return True
+    core = re.sub(r"^中华人民共和国", "", name).strip()
+    core = re.sub(r"[（(].*?[)）]\s*$", "", core).strip()
+    core = re.sub(r"\s*(节选|摘录|全文)\s*$", "", core).strip()
+    return core == ref
+
+
+def find_refs(refs, items, n=2):
+    """按 refs（标准号或法规名）在条目库中反查依据，返回可点击的条目。
+
+    匹配优先级：标准号（归一化后包含）> 法规名（短名需全等、长名可包含，排除泛化词）。
+    匹配不上一律降级为纯文字，绝不制造错误链接。
+    """
+    out, seen = [], set()
+    for r in refs or []:
+        if not r:
+            continue
+        r = r.strip()
+        nr = norm_code(r)
+        # 1) 标准号匹配。条目 code 可能是「法律」「部门规章」这类泛化短值，
+        #    故要求双方都有实质长度，且归一化后比较。
+        hit = next((x for x in items
+                    if x.get("url") and len(x.get("code") or "") >= 6 and len(nr) >= 5
+                    and nr in norm_code(x.get("code"))
+                    and x["url"] not in seen), None)
+        # 2) 回退到法规名匹配（排除泛化词，短名要求全等）
+        if not hit and r not in AMBIGUOUS_REFS:
+            hit = next((x for x in items
+                        if x.get("url") and name_match(r, x.get("name"))
+                        and x["url"] not in seen), None)
+        if hit:
+            out.append(hit)
+            seen.add(hit["url"])
+        if len(out) >= n:
+            break
+    return out
+
+
+def render_duty_tree(cats, items):
+    """合规义务主干：主题大类 → 场景 → 具体义务 三级。"""
+    chips = ['<button class="rd-fchip on" data-dcat="ALL">全部</button>']
+    for c in cats:
+        n_s = len(c.get("scenes", []))
+        n_d = sum(len(s.get("duties", [])) for s in c.get("scenes", []))
+        chips.append(f'<button class="rd-fchip" data-dcat="{esc(c["id"])}">'
+                     f'{esc(c["name"])}<em>{n_s}·{n_d}</em></button>')
+    chips_html = ('<div class="rd-filters duty-filters"><span class="rd-flabel">主题大类</span>'
+                  + "".join(chips) + "</div>")
+
+    blocks = []
+    for ci, c in enumerate(cats):
+        scenes_html = []
+        for si, s in enumerate(c.get("scenes", [])):
+            rows = []
+            for d in s.get("duties", []):
+                risk = d.get("risk", "")
+                rk = (f'<span class="rk {RISK_CLS.get(risk, "r-md")}">{esc(risk)}</span>'
+                      if risk else "")
+                rels = find_refs(d.get("refs"), items)
+                ref_html = ""
+                if rels:
+                    ref_html = '<div class="lb-refs">' + "".join(
+                        f'<a href="{esc(x["url"])}" target="_blank" rel="noopener" '
+                        f'title="{esc(x["name"])}">{esc(x.get("code") or x["name"])}</a>'
+                        for x in rels) + "</div>"
+                else:
+                    ref_html = ('<div class="lb-refs lb-refs-plain">'
+                                + "".join(f'<span>{esc(r)}</span>' for r in (d.get("refs") or [])[:2])
+                                + "</div>")
+                rows.append(
+                    f'<div class="lb-d2" data-risk="{esc(risk)}">'
+                    f'<div class="lb-d2-t">{rk}<b>{esc(d["t"])}</b></div>'
+                    f'<div class="lb-d2-d">{esc(d["d"])}</div>{ref_html}</div>')
+            scenes_html.append(
+                f'<details class="lb-s" {"open" if ci == 0 and si < 2 else ""}>'
+                f'<summary><b>{esc(s["name"])}</b><i>{len(s.get("duties", []))} 项</i></summary>'
+                f'<div class="lb-s-body">{"".join(rows)}</div></details>')
+
+        n_s = len(c.get("scenes", []))
+        n_d = sum(len(x.get("duties", [])) for x in c.get("scenes", []))
+        blocks.append(
+            f'<section class="lb-cat" data-cat="{esc(c["id"])}">'
+            f'<div class="lb-cat-h"><h3>{esc(c["name"])}</h3>'
+            f'<span class="lb-cat-n">{n_s} 个场景 · {n_d} 项义务</span>'
+            f'<p>{esc(c.get("desc", ""))}</p></div>'
+            f'<div class="lb-cat-body">{"".join(scenes_html)}</div></section>')
+
+    return chips_html + ('<div class="lb-search duty-search">'
+                         '<input id="dutyQ" type="search" placeholder="搜索义务关键词，如 摇一摇、单独同意、划线价、温湿度…" autocomplete="off">'
+                         '<span id="dutyCount" class="lb-count"></span></div>'
+                         ) + '<div class="lb-tree">' + "".join(blocks) + "</div>"
+
+
 def duty_block(d, items, idx):
     rel = [x for x in items if d["name"] in x.get("duty", [])]
     rel.sort(key=lambda x: (0 if x.get("kind") != "标准" else 1, x.get("impl") or x.get("pub") or ""),
@@ -274,8 +393,15 @@ def duty_block(d, items, idx):
 def main():
     data = json.load(open(SRC, encoding="utf-8"))
     items = data["items"]
-    duties = data["duties"]
     today = datetime.date.today().isoformat()
+
+    # 合规义务主干（三级结构）；回退到条目库内的旧式 duties
+    if os.path.exists(DUTY_SRC):
+        duties = json.load(open(DUTY_SRC, encoding="utf-8"))
+    else:
+        duties = {"categories": []}
+    cats = duties.get("categories", [])
+    n_duty = sum(len(d.get("duties", [])) for c in cats for d in c.get("scenes", []))
 
     # 时效分区
     soon = [x for x in items if x.get("status") == "即将实施" and (x.get("impl") or "") >= today]
@@ -302,7 +428,7 @@ def main():
         ("法律法规", n_law),
         ("本机原文", n_local),
         ("在途草案", f"{len(drafts)} 项"),
-        ("合规义务", f"{len(duties)} 项"),
+        ("合规义务", f"{n_duty} 项"),
     ]]
     stat_html = ('<div class="rd-stats">' + "".join(
         f'<div class="rd-stat"><b>{esc(v)}</b><span>{esc(k)}</span></div>' for k, v in stats
@@ -360,9 +486,8 @@ def main():
 
     cards = "\n".join(item_card(x, i) for i, x in enumerate(items))
 
-    # ---------------- 义务视图
-    duty_html = "\n".join(
-        d for d in (duty_block(x, items, i) for i, x in enumerate(duties)) if d)
+    # ---------------- 义务视图（主题大类 → 场景 → 具体义务）
+    duty_html = render_duty_tree(cats, items)
 
     # ---------------- 草案跟踪视图
     draft_html = "\n".join(draft_card(d) for d in drafts)
@@ -438,7 +563,7 @@ def main():
 LIB_JS = """
 <script>
 (function(){
-  var tabs=[].slice.call(document.querySelectorAll('.lb-tabs .rd-fchip'));
+  var tabs=[].slice.call(document.querySelectorAll('.lb-tabs > .rd-fchip'));
   var panes=[].slice.call(document.querySelectorAll('.lb-pane'));
   tabs.forEach(function(b){
     b.addEventListener('click',function(){
@@ -477,10 +602,67 @@ LIB_JS = """
   });
   if(q) q.addEventListener('input',apply);
   apply();
+
+  // ---------- 合规义务主干：主题大类切换 + 义务全文搜索 ----------
+  var dchips=[].slice.call(document.querySelectorAll('.duty-filters .rd-fchip'));
+  var dcats=[].slice.call(document.querySelectorAll('.lb-cat'));
+  var dq=document.getElementById('dutyQ'), dcnt=document.getElementById('dutyCount');
+  var curCat='ALL';
+  function applyDuty(){
+    var kw=(dq&&dq.value||'').trim().toLowerCase();
+    var n=0;
+    if(kw){ [].slice.call(document.querySelectorAll('.lb-s')).forEach(function(s){s.open=true;}); }
+    dcats.forEach(function(c){
+      var okCat=(curCat==='ALL'||c.getAttribute('data-cat')===curCat);
+      var shown=0;
+      if(okCat){
+        [].slice.call(c.querySelectorAll('.lb-d2')).forEach(function(d){
+          var txt=(d.textContent||'').toLowerCase();
+          var ok=(!kw||txt.indexOf(kw)>=0);
+          d.style.display=ok?'':'none';
+          if(ok) shown++;
+        });
+        [].slice.call(c.querySelectorAll('.lb-s')).forEach(function(s){
+          var vis=[].slice.call(s.querySelectorAll('.lb-d2'))
+            .filter(function(d){return d.style.display!=='none';}).length;
+          s.style.display=vis?'':'none';
+        });
+      }
+      c.style.display=(okCat&&(shown>0||!kw))?'':'none';
+      n+=shown;
+    });
+    if(dcnt) dcnt.textContent=kw?('匹配 '+n+' 项义务'):'';
+  }
+  dchips.forEach(function(b){
+    b.addEventListener('click',function(){
+      dchips.forEach(function(x){x.classList.remove('on');});
+      b.classList.add('on');
+      curCat=b.getAttribute('data-dcat'); applyDuty();
+    });
+  });
+  if(dq) dq.addEventListener('input',applyDuty);
+  applyDuty();
 })();
 </script>
 """
 
 
+def refresh_chrome():
+    """页面整体重写后恢复子导航、统一导航/页脚与分享元数据（均幂等）。"""
+    import importlib.util
+    for name in ("inject_subnav", "unify_chrome", "inject_meta"):
+        p = os.path.join(HERE, name + ".py")
+        if not os.path.exists(p):
+            continue
+        try:
+            spec = importlib.util.spec_from_file_location(name, p)
+            m = importlib.util.module_from_spec(spec)
+            spec.loader.exec_module(m)
+            m.main()
+        except Exception as e:
+            print(f"  跳过 {name}：{e}")
+
+
 if __name__ == "__main__":
     main()
+    refresh_chrome()

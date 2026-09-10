@@ -555,6 +555,13 @@ def main():
     except Exception as e:
         print(f"  页脚时间戳刷新失败（不阻断）：{e}")
 
+    # 恢复模块子导航（news 三子页重写后需重新注入）
+    try:
+        from inject_subnav import main as subnav_main
+        subnav_main()
+    except Exception as e:
+        print(f"  子导航刷新失败（不阻断）：{e}")
+
     meta = {
         "generated": datetime.now().strftime("%Y-%m-%d %H:%M"),
         "news_items": len(verified),

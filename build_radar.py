@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""合规雷达生成器：立法日历 / 监管行动 / 全球监管地图。
+"""监管雷达生成器：立法日历 / 监管动向 / 全球监管地图。
 
 输入：sources/radar/{calendar,actions,global}.json —— 人工核实维护的结构化数据
 输出：radar/{index,calendar,actions,map}.html
@@ -220,9 +220,9 @@ def page_calendar(cal):
         parts.append(COUNTDOWN_JS)
 
     return page(
-        "合规日历", "法律施行日、征求意见截止与申报节点的月历视图，覆盖中国与主要海外辖区。",
-        '<a href="index.html">合规雷达</a> / 合规日历',
-        "合规日历",
+        "立法日历", "法律与标准的施行日、征求意见截止与申报节点的月历视图，覆盖中国与主要海外辖区。",
+        '<a href="index.html">监管雷达</a> / 立法日历',
+        "立法日历",
         "把散落在各机构的公开信息重排到一张月历上：哪些规定即将施行、哪些意见正在征集、"
         "哪些申报节点会过期。每条附发布机构原文深链，可直接点开核对。",
         "\n".join(parts),
@@ -266,9 +266,9 @@ def page_actions(acts):
     body_parts.append(domain_filter_script())
 
     return page(
-        "监管行动", "正在推进的专项治理、监督检查、立法草案与安全调查，含适用对象与最新进展。",
-        '<a href="index.html">合规雷达</a> / 监管行动',
-        "监管行动",
+        "监管动向", "正在推进的专项治理、监督检查与安全调查，含适用对象与最新进展。立法草案另见知识库·草案跟踪。",
+        '<a href="index.html">监管雷达</a> / 监管动向',
+        "监管动向",
         "监管不止写在纸上，更在执行里。这里追踪各主管部门正在推进的动作，标注适用对象、"
         "重点内容与最新进展，便于判断是否需要同步开展内部自查。",
         "\n".join(body_parts),
@@ -379,7 +379,7 @@ def page_map(g):
 
     return page(
         "全球监管地图", "按司法辖区查看立法、执法与规则动态，覆盖中国、欧盟、美国、日韩、印度、东南亚、拉美与中东非。",
-        '<a href="index.html">合规雷达</a> / 全球监管地图',
+        '<a href="index.html">监管雷达</a> / 全球监管地图',
         "全球监管地图",
         "出海或跨境业务常问「这个国家现在什么口径」。真实地理轮廓着色呈现已核实的立法、"
         "执法与规则动向，点击辖区即可下钻全部条目。",
@@ -498,18 +498,18 @@ def page_index(cal, acts, g):
     ])
 
     return page(
-        "合规雷达", "立法日历、监管行动与全球监管地图：把散落的监管信息按时间与地域重排，聚焦可执行的关键节点。",
-        '合规雷达',
-        "合规雷达",
+        "监管雷达", "立法日历、监管动向与全球监管地图：回答「何时生效、何地监管、何种行动」，按时间与地域重排监管信息。",
+        '监管雷达',
+        "监管雷达",
         "「什么时候要做什么」和「各地现在什么口径」——这是业务同事最常问的两个问题。"
-        "合规雷达用日历、行动与地图三个视图回答它们。",
+        "监管雷达用立法日历、监管动向与全球监管地图三个视图回答它们。",
         body,
     )
 
 
 # ================================================================= 首页区块
 def home_deck(cal, acts, g):
-    """首页「合规雷达驾驶舱」区块（RADAR:START/END，幂等替换）。"""
+    """首页「监管雷达驾驶舱」区块（RADAR:START/END，幂等替换）。"""
     today = date.today().strftime("%Y-%m-%d")
 
     def days(d):
@@ -696,7 +696,7 @@ def main():
 
     # 恢复统一导航 / 页脚 / 分享元数据
     import importlib.util
-    for name in ("unify_chrome", "inject_meta"):
+    for name in ("inject_subnav", "unify_chrome", "inject_meta"):
         p = os.path.join(HERE, name + ".py")
         if not os.path.exists(p):
             continue
