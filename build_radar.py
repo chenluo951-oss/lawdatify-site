@@ -323,8 +323,8 @@ def page_map(g):
             ("动态条目", len(items)),
         ]),
         """<p class="rd-note">底图为 <b>Natural Earth 公开数据</b>的等距圆柱投影<b>示意性视图</b>，
-非地理精确边界地图，不承担划界意义；<b>中国（含台湾地区、香港、澳门）为一个整体色块</b>。
-颜色深浅代表该辖区已收录的动态条目数量，点击辖区可下钻全部条目；
+非地理精确边界地图，不承担划界意义。<b>点击中国可下钻到省市级监管态势地图</b>（省界含
+南海诸岛与九段线，台湾省、香港、澳门为独立省级要素）。颜色深浅代表已收录的动态条目数量；
 本页不请求任何在线地图服务。</p>""",
         """<div class="geo-legend">
   <span class="gl-item"><i class="gl hv0"></i>暂无收录</span>
@@ -334,6 +334,10 @@ def page_map(g):
   <span class="gl-note">微型辖区以圆点定位</span>
 </div>""",
         '<div class="geo-frame" id="geoMap"></div>',
+        '<div class="cn-bar" id="cnBar">'
+        '<button class="cn-back" id="cnBack" type="button">← 返回全球</button>'
+        '<span class="cn-mode">当前视图：<b>中国 · 省市级监管态势</b>，点击省份查看地方监管动态</span></div>',
+        '<div class="cn-panel" id="cnPanel"></div>',
         '<div class="rd-mapres" id="mapres"></div>',
         '<div class="rd-glist" id="glist">' + "".join(list_html) + "</div>",
         f"""<script>window.GEO_META = {{
@@ -342,10 +346,14 @@ def page_map(g):
   tips: {tips_js}
 }};</script>
 <script src="../assets/radar-map.js"></script>
+<script src="../assets/china-map.js"></script>
 <script>
 (function(){{
   var blocks=[].slice.call(document.querySelectorAll('.rd-gblock'));
   var res=document.getElementById('mapres');
+  var cnBar=document.getElementById('cnBar');
+  var cnPanel=document.getElementById('cnPanel');
+  var mode='world';
   function show(code){{
     var n=0;
     blocks.forEach(function(b){{
@@ -358,19 +366,83 @@ def page_map(g):
         :'';
       if(code){{
         res.querySelector('b').textContent=n;
-        res.querySelector('#rclr').addEventListener('click',function(){{RadarMap.render(opt);}});
+        res.querySelector('#rclr').addEventListener('click',function(){{show(null);}});
       }}
     }}
-    if(code){{
-      var el=document.getElementById('glist');
-      if(el) el.scrollIntoView({{behavior:'smooth',block:'start'}});
-    }}
   }}
+  function renderPanel(name){{
+    if(!window.__CN_DATA__) return;
+    var provs=window.__CN_DATA__.provinces||[];
+    var total=0, cards='', blocks='';
+    provs.forEach(function(p){{
+      if(!p.name||p.name==='南海诸岛') return;
+      var its=p.items||[]; total+=its.length;
+      if(!its.length) return;
+      var rows=its.map(function(it){{
+        return '<div class="rd-item rd-gitem"><div class="rd-body"><div class="rd-row">'
+          +'<span class="rd-badge b-blue">'+(it.type||'监管动态')+'</span>'
+          +'<span class="rd-tags"><span class="rd-tag">'+(it.domain||'')+'</span></span>'
+          +'<span class="rd-count past">'+(it.date||'')+'</span></div>'
+          +'<h3><a href="'+it.url+'" target="_blank" rel="noopener">'+it.title+'</a>'
+          +'<span class="rd-src src-off">官方原文</span></h3>'
+          +'<p>'+(it.note||'')+'</p></div></div>';
+      }}).join('');
+      cards+='<div class="cn-card" data-prov="'+p.name+'"><div class="cn-n">'+its.length
+        +'<em>条动态</em></div><b>'+p.short+'</b><span>'+(its[0]?its[0].title:'')+'</span></div>';
+      blocks+='<div class="rd-gblock cn-block" data-prov="'+p.name+'" style="display:none">'
+        +'<h4 class="rd-gh">'+p.name+'<span>'+its.length+'</span></h4>'+rows+'</div>';
+    }});
+    var head='<div class="rd-note">共收录 <b>'+total+'</b> 条 2026 年省级地方监管动态，'
+      +'覆盖 '+provs.filter(function(p){{return (p.items||[]).length;}}).length
+      +' 个省级行政区。全国性法律法规与部门规章适用于全部省份，此处仅列<b>省级市场监管部门的属地监管动作</b>。'
+      +'点击卡片查看该省详情。</div><div class="cn-grid">'+cards+'</div>'+blocks;
+    cnPanel.innerHTML=head;
+    if(name){{
+      cnPanel.querySelectorAll('.cn-block').forEach(function(b){{b.style.display='none';}});
+      var blk=cnPanel.querySelector('.cn-block[data-prov="'+name+'"]');
+      if(blk) blk.style.display='';
+    }}
+    var b2=document.getElementById('cnBack2');
+    if(b2) b2.addEventListener('click',function(){{renderPanel(null);}});
+    cnPanel.querySelectorAll('.cn-card').forEach(function(c){{
+      c.addEventListener('click',function(){{
+        cnPanel.querySelectorAll('.cn-block').forEach(function(b){{b.style.display='none';}});
+        var blk=cnPanel.querySelector('.cn-block[data-prov="'+c.getAttribute('data-prov')+'"]');
+        if(blk) blk.style.display='';
+        if(mode==='world') {{ /* keep */ }}
+        cnPanel.scrollIntoView({{behavior:'smooth',block:'start'}});
+      }});
+    }});
+  }}
+  function enterCN(){{
+    if(mode==='cn') return;
+    mode='cn';
+    cnBar.classList.add('show');
+    cnPanel.classList.add('show');
+    ChinaView.render({{
+      mount:'#geoMap', dataUrl:'../sources/radar/china.json',
+      onProvClick:function(name,n){{
+        if(n>0) renderPanel(name);
+        else renderPanel(null);
+        cnPanel.scrollIntoView({{behavior:'smooth',block:'start'}});
+      }},
+      onReady:function(d){{ window.__CN_DATA__=d; renderPanel(null); }}
+    }});
+  }}
+  function exitCN(){{
+    if(mode==='world') return;
+    mode='world';
+    cnBar.classList.remove('show');
+    cnPanel.classList.remove('show');
+    RadarMap.render(opt);
+    show(null);
+  }}
+  document.getElementById('cnBack').addEventListener('click',exitCN);
   var opt={{
     mount:'#geoMap', geoUrl:'../sources/radar/geo.json',
     counts:window.GEO_META.counts, names:window.GEO_META.names,
     tipExtra:window.GEO_META.tips,
-    onSelect:show
+    onSelect:function(code){{ if(code==='CN'){{ enterCN(); }} else {{ show(code); }} }}
   }};
   RadarMap.render(opt);
 }})();

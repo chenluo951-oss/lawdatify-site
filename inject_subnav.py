@@ -46,6 +46,8 @@ GROUPS = [
     ("kb", KB_NAV),
 ]
 
+MODULE_NAMES = {"radar": "监管雷达", "news": "合规资讯", "kb": "合规知识库"}
+
 BLOCK_RE = re.compile(r"<!-- SUBNAV:START -->.*?<!-- SUBNAV:END -->", re.S)
 
 
@@ -55,7 +57,11 @@ def build_block(module, nav, rel):
     for href, label in nav:
         on = " on" if href == cur else ""
         items.append(f'<a class="{on.strip()}" href="{href}">{label}</a>')
-    html = ['<!-- SUBNAV:START -->', '<nav class="subnav">' + "".join(items) + "</nav>"]
+    html = [
+        "<!-- SUBNAV:START -->",
+        '<nav class="subnav"><span class="sn-cap">' + MODULE_NAMES[module] + '</span>'
+        + "".join(items) + "</nav>",
+    ]
     b = BOUNDARY.get(module)
     if b:
         html.append(f'<p class="mod-bound">{b}</p>')

@@ -135,7 +135,7 @@ def draft_card(d):
 </div>"""
 
 
-def build_kb_index(items, duties, drafts, soon):
+def build_kb_index(items, duties, drafts, soon, stat_html="", board=""):
     """合规知识库总览：定位三大件入口 + 时效提醒 + 模块边界说明。
 
     与 build_topics.py 的分工：动态类内容（监管动态、应对建议）归「合规资讯」，
@@ -183,6 +183,7 @@ def build_kb_index(items, duties, drafts, soon):
         duty_desc = f"{n_duty} 项合规义务"
 
     body = f"""
+  {stat_html}
   <div class="lb-split">
     <a class="dcard lb-entry" href="standards.html" style="--dc:#0f7b6c">
       <b>📚 合规标准知识库</b>
@@ -196,23 +197,19 @@ def build_kb_index(items, duties, drafts, soon):
       每项义务细化到可落地要求并反查依据条款。</span>
       <span class="more">查看义务清单 →</span>
     </a>
-    <a class="dcard lb-entry" href="standards.html#pane-drafts" style="--dc:#b45309">
+    <a class="dcard lb-entry" href="standards.html#pane-draft" style="--dc:#b45309">
       <b>📌 立法草案跟踪</b>
       <span>{len(drafts)} 项在途立法与征求意见，标注起止日期与剩余天数，链接到官方征求意见通知页。</span>
       <span class="more">查看草案 →</span>
     </a>
   </div>
 
-  <div class="section-title"><span class="bar"></span>时效提醒</div>
-  <div class="lb-cols">
-    <div class="lb-col">
-      <h3>即将实施（{n_sooner} 项）</h3>
-      {soon_html}
-    </div>
-    <div class="lb-col">
-      <h3>征求意见截止</h3>
+  <div class="section-title"><span class="bar"></span>时效看板</div>
+  {board}
+
+  <div class="section-title"><span class="bar"></span>征求意见截止</div>
+  <div class="lb-col">
       {draft_html}
-    </div>
   </div>
 
   <div class="section-title"><span class="bar"></span>三个模块怎么分</div>
@@ -383,6 +380,22 @@ def render_practice(pkey):
 
 def render_duty_tree(cats, items):
     """合规义务主干：主题大类 → 场景 → 具体义务 三级。"""
+    # 关联义务索引：rel 键 cat|scene|t → 页内锚点
+    rel_anchor = {}
+    for c in cats:
+        for si, s in enumerate(c.get("scenes", [])):
+            for di, d in enumerate(s.get("duties", [])):
+                rel_anchor[f'{c["id"]}|{s["name"]}|{d["t"]}'] = f'd-{c["id"]}-{si}-{di}'
+
+    def rel_html(duty):
+        keys = [k for k in (duty.get("rel") or []) if k in rel_anchor]
+        if not keys:
+            return ""
+        chips = "".join(
+            f'<a href="#{rel_anchor[k]}">{esc(k.split("|", 1)[1] if "|" in k else k)}</a>'
+            for k in keys)
+        return (f'<div class="lb-rel"><span class="lb-rel-l">关联义务</span>{chips}</div>')
+
     chips = ['<button class="rd-fchip on" data-dcat="ALL">全部</button>']
     for c in cats:
         n_s = len(c.get("scenes", []))
@@ -417,6 +430,7 @@ def render_duty_tree(cats, items):
                     f'<div class="lb-d2" id="{did}" data-risk="{esc(risk)}">'
                     f'<div class="lb-d2-t">{rk}<b>{esc(d["t"])}</b></div>'
                     f'<div class="lb-d2-d">{esc(d["d"])}</div>{ref_html}'
+                    f'{rel_html(d)}'
                     f'{render_articles(d.get("articles"))}</div>')
 
             pkey = f'{c["id"]}|{s["name"]}'
@@ -567,8 +581,6 @@ def main():
         draft_html = '<p class="rd-note">暂无在途草案记录。</p>'
 
     body = "\n".join([
-        stat_html,
-        board,
         '<div class="lb-tabs">'
         '<button class="rd-fchip on" data-tab="lib">资料库</button>'
         '<button class="rd-fchip" data-tab="draft">草案跟踪<i class="lb-dot"></i></button>'
@@ -615,7 +627,7 @@ def main():
     print(f"  kb/standards.html  {len(out)} B  ✓  "
           f"({len(items)} 条目)")
 
-    build_kb_index(items, duties, drafts, soon)
+    build_kb_index(items, duties, drafts, soon, stat_html=stat_html, board=board)
 
     # 恢复统一页头页脚与分享元数据
     import importlib.util

@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>全球监管地图 · 合规终点站</title>
 <meta name="description" content="按司法辖区查看立法、执法与规则动态，覆盖中国、欧盟、美国、日韩、印度、东南亚、拉美与中东非。">
-<link rel="stylesheet" href="../assets/style.css">
+<link rel="stylesheet" href="../assets/style.css?v=1789031589">
 <!-- SOCIAL:START -->
 <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
 <link rel="apple-touch-icon" href="../assets/favicon.svg">
@@ -27,7 +27,7 @@
 <body>
 
 <nav class="topnav"><div class="inner">
-  <a class="brand" href="../index.html">合规<span>无终点</span></a>
+  <a class="brand" href="../index.html">合规<span>终点站</span></a>
   <div class="navlinks">
     <a href="../index.html">首页</a>
     <a href="../updates/index.html">今日更新</a>
@@ -46,15 +46,15 @@
   <p>出海或跨境业务常问「这个国家现在什么口径」。真实地理轮廓着色呈现已核实的立法、执法与规则动向，点击辖区即可下钻全部条目。</p>
 </div></div>
 <!-- SUBNAV:START -->
-<nav class="subnav"><a class="" href="index.html">总览</a><a class="" href="calendar.html">立法日历</a><a class="" href="actions.html">监管动向</a><a class="on" href="map.html">全球监管地图</a></nav>
+<nav class="subnav"><span class="sn-cap">监管雷达</span><a class="" href="index.html">总览</a><a class="" href="calendar.html">立法日历</a><a class="" href="actions.html">监管动向</a><a class="on" href="map.html">全球监管地图</a></nav>
 <p class="mod-bound">本模块回答<b>何时生效、何地监管、何种行动</b>——按时间与地域重排监管信息。已发生的事件与应对建议见 <a href="../news/index.html">合规资讯</a>；规则条文本身见 <a href="../kb/index.html">合规知识库</a>。</p>
 <!-- SUBNAV:END -->
 
 <main class="wrap">
 <div class="rd-stats"><div class="rd-stat"><b>15 个</b><span>收录辖区</span></div><div class="rd-stat"><b>9 个</b><span>有动态辖区</span></div><div class="rd-stat"><b>16</b><span>动态条目</span></div></div>
 <p class="rd-note">底图为 <b>Natural Earth 公开数据</b>的等距圆柱投影<b>示意性视图</b>，
-非地理精确边界地图，不承担划界意义；<b>中国（含台湾地区、香港、澳门）为一个整体色块</b>。
-颜色深浅代表该辖区已收录的动态条目数量，点击辖区可下钻全部条目；
+非地理精确边界地图，不承担划界意义。<b>点击中国可下钻到省市级监管态势地图</b>（省界含
+南海诸岛与九段线，台湾省、香港、澳门为独立省级要素）。颜色深浅代表已收录的动态条目数量；
 本页不请求任何在线地图服务。</p>
 <div class="geo-legend">
   <span class="gl-item"><i class="gl hv0"></i>暂无收录</span>
@@ -64,6 +64,8 @@
   <span class="gl-note">微型辖区以圆点定位</span>
 </div>
 <div class="geo-frame" id="geoMap"></div>
+<div class="cn-bar" id="cnBar"><button class="cn-back" id="cnBack" type="button">← 返回全球</button><span class="cn-mode">当前视图：<b>中国 · 省市级监管态势</b>，点击省份查看地方监管动态</span></div>
+<div class="cn-panel" id="cnPanel"></div>
 <div class="rd-mapres" id="mapres"></div>
 <div class="rd-glist" id="glist"><div class="rd-gblock" data-code="CN"><h4 class="rd-gh">中国<span>6</span></h4><div class="rd-item rd-gitem" data-code="CN"><div class="rd-body"><div class="rd-row"><span class="rd-badge b-purple">司法动向</span><span class="rd-tags"><span class="rd-tag">AI合规</span></span><span class="rd-count past">2026-09-07</span></div><h3><a href="https://www.court.gov.cn/zixun/xiangqing/511101.html" target="_blank" rel="noopener">最高人民法院发布《关于依法审理涉人工智能纠纷案件的意见》（法发〔2026〕10号）</a><span class="rd-src src-off">官方原文</span></h3><p>首部最高审判机关涉 AI 司法裁判规则，共 5 部分 24 条。涵盖 AI 换脸拟声、网络开盒、模型训练涉及的个人信息、大数据杀熟、自动驾驶事故、开源软件责任、AI 证据审查。其中「大数据杀熟」直接指向算法定价场景，是使用个性化定价与算法推荐业务的重点裁判风向。</p></div></div><div class="rd-item rd-gitem" data-code="CN"><div class="rd-body"><div class="rd-row"><span class="rd-badge b-blue">立法草案</span><span class="rd-tags"><span class="rd-tag">数据合规</span></span><span class="rd-count past">2026-08-07</span></div><h3><a href="https://www.cac.gov.cn/2026-08/07/c_1787851071612596.htm" target="_blank" rel="noopener">《大型个人信息处理者个人信息保护规定（征求意见稿）》公开征求意见</a><span class="rd-src src-off">官方原文</span></h3><p>处理 1000 万人以上个人信息、提供重要互联网服务或多业务线且影响重大的处理者适用。要求隐私政策结构化清单化（含第三方 SDK 名称、版本与政策链接）、设立个人信息保护负责人与监督机构、严格数据本地化、强化投诉处理机制。认定需自评并向网信部门申请，省级 15 个工作日初审、国家级终审，官方将公布认定名单。意见已于 2026-09-07 截止。</p></div></div><div class="rd-item rd-gitem" data-code="CN"><div class="rd-body"><div class="rd-row"><span class="rd-badge b-red">安全调查</span><span class="rd-tags"><span class="rd-tag">平台合规</span></span><span class="rd-count past">2026-08-05</span></div><h3><a href="https://trb.mofcom.gov.cn/mybldc/art/2026/art_839692c0d02b49cdac0717b48df85a92.html" target="_blank" rel="noopener">对进口打印复印办公设备启动对外贸易国家安全调查</a><span class="rd-src src-off">官方原文</span></h3><p>商务部贸易救济调查局依据《对外贸易法》第41、42条，对装有外国个人或实体开发、测试或维护的驱动软件与嵌入式软件且具打印复印功能的进口办公设备开展国家安全调查。重点评估进口情况、对国家安全利益的影响、国内需求与对外依赖、国内产业保障能力等。利害关系方答卷已于 2026-09-14 截止，调查原则上12个月内结束。</p></div></div><div class="rd-item rd-gitem" data-code="CN"><div class="rd-body"><div class="rd-row"><span class="rd-badge b-blue">立法草案</span><span class="rd-tags"><span class="rd-tag">平台合规</span></span><span class="rd-count past">2026-07-29</span></div><h3><a href="https://www.cac.gov.cn/2026-07/29/c_1787072711938509.htm" target="_blank" rel="noopener">《中华人民共和国反网络暴力法（征求意见稿）》公开征求意见</a><span class="rd-src src-off">官方原文</span></h3><p>首次就网络暴力治理单独立法。电商平台的用户评价区、直播间评论区、社区内容板块均属高发场景，平台的预防、识别、处置与配合调查义务将被法定化。意见已于 2026-08-28 截止。</p></div></div><div class="rd-item rd-gitem" data-code="CN"><div class="rd-body"><div class="rd-row"><span class="rd-badge b-blue">立法修订</span><span class="rd-tags"><span class="rd-tag">平台合规</span></span><span class="rd-count past">2026-07-03</span></div><h3><a href="https://www.cac.gov.cn/2026-07/03/c_1784822399677167.htm" target="_blank" rel="noopener">《互联网信息服务管理办法（修订草案征求意见稿）》再次公开征求意见</a><span class="rd-src src-off">官方原文</span></h3><p>对互联网信息服务的基础性行政法规进行再次修订征求意见，是该领域治理框架的重大调整。意见已于 2026-08-02 截止，定稿后将对平台信息服务全流程产生影响。</p></div></div><div class="rd-item rd-gitem" data-code="CN"><div class="rd-body"><div class="rd-row"><span class="rd-badge b-red">专项治理</span><span class="rd-tags"><span class="rd-tag">AI合规</span></span><span class="rd-count past">2026-04-30</span></div><h3><a href="https://www.cac.gov.cn/2026-07/06/c_1785081384384987.htm" target="_blank" rel="noopener">中央网信办部署「清朗·整治AI应用乱象」专项行动</a><span class="rd-src src-off">官方原文</span></h3><p>为期 4 个月，分两阶段：第一阶段聚焦 AI 应用服务典型违规（大模型备案登记、安全审核能力、训练语料安全、AI 数据投毒、生成合成内容标识落实不到位、滥用 AI 技术、开源模型安全管理）7 类问题；第二阶段整治 AI 信息内容乱象（数字泔水、虚假信息、暴力低俗、假冒仿冒、侵害未成年人权益、AI 托管水军、AI 产品服务违规）7 类问题。第二阶段已累计清理违法违规信息 561 万余条、查处账号 4.9 万余个、处置违规网站与应用程序 2400 余个。</p></div></div></div><div class="rd-gblock" data-code="JP"><h4 class="rd-gh">日本<span>1</span></h4><div class="rd-item rd-gitem" data-code="JP"><div class="rd-body"><div class="rd-row"><span class="rd-badge b-blue">立法通过</span><span class="rd-tags"><span class="rd-tag">数据合规</span></span><span class="rd-count past">2026-07-17</span></div><h3><a href="https://www.jdsupra.com/legalnews/amendments-to-the-act-on-the-protection-9567482/" target="_blank" rel="noopener">日本《个人信息保护法》修订案公布（令和8年法律第56号）</a><span class="rd-src src-ana">专业解读</span></h3><p>2026-07-10 国会通过、07-17 公布。创设行政课征金制度（PPC 首次获直接金钱制裁权，课征五要件：属特定违法类型、获得对价、未尽合理注意、权益侵害重大、影响 1000 人以上）；16 岁以下个人信息的同意与通知原则上须向法定代理人作出；新增「特定生物识别个人信息」类别并要求事前通知；新增「统计制作」例外，大型数据集用于统计分析与 AI 训练数据可不经同意对外提供（附公示义务，禁止再对外提供）。原则上自公布起两年内由政令指定施行日。</p></div></div></div><div class="rd-gblock" data-code="KR"><h4 class="rd-gh">韩国<span>1</span></h4><div class="rd-item rd-gitem" data-code="KR"><div class="rd-body"><div class="rd-row"><span class="rd-badge b-green">义务生效</span><span class="rd-tags"><span class="rd-tag">数据合规</span></span><span class="rd-count past">2026-09-11</span></div><h3><a href="https://cn-sec.com/archives/5418009.html" target="_blank" rel="noopener">韩国《个人信息保护法》修正案主体施行，引入 CEO 个人责任</a><span class="rd-src src-ana">专业解读</span></h3><p>2026-02-12 国会通过、03-10 公布（法律第21445号）。加重罚则档：故意或重大过失三年内重复违法、受害规模达 1000 万人以上、或不遵从更正措施命令导致泄露的，罚款上限由全体营业额 3% 提高至 10%。引入代表人/经营者个人监督责任，CPO 指定须经董事会决议并向监管报备。举证责任上已有先例倒置——企业须自行证明哪部分营业额与违法行为无关方能扣除。与认证义务化相关条文延至 2027-07-01 施行。</p></div></div></div><div class="rd-gblock" data-code="IN"><h4 class="rd-gh">印度<span>1</span></h4><div class="rd-item rd-gitem" data-code="IN"><div class="rd-body"><div class="rd-row"><span class="rd-badge b-purple">规则公布</span><span class="rd-tags"><span class="rd-tag">数据合规</span></span><span class="rd-count past">2025-11-13</span></div><h3><a href="https://www.meity.gov.in/data-protection-framework" target="_blank" rel="noopener">印度《数字个人数据保护规则 2025》公布，三阶段推进</a><span class="rd-src src-off">官方原文</span></h3><p>第一阶段（2025-11-13）组建印度数据保护委员会（DPBI）与基础框架；第二阶段（2026-11-13）开启同意管理器注册；第三阶段（2027-05-13）实质性义务与罚则全面生效，单项最高 25 亿卢比。泄露通知无实质门槛要求，董事会与被影响的个人均须通知，72 小时内向 DPBI 提交详细报告——比 GDPR 更宽。16 岁以下（含）及18岁门槛相关的儿童同意与禁止针对儿童的行为定向广告相关条款需特别关注。</p></div></div></div><div class="rd-gblock" data-code="SG"><h4 class="rd-gh">新加坡<span>1</span></h4><div class="rd-item rd-gitem" data-code="SG"><div class="rd-body"><div class="rd-row"><span class="rd-badge b-purple">制度框架</span><span class="rd-tags"><span class="rd-tag">数据合规</span></span><span class="rd-count past">2026-06-01</span></div><h3><a href="https://www.pdpc.gov.sg/overview-of-pdpa/the-legislation/personal-data-protection-act" target="_blank" rel="noopener">新加坡《个人数据保护法》(PDPA) 现行制度与合规要点</a><span class="rd-src src-off">官方原文</span></h3><p>新加坡个人数据保护委员会（PDPC）为监管机构。PDPA 采用「同意为原则、例外为辅」的二元结构， 义务 围绕通知义务、目的限制、保护义务、留存限制、泄露通知（须在 3 个工作日内评估是否通知 PDPC，受影响个人对组织造成严重影响时须通知个人）展开。作为东南亚区域总部所在地，常作为跨境亚太业务的合规基准辖区。</p></div></div></div><div class="rd-gblock" data-code="VN"><h4 class="rd-gh">越南<span>1</span></h4><div class="rd-item rd-gitem" data-code="VN"><div class="rd-body"><div class="rd-row"><span class="rd-badge b-blue">立法草案</span><span class="rd-tags"><span class="rd-tag">数据合规</span></span><span class="rd-count past">2026-09-01</span></div><h3><a href="https://securiti.ai/privacy-roundup/august-2026" target="_blank" rel="noopener">越南《数据安全法》草案审议中，拟设四级风险分类</a><span class="rd-src src-ana">专业解读</span></h3><p>越南正在审议新的《数据安全法》，引入数据安全风险四级分类、全生命周期管控、风险评估要求，以及对重要数据与核心数据的更严格要求。叠加已施行的第13/2023号个人数据保护法令（PDPD）与将于 2026-01-01 起适用的个人信息保护法框架，越南正成为东南亚数据合规复杂度上升最快的辖区之一。</p></div></div></div><div class="rd-gblock" data-code="EU"><h4 class="rd-gh">欧盟<span>2</span></h4><div class="rd-item rd-gitem" data-code="EU"><div class="rd-body"><div class="rd-row"><span class="rd-badge b-red">执法启动</span><span class="rd-tags"><span class="rd-tag">AI合规</span></span><span class="rd-count past">2026-08-02</span></div><h3><a href="https://digital-strategy.ec.europa.eu/en/policies/regulatory-framework-ai" target="_blank" rel="noopener">欧盟 AI Office 取得执法权，已向多家通用大模型提供者发出信息问询</a><span class="rd-src src-off">官方原文</span></h3><p>自 2026-08-02 起 AI Office 与国家主管机关开始执法，第50条透明度义务适用。执法后 27 天内即向多家境外通用大模型提供者发出信息问询，内容涉及模型安全、独立外部评估、投放后监控，以及向未发布训练数据摘要的提供者专门问询训练内容摘要。未按答复或答复不实本身即可罚，罚则上限为 1500 万欧元或全球营业额 3%（取高者）。</p></div></div><div class="rd-item rd-gitem" data-code="EU"><div class="rd-body"><div class="rd-row"><span class="rd-badge b-blue">立法修订</span><span class="rd-tags"><span class="rd-tag">AI合规</span></span><span class="rd-count past">2026-07-27</span></div><h3><a href="https://artificialintelligenceact.eu/implementation-timeline/" target="_blank" rel="noopener">《AI 综合修订条例》(EU) 2026/1744 生效，高风险义务期限调整</a><span class="rd-src src-ana">专业解读</span></h3><p>通过 My Omnibus on AI 修订附件III 高风险 AI 系统义务至 2027-12-02 适用、附件I 嵌入式高风险至 2028-08-02 适用，并软化第4条 AI 素养义务表述。重点：第50条透明度义务、GPAI 义务与处罚框架均未延期，2026-08-02 已如期适用。</p></div></div></div><div class="rd-gblock" data-code="US"><h4 class="rd-gh">美国<span>2</span></h4><div class="rd-item rd-gitem" data-code="US"><div class="rd-body"><div class="rd-row"><span class="rd-badge b-red">执法政策</span><span class="rd-tags"><span class="rd-tag">价格合规</span></span><span class="rd-count past">2026-09-01</span></div><h3><a href="https://www.ftc.gov/legal-library/browse/statutes/federal-trade-commission-act" target="_blank" rel="noopener">FTC 就「未披露个性化定价」执法政策草案征求意见</a><span class="rd-src src-off">官方原文</span></h3><p>FTC 正就一项针对「利用消费者数据确定个别化价格但未予披露」行为的执法政策草案公开征求意见。对采用算法定价、会员差异化价格的零售平台是直接信号——价格合规在美不再只是反垄断议题，而是消费者保护与数据合规的交叉议题。</p></div></div><div class="rd-item rd-gitem" data-code="US"><div class="rd-body"><div class="rd-row"><span class="rd-badge b-purple">规则生效</span><span class="rd-tags"><span class="rd-tag">算法合规</span></span><span class="rd-count past">2026-01-01</span></div><h3><a href="https://oag.ca.gov/privacy/ccpa" target="_blank" rel="noopener">加州 ADMT、风险评估与网络安全审计规则生效（CCPA/CPRA）</a><span class="rd-src src-off">官方原文</span></h3><p>CPPA 的 ADMT、风险评估、网络安全审计规则于 2025 年最终化、2026-01-01 生效；ADMT 具体义务自 2027-01-01 适用，既有系统须在此日期前完成合规改造。ADMT 定义以「功能」而非「模型」为核心：处理个人信息并以计算替代或实质性替代人工决策、且适用于财务、住房、教育、就业、医疗等重大决定。</p></div></div></div><div class="rd-gblock" data-code="BR"><h4 class="rd-gh">巴西<span>1</span></h4><div class="rd-item rd-gitem" data-code="BR"><div class="rd-body"><div class="rd-row"><span class="rd-badge b-amber">披露截止</span><span class="rd-tags"><span class="rd-tag">数据合规</span></span><span class="rd-count past">2026-09-17</span></div><h3><a href="https://www.gov.br/anpd/pt-br/assuntos/noticias" target="_blank" rel="noopener">巴西 ECA Digital：未成年用户超百万平台首份透明度报告披露截止</a><span class="rd-src src-off">官方原文</span></h3><p>面向巴西未成年用户超过 100 万的数字平台须在此日期前发布首份 ECA Digital 透明度报告。这是即时生效型节点，跨境业务若涉及巴西市场需确认是否落入门槛。</p></div></div></div></div>
 <script>window.GEO_META = {
@@ -72,10 +74,14 @@
   tips: {"CN": "最近 2026-09-07", "EU": "最近 2026-08-02", "US": "最近 2026-09-01", "IN": "最近 2025-11-13", "JP": "最近 2026-07-17", "KR": "最近 2026-09-11", "BR": "最近 2026-09-17", "SG": "最近 2026-06-01", "VN": "最近 2026-09-01"}
 };</script>
 <script src="../assets/radar-map.js"></script>
+<script src="../assets/china-map.js"></script>
 <script>
 (function(){
   var blocks=[].slice.call(document.querySelectorAll('.rd-gblock'));
   var res=document.getElementById('mapres');
+  var cnBar=document.getElementById('cnBar');
+  var cnPanel=document.getElementById('cnPanel');
+  var mode='world';
   function show(code){
     var n=0;
     blocks.forEach(function(b){
@@ -88,19 +94,83 @@
         :'';
       if(code){
         res.querySelector('b').textContent=n;
-        res.querySelector('#rclr').addEventListener('click',function(){RadarMap.render(opt);});
+        res.querySelector('#rclr').addEventListener('click',function(){show(null);});
       }
     }
-    if(code){
-      var el=document.getElementById('glist');
-      if(el) el.scrollIntoView({behavior:'smooth',block:'start'});
-    }
   }
+  function renderPanel(name){
+    if(!window.__CN_DATA__) return;
+    var provs=window.__CN_DATA__.provinces||[];
+    var total=0, cards='', blocks='';
+    provs.forEach(function(p){
+      if(!p.name||p.name==='南海诸岛') return;
+      var its=p.items||[]; total+=its.length;
+      if(!its.length) return;
+      var rows=its.map(function(it){
+        return '<div class="rd-item rd-gitem"><div class="rd-body"><div class="rd-row">'
+          +'<span class="rd-badge b-blue">'+(it.type||'监管动态')+'</span>'
+          +'<span class="rd-tags"><span class="rd-tag">'+(it.domain||'')+'</span></span>'
+          +'<span class="rd-count past">'+(it.date||'')+'</span></div>'
+          +'<h3><a href="'+it.url+'" target="_blank" rel="noopener">'+it.title+'</a>'
+          +'<span class="rd-src src-off">官方原文</span></h3>'
+          +'<p>'+(it.note||'')+'</p></div></div>';
+      }).join('');
+      cards+='<div class="cn-card" data-prov="'+p.name+'"><div class="cn-n">'+its.length
+        +'<em>条动态</em></div><b>'+p.short+'</b><span>'+(its[0]?its[0].title:'')+'</span></div>';
+      blocks+='<div class="rd-gblock cn-block" data-prov="'+p.name+'" style="display:none">'
+        +'<h4 class="rd-gh">'+p.name+'<span>'+its.length+'</span></h4>'+rows+'</div>';
+    });
+    var head='<div class="rd-note">共收录 <b>'+total+'</b> 条 2026 年省级地方监管动态，'
+      +'覆盖 '+provs.filter(function(p){return (p.items||[]).length;}).length
+      +' 个省级行政区。全国性法律法规与部门规章适用于全部省份，此处仅列<b>省级市场监管部门的属地监管动作</b>。'
+      +'点击卡片查看该省详情。</div><div class="cn-grid">'+cards+'</div>'+blocks;
+    cnPanel.innerHTML=head;
+    if(name){
+      cnPanel.querySelectorAll('.cn-block').forEach(function(b){b.style.display='none';});
+      var blk=cnPanel.querySelector('.cn-block[data-prov="'+name+'"]');
+      if(blk) blk.style.display='';
+    }
+    var b2=document.getElementById('cnBack2');
+    if(b2) b2.addEventListener('click',function(){renderPanel(null);});
+    cnPanel.querySelectorAll('.cn-card').forEach(function(c){
+      c.addEventListener('click',function(){
+        cnPanel.querySelectorAll('.cn-block').forEach(function(b){b.style.display='none';});
+        var blk=cnPanel.querySelector('.cn-block[data-prov="'+c.getAttribute('data-prov')+'"]');
+        if(blk) blk.style.display='';
+        if(mode==='world') { /* keep */ }
+        cnPanel.scrollIntoView({behavior:'smooth',block:'start'});
+      });
+    });
+  }
+  function enterCN(){
+    if(mode==='cn') return;
+    mode='cn';
+    cnBar.classList.add('show');
+    cnPanel.classList.add('show');
+    ChinaView.render({
+      mount:'#geoMap', dataUrl:'../sources/radar/china.json',
+      onProvClick:function(name,n){
+        if(n>0) renderPanel(name);
+        else renderPanel(null);
+        cnPanel.scrollIntoView({behavior:'smooth',block:'start'});
+      },
+      onReady:function(d){ window.__CN_DATA__=d; renderPanel(null); }
+    });
+  }
+  function exitCN(){
+    if(mode==='world') return;
+    mode='world';
+    cnBar.classList.remove('show');
+    cnPanel.classList.remove('show');
+    RadarMap.render(opt);
+    show(null);
+  }
+  document.getElementById('cnBack').addEventListener('click',exitCN);
   var opt={
     mount:'#geoMap', geoUrl:'../sources/radar/geo.json',
     counts:window.GEO_META.counts, names:window.GEO_META.names,
     tipExtra:window.GEO_META.tips,
-    onSelect:show
+    onSelect:function(code){ if(code==='CN'){ enterCN(); } else { show(code); } }
   };
   RadarMap.render(opt);
 })();
@@ -108,7 +178,7 @@
 </main>
 
 <footer><div class="inner">
-  <div class="foot-brand">合规<span>无终点</span> · 即时零售合规知识库</div>
+  <div class="foot-brand">合规<span>终点站</span> · 即时零售合规知识库</div>
   <div class="foot-desc">由法务团队维护 · 内容基于监管机构官网公开信息整理，逐条附原文深链</div>
   <div class="foot-links">
     <a href="../updates/index.html">今日更新</a>·

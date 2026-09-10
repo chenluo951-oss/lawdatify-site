@@ -71,7 +71,7 @@ def build_nav(rel: str) -> str:
         links.append(f'    <a href="{p}{target}"{active}>{label}</a>')
     return (
         '<nav class="topnav"><div class="inner">\n'
-        f'  <a class="brand" href="{p}index.html">合规<span>无终点</span></a>\n'
+        f'  <a class="brand" href="{p}index.html">合规<span>终点站</span></a>\n'
         '  <div class="navlinks">\n' + "\n".join(links) + "\n  </div>\n"
         '</div></nav>'
     )
@@ -81,7 +81,7 @@ def build_footer(rel: str) -> str:
     p = "../" * rel.count("/")
     return (
         '<footer><div class="inner">\n'
-        '  <div class="foot-brand">合规<span>无终点</span> · 即时零售合规知识库</div>\n'
+        '  <div class="foot-brand">合规<span>终点站</span> · 即时零售合规知识库</div>\n'
         '  <div class="foot-desc">由法务团队维护 · 内容基于监管机构官网公开信息整理，逐条附原文深链</div>\n'
         '  <div class="foot-links">\n'
         f'    <a href="{p}updates/index.html">今日更新</a>·\n'
@@ -105,6 +105,16 @@ NAV_RE = re.compile(r'<nav class="topnav">.*?</nav>', re.S)
 FOOT_RE = re.compile(r'<footer[^>]*>.*?</footer>', re.S)
 UPD_RE = re.compile(r'(<!-- UPDATED:START -->).*?(<!-- UPDATED:END -->)', re.S)
 
+# 样式表缓存治理：给 style.css 链接附加 mtime 版本号，改名/改样式后浏览器立即拉新。
+STYLE_RE = re.compile(r'href="((?:\.\./)?assets/style\.css)(?:\?[^"]*)?"')
+
+
+def _style_v():
+    try:
+        return str(int(os.path.getmtime(os.path.join(HERE, "assets", "style.css"))))
+    except OSError:
+        return "1"
+
 
 def process(rel: str, do_write: bool) -> str:
     path = os.path.join(HERE, rel)
@@ -125,6 +135,7 @@ def process(rel: str, do_write: bool) -> str:
     else:
         # 没有 footer 的页面（理论上没有）：补在 </body> 前
         new = new.replace("</body>", build_footer(rel) + "\n</body>", 1)
+    new = STYLE_RE.sub(lambda m: f'href="{m.group(1)}?v={_style_v()}"', new)
     if new == s:
         return f"  {rel:<24} 无变化"
     if do_write:

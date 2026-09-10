@@ -475,6 +475,36 @@ footer .inner{flex-direction:column;align-items:flex-start;gap:10px}
 .geo-tip i{display:block;font-style:normal;color:#d3e2ee;font-size:11.5px;margin-top:2px}
 .geo-legend{display:flex;flex-wrap:wrap;align-items:center;gap:16px;margin:16px 2px 12px;
   font-size:12.5px;color:var(--muted)}
+
+/* ---------------- 中国省级下钻地图 ---------------- */
+.cgeo path{stroke:#fff;stroke-width:.6;transition:filter .12s}
+.cgeo.hv0 path{fill:#e3e9f0}
+.cgeo.hv1 path{fill:#b9d0e6}
+.cgeo.hv2 path{fill:#7fa5cd}
+.cgeo.hv3 path{fill:#1b4f8a}
+.cgeo.cn-has path{cursor:pointer}
+.cgeo:hover path,.cgeo:focus path{filter:brightness(.85)}
+.cgeo.cn-on path{fill:#0f7b6c;filter:none}
+.cn-sjxt{fill:none;stroke:#9fb8cd;stroke-width:1.1;stroke-linejoin:round;stroke-linecap:round}
+.cn-bar{display:none;align-items:center;gap:10px;margin:0 2px 10px}
+.cn-bar.show{display:flex}
+.cn-back{border:1px solid var(--brand);background:#fff;color:var(--brand);font-weight:600;
+  border-radius:9px;padding:7px 15px;font-size:13px;cursor:pointer;font-family:inherit;transition:.15s}
+.cn-back:hover{background:var(--brand);color:#fff}
+.cn-mode{font-size:13px;color:var(--muted)}
+.cn-mode b{color:var(--brand)}
+.cn-panel{display:none;margin:14px 0 8px}
+.cn-panel.show{display:block}
+.cn-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:10px}
+.cn-card{background:#fff;border:1px solid var(--line);border-radius:12px;padding:13px 15px;
+  cursor:pointer;transition:.15s}
+.cn-card:hover{border-color:var(--brand);box-shadow:var(--shadow);transform:translateY(-2px)}
+.cn-card .cn-n{font-size:18px;font-weight:800;color:var(--brand);font-variant-numeric:tabular-nums}
+.cn-card .cn-n em{font-style:normal;font-size:11.5px;color:var(--faint);font-weight:600;margin-left:5px}
+.cn-card b{display:block;font-size:13.5px;color:var(--ink);margin-top:2px}
+.cn-card span{display:block;font-size:11.8px;color:var(--muted);margin-top:3px;line-height:1.6;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.cn-items{margin-top:12px;display:flex;flex-direction:column;gap:10px}
 .gl{display:inline-block;width:15px;height:15px;border-radius:4px;margin-right:5px;
   vertical-align:-3px;border:1px solid rgba(0,0,0,.06)}
 .gl.hv0{background:#d5dde6}.gl.hv1{background:#b9d0e6}
@@ -697,11 +727,19 @@ footer .inner{flex-direction:column;align-items:flex-start;gap:10px}
 .lb-bd a:hover{text-decoration:underline}
 .lb-here{font-size:11.5px;color:var(--faint)}
 /* 子导航（模块内页签） */
-.subnav{display:flex;gap:6px;flex-wrap:wrap;margin:0 0 18px;border-bottom:1px solid var(--line);padding-bottom:10px}
-.subnav a{padding:6px 14px;border-radius:999px;font-size:13px;color:var(--ink-2);
-  text-decoration:none;border:1px solid var(--line);background:#fff}
-.subnav a:hover{border-color:var(--brand);color:var(--brand)}
-.subnav a.on{background:var(--brand);border-color:var(--brand);color:#fff;font-weight:600}
+/* 二级页面模块子导航：卡片式分段控件，醒目且与主导航层级分明 */
+.subnav{display:flex;align-items:center;gap:5px;flex-wrap:wrap;margin:0 0 22px;padding:9px 10px;
+  background:linear-gradient(135deg,#f2f7fb 0%,#edf5f1 100%);border:1px solid #dbe6ee;
+  border-radius:14px;box-shadow:0 3px 14px rgba(15,40,70,.07)}
+.subnav .sn-cap{font-size:12.5px;font-weight:800;color:var(--brand);letter-spacing:1px;
+  padding:0 14px 0 8px;border-right:1px solid #cfdeea;margin-right:6px;white-space:nowrap}
+.subnav a{padding:8px 18px;border-radius:10px;font-size:13.5px;font-weight:600;color:#33526e;
+  text-decoration:none;border:1px solid transparent;background:transparent;transition:.16s}
+.subnav a:hover{background:#fff;color:var(--brand);box-shadow:0 2px 8px rgba(15,40,70,.10)}
+.subnav a.on{background:var(--brand);color:#fff;font-weight:700;
+  box-shadow:0 3px 10px rgba(18,55,92,.30)}
+.subnav a.on:hover{background:var(--brand);color:#fff}
+@media(max-width:720px){.subnav .sn-cap{border-right:0;padding-right:4px;width:100%;margin-bottom:2px}}
 
 /* ===== 合规义务主干（大类 → 场景 → 义务）===== */
 .duty-filters{flex-wrap:wrap;gap:8px}
@@ -957,7 +995,14 @@ footer .inner{flex-direction:column;align-items:flex-start;gap:10px}
 /* 首页 hero 关键词 */
 .hero-kw{margin-top:16px;display:flex;flex-wrap:wrap;gap:8px;align-items:center}
 .hk-l{font-size:12px;color:#9fd8cf;letter-spacing:.5px;margin-right:2px}
-.hero-kw .hk{display:inline-block;font-size:12.5px;color:#eaf6f3;text-decoration:none;
-  background:rgba(255,255,255,.13);border:1px solid rgba(255,255,255,.18);
+.hero-kw .hk{display:inline-block;font-size:12.5px;color:#fff;text-decoration:none;
+  background:rgba(255,255,255,.20);border:1px solid rgba(255,255,255,.34);
   padding:4px 11px;border-radius:999px;transition:.18s}
 .hero-kw .hk:hover{background:rgba(255,255,255,.26);color:#fff}
+
+/* 关联义务 */
+.lb-rel{margin-top:7px;display:flex;flex-wrap:wrap;align-items:center;gap:6px}
+.lb-rel-l{font-size:11px;color:var(--faint);font-weight:700;letter-spacing:.5px}
+.lb-rel a{font-size:11.5px;padding:2px 9px;border-radius:999px;background:#eef7f4;
+  color:#0c6a5c;text-decoration:none;border:1px solid #cfe8e0}
+.lb-rel a:hover{background:#0f7b6c;color:#fff;border-color:#0f7b6c}
