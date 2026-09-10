@@ -5,7 +5,7 @@ build_search.py — 生成全站检索索引 assets/search-index.json
 
 索引覆盖（可被真实搜到的内容，而非只有几个页面）：
   law    法规与标准      sources/standards/library.json（1000+ 条，含编号/发布机构/状态）
-  duty   合规义务        sources/standards/duties.json（129 项，含条款原文与出处）
+  duty   合规义务        sources/standards/duties.json（143 项，含条款原文与出处）
   news   监管动态        news/index.html 已发布条目（含领域/机构/日期/要点）
   action 监管行动        sources/radar/actions.json
   cal    立法节点        sources/radar/calendar.json
@@ -187,8 +187,8 @@ def main():
         ("合规资讯", "news/index.html", "六大领域监管动态流，逐条附官方深链"),
         ("应对建议", "news/actions.html", "按领域给出的整改与落地建议"),
         ("简报归档", "news/briefs.html", "日报 / 周报 / 月报全期次归档"),
-        ("合规知识库", "kb/index.html", "资料库、义务主干与草案跟踪"),
-        ("合规义务主干", "kb/standards.html", "10 大类 47 场景 129 项义务，配条款原文与标杆做法"),
+        ("合规知识库", "kb/index.html", "资料库、义务清单与草案跟踪"),
+        ("合规义务清单", "kb/standards.html", "10 大类 47 场景 143 项义务，矩阵总览 + 逐条明细，配条款原文与标杆做法"),
         ("专题分析", "analysis/index.html", "深度专题研究，结论先行、附官方深链"),
         ("关于本站", "about.html", "站点定位、数据来源与维护方式"),
     ]

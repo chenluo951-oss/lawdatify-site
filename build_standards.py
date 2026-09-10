@@ -4,7 +4,8 @@
 
 数据源：sources/standards/library.json（由 build_library_data.py 生成）
 视图一  资料库：按专题 / 层级 / 时效性 三维筛选 + 关键词检索
-视图二  合规义务：以 26 项合规义务为主干，反查每一义务对应的法律法规与标准
+视图二  合规义务清单：① 矩阵总览（主题大类 × 业务场景，一屏看全规模与整改优先级分布）
+                       ② 逐条明细（每项义务反查条款原文、标杆做法与可套用文案）
 
 幂等：输出后自动调用 unify_chrome + inject_meta 恢复页头页脚与分享元数据。
 """
@@ -13,7 +14,7 @@ import os, re, json, html, datetime
 HERE = os.path.dirname(os.path.abspath(__file__))
 SRC = os.path.join(HERE, "sources", "standards", "library.json")
 DRAFTS = os.path.join(HERE, "sources", "library", "drafts.json")
-# 合规义务主干（主题大类 → 场景 → 具体义务 三级），与条目库分开维护
+# 合规义务清单（主题大类 → 场景 → 具体义务 三级），与条目库分开维护
 DUTY_SRC = os.path.join(HERE, "sources", "standards", "duties.json")
 
 
@@ -171,7 +172,7 @@ def build_kb_index(items, duties, drafts, soon, stat_html="", board=""):
     else:
         soon_html = '<p class="lb-empty">暂无即将实施条目。</p>'
 
-    # 义务主干统计（重构后为 大类 → 场景 → 义务 三级）
+    # 义务清单统计（重构后为 大类 → 场景 → 义务 三级）
     cats = duties.get("categories", []) if isinstance(duties, dict) else []
     if cats:
         n_cat = len(cats)
@@ -192,9 +193,9 @@ def build_kb_index(items, duties, drafts, soon, stat_html="", board=""):
       <span class="more">进入标准知识库 →</span>
     </a>
     <a class="dcard lb-entry" href="standards.html#pane-duty" style="--dc:#1b4f8a">
-      <b>🎯 合规义务主干</b>
-      <span>{duty_desc}。按 App 合规、广告合规、AI 合规、平台治理等主题大类组织，
-      每项义务细化到可落地要求并反查依据条款。</span>
+      <b>🎯 合规义务清单</b>
+      <span>{duty_desc}。矩阵总览按「主题大类 × 业务场景」铺开，一屏看全覆盖面与整改优先级；
+      逐条明细给出条款原文、标杆做法与可套用文案，并反查依据条款。</span>
       <span class="more">查看义务清单 →</span>
     </a>
     <a class="dcard lb-entry" href="standards.html#pane-draft" style="--dc:#b45309">
@@ -378,8 +379,83 @@ def render_practice(pkey):
     return "".join(out)
 
 
+RISK_ORDER = ("高", "中高", "中", "低")
+RISK_LABEL = {"高": "高", "中高": "中高", "中": "中", "低": "低"}
+
+
+def _risk_tally(duties):
+    t = {}
+    for d in duties:
+        k = d.get("risk", "") or "未标注"
+        t[k] = t.get(k, 0) + 1
+    return t
+
+
+def _riskbar(tally):
+    """整改优先级分布条：红＝高、橙＝中、灰＝低（或无标注）。"""
+    segs = []
+    for k in ("高", "中高", "中", "低"):
+        n = tally.get(k, 0)
+        if n:
+            segs.append(f'<i class="{RISK_CLS.get(k, "r-md")}" style="flex:{n} 1 0" '
+                        f'title="{esc(k)} {n} 项"></i>')
+    if not segs:
+        return ""
+    return f'<span class="dm-bar">{"".join(segs)}</span>'
+
+
+def render_duty_matrix(cats):
+    """合规义务矩阵总览：行＝主题大类，列＝业务场景，格＝该场景义务数与优先级分布。"""
+    ncol = max((len(c.get("scenes", [])) for c in cats), default=0)
+    n_cat = len(cats)
+    n_scene = sum(len(c.get("scenes", [])) for c in cats)
+    n_duty = sum(len(s.get("duties", [])) for c in cats for s in c.get("scenes", []))
+
+    head = "".join(f'<th class="dm-col">场景 {i + 1}</th>' for i in range(ncol))
+    rows = []
+    for c in cats:
+        scenes = c.get("scenes", [])
+        c_duties = [d for s in scenes for d in s.get("duties", [])]
+        tally = _risk_tally(c_duties)
+        cells = []
+        for si, s in enumerate(scenes):
+            duties = s.get("duties", [])
+            dots = "".join(f'<i class="{RISK_CLS.get(d.get("risk", ""), "r-lo")}"></i>'
+                           for d in duties)
+            names = "、".join(d.get("t", "") for d in duties)
+            cells.append(
+                f'<td class="dm-cell" data-cat="{esc(c["id"])}" data-si="{si}" tabindex="0" '
+                f'role="button" title="{esc(s["name"])}：{esc(names)}">'
+                f'<b>{esc(s["name"])}</b>'
+                f'<span class="dm-meta"><em>{len(duties)} 项</em>'
+                f'<span class="dm-dots">{dots}</span></span></td>')
+        cells += ['<td class="dm-cell dm-empty"></td>'] * (ncol - len(scenes))
+        rows.append(
+            f'<tr><th class="dm-cat" data-cat="{esc(c["id"])}" scope="row" tabindex="0" '
+            f'role="button"><b>{esc(c["name"])}</b>'
+            f'<span class="dm-cat-m">{len(scenes)} 场景 · {len(c_duties)} 项</span>{_riskbar(tally)}</th>'
+            f'{"".join(cells)}<td class="dm-sum">{len(c_duties)}</td></tr>')
+
+    legend = ('<div class="dm-legend"><span class="dm-lg-t">整改优先级</span>'
+              '<span class="dm-lg"><i class="r-hi"></i>高</span>'
+              '<span class="dm-lg"><i class="r-md"></i>中</span>'
+              '<span class="dm-lg"><i class="r-lo"></i>低 / 未标注</span>'
+              '<span class="dm-hint">一格＝一个业务场景 · 点格子看该场景逐条义务</span></div>')
+
+    return (f'<div class="dm-top">{legend}'
+            f'<span class="dm-hint-m">← 左右滑动查看全部场景 →</span>'
+            f'<div class="dm-scale">{n_cat} 个大类 × {n_scene} 个场景 × {n_duty} 项义务</div></div>'
+            f'<div class="dm-scroll"><table class="dm"><thead><tr>'
+            f'<th class="dm-th-cat"><b>主题大类</b><span>＼ 业务场景</span></th>{head}'
+            f'<th class="dm-th-sum">合计</th></tr></thead><tbody>{"".join(rows)}</tbody>'
+            f'<tfoot><tr><td class="dm-foot-l" colspan="2">共 {n_cat} 个主题大类 · '
+            f'{n_scene} 个业务场景</td>'
+            f'<td class="dm-foot-t" colspan="{max(ncol - 1, 0)}"></td>'
+            f'<td class="dm-sum">{n_duty}</td></tr></tfoot></table></div>')
+
+
 def render_duty_tree(cats, items):
-    """合规义务主干：主题大类 → 场景 → 具体义务 三级。"""
+    """合规义务清单 · 逐条明细：主题大类 → 场景 → 具体义务 三级。"""
     # 关联义务索引：rel 键 cat|scene|t → 页内锚点
     rel_anchor = {}
     for c in cats:
@@ -449,10 +525,7 @@ def render_duty_tree(cats, items):
             f'<p>{esc(c.get("desc", ""))}</p></div>'
             f'<div class="lb-cat-body">{"".join(scenes_html)}</div></section>')
 
-    return chips_html + ('<div class="lb-search duty-search">'
-                         '<input id="dutyQ" type="search" placeholder="搜索义务关键词，如 摇一摇、单独同意、划线价、温湿度…" autocomplete="off">'
-                         '<span id="dutyCount" class="lb-count"></span></div>'
-                         ) + '<div class="lb-tree">' + "".join(blocks) + "</div>"
+    return chips_html + '<div class="lb-tree">' + "".join(blocks) + "</div>"
 
 
 def duty_block(d, items, idx):
@@ -481,7 +554,7 @@ def main():
     items = data["items"]
     today = datetime.date.today().isoformat()
 
-    # 合规义务主干（三级结构）；回退到条目库内的旧式 duties
+    # 合规义务清单（三级结构）；回退到条目库内的旧式 duties
     if os.path.exists(DUTY_SRC):
         duties = json.load(open(DUTY_SRC, encoding="utf-8"))
     else:
@@ -572,8 +645,21 @@ def main():
 
     cards = "\n".join(item_card(x, i) for i, x in enumerate(items))
 
-    # ---------------- 义务视图（主题大类 → 场景 → 具体义务）
-    duty_html = render_duty_tree(cats, items)
+    # ---------------- 义务视图（矩阵总览 ⇄ 逐条明细）
+    duty_matrix = render_duty_matrix(cats)
+    duty_detail = render_duty_tree(cats, items)
+    duty_html = (
+        '<div class="lb-search duty-search">'
+        '<input id="dutyQ" type="search" '
+        'placeholder="搜索义务关键词，如 摇一摇、单独同意、划线价、温湿度…" autocomplete="off">'
+        '<span id="dutyCount" class="lb-count"></span></div>'
+        '<div class="dm-switch">'
+        '<button class="dm-sw on" data-view="matrix">矩阵总览</button>'
+        '<button class="dm-sw" data-view="detail">逐条明细</button>'
+        '<span class="dm-sw-tip">搜索或点矩阵中的格子会自动切到逐条明细</span></div>'
+        f'<div class="dm-view" id="dmMatrix">{duty_matrix}</div>'
+        f'<div class="dm-view" id="dmDetail" hidden>'
+        f'<div class="lb-duties">{duty_detail}</div></div>')
 
     # ---------------- 草案跟踪视图
     draft_html = "\n".join(draft_card(d) for d in drafts)
@@ -584,7 +670,7 @@ def main():
         '<div class="lb-tabs">'
         '<button class="rd-fchip on" data-tab="lib">资料库</button>'
         '<button class="rd-fchip" data-tab="draft">草案跟踪<i class="lb-dot"></i></button>'
-        '<button class="rd-fchip" data-tab="duty">合规义务主干</button>'
+        '<button class="rd-fchip" data-tab="duty">合规义务清单</button>'
         "</div>",
         '<section class="lb-pane" id="pane-lib">',
         search,
@@ -600,9 +686,11 @@ def main():
         f'<div class="rd-list" id="draftList">{draft_html}</div>',
         "</section>",
         '<section class="lb-pane" id="pane-duty" hidden>',
-        '<p class="rd-note">以<b>合规义务</b>为主线反查依据：每一项义务下列出可直接引用的法律法规与标准。'
+        '<p class="rd-note">以<b>合规义务</b>为主线反查依据。<b>矩阵总览</b>按「主题大类 × 业务场景」铺开，'
+        '一格即一个场景，格内数字为该场景的义务条数、色点为其整改优先级分布，一屏看全覆盖面与风险重心；'
+        '点任一格子进入<b>逐条明细</b>，每项义务下列出可直接引用的法律法规与标准条款原文、行业标杆做法与可套用文案。'
         '义务清单源自个人信息保护合规审计底稿与网数合规自查清单，并按监管文件要点整理。</p>',
-        f'<div class="lb-duties">{duty_html}</div>',
+        duty_html,
         "</section>",
         '<p class="rd-note">标准数据取自<b>国家标准全文公开系统</b>（发布/实施日期与现行状态以官方为准）；'
         '法律法规与规范性文件均附发布机构官网原文深链。'
@@ -658,6 +746,12 @@ LIB_JS = """
       window.scrollTo({top:0,behavior:'smooth'});
     });
   });
+  function activateTab(name){
+    var b=tabs.filter(function(x){return x.getAttribute('data-tab')===name;})[0];
+    if(b) b.click();
+  }
+  var hm=/^#pane-(lib|draft|duty)$/.exec(location.hash||'');
+  if(hm) activateTab(hm[1]);
 
   var cards=[].slice.call(document.querySelectorAll('#lbList .lb-item'));
   var q=document.getElementById('lbQ'), cnt=document.getElementById('lbCount');
@@ -687,7 +781,7 @@ LIB_JS = """
   if(q) q.addEventListener('input',apply);
   apply();
 
-  // ---------- 合规义务主干：主题大类切换 + 义务全文搜索 ----------
+  // ---------- 合规义务清单：主题大类切换 + 义务全文搜索 ----------
   var dchips=[].slice.call(document.querySelectorAll('.duty-filters .rd-fchip'));
   var dcats=[].slice.call(document.querySelectorAll('.lb-cat'));
   var dq=document.getElementById('dutyQ'), dcnt=document.getElementById('dutyCount');
@@ -717,20 +811,74 @@ LIB_JS = """
     });
     if(dcnt) dcnt.textContent=kw?('匹配 '+n+' 项义务'):'';
   }
+  // ---------- 视图切换：矩阵总览 ⇄ 逐条明细 ----------
+  var dviews={matrix:document.getElementById('dmMatrix'),detail:document.getElementById('dmDetail')};
+  var dsw=[].slice.call(document.querySelectorAll('.dm-switch .dm-sw'));
+  function showDutyView(v){
+    dsw.forEach(function(b){b.classList.toggle('on',b.getAttribute('data-view')===v);});
+    for(var k in dviews){ if(dviews[k]) dviews[k].hidden=(k!==v); }
+  }
+  dsw.forEach(function(b){
+    b.addEventListener('click',function(){ showDutyView(b.getAttribute('data-view')); });
+  });
+  function mark(el){
+    el.style.transition='background .3s'; el.style.background='#fff8dc';
+    setTimeout(function(){ el.style.background=''; },2600);
+  }
+  function pickCat(cat){
+    curCat=cat||'ALL';
+    dchips.forEach(function(x){x.classList.toggle('on',x.getAttribute('data-dcat')===curCat);});
+    if(dq) dq.value='';
+    applyDuty();
+  }
+  function goScene(cat,si){
+    showDutyView('detail'); pickCat(cat);
+    var sec=document.getElementById('s-'+cat+'-'+si);
+    if(sec){ sec.open=true; sec.scrollIntoView({behavior:'smooth',block:'center'}); mark(sec); }
+  }
+  function goCat(cat){
+    showDutyView('detail'); pickCat(cat);
+    var sec=document.querySelector('.lb-cat[data-cat="'+cat+'"]');
+    if(sec){ sec.scrollIntoView({behavior:'smooth',block:'start'}); mark(sec); }
+  }
+  [].slice.call(document.querySelectorAll('.dm-cell[data-cat]')).forEach(function(td){
+    function go(){ goScene(td.getAttribute('data-cat'), td.getAttribute('data-si')); }
+    td.addEventListener('click',go);
+    td.addEventListener('keydown',function(e){
+      if(e.key==='Enter'||e.key===' '){ e.preventDefault(); go(); }
+    });
+  });
+  [].slice.call(document.querySelectorAll('.dm-cat[data-cat]')).forEach(function(th){
+    function go(){ goCat(th.getAttribute('data-cat')); }
+    th.addEventListener('click',go);
+    th.addEventListener('keydown',function(e){
+      if(e.key==='Enter'||e.key===' '){ e.preventDefault(); go(); }
+    });
+  });
+
   dchips.forEach(function(b){
     b.addEventListener('click',function(){
       dchips.forEach(function(x){x.classList.remove('on');});
       b.classList.add('on');
       curCat=b.getAttribute('data-dcat'); applyDuty();
+      if(curCat!=='ALL'){
+        var sec=document.querySelector('.lb-cat[data-cat="'+curCat+'"]');
+        if(sec) sec.scrollIntoView({behavior:'smooth',block:'start'});
+      }
     });
   });
-  if(dq) dq.addEventListener('input',applyDuty);
+  if(dq) dq.addEventListener('input',function(){
+    if((dq.value||'').trim()) showDutyView('detail');
+    applyDuty();
+  });
   applyDuty();
 
   // ---------- 深链定位：从搜索结果跳转 #d-xxx 时展开父级并高亮 ----------
   function focusDuty(){
     var h=(location.hash||'').replace(/^#/,'');
     if(!/^d-/.test(h)) return;
+    activateTab('duty');
+    showDutyView('detail');
     var el=document.getElementById(h);
     if(!el) return;
     var p=el.closest('.lb-s'); if(p) p.open=true;
