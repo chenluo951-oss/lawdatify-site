@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""合规无终点 站点 · 合规简报归档融合脚本
+"""合规终点站 站点 · 合规简报归档融合脚本
 
 扫描 Desktop/合规资讯简报 下全部历史报告（HTML/PDF/DOCX），按「期次」聚合，
 把报告同步进 lawdatify-site/news/reports/，并生成站点内「简报归档」页
@@ -157,7 +157,7 @@ NAV = """<nav class="topnav"><div class="inner">
 </div></nav>"""
 
 FOOT = """<footer><div class="inner">
-  <div>合规无终点.site · 即时零售合规主站</div>
+  <div>合规终点站</div>
   <div><a href="../index.html">首页</a> · <a href="index.html">资讯索引</a> · <a href="../analysis/index.html">法律分析</a> · <a href="../kb/index.html">知识库</a> · <a href="../prm.html">PRM</a></div>
 </div></footer>"""
 
@@ -227,7 +227,7 @@ def build_briefs(groups):
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>合规简报归档 · 合规无终点</title>
+<title>合规简报归档 · 合规终点站</title>
 <link rel="stylesheet" href="../assets/style.css">
 <style>
 .bf-stats{{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:22px 0 6px}}

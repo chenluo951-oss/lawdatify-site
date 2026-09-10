@@ -94,7 +94,7 @@ def build_footer(rel: str) -> str:
         '  </div>\n'
         '  <div class="foot-meta">数据更新至 <span class="upd"><!-- UPDATED:START -->'
         f'{TODAY}<!-- UPDATED:END --></span>'
-        ' · 本站内容不构成法律意见 · © 2026 合规无终点</div>\n'
+        ' · 本站内容不构成法律意见 · © 2026 合规终点站</div>\n'
         '</div></footer>'
     )
 

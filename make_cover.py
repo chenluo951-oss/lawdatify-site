@@ -113,7 +113,7 @@ def main():
     d.text((L, 150), "LEGAL & COMPLIANCE HUB", font=f_eye, fill=(255, 255, 255, 165))
 
     # 标题略带字距感：Pillow 无字距参数，用逐字绘制实现
-    title = "即时零售合规主站"
+    title = "合规终点站"
     x = L
     y = 208
     for ch in title:
@@ -128,7 +128,7 @@ def main():
     d.text((L, 382), "可溯源的合规资讯与分析", font=f_sub, fill=(214, 232, 240, 255))
 
     # ---- 右下落款 ----
-    brand = "合规无终点"
+    brand = "合规终点站"
     bw = f_foot.getlength(brand)
     d.text((W - 88 - bw, H - 78), brand, font=f_foot, fill=(255, 255, 255, 200))
     d.line([W - 88 - bw - 18, H - 62, W - 88 - bw - 18, H - 114],

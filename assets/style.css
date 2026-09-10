@@ -34,15 +34,15 @@ h1,h2,h3,h4{line-height:1.45;letter-spacing:.2px}
 
 /* ---------------- hero ---------------- */
 .hero{background:linear-gradient(135deg,#12375c 0%,#1b6b6b 58%,#0f7b6c 100%);
-  color:#fff;padding:70px 0 60px;position:relative;overflow:hidden}
+  color:#fff;padding:34px 0 30px;position:relative;overflow:hidden}
 .hero::after{content:"";position:absolute;right:-120px;top:-90px;width:420px;height:420px;
   background:radial-gradient(circle,rgba(255,255,255,.10),transparent 62%);border-radius:50%}
 .hero .inner{max-width:var(--maxw);margin:0 auto;padding:0 24px;position:relative;z-index:1}
 .hero .eyebrow{display:inline-block;background:rgba(255,255,255,.16);font-size:11.5px;
   letter-spacing:1.6px;padding:5px 13px;border-radius:999px;margin-bottom:18px;font-weight:600}
-.hero h1{margin:0 0 14px;font-size:35px;letter-spacing:1.5px;font-weight:800}
+.hero h1{margin:0 0 16px;font-size:30px;letter-spacing:1.5px;font-weight:800}
 .hero p{margin:0;color:#d3ece7;max-width:740px;font-size:16px;line-height:1.85}
-.searchbox{max-width:580px;margin-top:28px;display:flex;background:#fff;border-radius:12px;
+.searchbox{max-width:580px;margin-top:0;display:flex;background:#fff;border-radius:12px;
   overflow:hidden;box-shadow:0 8px 24px rgba(8,20,36,.18)}
 .searchbox input{flex:1;border:0;padding:14px 18px;font-size:15px;outline:none;color:var(--ink);
   font-family:var(--sans)}
@@ -953,3 +953,11 @@ footer .inner{flex-direction:column;align-items:flex-start;gap:10px}
   text-decoration:none;transition:.18s}
 .dt-more a:hover{background:var(--brand);color:#fff;border-color:var(--brand)}
 @media(max-width:720px){.duty-teaser{grid-template-columns:1fr}}
+
+/* 首页 hero 关键词 */
+.hero-kw{margin-top:16px;display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.hk-l{font-size:12px;color:#9fd8cf;letter-spacing:.5px;margin-right:2px}
+.hero-kw .hk{display:inline-block;font-size:12.5px;color:#eaf6f3;text-decoration:none;
+  background:rgba(255,255,255,.13);border:1px solid rgba(255,255,255,.18);
+  padding:4px 11px;border-radius:999px;transition:.18s}
+.hero-kw .hk:hover{background:rgba(255,255,255,.26);color:#fff}

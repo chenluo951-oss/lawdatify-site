@@ -287,13 +287,13 @@ def main():
     parts.append(f"""<div class="up-hero">
   <div class="up-date">{TODAY_S}</div>
   <div class="up-hero-t">今日更新</div>
-  <p class="up-hero-d">本页由快照比对自动生成：以上次构建留存的条目基线（{esc(src)}）与当前条目库逐条比对，
-  算出本次新增、状态变更与失效条目，再叠加生效倒计时、立法日历与草案截止，回答「今天变了什么」。</p>
+  <p class="up-hero-d">汇总法规、标准与监管动态的当日变化：新增与状态变更、生效倒计时、7 日内立法节点、
+  草案征求意见截止与进行中的监管行动，逐条附发布机构原文深链。</p>
 </div>""")
 
     # 统计卡
     parts.append('<div class="stat-grid">')
-    parts.append(stat_card(len(added), "新增法规 / 标准", "本次相对基线新增", "tone-new"))
+    parts.append(stat_card(len(added), "新增法规 / 标准", "较上一期新增", "tone-new"))
     parts.append(stat_card(len(changed), "状态 / 内容变更", "施行日期或要点变化", "tone-chg"))
     parts.append(stat_card(len(today_eff), "今日生效", f"另有 {len(soon30)} 项 30 日内生效", "tone-eff"))
     parts.append(stat_card(len(cal7), "7 日内立法节点", f"{len(ongoing)} 项监管行动进行中", "tone-cal"))
@@ -301,12 +301,12 @@ def main():
     parts.append("</div>")
 
     # 1. 新增
-    parts.append('<div class="section-title"><span class="bar"></span>本次新增条目</div>')
+    parts.append('<div class="section-title"><span class="bar"></span>最新收录条目</div>')
     if added:
         for it in added:
             parts.append(item_row(it, '<span class="chip chip-new">NEW</span>'))
     else:
-        parts.append('<p class="lead">本次无新增条目。</p>')
+        parts.append('<p class="lead">本期无新增收录。</p>')
 
     # 2. 变更
     if changed:
@@ -398,12 +398,6 @@ def main():
                          + (f'<p class="up-note">进展：{esc(a.get("progress") or "")}</p>'
                             if a.get("progress") else "") + '</div>')
 
-    # 7. 站点变更
-    if changed_files:
-        parts.append('<div class="section-title"><span class="bar"></span>本次同步改动的页面</div>')
-        parts.append('<div class="up-files">' + "".join(
-            f'<code>{esc(f)}</code>' for f in changed_files[:40]) + '</div>')
-
     body = "\n".join(parts)
 
     html = f"""<!DOCTYPE html>
@@ -411,7 +405,7 @@ def main():
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>今日更新 · 合规无终点</title>
+<title>今日更新 · 合规终点站</title>
 <link rel="stylesheet" href="../assets/style.css">
 </head>
 <body>

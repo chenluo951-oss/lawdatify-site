@@ -86,7 +86,7 @@ def page(title, desc, crumb_html, h1, lead, body, depth=1):
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>{esc(title)} · 合规无终点</title>
+<title>{esc(title)} · 合规终点站</title>
 <meta name="description" content="{esc(desc)}">
 <link rel="stylesheet" href="{prefix}assets/style.css">
 </head>

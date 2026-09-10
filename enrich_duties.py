@@ -91,6 +91,29 @@ class Resolver:
         "网络安全技术 生成式人工智能数据标注安全规范": ["生成式人工智能数据标注安全规范"],
         "食品安全国家标准 餐饮服务通用卫生规范": ["餐饮服务通用卫生规范"],
         "国家网络安全事件应急预案": ["国家网络安全事件应急预案"],
+
+        "GB/T 35273-2020": ["信息安全技术 个人信息安全规范"],
+        "GB/T 39335-2020": ["个人信息安全影响评估指南"],
+        "GB/T 37988-2019": ["数据安全能力成熟度模型"],
+        "GB/T 22239-2019": ["网络安全等级保护基本要求"],
+        "GB/T 43697-2024": ["数据分类分级规则"],
+        "GB/T 38667-2020": ["数据分类指南"],
+        "GB 45438-2025": ["人工智能生成合成内容标识"],
+        "最高人民法院关于审理使用人脸识别技术处理个人信息相关民事案件适用法律若干问题的规定": ["人脸识别技术处理个人信息"],
+        "食品安全法": ["中华人民共和国食品安全法"],
+        "食品安全法实施条例": ["食品安全法实施条例"],
+        "价格法": ["中华人民共和国价格法"],
+        "反垄断法": ["反垄断法"],
+        "产品质量法": ["产品质量法"],
+        "反不正当竞争法": ["反不正当竞争法"],
+        "网络食品安全违法行为查处办法": ["网络食品安全违法行为查处办法"],
+        "网络餐饮服务食品安全监督管理办法": ["网络餐饮服务食品安全监督管理办法"],
+        "个人信息出境标准合同办法": ["个人信息出境标准合同办法"],
+        "消费者权益保护法实施条例": ["消费者权益保护法实施条例"],
+        "GB 31654-2021": ["GB31654-2021", "餐饮服务通用卫生规范"],
+        "GB/T 45574-2025": ["敏感个人信息处理安全要求", "GB/T45574-2025"],
+        "GB/T 46903-2025": ["个人信息保护合规审计要求", "GB/T46903-2025"],
+        "GB/T 45674-2025": ["生成式人工智能数据标注安全规范", "GB/T45674-2025"],
         "移动互联网应用程序信息服务管理规定": ["移动互联网应用程序信息服务管理规定"],
     }
 
@@ -185,6 +208,33 @@ def grams(s, k=4):
     return {s[i:i + k] for i in range(max(0, len(s) - k + 1))}
 
 
+# 总则性/程序性条款不作为义务依据：立法目的、适用范围、术语定义、附则等
+JUNK_NO = re.compile(r"^(第[一二三四五六七八]条|第[1-8]条|1|1\.0|2|3|4)$")
+JUNK_TITLE = ("范围", "规范性引用文件", "术语和定义", "缩略语", "概述", "原则",
+              "总则", "附则", "目次", "前言", "引言", "参考文献")
+
+
+def JUNK_CLAUSE(no, body):
+    n = (no or "").strip()
+    if JUNK_NO.match(n):
+        return True
+    for t in JUNK_TITLE:
+        if n.endswith(t) and len(n) <= len(t) + 8:
+            return True
+    b = (body or "").strip()
+    if len(b) < 40:
+        return True
+    if b.startswith(("为了", "为规范", "本办法所称", "本法所称", "根据")) and len(b) < 220:
+        return True
+    # 定义/解释性条款（"所称……是指"）不承载具体义务
+    if b.count("所称") >= 2 or b.count("是指") >= 2:
+        return True
+    # 施行日期 / 废止条款
+    if re.search(r"(本法|本条例|本办法|本规定|本标准)自.{0,24}(施行|实施)", b) and len(b) < 260:
+        return True
+    return False
+
+
 def score_clause(duty, clause_body):
     """锚点重合度打分：义务描述里有多少四字搭配在条款正文中原样出现。"""
     duty_txt = (duty.get("t", "") + "。" + duty.get("d", ""))[:260]
@@ -206,6 +256,7 @@ def main():
     ap.add_argument("--dry", action="store_true")
     ap.add_argument("--report", action="store_true")
     ap.add_argument("--top", type=int, default=1)
+    ap.add_argument("--min", type=float, default=0.5)
     a = ap.parse_args()
 
     docs = load_corpus()
@@ -257,9 +308,10 @@ def main():
                             stats["noclause"] += 1
                             continue
                         ranked = sorted(
-                            ((score_clause(du, body), no, body) for no, body in clauses),
+                            ((score_clause(du, body), no, body)
+                             for no, body in clauses if not JUNK_CLAUSE(no, body)),
                             key=lambda x: -x[0])
-                        best = [r for r in ranked[:a.top] if r[0] > 0.5]
+                        best = [r for r in ranked[:a.top] if r[0] > a.min]
                         if not best:
                             continue
                         for sc_, no, body in best:

@@ -61,7 +61,7 @@ def main():
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>法律分析 · 合规无终点</title>
+<title>法律分析 · 合规终点站</title>
 <link rel="stylesheet" href="../assets/style.css">
 </head>
 <body>
@@ -99,7 +99,7 @@ def main():
 </div>
 
 <footer><div class="inner">
-  <div class="foot-brand">law<span>datify</span> · 即时零售合规主站</div>
+  <div class="foot-brand">law<span>datify</span> · 合规终点站</div>
   <div class="foot-desc">由法务团队维护 · 内容基于监管机构官网公开信息整理，逐条附原文深链</div>
 </div></footer>
 </body>
