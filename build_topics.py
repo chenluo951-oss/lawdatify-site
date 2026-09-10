@@ -537,8 +537,10 @@ def main():
     print("写入页面…")
     if replace_block(os.path.join(HERE, "news", "index.html"), render_news_feed(verified)):
         print("  news/index.html ✓")
-    if replace_block(os.path.join(HERE, "kb", "index.html"), render_kb_cards(verified, internal)):
-        print("  kb/index.html ✓")
+    # 应对建议归属「合规资讯」模块（与动态同源，回答「我们该做什么」）；
+    # 知识库改为长效知识总览，由 build_standards.py 生成，不再接收动态内容。
+    if replace_block(os.path.join(HERE, "news", "actions.html"), render_kb_cards(verified, internal)):
+        print("  news/actions.html ✓")
     if replace_block(os.path.join(HERE, "index.html"), render_home_latest(verified)):
         print("  index.html ✓")
 

@@ -670,3 +670,35 @@ footer .inner{flex-direction:column;align-items:flex-start;gap:10px}
 .lb-tabs .rd-fchip i.lb-dot{display:inline-block;width:6px;height:6px;border-radius:50%;
   background:var(--warn);margin-left:6px;vertical-align:middle;font-style:normal}
 .lb-when{font-size:12px;color:var(--faint);margin-right:8px;font-variant-numeric:tabular-nums}
+
+/* ===== 知识库总览 / 模块边界 / 子导航 ===== */
+.lb-split{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px;margin:6px 0 22px}
+.lb-cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;margin-bottom:24px}
+.lb-col{border:1px solid var(--line);border-radius:10px;padding:14px 16px;background:#fff}
+.lb-col h3{margin:0 0 10px;font-size:14px;color:var(--ink)}
+.lb-rows{display:flex;flex-direction:column;gap:9px}
+.lb-row{display:flex;align-items:center;gap:9px;font-size:12.8px;line-height:1.5}
+.lb-row a{color:var(--ink-2);text-decoration:none;flex:1;min-width:0;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.lb-row a:hover{color:var(--brand);text-decoration:underline}
+.lb-empty{margin:0;font-size:12.8px;color:var(--faint)}
+/* 模块边界三栏 */
+.lb-bound{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px;margin-bottom:8px}
+.lb-bd{border:1px solid var(--line);border-radius:10px;padding:14px 16px;background:#fff;position:relative}
+.lb-bd.on{border-color:var(--brand);background:#f6f9ff}
+.lb-bd-h{display:flex;align-items:center;gap:9px;margin-bottom:8px}
+.lb-bd-h b{font-size:14.5px;color:var(--ink)}
+.lb-tag{font-size:11px;padding:2px 8px;border-radius:999px;font-weight:600;white-space:nowrap}
+.lb-tag.t-future{background:#fdf1e7;color:var(--warn)}
+.lb-tag.t-daily{background:#e8f4ff;color:var(--brand)}
+.lb-tag.t-long{background:#e9f5f1;color:#0f7b6c}
+.lb-bd p{margin:0 0 10px;font-size:12.8px;color:var(--ink-2);line-height:1.7}
+.lb-bd a{font-size:12.5px;color:var(--brand);text-decoration:none;font-weight:600}
+.lb-bd a:hover{text-decoration:underline}
+.lb-here{font-size:11.5px;color:var(--faint)}
+/* 子导航（模块内页签） */
+.subnav{display:flex;gap:6px;flex-wrap:wrap;margin:0 0 18px;border-bottom:1px solid var(--line);padding-bottom:10px}
+.subnav a{padding:6px 14px;border-radius:999px;font-size:13px;color:var(--ink-2);
+  text-decoration:none;border:1px solid var(--line);background:#fff}
+.subnav a:hover{border-color:var(--brand);color:var(--brand)}
+.subnav a.on{background:var(--brand);border-color:var(--brand);color:#fff;font-weight:600}

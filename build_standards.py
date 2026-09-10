@@ -133,6 +133,123 @@ def draft_card(d):
 </div>"""
 
 
+def build_kb_index(items, duties, drafts, soon):
+    """合规知识库总览：定位三大件入口 + 时效提醒 + 模块边界说明。
+
+    与 build_topics.py 的分工：动态类内容（监管动态、应对建议）归「合规资讯」，
+    这里只放长效知识——法规标准原文、义务清单、立法草案。
+    """
+    today = datetime.date.today().isoformat()
+    n_std = sum(1 for x in items if x.get("kind") == "标准")
+    n_law = len(items) - n_std
+    n_local = sum(1 for x in items if x.get("local"))
+    n_sooner = len(soon)
+
+    # 草案按截止日排序，取最近 5 条
+    dl = sorted([d for d in drafts if (d.get("days_left") or 9999) >= 0],
+                key=lambda d: d.get("days_left") or 9999)[:5]
+    if dl:
+        rows = "".join(
+            f'<div class="lb-row"><span class="lb-days{" hot" if (d.get("days_left") or 99) <= 14 else ""}">'
+            f'剩 {d["days_left"]} 天</span>'
+            f'<a href="{esc(d["url"])}" target="_blank" rel="noopener">{esc(d["name"])}</a>'
+            f'<span class="lb-when">{esc(d.get("end", ""))} 截止</span></div>'
+            for d in dl)
+        draft_html = f'<div class="lb-rows">{rows}</div>'
+    else:
+        draft_html = '<p class="lb-empty">暂无进行中的征求意见。</p>'
+
+    if soon:
+        srows = "".join(
+            f'<div class="lb-row"><span class="rd-badge b-blue">即将实施</span>'
+            f'<a href="standards.html" >{esc(x["name"])}</a>'
+            f'<span class="lb-when">{esc(x.get("impl", ""))} 施行</span></div>'
+            for x in soon[:5])
+        soon_html = f'<div class="lb-rows">{srows}</div>'
+    else:
+        soon_html = '<p class="lb-empty">暂无即将实施条目。</p>'
+
+    # 义务主干统计（重构后为 大类 → 场景 → 义务 三级）
+    cats = duties.get("categories", []) if isinstance(duties, dict) else []
+    if cats:
+        n_cat = len(cats)
+        n_scene = sum(len(c.get("scenes", [])) for c in cats)
+        n_duty = sum(len(s.get("duties", [])) for c in cats for s in c.get("scenes", []))
+        duty_desc = f"{n_cat} 个主题大类 · {n_scene} 个场景 · {n_duty} 项具体义务"
+    else:
+        n_duty = len(duties)
+        duty_desc = f"{n_duty} 项合规义务"
+
+    body = f"""
+  <div class="lb-split">
+    <a class="dcard lb-entry" href="standards.html" style="--dc:#0f7b6c">
+      <b>📚 合规标准知识库</b>
+      <span>{len(items)} 条目：法律 {n_law} 件 / 标准 {n_std} 项，含国家标准、行业与团体标准、指引指南。
+      标注效力状态（现行有效 / 即将实施 / 已废止）与发布实施日期。</span>
+      <span class="more">进入标准知识库 →</span>
+    </a>
+    <a class="dcard lb-entry" href="standards.html#pane-duty" style="--dc:#1b4f8a">
+      <b>🎯 合规义务主干</b>
+      <span>{duty_desc}。按 App 合规、广告合规、AI 合规、平台治理等主题大类组织，
+      每项义务细化到可落地要求并反查依据条款。</span>
+      <span class="more">查看义务清单 →</span>
+    </a>
+    <a class="dcard lb-entry" href="standards.html#pane-drafts" style="--dc:#b45309">
+      <b>📌 立法草案跟踪</b>
+      <span>{len(drafts)} 项在途立法与征求意见，标注起止日期与剩余天数，链接到官方征求意见通知页。</span>
+      <span class="more">查看草案 →</span>
+    </a>
+  </div>
+
+  <div class="section-title"><span class="bar"></span>时效提醒</div>
+  <div class="lb-cols">
+    <div class="lb-col">
+      <h3>即将实施（{n_sooner} 项）</h3>
+      {soon_html}
+    </div>
+    <div class="lb-col">
+      <h3>征求意见截止</h3>
+      {draft_html}
+    </div>
+  </div>
+
+  <div class="section-title"><span class="bar"></span>三个模块怎么分</div>
+  <div class="notice">
+    本站内容按<b>时间属性</b>划分，避免同一条信息在多个模块重复出现：
+  </div>
+  <div class="lb-bound">
+    <div class="lb-bd">
+      <div class="lb-bd-h"><b>合规雷达</b><span class="lb-tag t-future">未来 / 进行中</span></div>
+      <p>回答「接下来会发生什么」：立法日程与施行倒计时、监管专项行动与执法态势、全球监管地图。</p>
+      <a href="../radar/index.html">进入合规雷达 →</a>
+    </div>
+    <div class="lb-bd">
+      <div class="lb-bd-h"><b>合规资讯</b><span class="lb-tag t-daily">每日更新</span></div>
+      <p>回答「已经发生了什么、我们该做什么」：六大领域监管动态（逐条附官方深链）、
+      简报归档、以及从简报沉淀的应对建议。</p>
+      <a href="../news/index.html">进入合规资讯 →</a>
+    </div>
+    <div class="lb-bd on">
+      <div class="lb-bd-h"><b>合规知识库</b><span class="lb-tag t-long">长期稳定</span></div>
+      <p>回答「规则本身是什么」：法规与标准原文、按主题拆解的合规义务清单、在途立法草案。
+      内容不随日更变化。</p>
+      <span class="lb-here">当前位置</span>
+    </div>
+  </div>
+"""
+    out = page(
+        "合规知识库",
+        "合规标准知识库、按主题拆解的合规义务清单与在途立法草案跟踪——长效合规知识资产。",
+        "合规知识库",
+        "合规知识库",
+        "长效知识资产：法规与标准原文、按主题拆解的合规义务、在途立法草案。",
+        body,
+    )
+    dst = os.path.join(HERE, "kb", "index.html")
+    open(dst, "w", encoding="utf-8").write(out)
+    print(f"  kb/index.html        {len(out)} B  ✓  （知识库总览）")
+
+
 def duty_block(d, items, idx):
     rel = [x for x in items if d["name"] in x.get("duty", [])]
     rel.sort(key=lambda x: (0 if x.get("kind") != "标准" else 1, x.get("impl") or x.get("pub") or ""),
@@ -299,7 +416,9 @@ def main():
     os.makedirs(os.path.dirname(dst), exist_ok=True)
     open(dst, "w", encoding="utf-8").write(out)
     print(f"  kb/standards.html  {len(out)} B  ✓  "
-          f"({len(items)} 条目 / {len(duties)} 义务)")
+          f"({len(items)} 条目)")
+
+    build_kb_index(items, duties, drafts, soon)
 
     # 恢复统一页头页脚与分享元数据
     import importlib.util
