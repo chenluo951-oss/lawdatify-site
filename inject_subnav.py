@@ -28,6 +28,7 @@ NEWS_NAV = [
 KB_NAV = [
     ("index.html", "总览"),
     ("standards.html", "标准与义务"),
+    ("texts.html", "法规原文"),
 ]
 
 BOUNDARY = {

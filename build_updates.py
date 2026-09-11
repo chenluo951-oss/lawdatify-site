@@ -212,7 +212,7 @@ def countdown(d):
 
 def main():
     lib = load(LIB) or {}
-    items = lib.get("items", [])
+    items = [x for x in lib.get("items", []) if not x.get("hidden")]
     cal = (load(CAL) or {}).get("items", [])
     act = (load(ACT) or {}).get("items", [])
     draft_raw = load(DRAFT) or {}

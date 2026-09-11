@@ -35,6 +35,7 @@ PAGES = [
     "analysis/food-label.html",
     "kb/index.html",
     "kb/standards.html",
+    "kb/texts.html",
     "kb/benchmarks.html",
     "radar/index.html",
     "radar/calendar.html",

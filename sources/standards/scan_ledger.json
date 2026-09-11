@@ -1,0 +1,23 @@
+{
+ "GB/T 35273-2020": {
+  "code": "GB/T 35273-2020",
+  "name": "GB/T 35273-2020",
+  "hcno": "4568F276E0F8346EB0FBA097AA0CE05E",
+  "official_url": "https://openstd.samr.gov.cn/bzgk/std/newGbInfo?hcno=4568F276E0F8346EB0FBA097AA0CE05E",
+  "pages": 35,
+  "images": 6,
+  "fetched": "2026-09-11",
+  "status": "scan+ocr",
+  "chars": 3558,
+  "text": "sources/scans/GB_T_35273-2020/img/GB_T_35273-2020.txt",
+  "conflicts": 16,
+  "conflict_ratio": 0.0699,
+  "stored": 1
+ },
+ "_updated": "2026-09-11",
+ "GB/Z28828-2012": {
+  "code": "GB/Z28828-2012",
+  "hcno": "FB51A65B69F70BC3AF9F5AC95F5FEF48",
+  "status": "no-online-view"
+ }
+}
