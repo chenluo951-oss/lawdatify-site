@@ -123,7 +123,7 @@
         '<span class="rd-tag tg-region">' + esc(it.regionName || it.region || '') +
         '</span></span></div>' +
         '<h3><a href="' + esc(it.url) + '" target="_blank" rel="noopener">' +
-        esc(it.title) + '</a>' + srcTag(it.src) + '</h3>' +
+        esc(it.title) + '</a>' + srcTag(it.src, it.url) + '</h3>' +
         '<div class="rd-meta">' + esc(it.issuer || '') + '</div>' +
         '<p>' + esc(it.note || '') + '</p></div></div>';
     }).join('');
@@ -142,7 +142,8 @@
     if (/司法|规则|制度/.test(t)) return 'b-purple';
     return 'b-green';
   }
-  function srcTag(s) {
+  function srcTag(s, u) {
+    if (window.srcTierTag) return window.srcTierTag(u || '', s);
     return s === 'official'
       ? '<span class="rd-src src-off">官方原文</span>'
       : '<span class="rd-src src-ana">专业解读</span>';

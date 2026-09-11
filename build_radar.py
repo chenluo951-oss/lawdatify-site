@@ -21,11 +21,17 @@ import os
 import re
 from datetime import date
 
+from sources_tier import tier_of, tier_tag, tier_tally, audit_sources, TIER_LABEL
+
 HERE = os.path.dirname(os.path.abspath(__file__))
 SRC = os.path.join(HERE, "sources", "radar")
 OUT = os.path.join(HERE, "radar")
 
-DOMAINS = ["数据合规", "AI合规", "算法合规", "平台合规", "产品合规", "价格合规"]
+DOMAINS = ["数据合规", "AI合规", "算法合规", "平台合规", "产品合规", "价格合规",
+           # 业态域：即时零售平台 / 网络餐饮与线下餐饮 / 前置仓仓储冷链 / 即时配送与骑手 /
+           # 计量 / 零售消费者与会员 / 绿色包装与反浪费
+           "网络交易合规", "餐饮合规", "冷链仓储合规", "配送与用工合规",
+           "计量合规", "零售与消费者合规", "绿色合规"]
 
 REGION_CN = {
     "CN": "中国", "EU": "欧盟", "US": "美国", "GB": "英国",
@@ -73,10 +79,10 @@ def heat(n):
     return 0
 
 
-def src_tag(src):
-    if src == "official":
-        return '<span class="rd-src src-off">官方原文</span>'
-    return '<span class="rd-src src-ana">专业解读</span>'
+def src_tag(src, url=""):
+    """来源层级徽章。判定只看 URL 主机，`src` 仅作旧数据兜底。
+    口径见 sources_tier.py：立法/标准/专项行动/监管处罚必须 official。"""
+    return tier_tag(url, src)
 
 
 def page(title, desc, crumb_html, h1, lead, body, depth=1):
@@ -143,7 +149,7 @@ def cal_item(it):
     <div class="rd-row"><span class="rd-badge {tc}">{esc(it['type'])}</span>
       <span class="rd-tags"><span class="rd-tag">{esc(it.get('domain',''))}</span>
       <span class="rd-tag tg-region">{esc(REGION_CN.get(region, region))}</span></span>{cnt}</div>
-    <h3><a href="{esc(it['url'])}" target="_blank" rel="noopener">{esc(it['title'])}</a>{src_tag(src)}</h3>
+    <h3><a href="{esc(it['url'])}" target="_blank" rel="noopener">{esc(it['title'])}</a>{src_tag(src, it.get('url',''))}</h3>
     <div class="rd-meta">{esc(it.get('issuer',''))}</div>
     <p>{esc(it.get('note',''))}</p>
   </div>
@@ -208,6 +214,7 @@ def page_calendar(cal):
 <div id="calDetail" class="cal-detail"></div>
 
 <script>window.CAL_DATA = {cal_js_data(items)};</script>
+<script src="../assets/src-tier.js"></script>
 <script src="../assets/radar-cal.js"></script>
 <script>RadarCal.init('#calMount');</script>""")
 
@@ -239,7 +246,7 @@ def act_item(it):
       <span class="rd-badge b-ghost">{esc(it.get('status',''))}</span>
       <span class="rd-tags"><span class="rd-tag">{esc(it.get('domain',''))}</span>
       <span class="rd-tag tg-region">{esc(it.get('level',''))} · {esc(it.get('region',''))}</span></span></div>
-    <h3><a href="{esc(it['url'])}" target="_blank" rel="noopener">{esc(it['name'])}</a>{src_tag(it.get('src','official'))}</h3>
+    <h3><a href="{esc(it['url'])}" target="_blank" rel="noopener">{esc(it['name'])}</a>{src_tag(it.get('src','official'), it.get('url',''))}</h3>
     <div class="rd-meta">{esc(it.get('issuer',''))} · {esc(it.get('period',''))}</div>
     <p>{esc(it.get('focus',''))}</p>
     {'<div class="rd-prog"><b>进展</b>' + esc(prog) + '</div>' if prog else ''}
@@ -345,6 +352,7 @@ def page_map(g):
   names: {names_js},
   tips: {tips_js}
 }};</script>
+<script src="../assets/src-tier.js"></script>
 <script src="../assets/radar-map.js"></script>
 <script src="../assets/china-map.js"></script>
 <script>
@@ -384,7 +392,7 @@ def page_map(g):
           +'<span class="rd-tags"><span class="rd-tag">'+(it.domain||'')+'</span></span>'
           +'<span class="rd-count past">'+(it.date||'')+'</span></div>'
           +'<h3><a href="'+it.url+'" target="_blank" rel="noopener">'+it.title+'</a>'
-          +'<span class="rd-src src-off">官方原文</span></h3>'
+          +(window.srcTierTag?srcTierTag(it.url,it.src):'')+'</h3>'
           +'<p>'+(it.note||'')+'</p></div></div>';
       }}).join('');
       cards+='<div class="cn-card" data-prov="'+p.name+'"><div class="cn-n">'+its.length
@@ -585,6 +593,10 @@ def page_index(cal, acts, g):
                    on_select='function(code){}'),
         '<p class="rd-note">数据由人工核实后录入，每条均附可点击原文链接。'
         '倒计时按页面打开时的系统日期实时计算。</p>',
+        '<p class="rd-note"><b>引源规范</b>：立法、标准发布与生效、合规专项行动、监管处罚案例'
+        '一律引用<b>官方账号原文</b>（立法机关、监管机构与政府门户官网）；合规资讯可引用'
+        '<b>官方媒体</b>（人民日报、新华社、央视、澎湃等）与<b>官方学术机构、协会组织</b>。'
+        '每条标题后的徽章标明来源层级，二手转载不作为依据。</p>',
     ])
 
     return page(
@@ -767,6 +779,19 @@ def main():
     cal = load("calendar.json")
     acts = load("actions.json")
     g = load("global.json")
+
+    # 引源校验：立法/标准/专项行动/处罚类必须 official，资讯类可官方媒体/专业机构。
+    # 不阻断构建（数据由人工核实维护），但每次构建都把待替换清单打出来。
+    print("  —— 引源校验 ——")
+    for label, items, kind_key, name_key in (
+        ("立法日历", cal.get("items", []), "type", "title"),
+        ("监管动向", acts.get("items", []), ["series", "name"], "name"),
+        ("全球监管", g.get("items", []), "type", "title"),
+    ):
+        tally = tier_tally(items)
+        audit_sources(items, kind_key=kind_key, name_key=name_key, label=label)
+        print("    " + label + " 层级分布：" +
+              " / ".join(f"{TIER_LABEL[k]} {v}" for k, v in tally.items() if v))
 
     os.makedirs(OUT, exist_ok=True)
     pages = [

@@ -42,3 +42,7 @@ sources/scans/
 
 # 标准 PDF 文字层抽取缓存（可随时重抽，不入仓）
 sources/.cache/
+
+# 无头渲染自检的临时探针页（每次自检重新生成，不入仓）
+kb/_probe.html
+tools/_diag.py

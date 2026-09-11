@@ -20,7 +20,7 @@ build_texts.py —— 生成站内「法规原文」阅读库（只收法规，�
   kb/texts/p-NN.json       {id: 正文}
   sources/standards/text_ids.json   条目 → 原文 id 映射（供 build_standards 加「读原文」按钮）
 """
-import os, re, json, sys, html, hashlib, collections, unicodedata
+import os, re, json, sys, html, hashlib, collections, unicodedata, subprocess
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
@@ -54,7 +54,24 @@ RAD_LEFT = re.compile(r"[\u2e80-\u2eff]")        # 归一后仍有 → 抽取损
 # 整篇 NFKC 会把中文全角标点（，。：；）折成半角，反而制造排版错误。
 RAD_RE = re.compile(r"[\u2e80-\u2fdf]")
 _nfkc1 = lambda m: unicodedata.normalize("NFKC", m.group(0))
-RARE = re.compile("[\u3400-\u4dbf\U00020000-\U0003ffff\ue000-\uf8ff]")   # Ext-A/Ext-B/私用区
+RARE = re.compile("[\u3400-\u4dbf\U00020000-\U0003ffff]")   # Ext-A/Ext-B 生僻字
+
+# PDF 里用「符号字体」（Symbol / Wingdings / Webdings）排的字符，抽取时整体落进私用区，
+# 上站后一律显示成方框。这些字形有确定的排版含义，按语义回填，不能当成「编码损坏」丢掉：
+#   ± × ≥ ∑ ⊕ Δ ∈ ± 是 Symbol 表里的确定映射；√ / □ / ● 是表格勾选与项目符号。
+FONT_SYM = str.maketrans({
+    "\uf02b": "+", "\uf02d": "−", "\uf03d": "=", "\uf044": "Δ", "\uf0ce": "∈",
+    "\uf0b1": "±", "\uf0b3": "≥", "\uf0b4": "×", "\uf0c4": "⊗", "\uf0c5": "⊕",
+    "\uf0e5": "∑", "\uf0e0": "→", "\uf028": "(", "\uf029": ")",
+    "\uf050": "√", "\uf0fc": "√", "\uf0a8": "□", "\uf09f": "□", "\uf0a3": "□",
+    "\uf0b7": "●", "\uf06c": "●", "\uf06e": "●", "\uf06d": "■",
+})
+PUA_LEFT = re.compile("[\ue000-\uf8ff]")     # 无语义可判的私用区字形 → 清掉，不留方框
+
+# 「汉字整体平移」型编码损坏的判据：汉字很多但常用字一个都命中不到（如「犐犆犛」=ICS）
+COMMON = ("的一是在不了有人这中大为上个国我以要他时来用们生到作地于出就分对成会可主发年动"
+          "同工也能下过子说产种面而方后多定行学法所民得经十三之进着等部度家电力里如水化高")
+CJK_RE = re.compile("[\u4e00-\u9fff]")
 
 
 def quality_ok(t):
@@ -63,7 +80,10 @@ def quality_ok(t):
         return False, "存在未归一的部首字符"
     n = len(t) or 1
     if len(RARE.findall(t)) / n > 0.002:
-        return False, "含大量生僻/私用区字符，疑似编码损坏"
+        return False, "含大量生僻字，疑似编码损坏"
+    cjk = len(CJK_RE.findall(t))
+    if cjk >= 80 and sum(t.count(c) for c in COMMON) / cjk < 0.06:
+        return False, "汉字常用字命中率过低，疑似字体编码整体错位"
     return True, ""
 
 
@@ -153,6 +173,8 @@ def clean(text):
     # 反而制造排版错误，故不能整篇套用）。
     t = RAD_RE.sub(_nfkc1, t)
     t = t.translate(RAD_FIX)
+    t = t.translate(FONT_SYM)                # 符号字体的私用区字形 → 对应符号
+    t = PUA_LEFT.sub("", t)                  # 余下无法判义的私用区字形清掉
     t = t.replace("\u200b", "").replace("\ufeff", "").replace("\xa0", " ")
     t = re.sub(r"[\u0000-\u0008\u000b\u000c\u000e-\u001f]", "", t)
     # 网页模板残留：面包屑导航、转载页 URL、政府信息公开元数据键值对
@@ -312,6 +334,59 @@ def match_list(item, cand, top=6):
         hits.append(((score, sz, 1 if c["kind"] == "corpus" else 0), c))
     hits.sort(key=lambda x: x[0], reverse=True)
     return [c for _, c in hits[:top]]
+
+
+# 阅读页内联脚本允许出现的「宿主/内置全局」，其余小写函数调用必须在脚本里定义
+JS_BUILTINS = {
+    "if", "for", "while", "switch", "catch", "return", "typeof", "function", "new",
+    "delete", "in", "of", "do", "else", "case", "break", "continue", "throw", "try",
+    "var", "let", "const", "yield", "await", "async", "instanceof", "void", "with",
+    "parseInt", "parseFloat", "isNaN", "isFinite", "encodeURIComponent",
+    "decodeURIComponent", "escape", "unescape", "setTimeout", "setInterval",
+    "clearInterval", "clearTimeout", "requestAnimationFrame", "fetch", "alert",
+    "confirm", "prompt", "print", "atob", "btoa", "queueMicrotask",
+    "rgba", "calc", "translateY", "rotate", "url", "min", "max", "clamp", "var_",
+    "matchMedia", "customElements", "getComputedStyle", "structuredClone",
+    "Attr", "CharacterData", "Document", "Element", "Event", "Node", "Text",
+    "call", "apply", "bind", "then", "catch_", "not", "and", "or", "isinstance",
+}
+
+
+def lint_page(html):
+    """阅读页上线前的静态自检：语法 + 调用未定义的内部函数。
+
+    这条闸针对的是一次真实事故：改版式时误删了 halo()/gongwen() 的定义，
+    语法检查（node --check）照样通过，页面上线后整页渲染抛 ReferenceError，
+    只剩「正在载入原文…」。只有把「调用名 vs 定义名」对一遍才拦得住。
+    """
+    m = re.search(r"<script>(.*?)</script>", html, re.S)
+    if not m:
+        raise SystemExit("阅读页缺少内联脚本")
+    js = m.group(1)
+    defined = set(re.findall(r"function\s+(\w+)\s*\(", js))
+    defined |= set(re.findall(r"(?:var|let|const)\s+(\w+)\s*=", js))
+    # 排除 \u2019 这类转义序列（反斜杠后紧跟的名字不是函数调用）
+    called = set(re.findall(r"(?<![\w.$\\])([a-z][A-Za-z0-9_]{1,})\s*\(", js))
+    missing = sorted(c for c in called if c not in defined and c not in JS_BUILTINS)
+    if missing:
+        raise SystemExit("阅读页脚本调用了未定义的函数：%s" % "、".join(missing))
+    node = os.path.expanduser("~/.workbuddy/binaries/node/versions/22.22.2-2/bin/node")
+    node = node if os.path.exists(node) else "node"
+    tmp = os.path.join(HERE, "sources", ".cache", "_rd_check.js")
+    os.makedirs(os.path.dirname(tmp), exist_ok=True)
+    open(tmp, "w", encoding="utf-8").write(js)
+    try:
+        r = subprocess.run([node, "--check", tmp], capture_output=True, text=True, timeout=60)
+        if r.returncode != 0:
+            raise SystemExit("阅读页脚本语法错误：\n" + (r.stderr or "")[:800])
+    except FileNotFoundError:
+        pass
+    finally:
+        try:
+            os.remove(tmp)
+        except OSError:
+            pass
+    print("脚本自检：%d 个函数定义 / 无未定义调用 / 语法通过" % len(defined))
 
 
 def main():
@@ -513,17 +588,62 @@ PAGE_CSS = """
 .gw-caption{text-align:center;text-indent:0;font-weight:600;margin:18px 0 8px}
 .gw mark,.st mark,.cm mark{background:#fff2a8;padding:1px 2px;border-radius:3px}
 
-/* ------- 标准版式（国标 / 行标 / 团标）------- */
-.st{font-family:"Songti SC","宋体","SimSun",serif;font-size:16.5px;line-height:1.96;
-  color:#101418;text-align:justify}
-.st-title{font-family:"SimHei","Heiti SC","Microsoft YaHei",sans-serif;font-weight:700;
-  font-size:1.5em;line-height:1.5;text-align:center;margin:0 0 8px}
-.st-code{text-align:center;font-size:.95em;letter-spacing:1px;color:#3d444d;margin:0 0 4px}
-.st-rule{border:0;border-top:1px solid #c9d2dd;margin:18px 0 24px}
-.st-h1{font-weight:700;margin:26px 0 10px;text-indent:0}
-.st-h2{font-weight:700;margin:20px 0 8px;text-indent:0}
+/* ------- 标准版式（国标 / 行标 / 团标）：对齐官方发布稿与 GB/T 1.1 的编排习惯 ------- */
+.st{font-family:"Songti SC","宋体","SimSun",serif;font-size:16px;line-height:1.9;
+  color:#101418;text-align:justify;letter-spacing:.1px}
+/* 封面块：ICS/CCS 分列左右 → 标准类别 → 标准号 → 中英文名称 → 发布/实施日期 → 发布机构 */
+.st-cover{text-align:center;margin:0 0 34px;padding:0 0 28px;border-bottom:1px solid #dbe1ea}
+.st-cover .hd{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;
+  font-family:var(--sans);font-size:12.5px;color:#3d444d;letter-spacing:.6px;
+  text-align:left;line-height:1.75;margin:0 0 30px;white-space:pre-line}
+.st-cover .cls{font-family:"SimHei","Heiti SC","Microsoft YaHei",sans-serif;font-weight:700;
+  font-size:17px;letter-spacing:5px;margin:0 0 16px}
+.st-cover .code{font-family:"SimHei","Heiti SC","Microsoft YaHei",sans-serif;font-weight:700;
+  font-size:21px;letter-spacing:2px;margin:0 0 34px}
+.st-cover .cn{font-family:"SimHei","Heiti SC","Microsoft YaHei",sans-serif;font-weight:700;
+  font-size:23px;line-height:1.55;margin:0 0 12px;letter-spacing:1px}
+.st-cover .en{font-family:var(--sans);font-size:13px;line-height:1.65;color:#3d444d;
+  letter-spacing:.2px;margin:0 auto 40px;max-width:640px}
+.st-cover .dates{font-family:var(--sans);font-size:14px;color:#20262d;line-height:2.1;
+  margin:0 0 6px}
+.st-cover .dates span{display:inline-block;min-width:170px}
+.st-cover .issuer{font-family:"SimHei","Heiti SC","Microsoft YaHei",sans-serif;font-weight:700;
+  font-size:16px;letter-spacing:3px;margin:30px 0 0}
+/* 目次：条款名 ……… 页码 */
+.st-toc{margin:0 0 34px}
+.st-toc .t{font-family:"SimHei","Heiti SC","Microsoft YaHei",sans-serif;font-weight:700;
+  text-align:center;font-size:1.08em;letter-spacing:6px;margin:0 0 16px}
+.st-toc .ln{display:flex;align-items:baseline;gap:6px;font-size:14.5px;line-height:2;
+  text-indent:0}
+.st-toc .ln i{flex:1;border-bottom:1px dotted #b9c3d0;transform:translateY(-4px)}
+.st-toc .ln em{font-style:normal;color:#3d444d;font-family:var(--sans);font-size:13px}
+.st-toc .ln.lv2{padding-left:1.6em}
+.st-toc .ln.lv3{padding-left:3.2em}
+/* 层级：一级条统排黑体顶格；二三级同字体递减；四级并入正文加粗 */
+.st-h1{font-family:"SimHei","Heiti SC","Microsoft YaHei",sans-serif;font-weight:700;
+  font-size:1.14em;margin:34px 0 12px;text-indent:0;letter-spacing:.6px}
+.st-h2{font-family:"SimHei","Heiti SC","Microsoft YaHei",sans-serif;font-weight:700;
+  font-size:1em;margin:20px 0 8px;text-indent:0}
+.st-h3{font-family:"SimHei","Heiti SC","Microsoft YaHei",sans-serif;font-weight:700;
+  font-size:.98em;margin:15px 0 6px;text-indent:0}
+.st-h4{font-weight:700;margin:11px 0 4px;text-indent:0}
+/* 术语和定义：术语名 + 英文对应词 + 定义 */
+.st-term{margin:14px 0 4px;text-indent:0;padding-left:0}
+.st-term b{font-family:"SimHei","Heiti SC","Microsoft YaHei",sans-serif;font-weight:700}
+.st-term i{font-style:normal;font-family:var(--sans);font-size:.9em;color:#3d444d}
+.st-def{margin:0 0 .55em;text-indent:0}
 .st-p{margin:0 0 .5em;text-indent:0}
-.st-caption{text-align:center;text-indent:0;font-weight:600;margin:16px 0 10px}
+.st-ind{padding-left:2em;margin:0 0 .4em;text-indent:0}
+/* 列项（a) / 1) / — ）：悬挂缩进，编号不折行 */
+.st-li{padding-left:3.4em;text-indent:-1.7em;margin:0 0 .32em}
+.st-note{font-size:.87em;line-height:1.85;color:#3d444d;margin:.3em 0 .5em;text-indent:0}
+.st-table{margin:.5em 0 1.1em;padding:.55em .9em;border-left:2px solid #dbe1ea;
+  background:#fafbfd;font-family:var(--sans);font-size:13.5px;line-height:1.85;
+  white-space:pre-wrap;overflow-x:auto}
+.st-caption{text-align:center;text-indent:0;font-family:"SimHei","Heiti SC","Microsoft YaHei",sans-serif;
+  font-weight:700;font-size:.96em;margin:18px 0 9px}
+.st-quote{margin:.4em 0 .7em;padding:.5em .9em;border-left:2px solid #dbe1ea;
+  font-size:.9em;line-height:1.85;color:#3d444d;text-indent:0}
 
 /* ------- 舒适阅读版式（屏幕长读）------- */
 .cm{font-family:var(--sans);font-size:16px;line-height:2.05;color:var(--ink);letter-spacing:.2px}
@@ -552,8 +672,15 @@ PAGE_CSS = """
   .gw{font-size:16pt;line-height:1.75}
   .gw-title{font-size:22pt;letter-spacing:2px}
   .gw-h1,.gw-h2{font-size:16pt}
-  .st{font-size:12pt;line-height:1.7}
-  .st-title{font-size:18pt}
+  .st{font-size:11.5pt;line-height:1.75}
+  .st-cover{page-break-after:always;border-bottom:0;padding-bottom:0}
+  .st-cover .cn{font-size:20pt}
+  .st-cover .code{font-size:18pt}
+  .st-cover .cls{font-size:15pt}
+  .st-toc{page-break-after:always}
+  .st-h1,.st-h2,.st-h3{page-break-after:avoid}
+  .st-caption{page-break-after:avoid}
+  .st-table,.st-quote{page-break-inside:avoid}
   .cm{font-size:12pt;line-height:1.7}
   .cm-title{font-size:18pt}
   .rd-meta{font-size:9pt;color:#555;border-top:1px solid #ccc}
@@ -607,23 +734,6 @@ PAGE_JS = r"""
     }
     return out;
   }
-  function stdBlocks(t){
-    var out=[], ps=t.split(/\n{2,}/);
-    for(var i=0;i<ps.length;i++){
-      var raw=ps[i].replace(/^\n+|\n+$/g,'');
-      if(!raw) continue;
-      var lines=raw.split('\n').map(function(s){return s.trim()}).filter(Boolean);
-      var f=lines[0]||'', type='p';
-      if(/^附录\s*[A-Z]?\d*(\s+\S)?$/.test(f)||/^附录\s*[A-Z]?\d*\s+\S/.test(f)) type='h1';
-      else if(/^第[一二三四五六七八九十]+章\s*\S/.test(f)) type='h1';
-      else if(/^\d+\s+\S/.test(f)&&f.length<32) type='h1';
-      else if(/^\d+\.\d+(\.\d+)*\s+\S/.test(f)&&f.length<44) type='h2';
-      else if(RE_CAP.test(f)&&f.length<64) type='caption';
-      else if(lines.length>1&&RE_MULTI.test(raw)) type='table';
-      out.push({type:type,text:lines.join(' '),lines:lines});
-    }
-    return out;
-  }
   function artNo(t){ var m=t.match(RE_ARTNO); return m?m[0]:''; }
   function halo(txt,inner){
     if(!HL||txt.indexOf(HL)<0) return inner;
@@ -666,21 +776,165 @@ PAGE_JS = r"""
     }
     return {html:html,chapters:chapters};
   }
+  /* ---------- 标准正文结构识别（GB/T 1.1 编排惯例）---------- */
+  var RE_SCLS=/^中华人民共和国[^，。；]{0,20}标准$/;
+  var RE_STOC=/^(目\s*次|目\s*录)$/;
+  var RE_SH0=/^\d{1,2}\s?[\u4e00-\u9fff]/;          // 一级条：1 范围
+  var RE_SH1=/^\d{1,2}\.\d{1,2}\s?[\u4e00-\u9fff]/; // 二级条：4.1
+  var RE_SH2=/^\d{1,2}(?:\.\d{1,2}){2}\s?[\u4e00-\u9fff]/;
+  var RE_SH3=/^\d{1,2}(?:\.\d{1,2}){3}\s?[\u4e00-\u9fff]/;
+  var RE_SAPX=/^附\s*录\s*[A-Z]?(\s|$)/;
+  var RE_SAPXN=/^[A-Z]\.\d+(?:\.\d+)*\s?[\u4e00-\u9fff]/;
+  var RE_SFRONT=/^(前\s*言|引\s*言|参考文献|索\s*引|特别声明)$/;
+  var RE_SLI=/^(?:[a-z]\s*[)）]|[1-9]\d?\s*[)）]|[—–－]{1,2}\s|·\s)\s*\S/;
+  var RE_SNOTE=/^(?:注\s*\d*\s*[:：]|示例\s*\d*\s*[:：]|注\s*\d*$|示例\s*\d*$)/;
+  var RE_STERM=/^\d+(?:\.\d+)*\s?[^\x00-\x7F]{2,26}\s+[A-Za-z][A-Za-z0-9 ,\-'\u2019().]{1,}$/;
+  var RE_SCAP=/^(表|图)\s*[0-9A-Z一二三四五六七八九十]/;
+  function isTable(lines){
+    if(lines.length<4) return false;
+    for(var i=0;i<lines.length;i++){
+      var l=lines[i];
+      if(l.length>30) return false;
+      if(/[。；]$/.test(l)) return false;
+    }
+    return true;
+  }
+  /* 条标题与正文黏在同一行（PDF 文字层最常见的形态：4.1.2自启动管理a)除提供…）。
+     切点只能落在「列项标记」或「正文起句」上——条标题是名词短语，不会含这些词。 */
+  var RE_TAIL=/[a-z]\s*[)）]|[1-9]\d?\s*[)）]|[—–－]{1,2}\s|应当?|不应|不得|必须|严禁|须|本标准|本文件|本规范|下列/;
+  function splitHead(f,type){
+    var m=f.match(/^(\d{1,2}(?:\.\d{1,2}){0,3})\s*/);
+    if(!m) return null;
+    var num=m[1], rest=f.slice(m[0].length);
+    if(!rest) return null;
+    var mm=rest.match(RE_TAIL), cut;
+    if(mm) cut=mm.index;
+    else if(type==='h1'&&rest.length>12){
+      var m2=rest.match(/^([\u4e00-\u9fff、，]{2,10})/);
+      if(!m2) return null;
+      cut=m2[1].length;
+    } else return null;
+    var title=rest.slice(0,cut).replace(/[\s\u3000]+$/,'');
+    var body=rest.slice(cut).replace(/^[\s\u3000]+/,'');
+    if(!title||title.length>18||!body) return null;
+    return {head:num+title, body:body};
+  }
+  function stdBlocks(t){
+    var out=[], ps=t.split(/\n{2,}/);
+    for(var i=0;i<ps.length;i++){
+      var raw=ps[i].replace(/^\n+|\n+$/g,'');
+      if(!raw) continue;
+      var lines=raw.split('\n').map(function(s){return s.trim()}).filter(Boolean);
+      if(!lines.length) continue;
+      var f=lines[0], type='p';
+      if(RE_STOC.test(f)) type='toc';
+      else if(RE_SAPX.test(f)) type='h1';
+      else if(/^第[一二三四五六七八九十]+章\s*\S/.test(f)) type='h1';
+      else if(RE_SFRONT.test(f)) type='h1';
+      else if(RE_SAPXN.test(f)&&f.length<44) type='h2';
+      else if(RE_SH3.test(f)&&f.length<56) type='h4';
+      else if(RE_SH2.test(f)&&f.length<52) type='h3';
+      else if(RE_SH1.test(f)&&f.length<46) type='h2';
+      else if(RE_SH0.test(f)&&f.length<40) type='h1';
+      else if(RE_STERM.test(f)) type='term';
+      else if(RE_SCAP.test(f)&&f.length<64) type='caption';
+      else if(RE_SNOTE.test(f)) type='note';
+      else if(isTable(lines)) type='table';
+      else if(RE_SLI.test(f)) type='li';
+      if(/^h[1-4]$/.test(type)){
+        var head=f, rest='';
+        var sp=splitHead(f,type);
+        if(sp){ head=sp.head; rest=sp.body; }
+        else if(lines.length>1&&f.length<=40){ rest=lines.slice(1).join(''); }
+        else if(f.length>40){ type='p'; }        // 切不开又一整段 → 宁可当正文，也不做巨型粗体标题
+        if(/^h[1-4]$/.test(type)){
+          out.push({type:type,first:head,lines:[head],text:head});
+          var segs=rest?paraSegs(rest):[];
+          for(var q=0;q<segs.length;q++){
+            var sg=segs[q];
+            out.push({type:RE_SLI.test(sg)?'li':'p',first:sg,lines:[sg],text:sg});
+          }
+          continue;
+        }
+      }
+      out.push({type:type,first:f,lines:lines,text:lines.join('')});
+    }
+    return out;
+  }
+  /* 一段正文里若夹着 a)/1)/— 列项，就在句末标点后断开，转成悬挂缩进的列项 */
+  var RE_LISPLIT=/([。；：])\s*(?=[a-z]\s*[)）]|[1-9]\d?\s*[)）](?=\s*[^\d])|[—–－]{1,2}\s*\S)/g;
+  function paraSegs(txt){
+    // 不用后行断言（老 WebView 不支持），改用「插入分隔符再切」
+    var parts=(txt||'').replace(RE_LISPLIT,'$1\u0001').split('\u0001');
+    return parts.filter(function(x){return x&&x.trim()});
+  }
+  function splitTerm(f){
+    var m=f.match(/^(\d+(?:\.\d+)*)\s?([^\x00-\x7F]{2,26})\s+([A-Za-z][A-Za-z0-9 ,\-'\u2019().]{1,})$/);
+    if(!m) return null;
+    return {n:m[1],cn:m[2],en:m[3]};
+  }
 
-  /* ---------- 标准版式 ---------- */
+  function coverHtml(cv){
+    if(!cv) return '';
+    var hd=[];
+    if(cv.ics) hd.push('<span>ICS '+esc(cv.ics)+'</span>');
+    if(cv.ccs) hd.push('<span>CCS '+esc(cv.ccs)+'</span>');
+    var inner='';
+    if(hd.length) inner+='<div class="hd">'+hd.join('')+'</div>';
+    if(cv.cls) inner+='<div class="cls">'+esc(cv.cls)+'</div>';
+    if(cv.code) inner+='<div class="code">'+esc(cv.code)+'</div>';
+    if(cv.cn) inner+='<div class="cn">'+esc(cv.cn.replace(/\s+/g,' '))+'</div>';
+    if(cv.en) inner+='<div class="en">'+esc(cv.en)+'</div>';
+    var d=[];
+    if(cv.pubdate) d.push('<div><span>'+esc(cv.pubdate)+'</span>发布</div>');
+    if(cv.impldate) d.push('<div><span>'+esc(cv.impldate)+'</span>实施</div>');
+    if(d.length) inner+='<div class="dates">'+d.join('')+'</div>';
+    if(cv.issuer) inner+='<div class="issuer">'+esc(cv.issuer)+'</div>';
+    return inner?'<div class="st-cover">'+inner+'</div>':'';
+  }
+  function tocHtml(toc){
+    if(!toc||toc.length<4) return '';
+    var withPage=0;
+    for(var i=0;i<toc.length;i++) if(toc[i].p) withPage++;
+    if(withPage/toc.length<0.5) return '';
+    var rows=[];
+    for(var j=0;j<toc.length;j++){
+      var e=toc[j], t=(e.t||'').trim();
+      var lv=/^\d{1,2}\.\d{1,2}\.\d{1,2}/.test(t)?'lv3':(/^\d{1,2}\.\d{1,2}/.test(t)?'lv2':'');
+      rows.push('<div class="ln '+lv+'"><span>'+esc(t)+'</span><i></i><em>'+esc(e.p||'')+'</em></div>');
+    }
+    return '<div class="st-toc"><div class="t">目　次</div>'+rows.join('')+'</div>';
+  }
+
   function stdView(x,t){
     var bs=stdBlocks(t), html='', chapters=[];
-    if(x.code) html+='<div class="st-code">'+esc(x.code)+'</div>';
-    html+='<div class="st-title">'+esc(x.name)+'</div>';
-    html+='<hr class="st-rule">';
+    html+=coverHtml(x.cover);
+    html+=tocHtml(x.toc);
+    // 封面/目次被单独渲染后，正文里若还残留同名块就跳过
     for(var i=0;i<bs.length;i++){
       var b=bs[i], tx=b.text;
-      if(b.type==='h1'||b.type==='h2'){
+      if(b.type==='toc') continue;
+      if(b.type==='h1'||b.type==='h2'||b.type==='h3'||b.type==='h4'){
         var id='c'+(chapters.length); chapters.push(tx);
-        html+='<p class="'+b.type+'" id="'+id+'">'+esc(tx)+'</p>';
-      } else if(b.type==='caption') html+='<p class="st-caption">'+esc(tx)+'</p>';
-      else if(b.type==='table') html+='<p class="st-p">'+esc(b.lines.join('　'))+'</p>';
-      else html+='<p class="st-p">'+halo(tx,esc(tx))+'</p>';
+        html+='<p class="st-'+b.type+'" id="'+id+'">'+esc(tx)+'</p>';
+      } else if(b.type==='term'){
+        var st=splitTerm(b.first);
+        if(st){
+          html+='<p class="st-term"><b>'+esc(st.n+' '+st.cn)+'</b> <i>'+esc(st.en)+'</i></p>';
+          for(var k=1;k<b.lines.length;k++) html+='<p class="st-def">'+esc(b.lines[k])+'</p>';
+        } else html+='<p class="st-p">'+halo(tx,esc(tx))+'</p>';
+      } else if(b.type==='caption'){ html+='<p class="st-caption">'+esc(tx)+'</p>'; }
+      else if(b.type==='note'){ html+='<p class="st-note">'+esc(tx)+'</p>'; }
+      else if(b.type==='table'){ html+='<div class="st-table">'+esc(b.lines.join('\n'))+'</div>'; }
+      else if(b.type==='quote'){ html+='<div class="st-quote">'+esc(tx)+'</div>'; }
+      else if(b.type==='li'){ html+='<p class="st-li">'+halo(tx,esc(tx))+'</p>'; }
+      else {
+        var segs=paraSegs(tx);
+        for(var q=0;q<segs.length;q++){
+          if(q===0) html+='<p class="st-p">'+halo(segs[q],esc(segs[q]))+'</p>';
+          else html+='<p class="st-li">'+esc(segs[q])+'</p>';
+        }
+      }
     }
     return {html:html,chapters:chapters};
   }
@@ -707,7 +961,7 @@ PAGE_JS = r"""
     return {html:html,chapters:chapters};
   }
 
-  function baseSize(x,mode){ return mode==='cm'?16:(x.kind==='std'?16.5:20.5); }
+  function baseSize(x,mode){ return mode==='cm'?16:(x.kind==='std'?16:20.5); }
 
   function render(){
     if(!CUR) return;
@@ -945,6 +1199,7 @@ def write_page(count_law, total_chars, parts, count_std=0):
             .replace("__STD__", str(count_std))
             .replace("__WAN__", "%.0f" % (total_chars / 10000.0)))
     open(os.path.join(HERE, "kb", "texts.html"), "w", encoding="utf-8").write(html)
+    lint_page(html)
     print("阅读页：kb/texts.html")
 
 

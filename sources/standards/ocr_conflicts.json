@@ -1,0 +1,16 @@
+[
+ {
+  "path": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/TAF标准/T_TAF_077.9—2022_APP收集使用个人信息最小必要评估规范_第9部分：短信信息.pdf",
+  "out": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/TAF标准/T_TAF_077.9—2022_APP收集使用个人信息最小必要评估规范_第9部分：短信信息.txt",
+  "pages": 15,
+  "ocr_pages": 5,
+  "chars": 9100,
+  "conflicts": 39,
+  "cjk": 6691,
+  "rare": 0,
+  "sec": true,
+  "secs": 8.1,
+  "name": "T_TAF_077.9—2022_APP收集使用个人信息最小必要评估规范_第9部分：短信信息",
+  "why": "含大量生僻/私用区字符，疑似编码损坏"
+ }
+]

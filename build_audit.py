@@ -4,7 +4,7 @@
 build_audit.py —— 生成「合规审计」模块 kb/audit.html
 
 能力：
-  ① 从合规义务清单（sources/standards/duties.json，10 大类 / 47 场景 / 143 项义务）勾选审计范围；
+  ① 从合规义务清单（sources/standards/duties.json，17 大类 / 77 场景 / 220 项义务）勾选审计范围；
   ② 生成审计任务，逐项填写审计进度、审计素材、审计结论、审计说明；
   ③ 汇总生成审计报告（含覆盖范围、结论分布、不符合项清单）与整改任务清单；
   ④ 数据存本机浏览器 localStorage，支持导出/导入 JSON 备份与导出报告 HTML。
