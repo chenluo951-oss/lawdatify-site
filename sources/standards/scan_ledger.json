@@ -61,47 +61,5 @@
   "text": "sources/scans/GB_T42775-2023/img/GB_T42775-2023.txt",
   "conflicts": 85,
   "conflict_ratio": 0.0189
- },
- "GB/T44109-2024": {
-  "code": "GB/T44109-2024",
-  "name": "信息技术 大数据 数据治理实施指南",
-  "hcno": "D3B354CD2E0ECF1821C1D8B4204BEE7C",
-  "official_url": "https://openstd.samr.gov.cn/bzgk/std/newGbInfo?hcno=D3B354CD2E0ECF1821C1D8B4204BEE7C",
-  "pages": 21,
-  "images": 21,
-  "fetched": "2026-09-11",
-  "status": "scan+ocr",
-  "chars": 18429,
-  "text": "sources/scans/GB_T44109-2024/img/GB_T44109-2024.txt",
-  "conflicts": 17,
-  "conflict_ratio": 0.0213
- },
- "GB/T46353-2025": {
-  "code": "GB/T46353-2025",
-  "name": "信息技术 大数据 数据资产价值评估",
-  "hcno": "8173F6D7E7A03FB87621EEEE254EDDDE",
-  "official_url": "https://openstd.samr.gov.cn/bzgk/std/newGbInfo?hcno=8173F6D7E7A03FB87621EEEE254EDDDE",
-  "pages": 19,
-  "images": 19,
-  "fetched": "2026-09-11",
-  "status": "scan+ocr",
-  "chars": 13625,
-  "text": "sources/scans/GB_T46353-2025/img/GB_T46353-2025.txt",
-  "conflicts": 56,
-  "conflict_ratio": 0.0792
- },
- "GB/T45123-2024": {
-  "code": "GB/T45123-2024",
-  "name": "公共安全 生物特征识别应用 算法评测数据库要求",
-  "hcno": "9331D12E0392304F34E85D2C43C93FDE",
-  "official_url": "https://openstd.samr.gov.cn/bzgk/std/newGbInfo?hcno=9331D12E0392304F34E85D2C43C93FDE",
-  "pages": 16,
-  "images": 16,
-  "fetched": "2026-09-11",
-  "status": "scan+ocr",
-  "chars": 10190,
-  "text": "sources/scans/GB_T45123-2024/img/GB_T45123-2024.txt",
-  "conflicts": 37,
-  "conflict_ratio": 0.0425
  }
 }
