@@ -439,6 +439,29 @@ def main():
                 n_hidden += 1
         print(f"  保留下架标记 {n_hidden} 条（清单 sources/standards/excluded.json）")
 
+    # ---- 人工修改覆盖层：字段修正 / 下架（本地编辑器写入 sources/edits/overrides.json）----
+    try:
+        import edits as E
+        n_pt = n_hd = 0
+        for it in items:
+            k = (it.get("code") or "") + "::" + (it.get("name") or "")
+            new = E.apply_patch("library", k, it)
+            if new != it:
+                it.clear()
+                it.update(new)
+                n_pt += 1
+            if E.is_hidden("library", k):
+                it["hidden"] = True
+                n_hd += 1
+        st = E.stats()
+        if n_pt or n_hd:
+            print(f"  人工修改覆盖：字段修正 {n_pt} 条 · 下架 {n_hd} 条")
+        if st["rules"] or st["patches"] or st["hide"]:
+            print(f"  覆盖层合计：替换规则 {st['rules']} · 字段修正 {st['patches']} · "
+                  f"下架 {st['hide']}（{st['updated']}）")
+    except Exception as e:
+        print(f"  人工修改覆盖跳过：{e}")
+
     data = {
         "meta": {
             "title": "合规标准知识库",

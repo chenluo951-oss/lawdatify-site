@@ -29,6 +29,8 @@ KB_NAV = [
     ("index.html", "总览"),
     ("standards.html", "标准与义务"),
     ("texts.html", "法规原文"),
+    ("citations.html", "高频引用法条"),
+    ("audit.html", "合规审计"),
 ]
 
 BOUNDARY = {

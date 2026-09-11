@@ -36,6 +36,8 @@ PAGES = [
     "kb/index.html",
     "kb/standards.html",
     "kb/texts.html",
+    "kb/citations.html",
+    "kb/audit.html",
     "kb/benchmarks.html",
     "radar/index.html",
     "radar/calendar.html",

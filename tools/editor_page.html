@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>内容编辑器 · 合规无终点（仅本机）</title>
+<style>
+:root{
+  --bg:#f5f6f8; --panel:#fff; --ink:#1b1f26; --ink2:#465063; --faint:#8b93a3;
+  --line:#e3e6ec; --line2:#eef0f4; --brand:#1f4fd8; --brand-soft:#eef3ff;
+  --warn:#b4530a; --warn-soft:#fff7ed; --ok:#14743f; --ok-soft:#eefaf3;
+  --mono:"SFMono-Regular",Menlo,Consolas,"Liberation Mono",monospace;
+  --sans:-apple-system,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{font-family:var(--sans);color:var(--ink);background:var(--bg);font-size:14px;
+  display:flex;flex-direction:column;overflow:hidden}
+a{color:var(--brand);text-decoration:none}
+a:hover{text-decoration:underline}
+button{font-family:inherit;font-size:13px;cursor:pointer}
+input,textarea,select{font-family:inherit;font-size:13px;color:var(--ink)}
+
+/* ---------- header ---------- */
+header{flex:0 0 auto;display:flex;align-items:center;gap:14px;padding:0 16px;height:52px;
+  background:var(--panel);border-bottom:1px solid var(--line)}
+.brand{font-weight:700;font-size:15px;letter-spacing:.2px}
+.brand i{font-style:normal;color:var(--brand)}
+.tag{font-size:11.5px;color:var(--faint);border:1px solid var(--line);border-radius:20px;
+  padding:2px 9px}
+.spacer{flex:1}
+.stat{font-size:12.5px;color:var(--ink2);white-space:nowrap}
+.stat b{color:var(--ink);font-weight:700}
+.stat .sep{color:var(--line);margin:0 8px}
+.btn{border:1px solid var(--line);background:#fff;color:var(--ink2);border-radius:8px;
+  padding:6px 13px;transition:.15s}
+.btn:hover{border-color:var(--brand);color:var(--brand)}
+.btn.primary{background:var(--brand);border-color:var(--brand);color:#fff;font-weight:600}
+.btn.primary:hover{filter:brightness(1.07)}
+.btn.danger:hover{border-color:#c0342b;color:#c0342b}
+.btn[disabled]{opacity:.45;cursor:not-allowed}
+
+/* ---------- main ---------- */
+main{flex:1;display:grid;grid-template-columns:326px 1fr;min-height:0}
+aside{background:var(--panel);border-right:1px solid var(--line);display:flex;
+  flex-direction:column;min-height:0}
+.tabs{display:flex;flex-wrap:wrap;gap:4px;padding:10px 12px 8px;border-bottom:1px solid var(--line2)}
+.tabs button{border:1px solid transparent;background:transparent;color:var(--ink2);
+  border-radius:7px;padding:5px 9px;font-size:12.5px}
+.tabs button.on{background:var(--brand-soft);border-color:#cddbff;color:var(--brand);font-weight:600}
+.tabs button .n{color:var(--faint);font-size:11px;margin-left:3px}
+.tabs button.on .n{color:var(--brand)}
+.searchbox{padding:10px 12px;border-bottom:1px solid var(--line2);display:flex;gap:8px}
+.searchbox input{flex:1;border:1px solid var(--line);border-radius:8px;padding:7px 10px;outline:none}
+.searchbox input:focus{border-color:var(--brand)}
+.list{flex:1;overflow:auto;padding:4px 6px 40px}
+.li{padding:8px 10px;border-radius:8px;cursor:pointer;line-height:1.55}
+.li:hover{background:#f7f8fb}
+.li.on{background:var(--brand-soft)}
+.li .t{display:block;font-size:13px;color:var(--ink);word-break:break-word}
+.li .m{display:block;font-size:11.5px;color:var(--faint);margin-top:3px}
+.li.hid .t{text-decoration:line-through;color:var(--faint)}
+.li .badge{display:inline-block;font-size:10.5px;color:var(--warn);background:var(--warn-soft);
+  border:1px solid #fadfc4;border-radius:20px;padding:0 6px;margin-left:6px;vertical-align:1px}
+.empty{color:var(--faint);text-align:center;padding:36px 12px;font-size:13px}
+.loadmore{margin:8px 6px;width:calc(100% - 12px);text-align:center;padding:7px;
+  border:1px dashed var(--line);border-radius:8px;color:var(--ink2);background:#fff}
+
+/* ---------- article ---------- */
+article{overflow:auto;min-height:0;padding:18px 22px 80px}
+.doc-empty{color:var(--faint);text-align:center;padding-top:16vh;font-size:14px;line-height:2}
+.doc-head{display:flex;align-items:flex-start;gap:14px;flex-wrap:wrap;margin-bottom:6px}
+.doc-head h1{font-size:17px;margin:0;line-height:1.5;flex:1;min-width:280px}
+.doc-meta{font-size:12.5px;color:var(--faint);line-height:1.9;margin:0 0 14px}
+.doc-meta span{margin-right:12px}
+.doc-acts{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 14px}
+.sec{margin:0 0 22px}
+.sec>h2{font-size:13px;color:var(--ink2);margin:0 0 9px;padding-left:9px;
+  border-left:3px solid var(--brand);line-height:1.3;font-weight:700}
+.hint{font-size:12.5px;color:var(--faint);line-height:1.85;margin:0 0 10px}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.row>*{flex-shrink:0}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+textarea{border:1px solid var(--line);border-radius:8px;padding:9px 11px;width:100%;
+  outline:none;resize:vertical}
+textarea:focus{border-color:var(--brand)}
+textarea.plain{min-height:44px}
+#body{min-height:58vh;font-size:13.5px;line-height:1.95;font-family:var(--mono);
+  white-space:pre-wrap;word-break:break-word}
+#body.marked{background:#fdfdff}
+textarea.json{font-family:var(--mono);font-size:12.5px;min-height:70px}
+.pill{font-size:11.5px;border-radius:20px;padding:2px 9px;border:1px solid var(--line);
+  color:var(--ink2);background:#fff;flex-shrink:0}
+.pill.ok{color:var(--ok);background:var(--ok-soft);border-color:#c8ecda}
+.pill.warn{color:var(--warn);background:var(--warn-soft);border-color:#fadfc4}
+.pill.hid{color:#8a3b12;background:#fff6ed;border-color:#f5d3ae}
+.rules{list-style:none;margin:10px 0 0;padding:0}
+.rules li{display:flex;gap:10px;align-items:flex-start;border:1px solid var(--line);
+  border-radius:9px;padding:9px 11px;margin-bottom:8px;background:#fcfdff}
+.rules li .body{flex:1;min-width:0;font-size:12.5px;line-height:1.8;color:var(--ink2);
+  word-break:break-word}
+.rules li .body code{font-family:var(--mono);background:#f2f4f8;border-radius:4px;
+  padding:1px 4px;color:#8b3a1a;font-size:12px}
+.rules li .body code.r{color:#0f6b3d}
+.rules li .body .nt{color:var(--faint);display:block;margin-top:3px;font-size:11.5px}
+.fields{margin-top:4px}
+.fld{border:1px solid var(--line);border-radius:9px;padding:10px 11px;margin-bottom:10px;background:#fff}
+.fld .k{display:flex;align-items:center;gap:8px;margin-bottom:7px}
+.fld .k b{font-size:12.5px;font-family:var(--mono);font-weight:600}
+.fld .orig{font-size:11.5px;color:var(--faint);line-height:1.8;margin-top:6px;
+  max-height:120px;overflow:auto;white-space:pre-wrap;word-break:break-word;
+  border-top:1px dashed var(--line2);padding-top:6px}
+.fld textarea{font-size:13px;line-height:1.85}
+
+/* ---------- drawer ---------- */
+.drawer{flex:0 0 auto;background:var(--panel);border-top:1px solid var(--line);
+  display:flex;flex-direction:column;height:46px;transition:height .18s;overflow:hidden}
+.drawer.open{height:280px}
+.dtabs{display:flex;align-items:center;gap:6px;padding:0 14px;height:46px;flex:0 0 46px;
+  border-bottom:1px solid var(--line2)}
+.dtabs button{border:1px solid transparent;background:transparent;color:var(--ink2);
+  border-radius:7px;padding:5px 10px;font-size:12.5px}
+.dtabs button.on{background:var(--brand-soft);border-color:#cddbff;color:var(--brand);font-weight:600}
+.drawer .pane{flex:1;overflow:auto;padding:12px 16px;font-size:12.5px}
+#log{font-family:var(--mono);font-size:12px;line-height:1.75;white-space:pre-wrap;
+  color:var(--ink2);margin:0}
+#log .bad{color:#c0342b}
+#log .good{color:var(--ok)}
+.chg{display:flex;gap:10px;align-items:flex-start;border-bottom:1px solid var(--line2);
+  padding:7px 0;line-height:1.75}
+.chg .body{flex:1;min-width:0;word-break:break-word;color:var(--ink2)}
+.chg .body b{color:var(--ink)}
+.chg .kind{font-size:11px;color:var(--faint);font-family:var(--mono)}
+.chg .mini{border:1px solid var(--line);background:#fff;border-radius:7px;padding:3px 9px;
+  color:var(--ink2);font-size:12px}
+.chg .mini:hover{border-color:#c0342b;color:#c0342b}
+.toast{position:fixed;right:18px;bottom:64px;background:#1b1f26;color:#fff;border-radius:9px;
+  padding:9px 14px;font-size:13px;opacity:0;transform:translateY(8px);
+  transition:.2s;pointer-events:none;z-index:99}
+.toast.on{opacity:1;transform:none}
+mark.hit{background:#ffe9a8;border-radius:3px;padding:0 1px}
+</style>
+</head>
+<body>
+
+<header>
+  <span class="brand">内容编辑器 · <i>合规无终点</i></span>
+  <span class="tag">仅本机 127.0.0.1</span>
+  <span class="spacer"></span>
+  <span class="stat" id="stat">载入中…</span>
+  <button class="btn" id="btnQuick">快速重建</button>
+  <button class="btn" id="btnFull">全量重建</button>
+  <button class="btn primary" id="btnPush">发布上线</button>
+</header>
+
+<main>
+  <aside>
+    <div class="tabs" id="tabs"></div>
+    <div class="searchbox">
+      <input id="q" placeholder="按名称 / 编号 / 关键词筛选">
+      <button class="btn" id="btnQ">查找</button>
+    </div>
+    <div class="list" id="list"></div>
+  </aside>
+
+  <article id="doc">
+    <div class="doc-empty">
+      从左侧选一条内容开始校对。<br>
+      修改会写入覆盖层，下次重建自动叠加，不会被自动同步冲掉。
+    </div>
+  </article>
+</main>
+
+<div class="drawer" id="drawer">
+  <div class="dtabs">
+    <button data-p="chg" class="on">人工修改 <span id="chgN"></span></button>
+    <button data-p="log">构建 / 发布日志</button>
+    <span class="spacer"></span>
+    <button class="btn" id="btnToggleDrawer">展开</button>
+  </div>
+  <div class="pane" id="paneChg"></div>
+  <div class="pane" id="paneLog" style="display:none"><pre id="log">（暂无日志。点上方「快速重建」或「发布上线」后在此查看。）</pre></div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+"use strict";
+var S = { kind: "law", key: "", q: "", doc: null, list: [], total: 0, shown: 0,
+          limit: 400, logAt: 0, polling: false };
+
+function $(id){ return document.getElementById(id); }
+function esc(s){ return (s==null?"":String(s)).replace(/&/g,"&amp;").replace(/</g,"&lt;")
+  .replace(/>/g,"&gt;").replace(/"/g,"&quot;"); }
+function toast(msg, bad){
+  var t = $("toast"); t.textContent = msg;
+  t.style.background = bad ? "#c0342b" : "#1b1f26";
+  t.className = "toast on";
+  setTimeout(function(){ t.className = "toast"; }, 2400);
+}
+function api(path, opt){
+  return fetch(path, opt).then(function(r){
+    return r.json().then(function(j){
+      if(!r.ok) throw new Error(j && j.error ? j.error : ("HTTP " + r.status));
+      return j;
+    });
+  });
+}
+function post(path, body){
+  return api(path, { method:"POST", headers:{"Content-Type":"application/json"},
+                     body: JSON.stringify(body||{}) });
+}
+
+/* ---------------- 顶栏状态 ---------------- */
+function loadState(){
+  return api("/api/state").then(function(s){
+    S.counts = s.counts;
+    $("stat").innerHTML =
+      "法规 <b>" + s.counts.law + "</b><span class='sep'>|</span>" +
+      "标准 <b>" + s.counts.std + "</b><span class='sep'>|</span>" +
+      "条目 <b>" + s.counts.library + "</b><span class='sep'>|</span>" +
+      "义务 <b>" + s.counts.duty + "</b><span class='sep'>|</span>" +
+      "高频法条 <b>" + s.counts.hot + "</b>" +
+      "<span class='sep'>|</span>人工修改 规则 <b>" + s.edits.rules + "</b> / 字段 <b>" +
+      s.edits.patches + "</b> / 下架 <b>" + s.edits.hide + "</b>" +
+      (s.edits.updated ? "<span class='sep'>|</span>更新 " + esc(s.edits.updated) : "");
+    renderTabs();
+    if(s.build.running){ S.logAt = 0; startPoll(); $("log").textContent = ""; }
+    return s;
+  });
+}
+
+var KIND_ORDER = ["law","std","library","duty","hot"];
+var KIND_NAME = { law:"法规原文", std:"标准正文", library:"条目库", duty:"合规义务", hot:"高频法条" };
+
+function renderTabs(){
+  $("tabs").innerHTML = KIND_ORDER.map(function(k){
+    var n = S.counts ? (S.counts[k]||0) : 0;
+    return "<button data-k='" + k + "' class='" + (S.kind===k?"on":"") + "'>" +
+      KIND_NAME[k] + "<span class='n'>" + n + "</span></button>";
+  }).join("");
+}
+$("tabs").addEventListener("click", function(e){
+  var b = e.target.closest("button"); if(!b) return;
+  S.kind = b.dataset.k; S.key = ""; S.doc = null; S.limit = 400;
+  renderTabs(); loadList(); renderDoc();
+});
+$("btnQ").onclick = function(){ S.q = $("q").value; S.limit = 400; loadList(); };
+$("q").addEventListener("keydown", function(e){
+  if(e.key === "Enter"){ S.q = $("q").value; S.limit = 400; loadList(); }
+});
+
+/* ---------------- 左侧列表 ---------------- */
+function loadList(){
+  return api("/api/list?kind=" + encodeURIComponent(S.kind) +
+             "&limit=" + S.limit + "&q=" + encodeURIComponent(S.q))
+  .then(function(d){
+    S.list = d.items; S.total = d.total; S.shown = d.shown;
+    var html = S.list.map(function(it){
+      return "<div class='li" + (it.key===S.key?" on":"") + (it.hidden?" hid":"") +
+        "' data-k='" + esc(it.key) + "'>" +
+        "<span class='t'>" + esc(it.label) + (it.hidden?"<span class='badge'>已下架</span>":"") + "</span>" +
+        "<span class='m'>" + esc([it.sub, it.topic, it.status,
+            (it.chars? it.chars + " 字" : "")].filter(Boolean).join(" · ")) + "</span></div>";
+    }).join("");
+    if(S.shown < S.total){
+      html += "<button class='loadmore' data-more='1'>还有 " + (S.total - S.shown) +
+        " 条，点击继续加载</button>";
+    }
+    $("list").innerHTML = html || "<div class='empty'>没有匹配的内容</div>";
+  });
+}
+$("list").addEventListener("click", function(e){
+  var m = e.target.closest("[data-more]");
+  if(m){ S.limit += 600; loadList(); return; }
+  var li = e.target.closest(".li"); if(!li) return;
+  S.key = li.dataset.k;
+  $("list").querySelectorAll(".li").forEach(function(x){ x.className = "li"; });
+  li.className = "li on";
+  openDoc();
+});
+
+/* ---------------- 右侧文档 ---------------- */
+function openDoc(){
+  if(!S.key){ renderDoc(); return; }
+  return api("/api/doc?kind=" + encodeURIComponent(S.kind) +
+             "&key=" + encodeURIComponent(S.key))
+  .then(function(d){ S.doc = d; renderDoc(); });
+}
+
+function kindLabel(){ return KIND_NAME[S.kind] || S.kind; }
+
+function renderDoc(){
+  var d = S.doc;
+  if(!d){
+    $("doc").innerHTML = "<div class='doc-empty'>从左侧选一条内容开始校对。<br>" +
+      "修改会写入覆盖层，下次重建自动叠加，不会被自动同步冲掉。</div>";
+    return;
+  }
+  var it = d.item || {};
+  var head = "<div class='doc-head'><h1>" + esc(it.label || d.key) + "</h1>" +
+    (d.hidden ? "<span class='pill hid'>已下架</span>" : "<span class='pill ok'>在站</span>") +
+    "</div>";
+  var meta = [];
+  if(it.sub) meta.push("<span>" + esc(it.sub) + "</span>");
+  if(it.topic) meta.push("<span>" + esc(it.topic) + "</span>");
+  if(it.issuer) meta.push("<span>" + esc(it.issuer) + "</span>");
+  if(it.pub) meta.push("<span>发布 " + esc(it.pub) + "</span>");
+  if(it.status) meta.push("<span>状态 " + esc(it.status) + "</span>");
+  if(d.mode === "text") meta.push("<span>" + (d.text||"").length + " 字</span>");
+  meta.push("<span class='kind'>" + esc(d.kind) + " · " + esc(d.key) + "</span>");
+
+  var acts = [];
+  if(d.mode === "text" && it.id){
+    acts.push("<a class='btn' target='_blank' href='/site/kb/texts.html?id=" +
+      encodeURIComponent(it.id) + "'>在阅读器预览</a>");
+  }
+  if(it.url) acts.push("<a class='btn' target='_blank' href='" + esc(it.url) + "'>官方发布页</a>");
+  acts.push("<button class='btn " + (d.hidden?"":"danger") + "' id='btnHide'>" +
+    (d.hidden ? "恢复上站" : "下架此条") + "</button>");
+
+  var body = head +
+    "<p class='doc-meta'>" + meta.join("") + "</p>" +
+    "<div class='doc-acts'>" + acts.join("") + "</div>";
+
+  body += (d.mode === "text") ? textEditor(d) : recordEditor(d);
+  $("doc").innerHTML = body;
+  bindDoc();
+  if(d.mode === "text"){
+    var ta = $("body");
+    if(ta) ta.addEventListener("mouseup", function(){ fillFindFromSelection(); });
+  }
+  $("btnHide").onclick = function(){
+    post("/api/hide", { kind:d.kind, key:d.key, on:!d.hidden, label:it.label || d.key })
+      .then(function(){ toast(d.hidden?"已恢复上站":"已下架"); return refreshAll(); });
+  };
+}
+
+function textEditor(d){
+  var h = "<div class='sec'><h2>正文（站点当前生效版本）</h2>" +
+    "<p class='hint'>在正文里选中要改的文字，点「用选中做查找」；填好替换文字后保存，" +
+    "即生成一条替换规则。规则按创建顺序叠加，可随时删除。正文共 " +
+    (d.text||"").length + " 字。</p>" +
+    "<textarea id='body' spellcheck='false' class='marked'>" + esc(d.text) + "</textarea>" +
+    "</div>";
+  h += "<div class='sec'><h2>新增替换规则</h2>" +
+    "<div class='grid2'>" +
+      "<textarea id='find' class='plain' placeholder='查找（必须与正文完全一致，含标点）'></textarea>" +
+      "<textarea id='replace' class='plain' placeholder='替换为（留空 = 删除这段文字）'></textarea>" +
+    "</div>" +
+    "<div class='row' style='margin-top:9px'>" +
+      "<input id='note' placeholder='备注：为什么这么改（可选）' " +
+        "style='flex:1;border:1px solid var(--line);border-radius:8px;padding:7px 10px;outline:none'>" +
+      "<button class='btn' id='btnSel'>用选中做查找</button>" +
+      "<button class='btn primary' id='btnRule'>保存规则</button>" +
+    "</div>" + rulesList(d) + "</div>";
+  return h;
+}
+
+function rulesList(d){
+  if(!d.rules.length) return "<p class='hint' style='margin-top:12px'>本条暂无人工替换规则。</p>";
+  return "<ul class='rules'>" + d.rules.map(function(r){
+    return "<li><div class='body'>" +
+      "<code>" + esc(r.find).slice(0,300) + "</code> → " +
+      "<code class='r'>" + (r.replace ? esc(r.replace).slice(0,300) : "<i>（删除）</i>") + "</code>" +
+      (r.note ? "<span class='nt'>" + esc(r.note) + " · " + esc(r.at) + "</span>"
+              : "<span class='nt'>" + esc(r.at) + "</span>") +
+      "</div><button class='mini' data-delrule='" + r.idx + "'>删除</button>" +
+      "</li>";
+  }).join("") + "</ul>";
+}
+
+function recordEditor(d){
+  var h = "<div class='sec'><h2>字段校对</h2>" +
+    "<p class='hint'>改完点该字段右侧「保存修改」即可（原始值会保留在下方，便于对照）。" +
+    "列表 / 对象类字段按 JSON 填写。</p><div class='fields'>";
+  d.fields.forEach(function(f){
+    var v = d.effective ? d.effective[f] : undefined;
+    var isObj = (v !== null && typeof v === "object");
+    var val = isObj ? JSON.stringify(v, null, 1) : (v == null ? "" : String(v));
+    var orig = d.record ? d.record[f] : undefined;
+    var origS = (orig !== null && typeof orig === "object")
+      ? JSON.stringify(orig, null, 1) : (orig == null ? "" : String(orig));
+    var changed = JSON.stringify(v) !== JSON.stringify(orig);
+    h += "<div class='fld'><div class='k'><b>" + esc(f) + "</b>" +
+      (changed ? "<span class='pill warn'>已修改</span>" : "") +
+      "<span class='spacer' style='flex:1'></span>" +
+      "<button class='btn' data-save='" + esc(f) + "' data-obj='" + (isObj?1:0) + "'>保存修改</button>" +
+      (changed ? "<button class='btn danger' data-revert='" + esc(f) + "'>还原</button>" : "") +
+      "</div>" +
+      "<textarea class='" + (isObj ? "json" : "plain") + "' data-fld='" + esc(f) + "'>" +
+        esc(val) + "</textarea>" +
+      (changed ? "<div class='orig'>原始值：<br>" + esc(origS) + "</div>" : "") +
+      "</div>";
+  });
+  h += "</div></div>";
+  if(d.mode === "record" && (d.kind !== "duty")){
+    h += "<div class='sec'><h2>本条替换规则（可选）</h2>" +
+      "<p class='hint'>若某字段是长文本、只想改其中一段，可用替换规则。规则作用于该条记录的对应字段。</p>" +
+      "<div class='row'><input id='rfield' placeholder='字段名，如 quote / penalty' " +
+        "style='width:200px;border:1px solid var(--line);border-radius:8px;padding:7px 10px'>" +
+      "<input id='find' placeholder='查找' style='flex:1;border:1px solid var(--line);" +
+        "border-radius:8px;padding:7px 10px'>" +
+      "<input id='replace' placeholder='替换为' style='flex:1;border:1px solid var(--line);" +
+        "border-radius:8px;padding:7px 10px'>" +
+      "<button class='btn' id='btnRule'>保存规则</button></div>" + rulesList(d) + "</div>";
+  }
+  return h;
+}
+
+function fillFindFromSelection(){
+  var ta = $("body"); if(!ta) return;
+  var s = ta.value.substring(ta.selectionStart, ta.selectionEnd);
+  if(s && s.length <= 2000){
+    var f = $("find"); if(f) f.value = s;
+    var m = ta.value.indexOf(s);
+    if(m >= 0){ ta.focus(); ta.setSelectionRange(m, m + s.length); }
+  }
+}
+
+function bindDoc(){
+  var d = S.doc; if(!d) return;
+  var bSel = $("btnSel"), bRule = $("btnRule");
+  if(bSel) bSel.onclick = function(){
+    fillFindFromSelection();
+    var f = $("find");
+    if(f && !f.value) toast("请先在正文里选中一段文字", true);
+  };
+  if(bRule) bRule.onclick = function(){
+    var find = ($("find")||{}).value || "";
+    if(!find.trim()) return toast("查找内容不能为空", true);
+    if($("body") && $("body").value.indexOf(find) < 0 && !$("rfield")){
+      if(!confirm("正文里找不到这段文字（可能已改过）。仍要保存吗？")) return;
+    }
+    post("/api/rule", { kind:d.kind, key:d.key, find:find,
+        replace:($("replace")||{}).value || "", note:($("note")||{}).value || "",
+        label:(d.item||{}).label || d.key })
+      .then(function(){ toast("规则已保存"); return refreshAll(); });
+  };
+  $("doc").querySelectorAll("[data-delrule]").forEach(function(b){
+    b.onclick = function(){
+      post("/api/rule/del", { idx: +b.dataset.delrule })
+        .then(function(){ toast("已删除规则"); return refreshAll(); });
+    };
+  });
+  $("doc").querySelectorAll("[data-save]").forEach(function(b){
+    b.onclick = function(){
+      var f = b.dataset.save;
+      var ta = $("doc").querySelector("textarea[data-fld='" + f + "']");
+      var raw = ta.value;
+      var v = raw;
+      if(b.dataset.obj === "1"){
+        try { v = JSON.parse(raw); }
+        catch(e){ return toast("JSON 格式有误：" + e.message, true); }
+      }
+      post("/api/patch", { kind:d.kind, key:d.key, field:f, value:v,
+          label:(d.item||{}).label || d.key })
+        .then(function(){ toast("字段 " + f + " 已保存"); return refreshAll(); });
+    };
+  });
+  $("doc").querySelectorAll("[data-revert]").forEach(function(b){
+    b.onclick = function(){
+      var f = b.dataset.revert;
+      api("/api/changes").then(function(c){
+        var hit = c.patches.filter(function(p){
+          return p.kind === d.kind && p.key === d.key && p.field === f; })[0];
+        if(!hit) return toast("找不到修改记录", true);
+        return post("/api/patch/del", { idx: hit.idx })
+          .then(function(){ toast("已还原 " + f); return refreshAll(); });
+      });
+    };
+  });
+}
+
+/* ---------------- 变更面板 ---------------- */
+function loadChanges(){
+  return api("/api/changes").then(function(c){
+    $("chgN").textContent = "(" + (c.rules.length + c.patches.length + c.hide.length) + ")";
+    var rows = [];
+    c.hide.forEach(function(h){
+      rows.push(row(h.kind, "下架", "<b>" + esc(h.label || h.key) + "</b>", h.idx, "hide"));
+    });
+    c.patches.forEach(function(p){
+      rows.push(row(p.kind, "字段 " + esc(p.field) + " → ",
+        "<b>" + esc(p.label || p.key) + "</b><br>" + esc(trim(p.value, 200)), p.idx, "patch"));
+    });
+    c.rules.forEach(function(r){
+      rows.push(row(r.kind, "替换",
+        "<b>" + esc(r.label || r.key) + "</b><br><code>" + esc(trim(r.find, 120)) +
+        "</code> → <code>" + esc(trim(r.replace, 120) || "（删除）") + "</code>" +
+        (r.note ? "<br><span class='kind'>" + esc(r.note) + "</span>" : ""), r.idx, "rule"));
+    });
+    $("paneChg").innerHTML = rows.length ? rows.join("")
+      : "<div class='empty'>还没有人工修改。在右侧编辑后会自动记录在此。</div>";
+    $("paneChg").querySelectorAll("[data-del]").forEach(function(b){
+      b.onclick = function(){
+        var map = { rule:"/api/rule/del", patch:"/api/patch/del", hide:"/api/hide/del" };
+        post(map[b.dataset.t], { idx: +b.dataset.del })
+          .then(function(){ toast("已删除该条修改"); return refreshAll(); });
+      };
+    });
+    return c;
+  });
+}
+function row(kind, what, body, idx, t){
+  return "<div class='chg'><span class='kind'>" + esc(kind) + "</span>" +
+    "<div class='body'>" + what + " " + body + "</div>" +
+    "<button class='mini' data-del='" + idx + "' data-t='" + t + "'>删除</button></div>";
+}
+function trim(v, n){
+  var s = (v === null || v === undefined) ? "" : (typeof v === "string" ? v : JSON.stringify(v));
+  return s.length > n ? s.slice(0, n) + " …" : s;
+}
+
+/* ---------------- 抽屉 ---------------- */
+$("drawer").querySelectorAll(".dtabs button[data-p]").forEach(function(b){
+  b.onclick = function(){
+    $("drawer").querySelectorAll(".dtabs button[data-p]").forEach(function(x){
+      x.className = "";
+    });
+    b.className = "on";
+    $("paneChg").style.display = b.dataset.p === "chg" ? "" : "none";
+    $("paneLog").style.display  = b.dataset.p === "log" ? "" : "none";
+    $("drawer").classList.add("open");
+    $("btnToggleDrawer").textContent = "收起";
+  };
+});
+$("btnToggleDrawer").onclick = function(){
+  var o = $("drawer").classList.toggle("open");
+  $("btnToggleDrawer").textContent = o ? "收起" : "展开";
+};
+
+/* ---------------- 构建 / 发布 ---------------- */
+function startBuild(mode){
+  if(!confirm(mode === "full"
+      ? "全量重建会依次重跑条目库 → 语料 → 原文库 → 法条 → 审计 → 更新 → 索引 → 导航，耗时较长。继续？"
+      : "快速重建会重跑原文库 / 法条 / 审计 / 索引 / 导航页脚（不动条目库与语料）。继续？"))
+    return;
+  openLog();
+  post("/api/build", { mode: mode }).then(function(r){
+    if(!r.started) return toast("已有任务在运行", true);
+    S.logAt = 0; $("log").textContent = "";
+    startPoll();
+  });
+}
+function startPush(){
+  if(!confirm("发布上线会把当前工作区内容提交并通过 GitHub API 推送，然后核对远端 tree。继续？"))
+    return;
+  openLog();
+  post("/api/push", {}).then(function(r){
+    if(!r.started) return toast("已有任务在运行", true);
+    S.logAt = 0; $("log").textContent = "";
+    startPoll();
+  });
+}
+function openLog(){
+  $("drawer").classList.add("open");
+  $("btnToggleDrawer").textContent = "收起";
+  $("drawer").querySelectorAll(".dtabs button[data-p]").forEach(function(x){
+    x.className = x.dataset.p === "log" ? "on" : "";
+  });
+  $("paneChg").style.display = "none";
+  $("paneLog").style.display = "";
+}
+function startPoll(){
+  if(S.polling) return;
+  S.polling = true;
+  (function tick(){
+    api("/api/build/status?since=" + S.logAt).then(function(d){
+      if(d.lines && d.lines.length){
+        S.logAt = d.total;
+        var pre = $("log");
+        d.lines.forEach(function(l){
+          var s = document.createElement("span");
+          s.className = /^✗|失败|异常|!/.test(l) ? "bad" : (/^✓/.test(l) ? "good" : "");
+          s.textContent = l + "\n";
+          pre.appendChild(s);
+        });
+        pre.scrollTop = pre.scrollHeight;
+      }
+      if(d.running){ setTimeout(tick, 900); }
+      else{
+        S.polling = false;
+        loadState(); loadChanges();
+        toast(d.ok === false ? "任务结束，但有失败项，请看日志" : "任务完成", d.ok === false);
+      }
+    }).catch(function(){ S.polling = false; });
+  })();
+}
+$("btnQuick").onclick = function(){ startBuild("quick"); };
+$("btnFull").onclick  = function(){ startBuild("full"); };
+$("btnPush").onclick  = startPush;
+
+/* ---------------- 启动 ---------------- */
+function refreshAll(){
+  var sc = $("list").scrollTop;
+  return loadState().then(function(){ return loadChanges(); })
+    .then(function(){ return loadList(); })
+    .then(function(){
+      $("list").scrollTop = sc;
+      return S.key ? openDoc() : null;
+    });
+}
+(function boot(){
+  var q = new URLSearchParams(location.search);
+  var k = q.get("kind"), key = q.get("key");
+  if(k && KIND_NAME[k]) S.kind = k;
+  if(key) S.key = key;
+  loadState().then(function(){
+    renderTabs();
+    return loadList();
+  }).then(function(){
+    return loadChanges();
+  }).then(function(){
+    if(S.key) return openDoc();
+  });
+})();
+</script>
+</body>
+</html>

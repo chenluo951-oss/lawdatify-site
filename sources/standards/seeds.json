@@ -1,104 +1,110 @@
 {
-  "_meta": {
-    "desc": "法规/标准原文抓取种子清单 = 人工校验过的「必备法规官方正文档」清单。url 必须是发布机构官网的具体正文页（非首页），新增前用 curl 实测 200 且正文含「第X条」。harvest.py 与 fetch_standards.py 共用。",
-    "updated": "2026-09-11"
+ "_meta": {
+  "desc": "法规/标准原文抓取种子清单 = 人工校验过的「必备法规官方正文档」清单。url 必须是发布机构官网的具体正文页（非首页），新增前用 curl 实测 200 且正文含「第X条」。harvest.py 与 fetch_standards.py 共用。",
+  "updated": "2026-09-11"
+ },
+ "seeds": [
+  {
+   "ref": "广告法",
+   "title": "中华人民共和国广告法",
+   "cat": "法律",
+   "url": "https://www.samr.gov.cn/zt/ndzt/2019n/bjspjsqjxcjwljxyjsckpxc/zcfg/art/2023/art_f383fbf8c106420b8951ba8d9508d32d.html"
   },
-  "seeds": [
-    {
-      "ref": "广告法",
-      "title": "中华人民共和国广告法",
-      "cat": "法律",
-      "url": "https://www.samr.gov.cn/zt/ndzt/2019n/bjspjsqjxcjwljxyjsckpxc/zcfg/art/2023/art_f383fbf8c106420b8951ba8d9508d32d.html"
-    },
-    {
-      "ref": "互联网广告管理办法",
-      "title": "互联网广告管理办法",
-      "cat": "部门规章",
-      "url": "https://www.gov.cn/gongbao/2023/issue_10506/202306/content_6885261.html"
-    },
-    {
-      "ref": "明码标价和禁止价格欺诈规定",
-      "title": "明码标价和禁止价格欺诈规定",
-      "cat": "部门规章",
-      "url": "https://www.samr.gov.cn/zw/zfxxgk/fdzdgknr/fgs/art/2023/art_9a1f82a007964950a1a0f6c056f2fedf.html"
-    },
-    {
-      "ref": "生成式人工智能服务管理暂行办法",
-      "title": "生成式人工智能服务管理暂行办法",
-      "cat": "部门规章",
-      "url": "https://www.cac.gov.cn/2023-07/13/c_1690898327029107.htm"
-    },
-    {
-      "ref": "人工智能生成合成内容标识办法",
-      "title": "人工智能生成合成内容标识办法",
-      "cat": "部门规章",
-      "url": "https://www.cac.gov.cn/2025-03/14/c_1743654684782215.htm"
-    },
-    {
-      "ref": "个人信息保护法",
-      "title": "中华人民共和国个人信息保护法",
-      "cat": "法律",
-      "url": "https://www.cac.gov.cn/2021-08/20/c_1631050028355286.htm"
-    },
-    {
-      "ref": "食品标识监督管理办法",
-      "title": "食品标识监督管理办法（国家市场监督管理总局令第100号）",
-      "cat": "部门规章",
-      "url": "https://www.gov.cn/gongbao/2025/issue_12006/202504/content_7021456.html"
-    },
-    {
-      "ref": "数据安全法",
-      "title": "中华人民共和国数据安全法",
-      "cat": "法律",
-      "url": "https://www.cac.gov.cn/2021-06/11/c_1624994566919140.htm"
-    },
-    {
-      "ref": "网络安全法",
-      "title": "中华人民共和国网络安全法",
-      "cat": "法律",
-      "url": "https://www.cac.gov.cn/2016-11/07/c_1119867116.htm"
-    },
-    {
-      "ref": "电子商务法",
-      "title": "中华人民共和国电子商务法",
-      "cat": "法律",
-      "url": "http://www.npc.gov.cn/zgrdw//npc////////lfzt/rlyw/2018-08/31/content_2060827.htm"
-    },
-    {
-      "ref": "消费者权益保护法",
-      "title": "中华人民共和国消费者权益保护法",
-      "cat": "法律",
-      "url": "http://www.npc.gov.cn/zgrdw//npc///lfzt/xfzqybhfxza/2013-04/19/content_1792348.htm"
-    },
-    {
-      "ref": "算法推荐管理规定",
-      "title": "互联网信息服务算法推荐管理规定",
-      "cat": "部门规章",
-      "url": "https://www.cac.gov.cn/2022-01/04/c_1642894606364259.htm"
-    },
-    {
-      "ref": "深度合成管理规定",
-      "title": "互联网信息服务深度合成管理规定",
-      "cat": "部门规章",
-      "url": "https://www.cac.gov.cn/2022-12/11/c_1672221949354811.htm"
-    },
-    {
-      "ref": "网络安全审查办法",
-      "title": "网络安全审查办法",
-      "cat": "部门规章",
-      "url": "https://www.cac.gov.cn/2022-01/04/c_1642894602182845.htm"
-    },
-    {
-      "ref": "数据出境安全评估办法",
-      "title": "数据出境安全评估办法",
-      "cat": "部门规章",
-      "url": "https://www.cac.gov.cn/2022-07/07/c_1658811536396503.htm"
-    },
-    {
-      "ref": "促进和规范数据跨境流动规定",
-      "title": "促进和规范数据跨境流动规定",
-      "cat": "部门规章",
-      "url": "https://www.cac.gov.cn/2024-03/22/c_1712776611775634.htm"
-    }
-  ]
+  {
+   "ref": "互联网广告管理办法",
+   "title": "互联网广告管理办法",
+   "cat": "部门规章",
+   "url": "https://www.gov.cn/gongbao/2023/issue_10506/202306/content_6885261.html"
+  },
+  {
+   "ref": "明码标价和禁止价格欺诈规定",
+   "title": "明码标价和禁止价格欺诈规定",
+   "cat": "部门规章",
+   "url": "https://www.samr.gov.cn/zw/zfxxgk/fdzdgknr/fgs/art/2023/art_9a1f82a007964950a1a0f6c056f2fedf.html"
+  },
+  {
+   "ref": "生成式人工智能服务管理暂行办法",
+   "title": "生成式人工智能服务管理暂行办法",
+   "cat": "部门规章",
+   "url": "https://www.cac.gov.cn/2023-07/13/c_1690898327029107.htm"
+  },
+  {
+   "ref": "人工智能生成合成内容标识办法",
+   "title": "人工智能生成合成内容标识办法",
+   "cat": "部门规章",
+   "url": "https://www.cac.gov.cn/2025-03/14/c_1743654684782215.htm"
+  },
+  {
+   "ref": "个人信息保护法",
+   "title": "中华人民共和国个人信息保护法",
+   "cat": "法律",
+   "url": "https://www.cac.gov.cn/2021-08/20/c_1631050028355286.htm"
+  },
+  {
+   "ref": "食品标识监督管理办法",
+   "title": "食品标识监督管理办法（国家市场监督管理总局令第100号）",
+   "cat": "部门规章",
+   "url": "https://www.gov.cn/gongbao/2025/issue_12006/202504/content_7021456.html"
+  },
+  {
+   "ref": "数据安全法",
+   "title": "中华人民共和国数据安全法",
+   "cat": "法律",
+   "url": "https://www.cac.gov.cn/2021-06/11/c_1624994566919140.htm"
+  },
+  {
+   "ref": "网络安全法",
+   "title": "中华人民共和国网络安全法",
+   "cat": "法律",
+   "url": "https://www.cac.gov.cn/2016-11/07/c_1119867116.htm"
+  },
+  {
+   "ref": "电子商务法",
+   "title": "中华人民共和国电子商务法",
+   "cat": "法律",
+   "url": "http://www.npc.gov.cn/zgrdw//npc////////lfzt/rlyw/2018-08/31/content_2060827.htm"
+  },
+  {
+   "ref": "消费者权益保护法",
+   "title": "中华人民共和国消费者权益保护法",
+   "cat": "法律",
+   "url": "http://www.npc.gov.cn/zgrdw//npc///lfzt/xfzqybhfxza/2013-04/19/content_1792348.htm"
+  },
+  {
+   "ref": "算法推荐管理规定",
+   "title": "互联网信息服务算法推荐管理规定",
+   "cat": "部门规章",
+   "url": "https://www.cac.gov.cn/2022-01/04/c_1642894606364259.htm"
+  },
+  {
+   "ref": "深度合成管理规定",
+   "title": "互联网信息服务深度合成管理规定",
+   "cat": "部门规章",
+   "url": "https://www.cac.gov.cn/2022-12/11/c_1672221949354811.htm"
+  },
+  {
+   "ref": "网络安全审查办法",
+   "title": "网络安全审查办法",
+   "cat": "部门规章",
+   "url": "https://www.cac.gov.cn/2022-01/04/c_1642894602182845.htm"
+  },
+  {
+   "ref": "数据出境安全评估办法",
+   "title": "数据出境安全评估办法",
+   "cat": "部门规章",
+   "url": "https://www.cac.gov.cn/2022-07/07/c_1658811536396503.htm"
+  },
+  {
+   "ref": "促进和规范数据跨境流动规定",
+   "title": "促进和规范数据跨境流动规定",
+   "cat": "部门规章",
+   "url": "https://www.cac.gov.cn/2024-03/22/c_1712776611775634.htm"
+  },
+  {
+   "ref": "反不正当竞争法",
+   "title": "中华人民共和国反不正当竞争法",
+   "cat": "法律",
+   "url": "http://www.npc.gov.cn/c2/c30834/202506/t20250627_446247.html"
+  }
+ ]
 }

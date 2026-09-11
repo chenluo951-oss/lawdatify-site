@@ -91,6 +91,43 @@ def text_id_count():
     return len(_TID)
 
 
+def std_online_count():
+    """站内可直接阅读的标准正文部数（build_std_texts 产出的 std_index.json）。"""
+    try:
+        d = json.load(open(os.path.join(HERE, "kb", "texts", "std_index.json"),
+                           encoding="utf-8"))
+        return (d or {}).get("_meta", {}).get("count", 0)
+    except Exception:
+        return 0
+
+
+def law_online_count():
+    """站内可直接阅读的法规部数（阅读器 index.json 的实际条目数）。
+
+    与 text_ids.json 的差值来自「有原文映射但没过正文质量闸」的少数条目，
+    以阅读器实际能打开的部数为准，避免与原文库页面上的数字对不上。
+    """
+    try:
+        d = json.load(open(os.path.join(HERE, "kb", "texts", "index.json"),
+                           encoding="utf-8"))
+        m = (d or {}).get("_meta", {})
+        return m.get("laws") or sum(1 for x in d.get("items", [])
+                                    if x.get("kind") == "law")
+    except Exception:
+        return 0
+
+
+def hot_counts():
+    """高频引用法条规模：(法条数, 案例数)。"""
+    try:
+        d = json.load(open(os.path.join(HERE, "sources", "standards", "hot_articles.json"),
+                           encoding="utf-8"))
+    except Exception:
+        return 0, 0
+    items = d.get("items", [])
+    return len(items), sum(len(x.get("cases", [])) for x in items)
+
+
 def online_reader_url(it):
     """标准类：openstd 详情深链 → 官方「在线预览」阅读器深链（图片式全文，供读者自行查阅）。"""
     m = re.search(r"[?&]hcno=([A-Fa-f0-9]{32})", it.get("url") or "")
@@ -244,7 +281,9 @@ def build_kb_index(items, duties, drafts, soon, stat_html="", board=""):
         soon_html = f'<div class="lb-rows">{srows}</div>'
     else:
         soon_html = '<p class="lb-empty">暂无即将实施条目。</p>'
-    n_online = text_id_count()
+    n_online = law_online_count()
+    n_std_online = std_online_count()
+    n_hot, n_case = hot_counts()
 
     # 义务清单统计（重构后为 大类 → 场景 → 义务 三级）
     cats = duties.get("categories", []) if isinstance(duties, dict) else []
@@ -273,10 +312,22 @@ def build_kb_index(items, duties, drafts, soon, stat_html="", board=""):
       <span class="more">查看义务清单 →</span>
     </a>
     <a class="dcard lb-entry" href="texts.html" style="--dc:#7c3aed">
-      <b>📖 法规原文</b>
-      <span>法律、行政法规、部门规章与规范性文件的官方正文，{n_online} 部可在站内直接阅读、复制与下载 TXT；
-      标准正文受著作权保护，由条目页给出发布机构的官方在线阅读入口。</span>
-      <span class="more">进入法规原文 →</span>
+      <b>📖 法规与标准原文</b>
+      <span>法律、行政法规、部门规章与规范性文件的官方正文 {n_online} 部，加上本人存档的国家 / 行业 / 团体标准正文
+      {n_std_online} 部，均可在站内直接阅读、复制与下载；法规按公文版式排版，支持条文定位与一键跳转。</span>
+      <span class="more">进入原文库 →</span>
+    </a>
+    <a class="dcard lb-entry" href="citations.html" style="--dc:#b91c1c">
+      <b>⚖️ 高频引用法条</b>
+      <span>{n_hot} 条被监管处罚与司法裁判高频引用的条款，逐条给出条文摘录、合规场景、处罚标准、法律责任与正面示例，
+      并附 {n_case} 个真实监管 / 处罚 / 司法案例（全部指向发布机构官网具体页面）。可按合规领域或引用次数排序。</span>
+      <span class="more">查看高频法条 →</span>
+    </a>
+    <a class="dcard lb-entry" href="audit.html" style="--dc:#0f766e">
+      <b>🗂️ 合规审计</b>
+      <span>从义务清单勾选审计范围（{n_cat} 大类 / {n_scene} 场景 / {n_duty} 项义务），生成审计任务后逐项记录进度、
+      审计素材、审计结论与整改安排，完成后一键输出审计报告与整改任务清单（可打印 / 导出 HTML / JSON）。</span>
+      <span class="more">开始审计 →</span>
     </a>
     <a class="dcard lb-entry" href="standards.html#pane-draft" style="--dc:#b45309">
       <b>📌 立法草案跟踪</b>
@@ -319,10 +370,10 @@ def build_kb_index(items, duties, drafts, soon, stat_html="", board=""):
 """
     out = page(
         "合规知识库",
-        "合规标准知识库、按主题拆解的合规义务清单与在途立法草案跟踪——长效合规知识资产。",
+        "法规与标准原文、按主题拆解的合规义务清单、高频引用法条与合规审计工具——长效合规知识资产。",
         "合规知识库",
         "合规知识库",
-        "长效知识资产：法规与标准原文、按主题拆解的合规义务、在途立法草案。",
+        "长效知识资产：法规与标准原文、按主题拆解的合规义务、高频引用法条与监管案例、可落地的合规审计工具。",
         body,
     )
     dst = os.path.join(HERE, "kb", "index.html")
@@ -651,6 +702,9 @@ def main():
     n_std = sum(1 for x in items if x.get("kind") == "标准")
     n_law = len(items) - n_std
     n_local = sum(1 for x in items if x.get("local"))
+    n_online = law_online_count()
+    n_std_online = std_online_count()
+    n_hot, _n_case = hot_counts()
     topics = data["meta"]["topics"]
 
     # 草案跟踪
@@ -667,7 +721,9 @@ def main():
         ("标准", n_std),
         ("法律法规", n_law),
         ("本机原文", n_local),
-        ("站内可读原文", text_id_count()),
+        ("站内法规原文", n_online),
+        ("站内标准正文", n_std_online),
+        ("高频引用法条", n_hot),
         ("在途草案", f"{len(drafts)} 项"),
         ("合规义务", f"{n_duty} 项"),
     ]]

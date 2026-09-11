@@ -39,3 +39,6 @@ sources/standards/harvest_worklist.json
 
 # 国标在线预览的整页截图与 OCR 中间产物（标准正文受版权保护，只留本机 + 私有库）
 sources/scans/
+
+# 标准 PDF 文字层抽取缓存（可随时重抽，不入仓）
+sources/.cache/

@@ -8938,5 +8938,19 @@
   "file": "sources/scans/GB_T_41817-2022/img/GB_T_41817-2022.txt",
   "note": "国标在线阅读器整页截图 + 三轮 OCR 比对定稿（21 页，29 处待复核）",
   "corpus_id": "64d7ff1fff3a"
+ },
+ "中华人民共和国反不正当竞争法": {
+  "code": "法律",
+  "level": "法律",
+  "source": "npc.gov.cn",
+  "official_url": "http://www.npc.gov.cn/c2/c30834/202506/t20250627_446247.html",
+  "http_kind": "html",
+  "chars": 5937,
+  "sha256": "cbec1ac8e25e167c",
+  "corpus_id": "37ec7245517f",
+  "file": "中华人民共和国反不正当竞争法.txt",
+  "status": "full",
+  "fetched": "2026-09-11",
+  "note": "2025 年修订版，npc.gov.cn 正文页"
  }
 }

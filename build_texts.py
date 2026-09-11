@@ -25,6 +25,7 @@ import os, re, json, sys, html, hashlib, collections, unicodedata
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 import harvest as H
+import edits as E
 
 LIB = H.LIB
 OUT = os.path.join(HERE, "kb", "texts")
@@ -71,7 +72,7 @@ IDX_HEAD = re.compile(r"目\s*录|目\s*次|\.{5,}|…{2,}|节选|汇编")
 ART_IN_HEAD = re.compile(r"第[一二三四五六七八九十百零〇\d]+条")
 # 转载页/栏目页的抬头（「XX人大常委会欢迎您」这类），正文再长也不是权威原文
 PORTAL_HEAD = re.compile(r"欢迎您|欢迎访问|当前位置[:：]|您现在的位置|网站首页|无障碍|"
-                         r"主办[:：]|版权所有|回到顶部|政务公开|政务服务")
+                         r"主办[:：]|版权所有|回到顶部|政务公开|政务服务|门户网站|中国人大网")
 
 
 def looks_compilation(t):
@@ -129,6 +130,13 @@ NAV_BLOB = re.compile(
 META_INLINE = re.compile(r"(发布时间|发布日期|信息来源|来源|浏览次数|字体|字号|"
                          r"扫一扫在手机打开当前页|分享到)\s*[:：][^\s，。；]{0,32}")
 
+# 政府门户 / 人大网转载页的站点名与信息公开元数据（「XX法_中国人大网」「[发文机构] …」）
+SITE_NAME = re.compile(r"门户网站|中国人大网|中国政府网|首都之窗|人民政府网站|政务网")
+META_BRACKET = re.compile(r"^\s*\[(?:发文字号|发文机构|发布日期|实施日期|生效日期|有效性|"
+                          r"废止日期|成文日期|主题分类|信息索引|信息名称)\][^\n]*$")
+BREADCRUMB = re.compile(r"^\s*[^\n]{0,24}(?:\s*>\s*[^\n>]{1,20}){2,}\s*$")
+EDITOR_LINE = re.compile(r"^\s*(?:编\s*辑|责\s*编|来\s*源|责任编辑)\s*[:：][^\n]*$|^相关文章\s*$")
+
 # PDF 抽取的页眉页码：－3－ / -3- / 第 3 页 / 3/120
 PAGENO = re.compile(r"^\s*(?:[－\-—–]\s*\d{1,3}\s*[－\-—–]|第\s*\d{1,3}\s*页|\d{1,3}\s*/\s*\d{1,3})\s*$")
 # 自编目录/清单残留的行首序号：6. 《XX法》
@@ -175,6 +183,10 @@ def clean(text):
             continue
         if PAGENO.match(ln):                    # PDF 抽出的页眉页码：－3－、第 3 页
             continue
+        if SITE_NAME.search(ln) and len(ln) < 120:
+            continue                            # 门户/人大网转载页的站点名抬头
+        if META_BRACKET.match(ln) or BREADCRUMB.match(ln) or EDITOR_LINE.match(ln):
+            continue                            # 信息公开元数据、面包屑、编者署名
         if re.match(r"^[\s\d第号发文\-—–〔〕\[\]（）()【】]+$", ln) and len(ln) <= 24:
             continue                            # 只由文号/序号组成的孤立行
         out.append(ln)
@@ -311,8 +323,9 @@ def main():
     print("条目库 %d 条（法定层级候选 %d）；候选正文 %d 份" % (len(items), len(laws), len(cand)))
 
     os.makedirs(OUT, exist_ok=True)
+    # 只清自己的产物：法规分片 p-NN.json + 索引；标准分片 s-NN.json 由 build_std_texts 负责
     for f in os.listdir(OUT):
-        if f.endswith(".json"):
+        if f == "index.json" or re.fullmatch(r"p-\d+\.json", f):
             os.remove(os.path.join(OUT, f))
 
     kept, idmap, dropped = [], {}, []
@@ -353,6 +366,8 @@ def main():
             dropped.append((it.get("name"), "无正文"))
             continue
         t = picked[1]
+        # 人工修改覆盖层：按法规名套用「查找 → 替换」规则（编辑器写入）
+        t = E.apply_rules("law", it.get("name") or "", t)
         key = nkey((it.get("code") or "") + it.get("name", ""))
         tid = hashlib.md5(key.encode()).hexdigest()[:10]
         rec = {"id": tid, "code": it.get("code") or "", "name": it.get("name") or "",
@@ -392,10 +407,22 @@ def main():
         json.dump(d, open(os.path.join(OUT, "p-%02d.json" % p), "w", encoding="utf-8"),
                   ensure_ascii=False)
 
-    index = [{k: v for k, v in x.items()} for x in kept]
-    json.dump({"_meta": {"count": len(index), "parts": len(parts), "per_part": PER_PART,
-                         "note": "法规/规章/规范性文件官方正文（不受著作权法保护）；"
-                                 "标准正文不在此库，见条目页的官方在线阅读入口。",
+    for x in kept:
+        x["kind"] = "law"
+
+    # 标准正文（本人存档：国标 OCR 定稿 / 行标与团标官方公开 PDF 文字层）
+    std_items, std_parts = [], 0
+    try:
+        import build_std_texts as BS
+        std_items, std_parts = BS.build(quiet=True)
+    except Exception as e:                                    # 不阻断法规原文库
+        print("标准原文库跳过：%s" % e)
+
+    index = [{k: v for k, v in x.items()} for x in kept] + std_items
+    json.dump({"_meta": {"count": len(index), "laws": len(kept), "stds": len(std_items),
+                         "parts": len(parts), "std_parts": std_parts,
+                         "note": "法规/规章/规范性文件官方正文，以及本人存档的标准正文"
+                                 "（国标 OCR 定稿 / 官方公开 PDF 文字层），仅供本机学习研究。",
                          "updated": __import__("datetime").date.today().isoformat()},
                "items": index},
               open(os.path.join(OUT, "index.json"), "w", encoding="utf-8"), ensure_ascii=False)
@@ -403,180 +430,504 @@ def main():
     H.save_json(MAP, idmap)
     total = sum(x["chars"] for x in index)
     size = sum(os.path.getsize(os.path.join(OUT, f)) for f in os.listdir(OUT))
-    write_page(len(index), total, len(parts))
-    print("原文库：%d 条 / %d 字 / %d 片 / 磁盘 %.1f MB（gzip 后更小）"
-          % (len(index), total, len(parts), size / 1024 / 1024))
+    write_page(len(kept), total, len(parts), len(std_items))
+    print("原文库：法规 %d 条 + 标准 %d 条 / 合计 %d 字 / 磁盘 %.1f MB（gzip 后更小）"
+          % (len(kept), len(std_items), total, size / 1024 / 1024))
     if dropped:
         print("未收录 %d 条，示例：%s"
               % (len(dropped), "；".join("%s(%s)" % (n[:18], r) for n, r in dropped[:5])))
 
 
 PAGE_CSS = """
-.rd{display:grid;grid-template-columns:320px 1fr;gap:28px;align-items:start}
-@media(max-width:900px){.rd{grid-template-columns:1fr}}
-.rd-side{position:sticky;top:76px;background:var(--surface,#fff);border:1px solid var(--line,#e6e8ec);
-  border-radius:14px;padding:14px;max-height:calc(100vh - 110px);display:flex;flex-direction:column}
-.rd-box{width:100%;box-sizing:border-box;padding:9px 12px;border:1px solid var(--line,#e6e8ec);
-  border-radius:9px;font-size:14px;margin-bottom:10px;background:transparent;color:inherit}
-.rd-tabs{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
-.rd-tab{font-size:12.5px;padding:4px 10px;border-radius:999px;border:1px solid var(--line,#e6e8ec);
-  cursor:pointer;color:var(--muted,#6b7280);background:transparent;white-space:nowrap}
-.rd-tab.on{background:var(--ink,#111827);color:#fff;border-color:var(--ink,#111827)}
+/* ================= 原文阅读器：公文版式 + 标准版式 ================= */
+.rd{display:grid;grid-template-columns:332px 1fr;gap:26px;align-items:start}
+@media(max-width:960px){.rd{grid-template-columns:1fr}}
+.rd-side{position:sticky;top:76px;background:#fff;border:1px solid var(--line);
+  border-radius:14px;padding:14px;max-height:calc(100vh - 108px);display:flex;flex-direction:column}
+.rd-box{width:100%;box-sizing:border-box;padding:9px 12px;border:1px solid var(--line);
+  border-radius:9px;font-size:14px;margin-bottom:10px;background:#fff;color:var(--ink);font-family:var(--sans)}
+.rd-tabs{display:flex;gap:6px;margin-bottom:9px}
+.rd-tab{flex:1;font-size:13px;padding:7px 0;border-radius:9px;border:1px solid var(--line);
+  background:#fff;color:var(--ink-2);cursor:pointer;font-family:var(--sans);font-weight:600}
+.rd-tab.on{background:var(--brand);border-color:var(--brand);color:#fff}
+.rd-chips{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:9px}
+.rd-chip{font-size:12px;padding:3px 9px;border-radius:999px;border:1px solid var(--line);
+  background:#fff;color:var(--muted);cursor:pointer;white-space:nowrap;font-family:var(--sans)}
+.rd-chip.on{background:var(--ink);border-color:var(--ink);color:#fff}
+.rd-count{font-size:12.5px;color:var(--faint);margin:0 0 8px}
 .rd-list{overflow:auto;flex:1;margin:0;padding:0;list-style:none}
 .rd-list li{margin:0}
 .rd-list button{display:block;width:100%;text-align:left;background:none;border:0;cursor:pointer;
-  padding:8px 10px;border-radius:8px;font-size:13.5px;line-height:1.5;color:inherit;font-family:inherit}
+  padding:8px 10px;border-radius:8px;font-size:13.5px;line-height:1.5;color:inherit;font-family:var(--sans)}
 .rd-list button:hover{background:rgba(127,127,127,.10)}
-.rd-list button.on{background:rgba(127,127,127,.16);font-weight:600}
-.rd-list .lv{font-size:11.5px;color:var(--muted,#6b7280);margin-left:6px}
-.rd-main{min-height:420px}
-.rd-doc{background:var(--surface,#fff);border:1px solid var(--line,#e6e8ec);border-radius:14px;padding:26px 30px}
-.rd-h1{font-size:24px;line-height:1.4;margin:0 0 10px}
-.rd-meta{font-size:13px;color:var(--muted,#6b7280);line-height:1.9;margin-bottom:14px}
-.rd-meta a{color:inherit;text-decoration:underline}
-.rd-act{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:18px;padding-bottom:16px;
-  border-bottom:1px solid var(--line,#e6e8ec)}
-.rd-btn{font-size:13px;padding:6px 14px;border-radius:8px;border:1px solid var(--line,#e6e8ec);
-  background:transparent;color:inherit;cursor:pointer;font-family:inherit}
-.rd-btn:hover{border-color:currentColor}
-.rd-body{font-size:16px;line-height:2.0;letter-spacing:.2px}
-.rd-body p{margin:0 0 14px;text-indent:2em}
-.rd-body p.h{text-indent:0;font-weight:700}
-.rd-empty{color:var(--muted,#6b7280);font-size:14px;padding:40px 6px;line-height:1.9}
-.rd-note{font-size:13px;color:var(--muted,#6b7280);line-height:1.9;margin:0 0 20px}
-.rd-splash{padding:52px 6px;color:var(--muted,#6b7280);font-size:14.5px;line-height:2}
+.rd-list button.on{background:#e8f0fa;box-shadow:inset 2px 0 0 var(--brand)}
+.rd-list .lv{font-size:11.5px;color:var(--faint);margin-left:6px;white-space:nowrap}
+.rd-main{min-height:460px}
+
+/* 工具条 */
+.rd-bar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;background:#fff;
+  border:1px solid var(--line);border-radius:11px;padding:9px 12px;margin-bottom:16px}
+.rd-seg{display:flex;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.rd-seg button{border:0;background:#fff;color:var(--ink-2);font-size:13px;padding:6px 12px;
+  cursor:pointer;font-family:var(--sans);border-right:1px solid var(--line)}
+.rd-seg button:last-child{border-right:0}
+.rd-seg button.on{background:var(--ink);color:#fff}
+.rd-btn{font-size:13px;padding:6px 13px;border-radius:8px;border:1px solid var(--line);
+  background:#fff;color:var(--ink-2);cursor:pointer;font-family:var(--sans)}
+.rd-btn:hover{border-color:var(--brand);color:var(--brand)}
+.rd-sp{flex:1}
+.rd-hint{font-size:12px;color:var(--faint)}
+.rd-toc{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 16px}
+.rd-toc a{font-size:12.5px;padding:3px 10px;border-radius:999px;border:1px solid var(--line);
+  color:var(--ink-2);background:#fff}
+.rd-toc a:hover{border-color:var(--brand);color:var(--brand);text-decoration:none}
+
+/* 纸张 */
+.paper{background:#fff;border:1px solid var(--line);border-radius:6px;max-width:920px;margin:0 auto;
+  box-shadow:0 1px 2px rgba(16,24,40,.05),0 12px 34px rgba(16,24,40,.07);padding:52px 60px 64px}
+@media(max-width:640px){.paper{padding:28px 20px 36px}}
+
+/* 文末信息 */
+.rd-meta{font-size:13px;color:var(--muted);line-height:1.95;margin:34px 0 0;
+  padding-top:14px;border-top:1px solid var(--line-2)}
+.rd-meta a{color:var(--brand)}
+.rd-meta .k{color:var(--faint)}
+
+/* ------- 公文版式（法律 / 行政法规 / 规章 / 规范性文件）------- */
+.gw{font-family:"FangSong","仿宋_GB2312","STFangsong","Songti SC","SimSun",serif;
+  font-size:20.5px;line-height:1.82;color:#101418;letter-spacing:.2px;text-align:justify}
+.gw-title{font-family:"STZhongsong","方正小标宋简体","Songti SC","SimSun",serif;font-weight:700;
+  font-size:1.6em;line-height:1.55;text-align:center;letter-spacing:3px;margin:0 0 10px}
+.gw-sub{text-align:center;font-size:.82em;line-height:1.95;color:#3d444d;margin:4px 0 0;
+  font-family:"KaiTi","STKaiti","Kaiti SC",serif}
+.gw-org{text-align:center;font-size:.92em;color:#20262d;margin:18px 0 0;letter-spacing:1px}
+.gw-rule{border:0;border-top:2px solid #101418;margin:22px 0 30px}
+.gw-h1{font-family:"SimHei","Heiti SC","Microsoft YaHei",sans-serif;font-weight:700;
+  text-align:center;font-size:1.02em;letter-spacing:2px;margin:30px 0 16px;text-indent:0}
+.gw-h2{font-weight:700;text-align:center;font-size:1em;letter-spacing:1px;margin:24px 0 12px;text-indent:0}
+.gw-p{margin:0 0 .44em;text-indent:2em}
+.gw-p.noind{text-indent:0}
+.gw-n{font-weight:600}
+.gw-att{margin:18px 0 .3em;text-indent:0;font-weight:600}
+.gw-sign{text-align:right;text-indent:0;margin:26px 2em 0}
+.gw-caption{text-align:center;text-indent:0;font-weight:600;margin:18px 0 8px}
+.gw mark,.st mark,.cm mark{background:#fff2a8;padding:1px 2px;border-radius:3px}
+
+/* ------- 标准版式（国标 / 行标 / 团标）------- */
+.st{font-family:"Songti SC","宋体","SimSun",serif;font-size:16.5px;line-height:1.96;
+  color:#101418;text-align:justify}
+.st-title{font-family:"SimHei","Heiti SC","Microsoft YaHei",sans-serif;font-weight:700;
+  font-size:1.5em;line-height:1.5;text-align:center;margin:0 0 8px}
+.st-code{text-align:center;font-size:.95em;letter-spacing:1px;color:#3d444d;margin:0 0 4px}
+.st-rule{border:0;border-top:1px solid #c9d2dd;margin:18px 0 24px}
+.st-h1{font-weight:700;margin:26px 0 10px;text-indent:0}
+.st-h2{font-weight:700;margin:20px 0 8px;text-indent:0}
+.st-p{margin:0 0 .5em;text-indent:0}
+.st-caption{text-align:center;text-indent:0;font-weight:600;margin:16px 0 10px}
+
+/* ------- 舒适阅读版式（屏幕长读）------- */
+.cm{font-family:var(--sans);font-size:16px;line-height:2.05;color:var(--ink);letter-spacing:.2px}
+.cm-title{font-size:1.5em;font-weight:800;line-height:1.5;text-align:center;margin:0 0 10px}
+.cm-sub{text-align:center;font-size:.85em;color:var(--muted);margin:2px 0 0}
+.cm-rule{border:0;border-top:2px solid var(--line);margin:22px 0 26px}
+.cm-h1,.cm-h2{font-weight:800;text-align:center;margin:28px 0 14px;text-indent:0}
+.cm-p{margin:0 0 14px;text-indent:2em}
+.cm-p.noind{text-indent:0}
+.cm-n{font-weight:700}
+.cm-sign{text-align:right;text-indent:0;margin:24px 0 0;color:var(--ink-2)}
+.cm-caption{text-align:center;text-indent:0;font-weight:700;margin:18px 0 10px}
+
+.rd-empty{color:var(--faint);font-size:14px;padding:40px 6px;line-height:1.9}
+.rd-note{font-size:13px;color:var(--muted);line-height:1.9;margin:0 0 18px}
+.rd-splash{padding:56px 6px;color:var(--muted);font-size:14.5px;line-height:2.1}
+.rd-splash b{color:var(--ink)}
+
+@media print{
+  .topnav,.subnav,.mod-bound,footer,.rd-side,.rd-bar,.rd-toc,.pagehead,.rd-note,
+  #toTop{display:none !important}
+  body{background:#fff}
+  .wrap{max-width:100%;padding:0}
+  .paper{border:0;box-shadow:none;padding:0;max-width:100%}
+  .rd{display:block}
+  .gw{font-size:16pt;line-height:1.75}
+  .gw-title{font-size:22pt;letter-spacing:2px}
+  .gw-h1,.gw-h2{font-size:16pt}
+  .st{font-size:12pt;line-height:1.7}
+  .st-title{font-size:18pt}
+  .cm{font-size:12pt;line-height:1.7}
+  .cm-title{font-size:18pt}
+  .rd-meta{font-size:9pt;color:#555;border-top:1px solid #ccc}
+  @page{size:A4;margin:2.2cm 2cm}
+}
 """
 
 PAGE_JS = r"""
 (function(){
-  var IX=null, CUR=null, PARTS={}, LV='';
+  var IX=null, CUR=null, PARTS={}, KIND='', LV='', MODE='', HL='', SZ=0;
   var $=function(s){return document.querySelector(s)};
-  var esc=function(s){return (s||'').replace(/[&<>]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;'}[c]})};
-  function load(p){ if(PARTS[p]) return Promise.resolve(PARTS[p]);
-    return fetch('texts/p-'+String(p).padStart(2,'0')+'.json').then(function(r){return r.json()})
-      .then(function(d){PARTS[p]=d;return d}); }
-  function renderList(){
-    var q=($('#rd-q')||{}).value||''; q=q.trim();
-    var ul=$('#rd-list'); ul.innerHTML='';
-    var arr=IX.items.filter(function(x){
-      if(LV && x.level!==LV) return false;
-      if(q && x.name.indexOf(q)<0 && (x.code||'').indexOf(q)<0) return false;
-      return true; });
-    $('#rd-count').textContent=arr.length+' 条';
-    arr.forEach(function(x){
-      var li=document.createElement('li');
-      var b=document.createElement('button');
-      b.innerHTML=esc(x.name)+'<span class="lv">'+esc(x.level)+'</span>';
-      b.onclick=function(){ location.hash=x.id; };
-      if(CUR && CUR.id===x.id) b.className='on';
-      li.appendChild(b); ul.appendChild(li);
-    });
+  var esc=function(s){return (s||'').replace(/[&<>"]/g,function(c){
+    return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})};
+
+  var RE_ARTNO=/^第[一二三四五六七八九十百零〇\d]+条/;
+  var RE_PIAN=/^第[一二三四五六七八九十百零〇\d]+编/;
+  var RE_ZH=/^第[一二三四五六七八九十百零〇\d]+章/;
+  var RE_JIE=/^第[一二三四五六七八九十百零〇\d]+节/;
+  var RE_DATE=/^\d{4}年\d{1,2}月\d{1,2}日$/;
+  var RE_ATT=/^附件\s*\d*\s*[:：]?/;
+  var RE_CAP=/^(表|图)\s*[0-9A-Z一二三四五六七八九十]/;
+  var RE_SUB=/^[（(].{0,140}[）)]$/;
+  var RE_MULTI=/\s{2,}|\t/;
+
+  function partName(x){ return (x.kind==='std'?'s':'p')+'-'+String(x.part).padStart(2,'0'); }
+  function load(x){
+    var k=partName(x);
+    if(PARTS[k]) return Promise.resolve(PARTS[k]);
+    return fetch('texts/'+k+'.json').then(function(r){return r.json()})
+      .then(function(d){PARTS[k]=d;return d});
   }
-  function meta(x){
-    var m=[]; if(x.code) m.push(esc(x.code)); m.push(esc(x.level));
-    if(x.issuer) m.push(esc(x.issuer));
-    if(x.pub) m.push('发布 '+esc(x.pub));
-    if(x.impl) m.push('实施 '+esc(x.impl));
-    if(x.status) m.push(esc(x.status));
-    m.push(x.chars+' 字');
-    if(x.url) m.push('<a href="'+esc(x.url)+'" target="_blank" rel="noopener">官方原文 &#8599;</a>');
-    return m.join(' · ');
+
+  /* ---------- 结构识别 ---------- */
+  function blocks(t){
+    var out=[], ps=t.split(/\n{2,}/);
+    for(var i=0;i<ps.length;i++){
+      var raw=ps[i].replace(/^\n+|\n+$/g,'');
+      if(!raw) continue;
+      var lines=raw.split('\n').map(function(s){return s.trim()}).filter(Boolean);
+      var flat=lines.join('');
+      var type='p';
+      if(RE_PIAN.test(flat)) type='h1';
+      else if(RE_ZH.test(flat)) type='h1';
+      else if(RE_JIE.test(flat)) type='h2';
+      else if(RE_ARTNO.test(flat)) type='art';
+      else if(RE_DATE.test(flat)) type='sign';
+      else if(RE_ATT.test(flat)) type='att';
+      else if(RE_CAP.test(flat)&&flat.length<44) type='caption';
+      else if(lines.length>1&&RE_MULTI.test(raw)) type='table';
+      out.push({type:type,text:flat,lines:lines});
+    }
+    return out;
   }
-  function paragraphs(t){
-    return t.split(/\n{2,}/).map(function(p){
-      p=p.replace(/^\n+|\n+$/g,'');
-      if(!p) return '';
-      var flat=p.replace(/\n/g,'');
-      var cls='';
-      if(/^第[一二三四五六七八九十百零〇\d]+[条章节]/.test(flat)) cls=' class="h"';
-      return '<p'+cls+'>'+esc(flat)+'</p>';
-    }).join('');
+  function stdBlocks(t){
+    var out=[], ps=t.split(/\n{2,}/);
+    for(var i=0;i<ps.length;i++){
+      var raw=ps[i].replace(/^\n+|\n+$/g,'');
+      if(!raw) continue;
+      var lines=raw.split('\n').map(function(s){return s.trim()}).filter(Boolean);
+      var f=lines[0]||'', type='p';
+      if(/^附录\s*[A-Z]?\d*(\s+\S)?$/.test(f)||/^附录\s*[A-Z]?\d*\s+\S/.test(f)) type='h1';
+      else if(/^第[一二三四五六七八九十]+章\s*\S/.test(f)) type='h1';
+      else if(/^\d+\s+\S/.test(f)&&f.length<32) type='h1';
+      else if(/^\d+\.\d+(\.\d+)*\s+\S/.test(f)&&f.length<44) type='h2';
+      else if(RE_CAP.test(f)&&f.length<64) type='caption';
+      else if(lines.length>1&&RE_MULTI.test(raw)) type='table';
+      out.push({type:type,text:lines.join(' '),lines:lines});
+    }
+    return out;
   }
-  function open(id){
-    var x=IX.items.filter(function(y){return y.id===id})[0];
-    if(!x){ $('#rd-main').innerHTML='<div class="rd-splash">请从左侧目录选择要阅读的法规。</div>'; CUR=null; renderList(); return; }
-    CUR=x; renderList();
-    $('#rd-main').innerHTML='<div class="rd-doc"><div class="rd-empty">正在载入原文…</div></div>';
-    load(x.part).then(function(d){
+  function artNo(t){ var m=t.match(RE_ARTNO); return m?m[0]:''; }
+  function halo(txt,inner){
+    if(!HL||txt.indexOf(HL)<0) return inner;
+    return esc(txt).split(esc(HL)).join('<mark>'+esc(HL)+'</mark>');
+  }
+  function artHtml(t,cls){
+    if(HL&&t.indexOf(HL)>=0) return halo(t,'');
+    return esc(t).replace(RE_ARTNO,'<span class="'+cls+'">'+artNo(t)+'</span>');
+  }
+
+  /* ---------- 公文版式 ---------- */
+  function gongwen(x,t){
+    var bs=blocks(t), html='', title=x.name, subs=[], org='', i;
+    for(i=0;i<Math.min(bs.length,4);i++){
+      var tx=bs[i].text;
+      if(bs[i].type==='h1'||bs[i].type==='art') break;
+      if(RE_SUB.test(tx)&&tx.length<170){ subs.push(tx); bs[i].used=1; continue; }
+      if(/^中华人民共和国[^，。]{0,20}(主席令|国务院令|令)$/.test(tx)){ org=tx; bs[i].used=1; continue; }
+      if(i===0&&tx.replace(/\s/g,'').length<=x.name.replace(/\s/g,'').length+10
+         &&!RE_ARTNO.test(tx)){ title=tx; bs[i].used=1; }
+    }
+    html+='<div class="gw-title">'+esc(title)+'</div>';
+    if(subs.length) html+='<div class="gw-sub">'+subs.map(esc).join('<br>')+'</div>';
+    if(org) html+='<div class="gw-org">'+esc(org)+'</div>';
+    html+='<hr class="gw-rule">';
+    var chapters=[];
+    for(i=0;i<bs.length;i++){
+      var b=bs[i]; if(b.used) continue;
+      var tx2=b.text;
+      if(b.type==='h1'||b.type==='h2'){
+        var id='c'+(chapters.length); chapters.push(tx2);
+        html+='<p class="gw-'+(b.type==='h1'?'h1':'h2')+'" id="'+id+'">'+esc(tx2)+'</p>';
+      } else if(b.type==='art'){
+        html+='<p class="gw-p" data-art="'+esc(artNo(tx2))+'" id="'+esc(artNo(tx2))+'">'+artHtml(tx2,'gw-n')+'</p>';
+      } else if(b.type==='sign') html+='<p class="gw-sign">'+esc(tx2)+'</p>';
+      else if(b.type==='att') html+='<p class="gw-att">'+esc(tx2)+'</p>';
+      else if(b.type==='caption') html+='<p class="gw-caption">'+esc(tx2)+'</p>';
+      else if(b.type==='table') html+='<p class="gw-p noind">'+esc(b.lines.join('　'))+'</p>';
+      else html+='<p class="gw-p">'+halo(tx2,esc(tx2))+'</p>';
+    }
+    return {html:html,chapters:chapters};
+  }
+
+  /* ---------- 标准版式 ---------- */
+  function stdView(x,t){
+    var bs=stdBlocks(t), html='', chapters=[];
+    if(x.code) html+='<div class="st-code">'+esc(x.code)+'</div>';
+    html+='<div class="st-title">'+esc(x.name)+'</div>';
+    html+='<hr class="st-rule">';
+    for(var i=0;i<bs.length;i++){
+      var b=bs[i], tx=b.text;
+      if(b.type==='h1'||b.type==='h2'){
+        var id='c'+(chapters.length); chapters.push(tx);
+        html+='<p class="'+b.type+'" id="'+id+'">'+esc(tx)+'</p>';
+      } else if(b.type==='caption') html+='<p class="st-caption">'+esc(tx)+'</p>';
+      else if(b.type==='table') html+='<p class="st-p">'+esc(b.lines.join('　'))+'</p>';
+      else html+='<p class="st-p">'+halo(tx,esc(tx))+'</p>';
+    }
+    return {html:html,chapters:chapters};
+  }
+
+  /* ---------- 舒适阅读 ---------- */
+  function comfort(x,t){
+    var isStd=(x.kind==='std');
+    var bs=isStd?stdBlocks(t):blocks(t), html='', chapters=[];
+    html+='<div class="cm-title">'+esc(x.name)+'</div>';
+    if(x.code) html+='<div class="cm-sub">'+esc(x.code)+'</div>';
+    html+='<hr class="cm-rule">';
+    for(var i=0;i<bs.length;i++){
+      var b=bs[i], tx=b.text;
+      if(b.type==='h1'||b.type==='h2'){
+        var id='c'+(chapters.length); chapters.push(tx);
+        html+='<p class="cm-'+(b.type==='h1'?'h1':'h2')+'" id="'+id+'">'+esc(tx)+'</p>';
+      } else if(b.type==='art'){
+        html+='<p class="cm-p" data-art="'+esc(artNo(tx))+'" id="'+esc(artNo(tx))+'">'+artHtml(tx,'cm-n')+'</p>';
+      } else if(b.type==='sign') html+='<p class="cm-sign">'+esc(tx)+'</p>';
+      else if(b.type==='caption') html+='<p class="cm-caption">'+esc(tx)+'</p>';
+      else if(b.type==='table') html+='<p class="cm-p noind">'+esc(b.lines.join('　'))+'</p>';
+      else html+='<p class="cm-p">'+halo(tx,esc(tx))+'</p>';
+    }
+    return {html:html,chapters:chapters};
+  }
+
+  function baseSize(x,mode){ return mode==='cm'?16:(x.kind==='std'?16.5:20.5); }
+
+  function render(){
+    if(!CUR) return;
+    var x=CUR, isStd=(x.kind==='std');
+    if(!MODE) MODE=isStd?'std':'gw';
+    if(isStd&&MODE==='gw') MODE='std';
+    if(!isStd&&MODE==='std') MODE='gw';
+    $('#rd-main').innerHTML='<div class="paper"><div class="rd-empty">正在载入原文…</div></div>';
+    load(x).then(function(d){
       var t=d[x.id]||'';
-      $('#rd-main').innerHTML='<div class="rd-doc">'+
-        '<h1 class="rd-h1">'+esc(x.name)+'</h1>'+
-        '<div class="rd-meta">'+meta(x)+'</div>'+
-        '<div class="rd-act">'+
-          '<button class="rd-btn" id="rd-copy">复制全文</button>'+
-          '<button class="rd-btn" id="rd-dl">下载 TXT</button>'+
-          '<button class="rd-btn" id="rd-pr">打印 / 存为 PDF</button>'+
-        '</div><div class="rd-body">'+paragraphs(t)+'</div></div>';
-      document.title=x.name+' · 法规原文 · 合规无终点';
+      var r = MODE==='cm'?comfort(x,t) : (isStd?stdView(x,t):gongwen(x,t));
+      var cls = MODE==='cm'?'cm' : (isStd?'st':'gw');
+      var bar='<div class="rd-bar">'+
+        '<div class="rd-seg">'+
+          '<button data-m="'+(isStd?'std':'gw')+'" class="'+(MODE!=='cm'?'on':'')+'">'+
+            (isStd?'标准版式':'公文版式')+'</button>'+
+          '<button data-m="cm" class="'+(MODE==='cm'?'on':'')+'">舒适阅读</button>'+
+        '</div>'+
+        '<div class="rd-seg"><button id="rd-minus" title="缩小字号">A-</button>'+
+        '<button id="rd-plus" title="放大字号">A+</button></div>'+
+        '<button class="rd-btn" id="rd-copy">复制全文</button>'+
+        '<button class="rd-btn" id="rd-dl">下载 TXT</button>'+
+        '<button class="rd-btn" id="rd-wd">下载 Word</button>'+
+        '<button class="rd-btn" id="rd-pr">打印 / 存 PDF</button>'+
+        '<span class="rd-sp"></span><span class="rd-hint">'+t.length.toLocaleString()+' 字</span>'+
+        '</div>';
+      var meta=[];
+      if(x.code) meta.push('<span class="k">编号</span> '+esc(x.code));
+      meta.push('<span class="k">层级</span> '+esc(x.level));
+      if(x.issuer) meta.push('<span class="k">发布机关</span> '+esc(x.issuer));
+      if(x.pub) meta.push('<span class="k">发布</span> '+esc(x.pub));
+      if(x.impl) meta.push('<span class="k">实施</span> '+esc(x.impl));
+      if(x.status) meta.push('<span class="k">状态</span> '+esc(x.status));
+      if(x.url) meta.push('<a href="'+esc(x.url)+'" target="_blank" rel="noopener">官方发布页 &#8599;</a>');
+      var toc=r.chapters.length>1?('<div class="rd-toc">'+r.chapters.map(function(c){
+          return '<a href="#'+x.id+'|'+esc(c)+'">'+esc(c)+'</a>';}).join('')+'</div>'):'';
+      $('#rd-main').innerHTML=bar+toc+'<div class="paper">'+
+        '<div class="'+cls+'" id="rd-body">'+r.html+'</div>'+
+        '<div class="rd-meta">'+meta.join(' · ')+'</div></div>';
+      document.title=x.name+' · 原文 · 合规无终点';
+      SZ=baseSize(x,MODE);
+      function applySize(){ $('#rd-body').style.fontSize=SZ+'px'; }
+      $('#rd-plus').onclick=function(){ SZ=Math.min(27,SZ+1); applySize(); };
+      $('#rd-minus').onclick=function(){ SZ=Math.max(13,SZ-1); applySize(); };
+      var segs=document.querySelectorAll('.rd-seg button[data-m]');
+      for(var i=0;i<segs.length;i++){(function(b){
+        b.onclick=function(){ MODE=b.getAttribute('data-m'); render(); };
+      })(segs[i]);}
       $('#rd-copy').onclick=function(){ navigator.clipboard.writeText(t).then(function(){
-        $('#rd-copy').textContent='已复制'; setTimeout(function(){$('#rd-copy').textContent='复制全文'},1600);}); };
+        $('#rd-copy').textContent='已复制 ✓';
+        setTimeout(function(){$('#rd-copy').textContent='复制全文'},1600);}); };
       $('#rd-dl').onclick=function(){
-        var a=document.createElement('a');
-        a.href=URL.createObjectURL(new Blob([x.name+'\n\n'+t],{type:'text/plain;charset=utf-8'}));
-        a.download=x.name+'.txt'; document.body.appendChild(a); a.click();
-        setTimeout(function(){URL.revokeObjectURL(a.href);a.remove()},800); };
+        download(x.name+'.txt',[x.name+'\n'+(x.code?x.code+'\n':'')+'\n'+t],'text/plain;charset=utf-8'); };
+      $('#rd-wd').onclick=function(){ word(x,t); };
       $('#rd-pr').onclick=function(){ window.print(); };
+      if(HL) jump(HL);
       window.scrollTo({top:0,behavior:'smooth'});
     });
   }
+
+  function download(name,parts,type){
+    var a=document.createElement('a');
+    a.href=URL.createObjectURL(new Blob(parts,{type:type}));
+    a.download=name; document.body.appendChild(a); a.click();
+    setTimeout(function(){URL.revokeObjectURL(a.href);a.remove()},900);
+  }
+
+  function word(x,t){
+    var isStd=(x.kind==='std');
+    var body=(isStd?stdView(x,t):gongwen(x,t)).html.replace(/<mark>/g,'').replace(/<\/mark>/g,'');
+    var css='@page{size:A4;margin:3.7cm 2.6cm 3.5cm 2.8cm}'+
+      'body{font-family:"仿宋_GB2312",FangSong;font-size:16pt;line-height:28pt;text-align:justify}'+
+      '.gw-title{font-family:"方正小标宋简体",STZhongsong;font-size:22pt;line-height:34pt;text-align:center;letter-spacing:2pt}'+
+      '.gw-sub{text-align:center;font-family:KaiTi;font-size:14pt;line-height:24pt}'+
+      '.gw-org{text-align:center;font-size:16pt}'+
+      '.gw-rule{border:0;border-top:2pt solid #000}'+
+      '.gw-h1,.gw-h2{font-family:SimHei;font-size:16pt;line-height:28pt;text-align:center}'+
+      '.gw-p{margin:0;text-indent:2em}.gw-n{font-weight:bold}'+
+      '.gw-att{margin:0;text-indent:0;font-weight:bold}.gw-sign{text-align:right;text-indent:0;margin-right:2em}'+
+      '.gw-caption{text-align:center;text-indent:0;font-weight:bold}'+
+      '.st-title{font-family:SimHei;font-size:20pt;text-align:center}'+
+      '.st-code{text-align:center;font-size:12pt}'+
+      '.st-h1,.st-h2{font-weight:bold;margin:0;text-indent:0}'+
+      '.st-p{margin:0;text-indent:0}'+
+      '.st-caption{text-align:center;text-indent:0;font-weight:bold}';
+    var doc='<html xmlns:o="urn:schemas-microsoft-com:office:office" '+
+      'xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40">'+
+      '<head><meta charset="utf-8"><title>'+esc(x.name)+'</title><style>'+css+'</style></head>'+
+      '<body><div class="'+(isStd?'st':'gw')+'">'+body+'</div></body></html>';
+    download(x.name+'.doc',['\ufeff'+doc],'application/msword');
+  }
+
+  function jump(art){
+    var el=document.querySelector('[data-art="'+String(art).replace(/"/g,'')+'"]');
+    if(el){ window.scrollTo({top:el.getBoundingClientRect().top+window.scrollY-140,behavior:'smooth'}); }
+  }
+
+  /* ---------- 侧栏 ---------- */
+  function renderList(){
+    var q=(($('#rd-q')||{}).value||'').trim();
+    var ul=$('#rd-list'); ul.innerHTML='';
+    var arr=IX.items.filter(function(x){
+      if(KIND&&x.kind!==KIND) return false;
+      if(LV&&x.level!==LV) return false;
+      if(q&&x.name.indexOf(q)<0&&(x.code||'').indexOf(q)<0) return false;
+      return true;});
+    $('#rd-count').textContent=arr.length+' 条';
+    var frag=document.createDocumentFragment();
+    arr.forEach(function(x){
+      var li=document.createElement('li'), b=document.createElement('button');
+      b.innerHTML=esc(x.name)+'<span class="lv">'+esc(x.code||x.level)+'</span>';
+      b.onclick=function(){ location.hash=x.id; };
+      if(CUR&&CUR.id===x.id) b.className='on';
+      li.appendChild(b); frag.appendChild(li);
+    });
+    ul.appendChild(frag);
+  }
+
+  function splash(){
+    $('#rd-main').innerHTML='<div class="rd-splash"><b>从左侧选择一部法规或标准</b><br>'+
+      '共 '+IX.items.length+' 部原文（法规 '+IX._law+' 部 · 标准 '+IX._std+' 部）。'+
+      '正文按官方发文版式排印，支持复制全文、下载 TXT、导出 Word 与打印存 PDF。<br>'+
+      '外部可直接定位到条文：<code>texts.html#原文id|第X条</code></div>';
+    CUR=null; renderList();
+  }
+
+  function open(hash){
+    if(!IX) return;
+    var id=hash||'', art=HL;
+    if(id.indexOf('|')>=0){ var p=id.split('|'); id=p[0]; art=p[1]; } else { art=''; }
+    HL=art; SZ=0;
+    var x=IX.items.filter(function(y){return y.id===id})[0];
+    if(!x){ splash(); return; }
+    if(!CUR||CUR.id!==x.id) MODE='';
+    CUR=x; renderList(); render();
+  }
+
   fetch('texts/index.json').then(function(r){return r.json()}).then(function(d){
-    IX=d;
-    var lvs={}; IX.items.forEach(function(x){lvs[x.level]=(lvs[x.level]||0)+1});
-    var tabs=[['','全部 '+IX.items.length]];
-    ['法律','行政法规','部门规章','规范性文件'].forEach(function(k){ if(lvs[k]) tabs.push([k,k+' '+lvs[k]]); });
-    var tb=$('#rd-tabs');
-    tabs.forEach(function(t){
-      var b=document.createElement('button'); b.className='rd-tab'+(t[0]===''?' on':'');
-      b.textContent=t[1];
-      b.onclick=function(){ LV=t[0]; [].forEach.call(tb.children,function(c){c.className='rd-tab'});
-        b.className='rd-tab on'; renderList(); };
+    IX=d; IX._law=0; IX._std=0;
+    var lvs={};
+    IX.items.forEach(function(x){ lvs[x.level]=(lvs[x.level]||0)+1; if(x.kind==='std') IX._std++; else IX._law++; });
+    var tb=$('#rd-tabs'), chipBox=$('#rd-chips');
+    function buildChips(){
+      chipBox.innerHTML='';
+      var order=['法律','行政法规','部门规章','规范性文件','国家标准','行业标准','团体标准'];
+      var ks=order.filter(function(k){return lvs[k]});
+      Object.keys(lvs).forEach(function(k){ if(ks.indexOf(k)<0) ks.push(k); });
+      var all=document.createElement('button');
+      all.className='rd-chip'+(LV===''?' on':''); all.textContent='全部层级';
+      all.onclick=function(){ LV=''; buildChips(); renderList(); };
+      chipBox.appendChild(all);
+      ks.forEach(function(k){
+        if(KIND==='law'&&['国家标准','行业标准','团体标准'].indexOf(k)>=0) return;
+        if(KIND==='std'&&['法律','行政法规','部门规章','规范性文件'].indexOf(k)>=0) return;
+        var c=document.createElement('button');
+        c.className='rd-chip'+(LV===k?' on':''); c.textContent=k+' '+lvs[k];
+        c.onclick=function(){ LV=(LV===k?'':k); buildChips(); renderList(); };
+        chipBox.appendChild(c);
+      });
+    }
+    function setTab(kind,btn){
+      KIND=kind; LV='';
+      for(var i=0;i<tb.children.length;i++) tb.children[i].className='rd-tab';
+      btn.className='rd-tab on'; buildChips(); renderList();
+    }
+    [['','全部 '+IX.items.length],['law','法规 '+IX._law],['std','标准 '+IX._std]].forEach(function(t,i){
+      var b=document.createElement('button');
+      b.className='rd-tab'+(i===0?' on':''); b.textContent=t[1];
+      b.onclick=function(){ setTab(t[0],b); };
       tb.appendChild(b);
     });
+    buildChips();
     $('#rd-q').addEventListener('input',renderList);
     renderList();
     window.addEventListener('hashchange',function(){ open(location.hash.slice(1)); });
-    var q0=(location.hash||'').slice(1) || new URLSearchParams(location.search).get('id') || '';
-    if(q0) open(q0);
+    var q0=(location.hash||'').slice(1)||new URLSearchParams(location.search).get('id')||'';
+    if(q0) open(q0); else splash();
   });
 })();
 """
 
 
-def write_page(count, total_chars, parts):
+def write_page(count_law, total_chars, parts, count_std=0):
     tpl = """<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>法规原文 · 合规无终点</title>
-<meta name="description" content="法律、行政法规、部门规章与规范性文件的官方正文，覆盖数据合规、个人信息保护、算法与人工智能、平台与移动应用等方向；标准正文受著作权保护，见条目页的官方在线阅读入口。">
+<title>原文库 · 法规与标准 · 合规无终点</title>
+<meta name="description" content="法律、行政法规、部门规章、规范性文件与国家标准、行业标准、团体标准的正文，按官方发文版式排印，可在站内直接阅读、复制、下载与打印。">
 <link rel="stylesheet" href="../assets/style.css">
 <style>__CSS__</style>
 </head>
 <body>
 
 <nav class="topnav"></nav>
+<!-- SUBNAV:START --><!-- SUBNAV:END -->
 
 <div class="pagehead"><div class="inner">
-  <div class="crumb"><a href="../index.html">首页</a> / <a href="index.html">合规知识库</a> / 法规原文</div>
-  <h1>法规原文</h1>
-  <p>收录 __COUNT__ 部法律、行政法规、部门规章与规范性文件的官方正文，可在站内直接阅读、复制与下载。<br>
-     国家标准、行业标准与团体标准的正文受著作权保护，本站不转载，改由条目页提供发布机构的官方在线阅读入口。</p>
+  <div class="crumb"><a href="../index.html">首页</a> / <a href="index.html">合规知识库</a> / 原文库</div>
+  <h1>原文库</h1>
+  <p>法规与标准正文统一按官方发文版式排印：标题居中、层级清晰、条文可定位。<br>
+     左侧按「法规 / 标准」与效力层级筛选，正文支持复制全文、下载 TXT、导出 Word 与打印存 PDF。</p>
 </div></div>
 
 <main class="wrap">
-  <p class="rd-note">数据来源均为发布机关官网公开文本（全国人大、国务院、国家市场监督管理总局、国家互联网信息办公室等）。阅读时以官方原文为准。</p>
+  <p class="rd-note">法规正文来自发布机关官网公开文本；标准正文取自本人存档（国标为三轮 OCR 比对定稿，行标与团标为发布机构公开 PDF 的文字层），仅供个人学习研究，正式引用请以官方发布版本为准。</p>
   <div class="rd">
     <aside class="rd-side">
-      <input id="rd-q" class="rd-box" type="search" placeholder="按名称或文号检索">
+      <input id="rd-q" class="rd-box" type="search" placeholder="按名称、文号或标准号检索">
       <div class="rd-tabs" id="rd-tabs"></div>
-      <div style="font-size:12.5px;opacity:.72;margin:2px 0 8px" id="rd-count"></div>
+      <div class="rd-chips" id="rd-chips"></div>
+      <div class="rd-count" id="rd-count"></div>
       <ul class="rd-list" id="rd-list"></ul>
     </aside>
     <section class="rd-main" id="rd-main">
       <div class="rd-splash">
-        左侧目录共 __COUNT__ 部法规，合计约 __WAN__ 万字。<br>
-        点选任意一条即可在此阅读全文，并支持复制、下载 TXT 与打印／另存为 PDF。
+        <b>左侧共 __COUNT__ 部原文</b>（法规 __LAW__ 部 · 标准 __STD__ 部，合计约 __WAN__ 万字）。<br>
+        点选任意一条即可在此按公文版式阅读全文；标准另有「标准版式」，长文阅读可切「舒适阅读」。<br>
+        条文可被外部直接定位：<code>texts.html#原文id|第X条</code>。
       </div>
     </section>
   </div>
@@ -589,7 +940,9 @@ def write_page(count, total_chars, parts):
 """
     html = (tpl.replace("__CSS__", PAGE_CSS.strip())
             .replace("__JS__", PAGE_JS.strip())
-            .replace("__COUNT__", str(count))
+            .replace("__COUNT__", str(count_law + count_std))
+            .replace("__LAW__", str(count_law))
+            .replace("__STD__", str(count_std))
             .replace("__WAN__", "%.0f" % (total_chars / 10000.0)))
     open(os.path.join(HERE, "kb", "texts.html"), "w", encoding="utf-8").write(html)
     print("阅读页：kb/texts.html")
