@@ -460,7 +460,13 @@ def do_hb(entry):
 
 
 def copy_to_store(rec):
-    """把截图 / PDF / 定稿文本复制进本机标准库（人可读）。"""
+    """把 OCR 定稿文本 / PDF 复制进本机标准库（人可读）。
+
+    注意：**不复制整页 PNG 原图**。原图只留在 sources/scans/（已 gitignore，随时可重跑复原），
+    否则每份标准会给本机标准库灌 10~20MB、给私有库同步平添体积；
+    紧凑的「定稿 txt + 灰度截图合集 PDF + 待复核清单」由 archive_scans.py 落到
+    `国标（截图+OCR）/`，那才是长期归档形态。
+    """
     d = os.path.join(SCAN_DIR, safe_name(rec.get("code", "")))
     if not os.path.isdir(d):
         return 0
@@ -470,7 +476,7 @@ def copy_to_store(rec):
         for f in files:
             if f.startswith("_") or f.endswith(".webp"):
                 continue
-            if not (f.endswith(".png") or f.endswith(".pdf") or f.endswith(".txt")):
+            if not (f.endswith(".pdf") or f.endswith(".txt")):
                 continue
             rel = os.path.relpath(os.path.join(root, f), d)
             dst = os.path.join(sub, rel)
