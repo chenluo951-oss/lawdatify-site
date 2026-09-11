@@ -162,7 +162,9 @@ def guess_topic(name):
 
 def norm_key(code, name):
     if code:
-        return re.sub(r"[\s—–-]+", "", code).upper()
+        # 注意要去掉斜杠：语料库里同一份团标常写成「TTAF068-2020」，
+        # 而正式条目写成「T/TAF 068—2020」，不去斜杠会被当成两条。
+        return re.sub(r"[\s—–\-/／]+", "", code).upper()
     n = re.sub(r"[（(].*?[)）]", "", name)
     n = re.sub(r"[\s、，,。.:：\-—–]+", "", n)
     return n[:40]
@@ -183,7 +185,7 @@ def main():
     # 既有条目键
     def lib_keys(it):
         ks = set()
-        c = re.sub(r"[\s—–-]+", "", it.get("code", "") or "").upper()
+        c = re.sub(r"[\s—–\-/／]+", "", it.get("code", "") or "").upper()
         if c:
             ks.add(c)
         txt = (it.get("code", "") or "") + " " + (it.get("name", "") or "")

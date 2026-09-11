@@ -33,5 +33,19 @@
   "text": "sources/scans/GB_T42574-2023/img/GB_T42574-2023.txt",
   "conflicts": 59,
   "conflict_ratio": 0.0301
+ },
+ "GB/T41819-2022": {
+  "code": "GB/T41819-2022",
+  "name": "信息安全技术 人脸识别数据安全要求",
+  "hcno": "BE74B9780B8C4852D62CF47F282478B6",
+  "official_url": "https://openstd.samr.gov.cn/bzgk/std/newGbInfo?hcno=BE74B9780B8C4852D62CF47F282478B6",
+  "pages": 9,
+  "images": 9,
+  "fetched": "2026-09-11",
+  "status": "scan+ocr",
+  "chars": 5882,
+  "text": "sources/scans/GB_T41819-2022/img/GB_T41819-2022.txt",
+  "conflicts": 13,
+  "conflict_ratio": 0.0583
  }
 }
