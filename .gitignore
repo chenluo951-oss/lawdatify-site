@@ -33,3 +33,6 @@ _private/
 
 # 原文语料库：只存本机，不上传（标准正文受版权保护，站点仅放元数据+章节）
 sources/library/corpus/
+
+# 抓取工作清单缓存（可随时重建，不入仓）
+sources/standards/harvest_worklist.json

@@ -51,18 +51,38 @@ def api(method, path, token, payload=None, raw=False):
         return {"_raw": r.stdout, "_err": r.stderr}
 
 
+def git_blob_sha(data: bytes) -> str:
+    """GitHub blob sha 就是 git 的对象哈希：sha1('blob <len>\\0' + content)。
+    本地算得出来，就能和远端树逐文件比对，命中即复用，不再重复上传。"""
+    h = hashlib.sha1()
+    h.update(b"blob %d\0" % len(data))
+    h.update(data)
+    return h.hexdigest()
+
+
+def remote_tree(token):
+    """取远端当前树：path -> blob sha。"""
+    ref = api("GET", f"/repos/{REPO}/git/ref/heads/{BRANCH}", token, raw=True)
+    sha = (ref.get("object") or {}).get("sha") if isinstance(ref.get("object"), dict) else None
+    if not sha:
+        return {}
+    t = api("GET", f"/repos/{REPO}/git/trees/{sha}?recursive=1", token, raw=True)
+    return {e["path"]: e["sha"] for e in (t.get("tree") or []) if e.get("type") == "blob"}
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--dry", action="store_true")
+    ap.add_argument("--full", action="store_true", help="忽略复用，全部重传")
     a = ap.parse_args()
 
     if not os.path.isdir(STORE):
-        sys.exit(f"本机标准库不存在：{STORE}（先跑 fetch_standards.py）")
+        sys.exit(f"本机标准库不存在：{STORE}（先跑 harvest.py / fetch_standards.py）")
     # 递归收集（含 TAF标准/ 等子目录），保留相对路径
     files = []
     for root, _dirs, fns in os.walk(STORE):
         for fn in fns:
-            if fn.lower().endswith((".txt", ".md")):
+            if fn.lower().endswith((".txt", ".md", ".pdf", ".docx")):
                 rel = os.path.relpath(os.path.join(root, fn), STORE)
                 files.append(rel.replace(os.sep, "/"))
     files = sorted(files)
@@ -80,22 +100,28 @@ def main():
             "branch": BRANCH})
         print("  初始化仓库：", "OK" if boot.get("commit") else str(boot)[:120])
 
-    index = []
-    tree = []
+    remote = {} if a.full else remote_tree(token)
+    index, tree = [], []
+    reuse = upload = 0
     for fn in files:
         p = os.path.join(STORE, fn)
         raw = open(p, "rb").read()
-        content = raw.decode("utf-8", "ignore")
         meta = next((v for v in fetched.values()
-                     if re.sub(r"[\\/:*?\"<>|]", "_", v["ref"]) + ".txt" == fn
-                     or v.get("corpus_id") and False), {})
+                     if re.sub(r"[\\/:*?\"<>|]", "_", v["ref"]) + ".txt" == fn), {})
+        bsha = git_blob_sha(raw)
         index.append({
-            "file": fn, "chars": len(content), "bytes": len(raw),
-            "sha256": hashlib.sha256(raw).hexdigest()[:16],
+            "file": fn, "chars": len(raw.decode("utf-8", "ignore")), "bytes": len(raw),
+            "blob_sha": bsha[:16], "sha256": hashlib.sha256(raw).hexdigest()[:16],
             "source_url": meta.get("url", ""), "cat": meta.get("cat", ""),
         })
         if a.dry:
-            print(f"  将同步  {fn}  {len(raw)/1024:.1f} KB")
+            flag = "复用" if remote.get("texts/" + fn) == bsha else "上传"
+            print(f"  [{flag}] {fn}  {len(raw)/1024:.1f} KB")
+            continue
+        old = remote.get("texts/" + fn)
+        if old == bsha:
+            tree.append({"path": "texts/" + fn, "mode": "100644", "type": "blob", "sha": old})
+            reuse += 1
             continue
         b = api("POST", f"/repos/{REPO}/git/blobs", token,
                 {"content": base64.b64encode(raw).decode(), "encoding": "base64"})
@@ -103,13 +129,21 @@ def main():
             print(f"  blob 失败 {fn}: {str(b)[:120]}")
             continue
         tree.append({"path": "texts/" + fn, "mode": "100644", "type": "blob", "sha": b["sha"]})
-        print(f"  ✓ {fn}  {len(raw)/1024:.1f} KB")
+        upload += 1
+        print(f"  ↑ {fn}  {len(raw)/1024:.1f} KB")
+
+    # 远端有、本机已无 → 从树里去掉（传 sha: null）
+    for pth in remote:
+        if pth.startswith("texts/") and pth[6:] not in files:
+            tree.append({"path": pth, "mode": "100644", "type": "blob", "sha": None})
+            print(f"  ✗ 移除 {pth[6:]}")
 
     if a.dry:
         return
 
     idx_bytes = json.dumps({"updated": date.today().isoformat(),
-                            "source_dir": STORE, "items": index},
+                            "source_dir": STORE, "count": len(files),
+                            "items": index},
                            ensure_ascii=False, indent=1).encode("utf-8")
     b = api("POST", f"/repos/{REPO}/git/blobs", token,
             {"content": base64.b64encode(idx_bytes).decode(), "encoding": "base64"})
@@ -134,8 +168,8 @@ def main():
     ref = api("GET", f"/repos/{REPO}/git/ref/heads/{BRANCH}", token, raw=True)
     if isinstance(ref.get("object"), dict):
         parent = ref["object"]["sha"]
-    payload = {"message": f"standards: 同步 {len(files)} 份原文 {date.today().isoformat()}",
-               "tree": t["sha"]}
+    payload = {"message": f"standards: 同步 {len(files)} 份原文 {date.today().isoformat()}"
+                          f"（新增/更新 {upload}）", "tree": t["sha"]}
     if parent:
         payload["parents"] = [parent]
     c = api("POST", f"/repos/{REPO}/git/commits", token, payload)
@@ -150,7 +184,8 @@ def main():
     if "object" not in r and r.get("ref") is None:
         sys.exit(f"ref 更新失败：{str(r)[:300]}")
 
-    print(f"\n已同步 {len(files)} 份 → https://github.com/{REPO} (private) · commit {c['sha'][:8]}")
+    print(f"\n已同步 {len(files)} 份（复用 {reuse} · 上传 {upload}）"
+          f" → https://github.com/{REPO} (private) · commit {c['sha'][:8]}")
 
 
 if __name__ == "__main__":
