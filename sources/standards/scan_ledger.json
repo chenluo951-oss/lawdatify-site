@@ -5,19 +5,33 @@
   "hcno": "4568F276E0F8346EB0FBA097AA0CE05E",
   "official_url": "https://openstd.samr.gov.cn/bzgk/std/newGbInfo?hcno=4568F276E0F8346EB0FBA097AA0CE05E",
   "pages": 35,
-  "images": 6,
+  "images": 35,
   "fetched": "2026-09-11",
   "status": "scan+ocr",
-  "chars": 3558,
+  "chars": 36271,
   "text": "sources/scans/GB_T_35273-2020/img/GB_T_35273-2020.txt",
-  "conflicts": 16,
-  "conflict_ratio": 0.0699,
-  "stored": 1
+  "conflicts": 60,
+  "conflict_ratio": 0.0381,
+  "stored": 30
  },
  "_updated": "2026-09-11",
  "GB/Z28828-2012": {
   "code": "GB/Z28828-2012",
   "hcno": "FB51A65B69F70BC3AF9F5AC95F5FEF48",
   "status": "no-online-view"
+ },
+ "GB/T42574-2023": {
+  "code": "GB/T42574-2023",
+  "name": "信息安全技术 个人信息处理中告知和同意的实施指南",
+  "hcno": "09255E6D24E0BAB7F391472C6995EC56",
+  "official_url": "https://openstd.samr.gov.cn/bzgk/std/newGbInfo?hcno=09255E6D24E0BAB7F391472C6995EC56",
+  "pages": 57,
+  "images": 57,
+  "fetched": "2026-09-11",
+  "status": "scan+ocr",
+  "chars": 58658,
+  "text": "sources/scans/GB_T42574-2023/img/GB_T42574-2023.txt",
+  "conflicts": 59,
+  "conflict_ratio": 0.0301
  }
 }

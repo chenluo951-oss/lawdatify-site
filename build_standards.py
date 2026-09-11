@@ -99,11 +99,35 @@ def online_reader_url(it):
     return ""
 
 
+# 抓取台账：给出「发布机构公开可直接下载的正文」深链（目前主要是行业标准）
+LEDGER = os.path.join(HERE, "sources", "standards", "harvest_ledger.json")
+_LED = None
+
+
+def ledger_pdf_url(it):
+    global _LED
+    if _LED is None:
+        try:
+            _LED = json.load(open(LEDGER, encoding="utf-8"))
+        except Exception:
+            _LED = {}
+    code = (it.get("code") or "").strip()
+    if not code:
+        return ""
+    hits = [v for k, v in _LED.items()
+            if isinstance(v, dict) and (v.get("code") or "").strip() == code and v.get("pdf_url")]
+    return hits[0]["pdf_url"] if hits else ""
+
+
 def read_affordance(it):
-    """条目上的「读原文」入口：法规走站内原文库，标准走发布机构在线阅读器。"""
+    """条目上的原文入口：站内原文库 → 发布机构公开 PDF → 官方在线阅读器。"""
     tid = text_id(it)
     if tid:
         return f'<a class="lb-read" href="texts.html#{tid}">读原文</a>'
+    pdf = ledger_pdf_url(it)
+    if pdf:
+        return (f'<a class="lb-read" href="{esc(pdf)}" target="_blank" rel="noopener" '
+                f'title="发布机构公开的标准全文 PDF">官方全文 PDF</a>')
     ou = online_reader_url(it)
     if ou:
         return f'<a class="lb-read" href="{esc(ou)}" target="_blank" rel="noopener">官方在线阅读</a>'

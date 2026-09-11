@@ -13,6 +13,34 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 SRC = os.path.join(HERE, "sources", "standards")
 os.makedirs(SRC, exist_ok=True)
 
+# 行业标准（hbba）里与合规相关的名称特征；不相关的主要是车联网通信/电磁兼容类技术标准
+HBBA_REL = re.compile(
+    r"个人信息|隐私|数据安全|数据分类|数据识别|数据治理|重要数据|核心数据|数据出境|跨境|"
+    r"网络安全|网络数据|关键信息基础设施|等级保护|安全评估|风险评估|安全检测|安全测试|"
+    r"算法|人工智能|生成式|深度合成|大模型|自动化决策|"
+    r"APP|应用软件|应用程序|移动互联网|移动智能终端|用户信息|账号|实名|"
+    r"儿童|未成年人|密码|应急处置|漏洞|信息安全|信息保护|"
+    r"公共数据|电子商务|消费者|平台|广告|价格|明码标价|规范促销|"
+    r"食品|食用农产品|溯源|冷链|计量|安全规范|安全指南|安全要求|安全能力")
+
+HBBA_TOPIC = [
+    ("个人信息保护", r"个人信息|隐私|用户信息|账号|实名|儿童|未成年人"),
+    ("数据安全", r"数据安全|数据分类|数据识别|数据治理|重要数据|核心数据|公共数据"),
+    ("数据跨境", r"数据出境|跨境"),
+    ("网络安全", r"网络安全|网络数据|关键信息基础设施|等级保护|密码|漏洞|应急处置|安全评估|风险评估"),
+    ("算法与AI合规", r"算法|人工智能|生成式|深度合成|大模型|自动化决策"),
+    ("移动应用合规", r"APP|应用软件|应用程序|移动互联网|移动智能终端"),
+    ("产品与食安合规", r"食品|食用农产品|溯源|冷链|计量"),
+    ("平台合规", r"电子商务|消费者|平台|广告|价格|明码标价|规范促销"),
+]
+
+
+def hbba_topic(name):
+    for topic, pat in HBBA_TOPIC:
+        if re.search(pat, name):
+            return topic
+    return "个人信息保护"
+
 # ---------------------------------------------------------------- 法律法规
 # 字段：code(文号/简称) name level topic status pub impl issuer url point duty
 LAWS = [
@@ -357,6 +385,59 @@ def main():
             })
             have.add(re.sub(r"\s+", "", full))
             n_taf += 1
+
+    # ---- 合并通信/金融等行业标准（hbba 全国标准信息公共服务平台，已抓官方公开全文）----
+    # 只收与合规主题相关的；发布机构官网提供公开 PDF 的，条目上会给出「官方全文 PDF」入口。
+    hb_path = os.path.join(SRC, "hbba_fetched.json")
+    led_path = os.path.join(SRC, "harvest_ledger.json")
+    n_hb = 0
+    if os.path.exists(hb_path):
+        hb = json.load(open(hb_path, encoding="utf-8"))
+        led = json.load(open(led_path, encoding="utf-8")) if os.path.exists(led_path) else {}
+        pub_pdf = {(v.get("code") or "").strip() for v in led.values()
+                   if isinstance(v, dict) and v.get("pdf_url")}
+        have_name = {re.sub(r"\s+", "", i["name"]) for i in items}
+        have_code = {norm_code(i.get("code")) for i in items}
+        for t in hb.values():
+            code = (t.get("code") or "").strip()
+            name = (t.get("name") or "").strip()
+            if not code or not name or not HBBA_REL.search(name):
+                continue
+            nc = norm_code(code)
+            if nc in have_code:
+                continue
+            full = f"{code} {name}"
+            if re.sub(r"\s+", "", full) in have_name:
+                continue
+            have_code.add(nc)
+            have_name.add(re.sub(r"\s+", "", full))
+            items.append({
+                "code": code, "name": full, "level": "行业标准",
+                "topic": hbba_topic(name), "status": "现行有效",
+                "pub": t.get("pub") or "", "impl": t.get("impl") or "",
+                "issuer": t.get("issuer") or "",
+                "url": t.get("url") or "", "point": "", "duty": [],
+                "note": "", "kind": "标准",
+                "has_pdf": 1 if code in pub_pdf else 0,
+            })
+            n_hb += 1
+        print(f"  合并行业标准 {n_hb} 条（其中发布机构公开全文 "
+              f"{sum(1 for i in items if i.get('has_pdf'))} 条）")
+
+    # ---- 恢复下架标记：excluded.json 里的条目重建后仍是 hidden=true ----
+    # （否则每次重建 library.json 都会把已下架的 51 条噪声条目重新推回公开页面）
+    exc_path = os.path.join(SRC, "excluded.json")
+    n_hidden = 0
+    if os.path.exists(exc_path):
+        exc = json.load(open(exc_path, encoding="utf-8"))
+        keys = {re.sub(r"[^0-9A-Z\u4e00-\u9fa5]", "", (v.get("code") or "") + (v.get("name") or "")).upper()
+                for v in (exc.get("items") or {}).values()}
+        for it in items:
+            k = re.sub(r"[^0-9A-Z\u4e00-\u9fa5]", "", (it.get("code") or "") + (it.get("name") or "")).upper()
+            if k in keys:
+                it["hidden"] = True
+                n_hidden += 1
+        print(f"  保留下架标记 {n_hidden} 条（清单 sources/standards/excluded.json）")
 
     data = {
         "meta": {

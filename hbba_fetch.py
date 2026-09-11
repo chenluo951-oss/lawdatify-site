@@ -260,6 +260,7 @@ def main():
                               "level": "行业标准",
                               "status": "full" if len(txt) >= 800 else "meta",
                               "official_url": v.get("url") or "",
+                              "pdf_url": "https://hbba.sacinfo.org.cn/portal/download/" + pk,
                               "chars": len(txt), "sha256": sha16(txt),
                               "fetched": today(), "file": os.path.relpath(fp, HERE),
                               "corpus_id": cid,

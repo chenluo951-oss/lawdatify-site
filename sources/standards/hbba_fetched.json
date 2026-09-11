@@ -33,7 +33,9 @@
   "pub": "2018-09-27",
   "impl": "2018-09-27",
   "issuer": "中国人民银行",
-  "url": "https://hbba.sacinfo.org.cn/stdDetail/33ae941df25f4f23b503ecf87adc23d3"
+  "url": "https://hbba.sacinfo.org.cn/stdDetail/33ae941df25f4f23b503ecf87adc23d3",
+  "file": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/行业标准/JR_T 0158-2018 证券期货业数据分类分级指引.pdf",
+  "chars": 68949
  },
  "JR/T 0171-2020": {
   "code": "JR/T 0171-2020",
@@ -42,7 +44,9 @@
   "pub": "2020-02-13",
   "impl": "2020-02-13",
   "issuer": "中国人民银行",
-  "url": "https://hbba.sacinfo.org.cn/stdDetail/69bfa34620e1e22425450fa511bc155a386fbbb4caee58ed0687cf50782fa3d8"
+  "url": "https://hbba.sacinfo.org.cn/stdDetail/69bfa34620e1e22425450fa511bc155a386fbbb4caee58ed0687cf50782fa3d8",
+  "file": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/行业标准/JR_T 0171-2020 个人金融信息保护技术规范.pdf",
+  "chars": 25430
  },
  "YD/T 6793-2026": {
   "code": "YD/T 6793-2026",
@@ -354,7 +358,9 @@
   "industry": "通信",
   "url": "https://hbba.sacinfo.org.cn/stdDetail/94a2afeefce6159f4ba31abb7336fdc62f451a8c78caedfe5ecea4b6c1884c68",
   "pk": "94a2afeefce6159f4ba31abb7336fdc62f451a8c78caedfe5ecea4b6c1884c68",
-  "note": "hbba 检索发现"
+  "note": "hbba 检索发现",
+  "file": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/行业标准/YD_T 4994-2024 移动智能终端人工智能应用的个人信息保护技术要求及评估方法.pdf",
+  "chars": 26507
  },
  "WS/T 846.2—2024": {
   "code": "WS/T 846.2—2024",
@@ -366,7 +372,9 @@
   "industry": "卫生",
   "url": "https://hbba.sacinfo.org.cn/stdDetail/1b558e4398b0df34dbcabc1099bd8e7b64c58aa846b43c75e4c7cef13b1f1a2d",
   "pk": "1b558e4398b0df34dbcabc1099bd8e7b64c58aa846b43c75e4c7cef13b1f1a2d",
-  "note": "hbba 检索发现"
+  "note": "hbba 检索发现",
+  "file": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/行业标准/WS_T 846.2—2024 医院信息平台交互标准 第2部分：个人信息注册、查询服务.pdf",
+  "chars": 70416
  },
  "RB/T 182-2023": {
   "code": "RB/T 182-2023",
@@ -378,7 +386,9 @@
   "industry": "认证认可",
   "url": "https://hbba.sacinfo.org.cn/stdDetail/d11d9001f69dfcc4a51e7873b87fac1d86a3ee9222a8691656f647ab0a249d0d",
   "pk": "d11d9001f69dfcc4a51e7873b87fac1d86a3ee9222a8691656f647ab0a249d0d",
-  "note": "hbba 检索发现"
+  "note": "hbba 检索发现",
+  "file": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/行业标准/RB_T 182-2023 移动智能终端应用软件个人信息安全评价规范.pdf",
+  "chars": 45298
  },
  "YD/T 4538-2023": {
   "code": "YD/T 4538-2023",
@@ -390,7 +400,9 @@
   "industry": "通信",
   "url": "https://hbba.sacinfo.org.cn/stdDetail/9c52f8cd8c111fbeca230cf7134e27ce6f5cd02a18f51ed779d3f566db323fc7",
   "pk": "9c52f8cd8c111fbeca230cf7134e27ce6f5cd02a18f51ed779d3f566db323fc7",
-  "note": "hbba 检索发现"
+  "note": "hbba 检索发现",
+  "file": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/行业标准/YD_T 4538-2023 互联网医疗健康移动应用软件（APP）个人信息保护技术要求.pdf",
+  "chars": 8787
  },
  "YD/T 4177.5-2023": {
   "code": "YD/T 4177.5-2023",
@@ -402,7 +414,9 @@
   "industry": "通信",
   "url": "https://hbba.sacinfo.org.cn/stdDetail/f2e55ad48362ad7c7eea1d4e3b644fd4122cc8f965f9e86459e6f2da264f6143",
   "pk": "f2e55ad48362ad7c7eea1d4e3b644fd4122cc8f965f9e86459e6f2da264f6143",
-  "note": "hbba 检索发现"
+  "note": "hbba 检索发现",
+  "file": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/行业标准/YD_T 4177.5-2023 移动互联网应用程序（APP）收集使用个人信息最小必要评估规范 第5部分：设备信息.pdf",
+  "chars": 14195
  },
  "YD/T 4177.10-2023": {
   "code": "YD/T 4177.10-2023",
@@ -414,7 +428,9 @@
   "industry": "通信",
   "url": "https://hbba.sacinfo.org.cn/stdDetail/4111e6a360e35385a21be39e9b5938367d924fe599b07075ec0d7a9ab9eff465",
   "pk": "4111e6a360e35385a21be39e9b5938367d924fe599b07075ec0d7a9ab9eff465",
-  "note": "hbba 检索发现"
+  "note": "hbba 检索发现",
+  "file": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/行业标准/YD_T 4177.10-2023 移动互联网应用程序（APP）收集使用个人信息最小必要评估规范 第10部分：通话记录.pdf",
+  "chars": 11181
  },
  "YD/T 4177.8-2023": {
   "code": "YD/T 4177.8-2023",
@@ -426,7 +442,9 @@
   "industry": "通信",
   "url": "https://hbba.sacinfo.org.cn/stdDetail/4111e6a360e35385a21be39e9b5938360891b5740cf0a9798806ebbaef65d4a6",
   "pk": "4111e6a360e35385a21be39e9b5938360891b5740cf0a9798806ebbaef65d4a6",
-  "note": "hbba 检索发现"
+  "note": "hbba 检索发现",
+  "file": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/行业标准/YD_T 4177.8-2023 移动互联网应用程序（APP）收集使用个人信息最小必要评估规范 第8部分：录像信息.pdf",
+  "chars": 22046
  },
  "YZ/T 0189-2023": {
   "code": "YZ/T 0189-2023",
@@ -450,7 +468,9 @@
   "industry": "通信",
   "url": "https://hbba.sacinfo.org.cn/stdDetail/cbc996db44a652dbfbfc6dbc04338d770cdd2557965501f57cb9b1ca1da0b742",
   "pk": "cbc996db44a652dbfbfc6dbc04338d770cdd2557965501f57cb9b1ca1da0b742",
-  "note": "hbba 检索发现"
+  "note": "hbba 检索发现",
+  "file": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/行业标准/YD_T 4177.11-2022 移动互联网应用程序（APP）收集使用个人信息最小必要评估规范 第11部分：短信信息.pdf",
+  "chars": 12546
  },
  "YD/T 4177.3-2022": {
   "code": "YD/T 4177.3-2022",
@@ -462,7 +482,9 @@
   "industry": "通信",
   "url": "https://hbba.sacinfo.org.cn/stdDetail/cbc996db44a652dbfbfc6dbc04338d778d3e370dbb4b1e1df9010f60f9a05515",
   "pk": "cbc996db44a652dbfbfc6dbc04338d778d3e370dbb4b1e1df9010f60f9a05515",
-  "note": "hbba 检索发现"
+  "note": "hbba 检索发现",
+  "file": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/行业标准/YD_T 4177.3-2022 移动互联网应用程序（APP）收集使用个人信息最小必要评估规范 第3部分：图片信息.pdf",
+  "chars": 11239
  },
  "YD/T 4177.2-2022": {
   "code": "YD/T 4177.2-2022",
@@ -474,7 +496,9 @@
   "industry": "通信",
   "url": "https://hbba.sacinfo.org.cn/stdDetail/cbc996db44a652dbfbfc6dbc04338d776ab109ddf3457c156134f03182ca88e5",
   "pk": "cbc996db44a652dbfbfc6dbc04338d776ab109ddf3457c156134f03182ca88e5",
-  "note": "hbba 检索发现"
+  "note": "hbba 检索发现",
+  "file": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/行业标准/YD_T 4177.2-2022 移动互联网应用程序（APP）收集使用个人信息最小必要评估规范 第2部分：位置信息.pdf",
+  "chars": 12938
  },
  "YD/T 4177.1-2022": {
   "code": "YD/T 4177.1-2022",
@@ -486,7 +510,9 @@
   "industry": "通信",
   "url": "https://hbba.sacinfo.org.cn/stdDetail/b1bd9f5815062eca5ecc7345b37db899082ba2655fc4420403efb73e0ff131d1",
   "pk": "b1bd9f5815062eca5ecc7345b37db899082ba2655fc4420403efb73e0ff131d1",
-  "note": "hbba 检索发现"
+  "note": "hbba 检索发现",
+  "file": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/行业标准/YD_T 4177.1-2022 移动互联网应用程序（APP）收集使用个人信息最小必要评估规范 第1部分：总则.pdf",
+  "chars": 19891
  },
  "YD/T 3367-2018": {
   "code": "YD/T 3367-2018",
@@ -558,7 +584,9 @@
   "industry": "卫生",
   "url": "https://hbba.sacinfo.org.cn/stdDetail/5e576ece9fa5b35d404b5229d2b24729",
   "pk": "5e576ece9fa5b35d404b5229d2b24729",
-  "note": "hbba 检索发现"
+  "note": "hbba 检索发现",
+  "file": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/行业标准/WS_T 483.14-2016 健康档案共享文档规范第14部分：重性精神疾病患者个人信息登记.pdf",
+  "chars": 23364
  },
  "YD/T 2782-2014": {
   "code": "YD/T 2782-2014",
@@ -606,7 +634,9 @@
   "industry": "卫生",
   "url": "https://hbba.sacinfo.org.cn/stdDetail/314c4df94f8d6a72d9eabd554f8b2842",
   "pk": "314c4df94f8d6a72d9eabd554f8b2842",
-  "note": "hbba 检索发现"
+  "note": "hbba 检索发现",
+  "file": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/行业标准/WS 371-2012 基本信息基本数据集 个人信息.pdf",
+  "chars": 12
  },
  "YD/T 2129-2010": {
   "code": "YD/T 2129-2010",
@@ -678,7 +708,9 @@
   "industry": "金融",
   "url": "https://hbba.sacinfo.org.cn/stdDetail/bc0dd6fc1c7fbd2b43739b1dcb12543e",
   "pk": "bc0dd6fc1c7fbd2b43739b1dcb12543e",
-  "note": "hbba 检索发现"
+  "note": "hbba 检索发现",
+  "file": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/行业标准/JR_T 0098.8-2012 中国金融移动支付 检测规范 第8部分：个人信息保护.pdf",
+  "chars": 11395
  },
  "YZ/T 0002-2003": {
   "code": "YZ/T 0002-2003",
@@ -762,7 +794,9 @@
   "industry": "金融",
   "url": "https://hbba.sacinfo.org.cn/stdDetail/2aea8032cf5c9848725b6997e8c110e7e3666d9b699fd135b8bdf5d135a28918",
   "pk": "2aea8032cf5c9848725b6997e8c110e7e3666d9b699fd135b8bdf5d135a28918",
-  "note": "hbba 检索发现"
+  "note": "hbba 检索发现",
+  "file": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/行业标准/JR_T 0358—2026 金融数据安全 数据安全能力体系.pdf",
+  "chars": 24300
  },
  "SL/T 846-2025": {
   "code": "SL/T 846-2025",
@@ -774,7 +808,9 @@
   "industry": "水利",
   "url": "https://hbba.sacinfo.org.cn/stdDetail/7dc2596b4a9158210f4e58220be9d7815e3c7bfa15a0dc8807cebbd6cb197521",
   "pk": "7dc2596b4a9158210f4e58220be9d7815e3c7bfa15a0dc8807cebbd6cb197521",
-  "note": "hbba 检索发现"
+  "note": "hbba 检索发现",
+  "file": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/行业标准/SL_T 846-2025 水利重要数据安全保护要求.pdf",
+  "chars": 14405
  },
  "YD/T 3802-2025": {
   "code": "YD/T 3802-2025",
@@ -798,7 +834,9 @@
   "industry": "民用航空",
   "url": "https://hbba.sacinfo.org.cn/stdDetail/3b8aa1b55c19db6f3cc9de736bc74bceedddf49d3f8d3dc48628a1e85fb9dd5a",
   "pk": "3b8aa1b55c19db6f3cc9de736bc74bceedddf49d3f8d3dc48628a1e85fb9dd5a",
-  "note": "hbba 检索发现"
+  "note": "hbba 检索发现",
+  "file": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/行业标准/MH_T 4064—2026 民用无人驾驶航空器航行服务系统数据安全技术要求.pdf",
+  "chars": 10045
  },
  "QX/T 757—2025": {
   "code": "QX/T 757—2025",
@@ -810,7 +848,9 @@
   "industry": "气象",
   "url": "https://hbba.sacinfo.org.cn/stdDetail/59ebdc4f3fb1b272fc2446b7e825e592f67f9c2fb0288fe258571b59340406e6",
   "pk": "59ebdc4f3fb1b272fc2446b7e825e592f67f9c2fb0288fe258571b59340406e6",
-  "note": "hbba 检索发现"
+  "note": "hbba 检索发现",
+  "file": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/行业标准/QX_T 757—2025 气象数据安全分级指南.pdf",
+  "chars": 6818
  },
  "MH/T 3038—2025": {
   "code": "MH/T 3038—2025",
@@ -822,7 +862,9 @@
   "industry": "民用航空",
   "url": "https://hbba.sacinfo.org.cn/stdDetail/1f8144867f089e61f8807950936e7747cadcb9835036c46965e45da093cff741",
   "pk": "1f8144867f089e61f8807950936e7747cadcb9835036c46965e45da093cff741",
-  "note": "hbba 检索发现"
+  "note": "hbba 检索发现",
+  "file": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/行业标准/MH_T 3038—2025 民用航空数据安全监测预警技术要求.pdf",
+  "chars": 8320
  },
  "YD/T 6415-2025": {
   "code": "YD/T 6415-2025",
@@ -870,7 +912,9 @@
   "industry": "通信",
   "url": "https://hbba.sacinfo.org.cn/stdDetail/e8fb40948ec7c0fb05d49dd3d6faa4d8ea7eadfbe73b48f83a1a002fec42f3ba",
   "pk": "e8fb40948ec7c0fb05d49dd3d6faa4d8ea7eadfbe73b48f83a1a002fec42f3ba",
-  "note": "hbba 检索发现"
+  "note": "hbba 检索发现",
+  "file": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/行业标准/YD_T 4988-2024 多方数据共享服务数据安全技术框架.pdf",
+  "chars": 8308
  },
  "YD/T 4982-2024": {
   "code": "YD/T 4982-2024",
@@ -882,7 +926,9 @@
   "industry": "通信",
   "url": "https://hbba.sacinfo.org.cn/stdDetail/52b3104e401cf4087191c227716156e8b2e6a8e29586307e641fde428b6ec04f",
   "pk": "52b3104e401cf4087191c227716156e8b2e6a8e29586307e641fde428b6ec04f",
-  "note": "hbba 检索发现"
+  "note": "hbba 检索发现",
+  "file": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/行业标准/YD_T 4982-2024 工业企业数据安全防护要求.pdf",
+  "chars": 14615
  },
  "JT/T 1522-2024": {
   "code": "JT/T 1522-2024",
@@ -906,7 +952,9 @@
   "industry": "通信",
   "url": "https://hbba.sacinfo.org.cn/stdDetail/afdafa20d9eb3474944c2492d8b40738b7a79b4df403fe1ef4e8284bef6d4c51",
   "pk": "afdafa20d9eb3474944c2492d8b40738b7a79b4df403fe1ef4e8284bef6d4c51",
-  "note": "hbba 检索发现"
+  "note": "hbba 检索发现",
+  "file": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/行业标准/YD_T 4979-2024 工业互联网 时序数据安全网关技术要求.pdf",
+  "chars": 19073
  },
  "YD/T 4949-2024": {
   "code": "YD/T 4949-2024",
@@ -918,7 +966,9 @@
   "industry": "通信",
   "url": "https://hbba.sacinfo.org.cn/stdDetail/61bb6caf6c2fa8c98f08244f77ecb3e22d4ac1ef0b9991b338b6da1faae2209a",
   "pk": "61bb6caf6c2fa8c98f08244f77ecb3e22d4ac1ef0b9991b338b6da1faae2209a",
-  "note": "hbba 检索发现"
+  "note": "hbba 检索发现",
+  "file": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/行业标准/YD_T 4949-2024 电子政务数据安全流通中的贡献度评估技术指南.pdf",
+  "chars": 11443
  },
  "YD/T 3956-2024": {
   "code": "YD/T 3956-2024",
@@ -930,7 +980,9 @@
   "industry": "通信",
   "url": "https://hbba.sacinfo.org.cn/stdDetail/48506d25a50a3b30dc1428f3a605b8131bf9584582c7f64302875bda6cafd0ed",
   "pk": "48506d25a50a3b30dc1428f3a605b8131bf9584582c7f64302875bda6cafd0ed",
-  "note": "hbba 检索发现"
+  "note": "hbba 检索发现",
+  "file": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/行业标准/YD_T 3956-2024 电信领域数据安全风险评估规范.pdf",
+  "chars": 33739
  },
  "YD/T 4681-2024": {
   "code": "YD/T 4681-2024",
@@ -942,7 +994,9 @@
   "industry": "通信",
   "url": "https://hbba.sacinfo.org.cn/stdDetail/17a10b1be7d3730d5315545e795e8d21417d548172b8f05747b786d77db26733",
   "pk": "17a10b1be7d3730d5315545e795e8d21417d548172b8f05747b786d77db26733",
-  "note": "hbba 检索发现"
+  "note": "hbba 检索发现",
+  "file": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/行业标准/YD_T 4681-2024 电信网和互联网数据安全风险等级指标与计算方法.pdf",
+  "chars": 15729
  },
  "YD/T 4680-2024": {
   "code": "YD/T 4680-2024",
@@ -954,7 +1008,9 @@
   "industry": "通信",
   "url": "https://hbba.sacinfo.org.cn/stdDetail/17a10b1be7d3730d5315545e795e8d21faebb09fd39d317282f88220d16d3b7d",
   "pk": "17a10b1be7d3730d5315545e795e8d21faebb09fd39d317282f88220d16d3b7d",
-  "note": "hbba 检索发现"
+  "note": "hbba 检索发现",
+  "file": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/行业标准/YD_T 4680-2024 电信网和互联网数据安全管控平台技术要求和测试方法.pdf",
+  "chars": 29336
  },
  "YD/T 4562-2023": {
   "code": "YD/T 4562-2023",
@@ -966,7 +1022,9 @@
   "industry": "通信",
   "url": "https://hbba.sacinfo.org.cn/stdDetail/20d06d57337eab55a71f9e0b02a1cb1330d587f397d37f700d1200255a34b637",
   "pk": "20d06d57337eab55a71f9e0b02a1cb1330d587f397d37f700d1200255a34b637",
-  "note": "hbba 检索发现"
+  "note": "hbba 检索发现",
+  "file": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/行业标准/YD_T 4562-2023 电信网和互联网云服务数据安全评估指南.pdf",
+  "chars": 26056
  },
  "YD/T 4561-2023": {
   "code": "YD/T 4561-2023",
@@ -978,7 +1036,9 @@
   "industry": "通信",
   "url": "https://hbba.sacinfo.org.cn/stdDetail/b3cbdb669d02ef5ce4bb778d47b1179460456d33ab11d13eb49d944a89511566",
   "pk": "b3cbdb669d02ef5ce4bb778d47b1179460456d33ab11d13eb49d944a89511566",
-  "note": "hbba 检索发现"
+  "note": "hbba 检索发现",
+  "file": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/行业标准/YD_T 4561-2023 5G移动通信网 数据安全监测预警技术要求.pdf",
+  "chars": 9795
  },
  "YD/T 4560-2023": {
   "code": "YD/T 4560-2023",
@@ -990,7 +1050,9 @@
   "industry": "通信",
   "url": "https://hbba.sacinfo.org.cn/stdDetail/b3cbdb669d02ef5ce4bb778d47b117946924a7e2dea5c7592834ab678c6dbd51",
   "pk": "b3cbdb669d02ef5ce4bb778d47b117946924a7e2dea5c7592834ab678c6dbd51",
-  "note": "hbba 检索发现"
+  "note": "hbba 检索发现",
+  "file": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/行业标准/YD_T 4560-2023 5G数据安全评估规范.pdf",
+  "chars": 18884
  },
  "YD/T 4558-2023": {
   "code": "YD/T 4558-2023",
@@ -1002,7 +1064,9 @@
   "industry": "通信",
   "url": "https://hbba.sacinfo.org.cn/stdDetail/b3cbdb669d02ef5ce4bb778d47b117942aae60d379ecbb3b6910413fe015b26e",
   "pk": "b3cbdb669d02ef5ce4bb778d47b117942aae60d379ecbb3b6910413fe015b26e",
-  "note": "hbba 检索发现"
+  "note": "hbba 检索发现",
+  "file": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/行业标准/YD_T 4558-2023 数据安全治理能力通用评估方法.pdf",
+  "chars": 65363
  },
  "YD/T 4557-2023": {
   "code": "YD/T 4557-2023",
@@ -1014,7 +1078,9 @@
   "industry": "通信",
   "url": "https://hbba.sacinfo.org.cn/stdDetail/b3cbdb669d02ef5ce4bb778d47b1179467a3ce3007353fca32cf2cb88bc283e5",
   "pk": "b3cbdb669d02ef5ce4bb778d47b1179467a3ce3007353fca32cf2cb88bc283e5",
-  "note": "hbba 检索发现"
+  "note": "hbba 检索发现",
+  "file": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/行业标准/YD_T 4557-2023 基础电信企业数据安全管理系统技术要求.pdf",
+  "chars": 34677
  },
  "YD/T 4251-2023": {
   "code": "YD/T 4251-2023",
@@ -1026,7 +1092,9 @@
   "industry": "通信",
   "url": "https://hbba.sacinfo.org.cn/stdDetail/6f1fcb38574b36cab10af6f042f1dae67f5a2c5869cedd78a84fe36c8713c5b5",
   "pk": "6f1fcb38574b36cab10af6f042f1dae67f5a2c5869cedd78a84fe36c8713c5b5",
-  "note": "hbba 检索发现"
+  "note": "hbba 检索发现",
+  "file": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/行业标准/YD_T 4251-2023 电信运营商大数据安全管控分类分级技术要求.pdf",
+  "chars": 16503
  },
  "YD/T 4249-2023": {
   "code": "YD/T 4249-2023",
@@ -1038,7 +1106,9 @@
   "industry": "通信",
   "url": "https://hbba.sacinfo.org.cn/stdDetail/6f1fcb38574b36cab10af6f042f1dae6f5c0fc2b270410422259b0fe113ba0fa",
   "pk": "6f1fcb38574b36cab10af6f042f1dae6f5c0fc2b270410422259b0fe113ba0fa",
-  "note": "hbba 检索发现"
+  "note": "hbba 检索发现",
+  "file": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/行业标准/YD_T 4249-2023 5G数据安全总体技术要求.pdf",
+  "chars": 21779
  },
  "YD/T 4248-2023": {
   "code": "YD/T 4248-2023",
@@ -1050,7 +1120,9 @@
   "industry": "通信",
   "url": "https://hbba.sacinfo.org.cn/stdDetail/9009099e1bdbf0462504e7b6c468333499cb89e8d6250b6b87762472ae4ed617",
   "pk": "9009099e1bdbf0462504e7b6c468333499cb89e8d6250b6b87762472ae4ed617",
-  "note": "hbba 检索发现"
+  "note": "hbba 检索发现",
+  "file": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/行业标准/YD_T 4248-2023 电信网和互联网应用程序接口数据安全技术要求和测试方法.pdf",
+  "chars": 17598
  },
  "YD/T 4242-2023": {
   "code": "YD/T 4242-2023",
@@ -1062,7 +1134,9 @@
   "industry": "通信",
   "url": "https://hbba.sacinfo.org.cn/stdDetail/9009099e1bdbf0462504e7b6c4683334e3e398552a9baeeae7302529003b90a2",
   "pk": "9009099e1bdbf0462504e7b6c4683334e3e398552a9baeeae7302529003b90a2",
-  "note": "hbba 检索发现"
+  "note": "hbba 检索发现",
+  "file": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/行业标准/YD_T 4242-2023 电信网和互联网数据安全日志审计指南.pdf",
+  "chars": 16388
  },
  "YD/T 4241-2023": {
   "code": "YD/T 4241-2023",
@@ -1074,7 +1148,9 @@
   "industry": "通信",
   "url": "https://hbba.sacinfo.org.cn/stdDetail/9009099e1bdbf0462504e7b6c46833342a973b01728d1d4711d7944692248731",
   "pk": "9009099e1bdbf0462504e7b6c46833342a973b01728d1d4711d7944692248731",
-  "note": "hbba 检索发现"
+  "note": "hbba 检索发现",
+  "file": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/行业标准/YD_T 4241-2023 电信网和互联网数据安全评估技术实施指南.pdf",
+  "chars": 21711
  },
  "NY/T 4261-2022": {
   "code": "NY/T 4261-2022",
@@ -1086,7 +1162,9 @@
   "industry": "农业",
   "url": "https://hbba.sacinfo.org.cn/stdDetail/cb96c1c64e05410adf3ae64f064e86c22923d429ba2141b92968ec4c5e40feb6",
   "pk": "cb96c1c64e05410adf3ae64f064e86c22923d429ba2141b92968ec4c5e40feb6",
-  "note": "hbba 检索发现"
+  "note": "hbba 检索发现",
+  "file": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/行业标准/NY_T 4261-2022 农业大数据安全管理指南.pdf",
+  "chars": 15011
  },
  "JR/T 0250—2022": {
   "code": "JR/T 0250—2022",
@@ -1098,7 +1176,9 @@
   "industry": "金融",
   "url": "https://hbba.sacinfo.org.cn/stdDetail/a65d4789f25ed44925f81ca821f330b57d924fe599b07075ec0d7a9ab9eff465",
   "pk": "a65d4789f25ed44925f81ca821f330b57d924fe599b07075ec0d7a9ab9eff465",
-  "note": "hbba 检索发现"
+  "note": "hbba 检索发现",
+  "file": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/行业标准/JR_T 0250—2022 证券期货业数据安全管理与保护指引.pdf",
+  "chars": 36790
  },
  "YD/T 3956-2021": {
   "code": "YD/T 3956-2021",
@@ -1122,7 +1202,9 @@
   "industry": "民政",
   "url": "https://hbba.sacinfo.org.cn/stdDetail/f9851b821528b607361f334b05fa63c852ac7ce5a6bc23c07ab946ed6d6fd0c3",
   "pk": "f9851b821528b607361f334b05fa63c852ac7ce5a6bc23c07ab946ed6d6fd0c3",
-  "note": "hbba 检索发现"
+  "note": "hbba 检索发现",
+  "file": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/行业标准/MZ_T 165-2020 居民家庭经济状况核对 数据安全管理要求.pdf",
+  "chars": 11440
  },
  "YD/T 3865-2021": {
   "code": "YD/T 3865-2021",
@@ -1134,7 +1216,9 @@
   "industry": "通信",
   "url": "https://hbba.sacinfo.org.cn/stdDetail/1e04ed998e1ebceb0401c733352158b964b9011b8d92f3d1d2a01dfda1dcfb4a",
   "pk": "1e04ed998e1ebceb0401c733352158b964b9011b8d92f3d1d2a01dfda1dcfb4a",
-  "note": "hbba 检索发现"
+  "note": "hbba 检索发现",
+  "file": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/行业标准/YD_T 3865-2021 工业互联网数据安全保护要求.pdf",
+  "chars": 10353
  },
  "JR/T 0223—2021": {
   "code": "JR/T 0223—2021",
@@ -1146,7 +1230,9 @@
   "industry": "金融",
   "url": "https://hbba.sacinfo.org.cn/stdDetail/1f9eb70777d824631167a79569f3ba72f8850dfaee4070f4397fe6a9a81f2f1e",
   "pk": "1f9eb70777d824631167a79569f3ba72f8850dfaee4070f4397fe6a9a81f2f1e",
-  "note": "hbba 检索发现"
+  "note": "hbba 检索发现",
+  "file": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/行业标准/JR_T 0223—2021 金融数据安全 数据生命周期安全规范.pdf",
+  "chars": 54773
  },
  "YD/T 3802-2020": {
   "code": "YD/T 3802-2020",
@@ -1182,7 +1268,9 @@
   "industry": "金融",
   "url": "https://hbba.sacinfo.org.cn/stdDetail/8b3109c6ea0908016ad6fad47562da21ceff320a7b132a3746ba830c118798d3",
   "pk": "8b3109c6ea0908016ad6fad47562da21ceff320a7b132a3746ba830c118798d3",
-  "note": "hbba 检索发现"
+  "note": "hbba 检索发现",
+  "file": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/行业标准/JR_T 0197-2020 金融数据安全 数据安全分级指南.pdf",
+  "chars": 44621
  },
  "YD/T 3736-2020": {
   "code": "YD/T 3736-2020",
@@ -1242,7 +1330,9 @@
   "industry": "金融",
   "url": "https://hbba.sacinfo.org.cn/stdDetail/7b39d6bbe275766f33c6ec1cfe7d15ca",
   "pk": "7b39d6bbe275766f33c6ec1cfe7d15ca",
-  "note": "hbba 检索发现"
+  "note": "hbba 检索发现",
+  "file": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/行业标准/JR_T 0109.3-2015 智能电视支付应用规范 第3部分：数据安全传输控制规范.pdf",
+  "chars": 4531
  },
  "JR/T 0055.4-2009": {
   "code": "JR/T 0055.4-2009",
@@ -1254,7 +1344,9 @@
   "industry": "金融",
   "url": "https://hbba.sacinfo.org.cn/stdDetail/483d3a4890d13c088179cd667acdb9c4",
   "pk": "483d3a4890d13c088179cd667acdb9c4",
-  "note": "hbba 检索发现"
+  "note": "hbba 检索发现",
+  "file": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/行业标准/JR_T 0055.4-2009 银行卡联网联合技术规范 第4部分：数据安全传输控制.pdf",
+  "chars": 9328
  },
  "MH/T 4018.7-2012": {
   "code": "MH/T 4018.7-2012",
@@ -1266,7 +1358,9 @@
   "industry": "民用航空",
   "url": "https://hbba.sacinfo.org.cn/stdDetail/b50c06e62d4a7721d0aed49704fd7402",
   "pk": "b50c06e62d4a7721d0aed49704fd7402",
-  "note": "hbba 检索发现"
+  "note": "hbba 检索发现",
+  "file": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/行业标准/MH_T 4018.7-2012 民用航空空中交通管理管理信息系统技术规范 第7部分：数据安全.pdf",
+  "chars": 5421
  },
  "YD/T 7441—2026": {
   "code": "YD/T 7441—2026",
@@ -1302,7 +1396,9 @@
   "industry": "民用航空",
   "url": "https://hbba.sacinfo.org.cn/stdDetail/1f8144867f089e61f8807950936e7747faf35b7831e26257b3a659420c184560",
   "pk": "1f8144867f089e61f8807950936e7747faf35b7831e26257b3a659420c184560",
-  "note": "hbba 检索发现"
+  "note": "hbba 检索发现",
+  "file": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/行业标准/MH_T 3039—2025 民航领域数据分类分级要求.pdf",
+  "chars": 17426
  },
  "YD/T 4244-2023": {
   "code": "YD/T 4244-2023",
@@ -1314,7 +1410,9 @@
   "industry": "通信",
   "url": "https://hbba.sacinfo.org.cn/stdDetail/9009099e1bdbf0462504e7b6c46833341e4f27f8081966b0c4564f6e749b74a7",
   "pk": "9009099e1bdbf0462504e7b6c46833341e4f27f8081966b0c4564f6e749b74a7",
-  "note": "hbba 检索发现"
+  "note": "hbba 检索发现",
+  "file": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/行业标准/YD_T 4244-2023 电信网和互联网数据分类分级技术要求与测试方法.pdf",
+  "chars": 15550
  },
  "YD/T 3813-2020": {
   "code": "YD/T 3813-2020",
@@ -1350,7 +1448,9 @@
   "industry": "通信",
   "url": "https://hbba.sacinfo.org.cn/stdDetail/48506d25a50a3b30dc1428f3a605b8132d024312779b844832bfb687484899f0",
   "pk": "48506d25a50a3b30dc1428f3a605b8132d024312779b844832bfb687484899f0",
-  "note": "hbba 检索发现"
+  "note": "hbba 检索发现",
+  "file": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/行业标准/YD_T 3867-2024 电信领域重要数据识别指南.pdf",
+  "chars": 10779
  },
  "YD/T 3867-2021": {
   "code": "YD/T 3867-2021",
@@ -1410,7 +1510,9 @@
   "industry": "电力",
   "url": "https://hbba.sacinfo.org.cn/stdDetail/8ad9fa0b97631236fcde2f5c2d91243456dad8581da79c64b6d9ff7e9dbf5bc8",
   "pk": "8ad9fa0b97631236fcde2f5c2d91243456dad8581da79c64b6d9ff7e9dbf5bc8",
-  "note": "hbba 检索发现"
+  "note": "hbba 检索发现",
+  "file": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/行业标准/DL_T 3011—2025 发电企业二氧化碳排放量核算法不确定度评定指南.pdf",
+  "chars": 34432
  },
  "YY/T 1991-2025": {
   "code": "YY/T 1991-2025",
@@ -1458,7 +1560,9 @@
   "industry": "国密",
   "url": "https://hbba.sacinfo.org.cn/stdDetail/6cfea21bf63c59d33b8da2e979fa919339b9086d5734dd3a0ac7c0b94723a822",
   "pk": "6cfea21bf63c59d33b8da2e979fa919339b9086d5734dd3a0ac7c0b94723a822",
-  "note": "hbba 检索发现"
+  "note": "hbba 检索发现",
+  "file": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/行业标准/GM_T 0001.4-2024 祖冲之序列密码算法 第4部分鉴别式加密机制.pdf",
+  "chars": 14293
  },
  "YD/T 4544.4-2024": {
   "code": "YD/T 4544.4-2024",
@@ -1494,7 +1598,9 @@
   "industry": "公共安全",
   "url": "https://hbba.sacinfo.org.cn/stdDetail/f23902c9400c81ea79d00aa398fdb0748082c9df8b5d047e636b03e50eb90ce9",
   "pk": "f23902c9400c81ea79d00aa398fdb0748082c9df8b5d047e636b03e50eb90ce9",
-  "note": "hbba 检索发现"
+  "note": "hbba 检索发现",
+  "file": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/行业标准/GA_T 2153-2024 安全防范 掌静脉识别应用 算法性能评测方法.pdf",
+  "chars": 2957
  },
  "YD/T 6090-2024": {
   "code": "YD/T 6090-2024",
@@ -1506,7 +1612,9 @@
   "industry": "通信",
   "url": "https://hbba.sacinfo.org.cn/stdDetail/b1ed7a1692e24209a78f236e3f382be12863f1c7ccba0fddff8806df0bf32577",
   "pk": "b1ed7a1692e24209a78f236e3f382be12863f1c7ccba0fddff8806df0bf32577",
-  "note": "hbba 检索发现"
+  "note": "hbba 检索发现",
+  "file": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/行业标准/YD_T 6090-2024 面向互联网的医疗人工智能辅助决策 基于病理图像的辅助决策系统算法指标和测试方法.pdf",
+  "chars": 13997
  },
  "YD/T 4921-2024": {
   "code": "YD/T 4921-2024",
@@ -1518,7 +1626,9 @@
   "industry": "通信",
   "url": "https://hbba.sacinfo.org.cn/stdDetail/632d9320dd0ef29e429bc549e21156ad3cc94a5f81b66fc4c2b081b6eed16e4d",
   "pk": "632d9320dd0ef29e429bc549e21156ad3cc94a5f81b66fc4c2b081b6eed16e4d",
-  "note": "hbba 检索发现"
+  "note": "hbba 检索发现",
+  "file": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/行业标准/YD_T 4921-2024 面向互联网的医疗人工智能辅助决策 基于妇科微生态的辅助决策系统算法指标和测试方法.pdf",
+  "chars": 10602
  },
  "YD/T 4884-2024": {
   "code": "YD/T 4884-2024",
@@ -1530,7 +1640,9 @@
   "industry": "通信",
   "url": "https://hbba.sacinfo.org.cn/stdDetail/c32f0352e7c3ca4ef3e433481760fdc56580a1feed9ab56bde88156de762bb43",
   "pk": "c32f0352e7c3ca4ef3e433481760fdc56580a1feed9ab56bde88156de762bb43",
-  "note": "hbba 检索发现"
+  "note": "hbba 检索发现",
+  "file": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/行业标准/YD_T 4884-2024 基于公用通信网络的智能图像识别算法及测试评估 人脸识别.pdf",
+  "chars": 15895
  },
  "YD/T 4813-2024": {
   "code": "YD/T 4813-2024",
@@ -1542,7 +1654,9 @@
   "industry": "通信",
   "url": "https://hbba.sacinfo.org.cn/stdDetail/09b68734589869f31ec7b6b8a4edaa96059b7a31ef25699bcee3a6a74e6a5618",
   "pk": "09b68734589869f31ec7b6b8a4edaa96059b7a31ef25699bcee3a6a74e6a5618",
-  "note": "hbba 检索发现"
+  "note": "hbba 检索发现",
+  "file": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/行业标准/YD_T 4813-2024 支持IP网络切片的灵活最优路径算法技术要求.pdf",
+  "chars": 16779
  },
  "GM/T 0010-2023": {
   "code": "GM/T 0010-2023",
@@ -1554,7 +1668,9 @@
   "industry": "国密",
   "url": "https://hbba.sacinfo.org.cn/stdDetail/22a394db18c231fa90c6bdb364f0e26422844fd49e8380b7b0a64bf9b56f692a",
   "pk": "22a394db18c231fa90c6bdb364f0e26422844fd49e8380b7b0a64bf9b56f692a",
-  "note": "hbba 检索发现"
+  "note": "hbba 检索发现",
+  "file": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/行业标准/GM_T 0010-2023 SM2密码算法加密签名消息语法规范.pdf",
+  "chars": 30
  },
  "GM/T 0009-2023": {
   "code": "GM/T 0009-2023",
@@ -1566,7 +1682,9 @@
   "industry": "国密",
   "url": "https://hbba.sacinfo.org.cn/stdDetail/22a394db18c231fa90c6bdb364f0e264a80038cbe5e666e3942905d649d34a62",
   "pk": "22a394db18c231fa90c6bdb364f0e264a80038cbe5e666e3942905d649d34a62",
-  "note": "hbba 检索发现"
+  "note": "hbba 检索发现",
+  "file": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/行业标准/GM_T 0009-2023 SM2密码算法使用规范.pdf",
+  "chars": 14
  },
  "GM/T 0130-2023": {
   "code": "GM/T 0130-2023",
@@ -1578,7 +1696,9 @@
   "industry": "国密",
   "url": "https://hbba.sacinfo.org.cn/stdDetail/22a394db18c231fa90c6bdb364f0e2647bed336db3e3baf64de6a6b91ce1f22f",
   "pk": "22a394db18c231fa90c6bdb364f0e2647bed336db3e3baf64de6a6b91ce1f22f",
-  "note": "hbba 检索发现"
+  "note": "hbba 检索发现",
+  "file": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/行业标准/GM_T 0130-2023 基于SM2算法的无证书及隐式证书公钥机制.pdf",
+  "chars": 30
  },
  "YD/T 4656-2024": {
   "code": "YD/T 4656-2024",
@@ -1590,7 +1710,9 @@
   "industry": "通信",
   "url": "https://hbba.sacinfo.org.cn/stdDetail/d5ea1dee5e09dbc2a60539516e4b83bd861e3083d3eb9b3e42b74a9bacf8dfe2",
   "pk": "d5ea1dee5e09dbc2a60539516e4b83bd861e3083d3eb9b3e42b74a9bacf8dfe2",
-  "note": "hbba 检索发现"
+  "note": "hbba 检索发现",
+  "file": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/行业标准/YD_T 4656-2024 面向SIM卡远程配置的国家商用密码算法技术要求.pdf",
+  "chars": 92806
  },
  "YD/T 4622-2023": {
   "code": "YD/T 4622-2023",
@@ -1602,7 +1724,9 @@
   "industry": "通信",
   "url": "https://hbba.sacinfo.org.cn/stdDetail/39ade344351b756a4c8ac4dc95823346c3a46a03ba989ca1f01f799185d78307",
   "pk": "39ade344351b756a4c8ac4dc95823346c3a46a03ba989ca1f01f799185d78307",
-  "note": "hbba 检索发现"
+  "note": "hbba 检索发现",
+  "file": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/行业标准/YD_T 4622-2023 BGPsec技术要求 算法、密钥格式和签名格式.pdf",
+  "chars": 22495
  },
  "JR/T 0287—2023": {
   "code": "JR/T 0287—2023",
@@ -1614,7 +1738,9 @@
   "industry": "金融",
   "url": "https://hbba.sacinfo.org.cn/stdDetail/228bc5a5110054687f3acef5900fed4fae0fe4cce70507d252bf7cd755b05761",
   "pk": "228bc5a5110054687f3acef5900fed4fae0fe4cce70507d252bf7cd755b05761",
-  "note": "hbba 检索发现"
+  "note": "hbba 检索发现",
+  "file": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/行业标准/JR_T 0287—2023 人工智能算法金融应用信息披露指南.pdf",
+  "chars": 12647
  },
  "YD/T 4424-2023": {
   "code": "YD/T 4424-2023",
@@ -1626,7 +1752,9 @@
   "industry": "通信",
   "url": "https://hbba.sacinfo.org.cn/stdDetail/f1851abd2919c7a31473282653c346a0f5d3b24314ab91dd25574b91f6e67fa7",
   "pk": "f1851abd2919c7a31473282653c346a0f5d3b24314ab91dd25574b91f6e67fa7",
-  "note": "hbba 检索发现"
+  "note": "hbba 检索发现",
+  "file": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/行业标准/YD_T 4424-2023 基于公用通信网络的智能图像识别算法及测试评估 总体技术要求.pdf",
+  "chars": 17118
  },
  "YY/T 1907-2023": {
   "code": "YY/T 1907-2023",
@@ -1650,7 +1778,9 @@
   "industry": "通信",
   "url": "https://hbba.sacinfo.org.cn/stdDetail/99f01c410dbbded2a00e8c45136fdd74bc9c1b63d954b5dbfc05800f841acc23",
   "pk": "99f01c410dbbded2a00e8c45136fdd74bc9c1b63d954b5dbfc05800f841acc23",
-  "note": "hbba 检索发现"
+  "note": "hbba 检索发现",
+  "file": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/行业标准/YD_T 4198-2023 虚拟现实（VR）服务中用户沉浸体验评估算法及参数.pdf",
+  "chars": 30753
  },
  "GM/T 0125.1-2022": {
   "code": "GM/T 0125.1-2022",
@@ -1662,7 +1792,9 @@
   "industry": "国密",
   "url": "https://hbba.sacinfo.org.cn/stdDetail/e99f8d17284a5e920923b11911b2f0b1b01d0be2bd56f1ec07deea3e709aad01",
   "pk": "e99f8d17284a5e920923b11911b2f0b1b01d0be2bd56f1ec07deea3e709aad01",
-  "note": "hbba 检索发现"
+  "note": "hbba 检索发现",
+  "file": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/行业标准/GM_T 0125.1-2022 JSON Web 密码应用语法规范 第1部分：算法标识.pdf",
+  "chars": 3339
  },
  "YY/T 1858-2022": {
   "code": "YY/T 1858-2022",
@@ -1686,7 +1818,9 @@
   "industry": "国密",
   "url": "https://hbba.sacinfo.org.cn/stdDetail/c32c8844bcf45d8fee4858cf91547c62153bddecd555a1a284326bab2f3f0771",
   "pk": "c32c8844bcf45d8fee4858cf91547c62153bddecd555a1a284326bab2f3f0771",
-  "note": "hbba 检索发现"
+  "note": "hbba 检索发现",
+  "file": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/行业标准/GM_T 0092-2020 基于SM2算法的证书申请语法规范.pdf",
+  "chars": 11
  },
  "GM/T 0086-2020": {
   "code": "GM/T 0086-2020",
@@ -1698,7 +1832,9 @@
   "industry": "国密",
   "url": "https://hbba.sacinfo.org.cn/stdDetail/c32c8844bcf45d8fee4858cf91547c626fef841c8eb427c089721a18ee2929d8",
   "pk": "c32c8844bcf45d8fee4858cf91547c626fef841c8eb427c089721a18ee2929d8",
-  "note": "hbba 检索发现"
+  "note": "hbba 检索发现",
+  "file": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/行业标准/GM_T 0086-2020 基于SM9标识密码算法的密钥管理系统技术规范.pdf",
+  "chars": 28
  },
  "GM/T 0085-2020": {
   "code": "GM/T 0085-2020",
@@ -1710,7 +1846,9 @@
   "industry": "国密",
   "url": "https://hbba.sacinfo.org.cn/stdDetail/c32c8844bcf45d8fee4858cf91547c62d840c938c16e6bc07a1b84fae7b33b6f",
   "pk": "c32c8844bcf45d8fee4858cf91547c62d840c938c16e6bc07a1b84fae7b33b6f",
-  "note": "hbba 检索发现"
+  "note": "hbba 检索发现",
+  "file": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/行业标准/GM_T 0085-2020 基于SM9标识密码算法的技术体系框架.pdf",
+  "chars": 12
  },
  "GM/T 0081-2020": {
   "code": "GM/T 0081-2020",
@@ -1722,7 +1860,9 @@
   "industry": "国密",
   "url": "https://hbba.sacinfo.org.cn/stdDetail/c32c8844bcf45d8fee4858cf91547c6290f8cdb41a4ddba308a5c9519833b985",
   "pk": "c32c8844bcf45d8fee4858cf91547c6290f8cdb41a4ddba308a5c9519833b985",
-  "note": "hbba 检索发现"
+  "note": "hbba 检索发现",
+  "file": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/行业标准/GM_T 0081-2020 SM9密码算法加密签名消息语法规范.pdf",
+  "chars": 17
  },
  "GM/T 0080-2020": {
   "code": "GM/T 0080-2020",
@@ -1734,7 +1874,9 @@
   "industry": "国密",
   "url": "https://hbba.sacinfo.org.cn/stdDetail/c32c8844bcf45d8fee4858cf91547c62ba345ee72cfe3e6feb256fee1f242411",
   "pk": "c32c8844bcf45d8fee4858cf91547c62ba345ee72cfe3e6feb256fee1f242411",
-  "note": "hbba 检索发现"
+  "note": "hbba 检索发现",
+  "file": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/行业标准/GM_T 0080-2020 SM9密码算法使用规范.pdf",
+  "chars": 14
  },
  "JR/T 0221-2021": {
   "code": "JR/T 0221-2021",
@@ -1746,7 +1888,9 @@
   "industry": "金融",
   "url": "https://hbba.sacinfo.org.cn/stdDetail/9b54e8c985ba66d8721b3a402bb2d06830d587f397d37f700d1200255a34b637",
   "pk": "9b54e8c985ba66d8721b3a402bb2d06830d587f397d37f700d1200255a34b637",
-  "note": "hbba 检索发现"
+  "note": "hbba 检索发现",
+  "file": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/行业标准/JR_T 0221-2021 人工智能算法金融应用评价规范.pdf",
+  "chars": 23452
  },
  "HJ/ T69-2001": {
   "code": "HJ/ T69-2001",
@@ -1758,7 +1902,9 @@
   "industry": "环境保护",
   "url": "https://hbba.sacinfo.org.cn/stdDetail/c8d253f01cc448c4151f72a0c9cd6cb89ccf7e4e0cbeea1fba6ef31b51925a02",
   "pk": "c8d253f01cc448c4151f72a0c9cd6cb89ccf7e4e0cbeea1fba6ef31b51925a02",
-  "note": "hbba 检索发现"
+  "note": "hbba 检索发现",
+  "file": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/行业标准/HJ_ T69-2001 燃煤锅炉烟尘和二氧化硫排放总量核定技术方法--物料衡算法（试行）.pdf",
+  "chars": 14
  },
  "YD/T 3779-2020": {
   "code": "YD/T 3779-2020",
@@ -3294,7 +3440,9 @@
   "industry": "司法",
   "url": "https://hbba.sacinfo.org.cn/stdDetail/a7f6504c51354ab8a4c427e4d83cfdb4e9fb05bca18867d6bcdf16111810e633",
   "pk": "a7f6504c51354ab8a4c427e4d83cfdb4e9fb05bca18867d6bcdf16111810e633",
-  "note": "hbba 检索发现"
+  "note": "hbba 检索发现",
+  "file": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/行业标准/SF_T 0182-2024 硅藻检验技术规范 基于人工智能技术的自动化方法.pdf",
+  "chars": 9986
  },
  "YD/T 6618-2025": {
   "code": "YD/T 6618-2025",
@@ -3450,7 +3598,9 @@
   "industry": "通信",
   "url": "https://hbba.sacinfo.org.cn/stdDetail/f2e55ad48362ad7c7eea1d4e3b644fd47d9e050cee986b8b2bad00737b873859",
   "pk": "f2e55ad48362ad7c7eea1d4e3b644fd47d9e050cee986b8b2bad00737b873859",
-  "note": "hbba 检索发现"
+  "note": "hbba 检索发现",
+  "file": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/行业标准/YD_T 4184-2023 移动互联网应用程序（APP）用户权益保护测评规范.pdf",
+  "chars": 14046
  },
  "YD/T 4307-2023": {
   "code": "YD/T 4307-2023",
@@ -3462,7 +3612,9 @@
   "industry": "通信",
   "url": "https://hbba.sacinfo.org.cn/stdDetail/a35409650ed4579bbc0825557162c9587cd254b95f78e6ac03be0322964ef9dc",
   "pk": "a35409650ed4579bbc0825557162c9587cd254b95f78e6ac03be0322964ef9dc",
-  "note": "hbba 检索发现"
+  "note": "hbba 检索发现",
+  "file": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/行业标准/YD_T 4307-2023 移动互联网应用 基于SMTP扩展的电子邮箱用户变更发现技术要求.pdf",
+  "chars": 7307
  },
  "YD/T 4089-2022": {
   "code": "YD/T 4089-2022",
@@ -3474,7 +3626,9 @@
   "industry": "通信",
   "url": "https://hbba.sacinfo.org.cn/stdDetail/6cb80d144064c5193ebeba45d6e971966277aa2741cfcdb12d547370c0ff3202",
   "pk": "6cb80d144064c5193ebeba45d6e971966277aa2741cfcdb12d547370c0ff3202",
-  "note": "hbba 检索发现"
+  "note": "hbba 检索发现",
+  "file": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/行业标准/YD_T 4089-2022 移动互联网应用（APP）性能管理平台技术要求.pdf",
+  "chars": 6789
  },
  "JR/T 0240—2021": {
   "code": "JR/T 0240—2021",
@@ -3486,7 +3640,9 @@
   "industry": "金融",
   "url": "https://hbba.sacinfo.org.cn/stdDetail/8e7cdec15ed376b6998da0a062e4a483ff06c7537174fb9c463809a3fe2b028c",
   "pk": "8e7cdec15ed376b6998da0a062e4a483ff06c7537174fb9c463809a3fe2b028c",
-  "note": "hbba 检索发现"
+  "note": "hbba 检索发现",
+  "file": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/行业标准/JR_T 0240—2021 证券期货业移动互联网应用程序安全检测规范.pdf",
+  "chars": 21933
  },
  "JR/T 0247—2022": {
   "code": "JR/T 0247—2022",
@@ -3498,7 +3654,9 @@
   "industry": "金融",
   "url": "https://hbba.sacinfo.org.cn/stdDetail/f5ec11294fc1f15d56a3e533bee778d626d32ff4b676496169966bca5ce41c59",
   "pk": "f5ec11294fc1f15d56a3e533bee778d626d32ff4b676496169966bca5ce41c59",
-  "note": "hbba 检索发现"
+  "note": "hbba 检索发现",
+  "file": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/行业标准/JR_T 0247—2022 面向老年人的证券期货业移动互联网应用程序设计检测规范.pdf",
+  "chars": 23428
  },
  "JR/T 0246—2022": {
   "code": "JR/T 0246—2022",
@@ -3510,7 +3668,9 @@
   "industry": "金融",
   "url": "https://hbba.sacinfo.org.cn/stdDetail/ad9d605806fad2e6c1548c967cffab124f04b8eca09b8bf6a695f9dac17910f3",
   "pk": "ad9d605806fad2e6c1548c967cffab124f04b8eca09b8bf6a695f9dac17910f3",
-  "note": "hbba 检索发现"
+  "note": "hbba 检索发现",
+  "file": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/行业标准/JR_T 0246—2022 面向老年人的证券期货业移动互联网应用程序设计规范.pdf",
+  "chars": 16809
  },
  "YD/T 2588-2020": {
   "code": "YD/T 2588-2020",
@@ -3546,7 +3706,9 @@
   "industry": "金融",
   "url": "https://hbba.sacinfo.org.cn/stdDetail/6c35776ecae75d705dbb8a0a420e2022f1e7b9545aa49c018f0abc6c65700ddc",
   "pk": "6c35776ecae75d705dbb8a0a420e2022f1e7b9545aa49c018f0abc6c65700ddc",
-  "note": "hbba 检索发现"
+  "note": "hbba 检索发现",
+  "file": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/行业标准/JR_T 0192—2020 证券期货业移动互联网应用程序安全规范.pdf",
+  "chars": 10268
  },
  "YD/T 3495-2019": {
   "code": "YD/T 3495-2019",
@@ -3738,7 +3900,9 @@
   "industry": "国密",
   "url": "https://hbba.sacinfo.org.cn/stdDetail/ced53568b96d1627754cc46714dfa5ae6f0ae2ab72be4bdd74874910c243d10f",
   "pk": "ced53568b96d1627754cc46714dfa5ae6f0ae2ab72be4bdd74874910c243d10f",
-  "note": "hbba 检索发现"
+  "note": "hbba 检索发现",
+  "file": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/行业标准/GM_T 0138-2024 C-V2X车联网证书策略与认证业务声明框架.pdf",
+  "chars": 34534
  },
  "YD/T 6205-2024": {
   "code": "YD/T 6205-2024",
@@ -3762,7 +3926,9 @@
   "industry": "通信",
   "url": "https://hbba.sacinfo.org.cn/stdDetail/9f7e7a3f4ac7294c1d59499e7f68e19681a5180d19be2f6b1bcedb3d87722491",
   "pk": "9f7e7a3f4ac7294c1d59499e7f68e19681a5180d19be2f6b1bcedb3d87722491",
-  "note": "hbba 检索发现"
+  "note": "hbba 检索发现",
+  "file": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/行业标准/YD_T 6058-2024 面向车联网应用场景的高精度定位总体技术要求.pdf",
+  "chars": 11782
  },
  "YD/T 6013-2024": {
   "code": "YD/T 6013-2024",
@@ -3774,7 +3940,9 @@
   "industry": "通信",
   "url": "https://hbba.sacinfo.org.cn/stdDetail/d48822531a0084dd0a03264c5eeba6d20cdd2557965501f57cb9b1ca1da0b742",
   "pk": "d48822531a0084dd0a03264c5eeba6d20cdd2557965501f57cb9b1ca1da0b742",
-  "note": "hbba 检索发现"
+  "note": "hbba 检索发现",
+  "file": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/行业标准/YD_T 6013-2024 C-V2X车联网认证授权系统技术要求.pdf",
+  "chars": 42291
  },
  "YD/T 6012-2024": {
   "code": "YD/T 6012-2024",
@@ -3786,7 +3954,9 @@
   "industry": "通信",
   "url": "https://hbba.sacinfo.org.cn/stdDetail/d48822531a0084dd0a03264c5eeba6d28d3e370dbb4b1e1df9010f60f9a05515",
   "pk": "d48822531a0084dd0a03264c5eeba6d28d3e370dbb4b1e1df9010f60f9a05515",
-  "note": "hbba 检索发现"
+  "note": "hbba 检索发现",
+  "file": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/行业标准/YD_T 6012-2024 车联网安全态势感知平台技术要求.pdf",
+  "chars": 12213
  },
  "YD/T 4989-2024": {
   "code": "YD/T 4989-2024",
@@ -3798,7 +3968,9 @@
   "industry": "通信",
   "url": "https://hbba.sacinfo.org.cn/stdDetail/e8fb40948ec7c0fb05d49dd3d6faa4d82376c77960191afcff9b246450403c09",
   "pk": "e8fb40948ec7c0fb05d49dd3d6faa4d82376c77960191afcff9b246450403c09",
-  "note": "hbba 检索发现"
+  "note": "hbba 检索发现",
+  "file": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/行业标准/YD_T 4989-2024 车联网基础电信网络安全监测数据采集技术要求及测试方法.pdf",
+  "chars": 12061
  },
  "YD/T 4974-2024": {
   "code": "YD/T 4974-2024",
@@ -3810,7 +3982,9 @@
   "industry": "通信",
   "url": "https://hbba.sacinfo.org.cn/stdDetail/afdafa20d9eb3474944c2492d8b407384c8c3c9e7f775b8cab0017989dfce084",
   "pk": "afdafa20d9eb3474944c2492d8b407384c8c3c9e7f775b8cab0017989dfce084",
-  "note": "hbba 检索发现"
+  "note": "hbba 检索发现",
+  "file": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/行业标准/YD_T 4974-2024 车联网安全态势感知平台与监管平台接口技术要求.pdf",
+  "chars": 57385
  },
  "YD/T 4973-2024": {
   "code": "YD/T 4973-2024",
@@ -3822,7 +3996,9 @@
   "industry": "通信",
   "url": "https://hbba.sacinfo.org.cn/stdDetail/afdafa20d9eb3474944c2492d8b40738c41cb5c7164a95b74d572f6db32f33bf",
   "pk": "afdafa20d9eb3474944c2492d8b40738c41cb5c7164a95b74d572f6db32f33bf",
-  "note": "hbba 检索发现"
+  "note": "hbba 检索发现",
+  "file": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/行业标准/YD_T 4973-2024 基于LTE的车联网无线通信技术 安全认证测试方法.pdf",
+  "chars": 38876
  },
  "YD/T 4773-2024": {
   "code": "YD/T 4773-2024",
@@ -3834,7 +4010,9 @@
   "industry": "通信",
   "url": "https://hbba.sacinfo.org.cn/stdDetail/ac14157693647a446c330fa262c188fc21364c36a41c4552e2c8a99ad60242c8",
   "pk": "ac14157693647a446c330fa262c188fc21364c36a41c4552e2c8a99ad60242c8",
-  "note": "hbba 检索发现"
+  "note": "hbba 检索发现",
+  "file": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/行业标准/YD_T 4773-2024 基于LTE的车联网无线通信技术 V2I基础信息单播传输技术要求.pdf",
+  "chars": 63286
  },
  "YD/T 4517.4-2024": {
   "code": "YD/T 4517.4-2024",
@@ -3846,7 +4024,9 @@
   "industry": "通信",
   "url": "https://hbba.sacinfo.org.cn/stdDetail/be6daffe2b13afed86a8dd71fd43baea6428d5f71fe091ffc37553a83b59a4bb",
   "pk": "be6daffe2b13afed86a8dd71fd43baea6428d5f71fe091ffc37553a83b59a4bb",
-  "note": "hbba 检索发现"
+  "note": "hbba 检索发现",
+  "file": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/行业标准/YD_T 4517.4-2024 车联网通信设备电磁兼容性要求和测量方法 第4部分：车载卫星通信设备.pdf",
+  "chars": 19201
  },
  "YD/T 4517.2-2024": {
   "code": "YD/T 4517.2-2024",
@@ -3858,7 +4038,9 @@
   "industry": "通信",
   "url": "https://hbba.sacinfo.org.cn/stdDetail/be6daffe2b13afed86a8dd71fd43baeae34cce23a9601447ba5772b2ce694d67",
   "pk": "be6daffe2b13afed86a8dd71fd43baeae34cce23a9601447ba5772b2ce694d67",
-  "note": "hbba 检索发现"
+  "note": "hbba 检索发现",
+  "file": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/行业标准/YD_T 4517.2-2024 车联网通信设备电磁兼容性要求和测量方法 第2部分：车载无线通信终端.pdf",
+  "chars": 19624
  },
  "YD/T 4517.1-2024": {
   "code": "YD/T 4517.1-2024",
@@ -3870,7 +4052,9 @@
   "industry": "通信",
   "url": "https://hbba.sacinfo.org.cn/stdDetail/be6daffe2b13afed86a8dd71fd43baea798797df1455b56d5e17096f6d5929fb",
   "pk": "be6daffe2b13afed86a8dd71fd43baea798797df1455b56d5e17096f6d5929fb",
-  "note": "hbba 检索发现"
+  "note": "hbba 检索发现",
+  "file": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/行业标准/YD_T 4517.1-2024 车联网通信设备电磁兼容性要求和测量方法 第1部分：路侧无线通信终端.pdf",
+  "chars": 18528
  },
  "YD/T 3756-2024": {
   "code": "YD/T 3756-2024",
@@ -3882,7 +4066,9 @@
   "industry": "通信",
   "url": "https://hbba.sacinfo.org.cn/stdDetail/1aa7dd59dfb6ecb60b93eadc6904cacef5c0fc2b270410422259b0fe113ba0fa",
   "pk": "1aa7dd59dfb6ecb60b93eadc6904cacef5c0fc2b270410422259b0fe113ba0fa",
-  "note": "hbba 检索发现"
+  "note": "hbba 检索发现",
+  "file": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/行业标准/YD_T 3756-2024 基于LTE的车联网无线通信技术 支持直连通信的车载终端设备技术要求.pdf",
+  "chars": 59473
  },
  "YD/T 3755-2024": {
   "code": "YD/T 3755-2024",
@@ -3894,7 +4080,9 @@
   "industry": "通信",
   "url": "https://hbba.sacinfo.org.cn/stdDetail/72c0a16928adf6567e47b3b6d23a34b3dc5f6ed4cf53ce865d3675aad34ac96a",
   "pk": "72c0a16928adf6567e47b3b6d23a34b3dc5f6ed4cf53ce865d3675aad34ac96a",
-  "note": "hbba 检索发现"
+  "note": "hbba 检索发现",
+  "file": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/行业标准/YD_T 3755-2024 基于LTE的车联网无线通信技术 支持直连通信的路侧设备技术要求.pdf",
+  "chars": 63622
  },
  "YD/T 4517.3-2023": {
   "code": "YD/T 4517.3-2023",
@@ -3906,7 +4094,9 @@
   "industry": "通信",
   "url": "https://hbba.sacinfo.org.cn/stdDetail/4a8489dd57280cda6971c356632ad987e23d3bd09d0cefb4a334eb7ecb03a0fe",
   "pk": "4a8489dd57280cda6971c356632ad987e23d3bd09d0cefb4a334eb7ecb03a0fe",
-  "note": "hbba 检索发现"
+  "note": "hbba 检索发现",
+  "file": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/行业标准/YD_T 4517.3-2023 车联网通信设备电磁兼容性要求和测量方法 第3部分：车载以太网通信设备.pdf",
+  "chars": 13660
  },
  "YD/T 4008-2022": {
   "code": "YD/T 4008-2022",
@@ -3918,7 +4108,9 @@
   "industry": "通信",
   "url": "https://hbba.sacinfo.org.cn/stdDetail/252eefffe5b67540732631076d5426c24505027e19a89fc2f26b8d60fece7f01",
   "pk": "252eefffe5b67540732631076d5426c24505027e19a89fc2f26b8d60fece7f01",
-  "note": "hbba 检索发现"
+  "note": "hbba 检索发现",
+  "file": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/行业标准/YD_T 4008-2022 基于LTE的车联网无线通信技术 应用标识分配及映射.pdf",
+  "chars": 7357
  },
  "YD/T 3957-2021": {
   "code": "YD/T 3957-2021",
@@ -3930,7 +4122,9 @@
   "industry": "通信",
   "url": "https://hbba.sacinfo.org.cn/stdDetail/5464c027db0a16062c4823c16f0f00eea5cccc0709000342f389001a4f54feb7",
   "pk": "5464c027db0a16062c4823c16f0f00eea5cccc0709000342f389001a4f54feb7",
-  "note": "hbba 检索发现"
+  "note": "hbba 检索发现",
+  "file": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/行业标准/YD_T 3957-2021 基于LTE的车联网无线通信技术 安全证书管理系统技术要求.pdf",
+  "chars": 202827
  },
  "YD/T 3848-2021": {
   "code": "YD/T 3848-2021",
@@ -3942,7 +4136,9 @@
   "industry": "通信",
   "url": "https://hbba.sacinfo.org.cn/stdDetail/8a2b87a1b6795b5b2301eb20de6014b68b6f1a184dca3bccbb6f2599c322c0af",
   "pk": "8a2b87a1b6795b5b2301eb20de6014b68b6f1a184dca3bccbb6f2599c322c0af",
-  "note": "hbba 检索发现"
+  "note": "hbba 检索发现",
+  "file": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/行业标准/YD_T 3848-2021 基于LTE的车联网无线通信技术 支持直连通信的车载终端设备测试方法.pdf",
+  "chars": 39180
  },
  "YD/T 3847-2021": {
   "code": "YD/T 3847-2021",
@@ -3954,7 +4150,9 @@
   "industry": "通信",
   "url": "https://hbba.sacinfo.org.cn/stdDetail/8a2b87a1b6795b5b2301eb20de6014b66a9b69cade01a9285e2b2300e8245092",
   "pk": "8a2b87a1b6795b5b2301eb20de6014b66a9b69cade01a9285e2b2300e8245092",
-  "note": "hbba 检索发现"
+  "note": "hbba 检索发现",
+  "file": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/行业标准/YD_T 3847-2021 基于LTE的车联网无线通信技术 支持直连通信的路侧设备测试方法.pdf",
+  "chars": 42490
  },
  "YD/T 3752-2020": {
   "code": "YD/T 3752-2020",
@@ -4110,7 +4308,9 @@
   "industry": "金融",
   "url": "https://hbba.sacinfo.org.cn/stdDetail/95b0bb8eca8fa1dda182b7f06e42f00f",
   "pk": "95b0bb8eca8fa1dda182b7f06e42f00f",
-  "note": "hbba 检索发现"
+  "note": "hbba 检索发现",
+  "file": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/行业标准/JR_T 0165-2018 保险业车联网基础数据元目录.pdf",
+  "chars": 44814
  },
  "YD/T 7415—2026": {
   "code": "YD/T 7415—2026",
@@ -5082,7 +5282,9 @@
   "industry": "安全生产",
   "url": "https://hbba.sacinfo.org.cn/stdDetail/382b9507ac5297f5f36cbc51e67d7141d68085f199d600d87f634383d9546401",
   "pk": "382b9507ac5297f5f36cbc51e67d7141d68085f199d600d87f634383d9546401",
-  "note": "hbba 检索发现"
+  "note": "hbba 检索发现",
+  "file": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/行业标准/AQ 3064.3—2025 “工业互联网+危化安全生产”建设规范 第3部分：人员定位.pdf",
+  "chars": 18
  },
  "AQ 3064.2—2025": {
   "code": "AQ 3064.2—2025",
@@ -5094,7 +5296,9 @@
   "industry": "安全生产",
   "url": "https://hbba.sacinfo.org.cn/stdDetail/382b9507ac5297f5f36cbc51e67d714123787a547a2331cc2b0ec7ba195e8aaf",
   "pk": "382b9507ac5297f5f36cbc51e67d714123787a547a2331cc2b0ec7ba195e8aaf",
-  "note": "hbba 检索发现"
+  "note": "hbba 检索发现",
+  "file": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/行业标准/AQ 3064.2—2025 “工业互联网+危化安全生产”建设规范 第2部分：特殊作业审批与作业过程管理.pdf",
+  "chars": 12
  },
  "AQ 3064.1—2025": {
   "code": "AQ 3064.1—2025",
@@ -5106,7 +5310,9 @@
   "industry": "安全生产",
   "url": "https://hbba.sacinfo.org.cn/stdDetail/382b9507ac5297f5f36cbc51e67d71418ed166772dd52c7e05ae06ad9592ddb5",
   "pk": "382b9507ac5297f5f36cbc51e67d71418ed166772dd52c7e05ae06ad9592ddb5",
-  "note": "hbba 检索发现"
+  "note": "hbba 检索发现",
+  "file": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/行业标准/AQ 3064.1—2025 “工业互联网+危化安全生产”建设规范 第1部分：总则.pdf",
+  "chars": 10
  },
  "JB/T 15227-2025": {
   "code": "JB/T 15227-2025",
@@ -5214,7 +5420,9 @@
   "industry": "通信",
   "url": "https://hbba.sacinfo.org.cn/stdDetail/ba699aa0fdb53fc3a19bcab1266d3fd0556a9f3d8d0c8d65c86316c5bebd7fac",
   "pk": "ba699aa0fdb53fc3a19bcab1266d3fd0556a9f3d8d0c8d65c86316c5bebd7fac",
-  "note": "hbba 检索发现"
+  "note": "hbba 检索发现",
+  "file": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/行业标准/YD_T 4961.4-2024 隐私计算 跨平台互联互通 第4部分：应用要求.pdf",
+  "chars": 29887
  },
  "YD/T 4961.3-2024": {
   "code": "YD/T 4961.3-2024",
@@ -5226,7 +5434,9 @@
   "industry": "通信",
   "url": "https://hbba.sacinfo.org.cn/stdDetail/ba699aa0fdb53fc3a19bcab1266d3fd0aad347f7298bd80ea039402c3548c6c9",
   "pk": "ba699aa0fdb53fc3a19bcab1266d3fd0aad347f7298bd80ea039402c3548c6c9",
-  "note": "hbba 检索发现"
+  "note": "hbba 检索发现",
+  "file": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/行业标准/YD_T 4961.3-2024 隐私计算 跨平台互联互通 第3部分：互联协议.pdf",
+  "chars": 12899
  },
  "YD/T 4961.2-2024": {
   "code": "YD/T 4961.2-2024",
@@ -5238,7 +5448,9 @@
   "industry": "通信",
   "url": "https://hbba.sacinfo.org.cn/stdDetail/ba699aa0fdb53fc3a19bcab1266d3fd003371addd6d6e96a3aa45ebf125f63cc",
   "pk": "ba699aa0fdb53fc3a19bcab1266d3fd003371addd6d6e96a3aa45ebf125f63cc",
-  "note": "hbba 检索发现"
+  "note": "hbba 检索发现",
+  "file": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/行业标准/YD_T 4961.2-2024 隐私计算 跨平台互联互通 第2部分：通信要求.pdf",
+  "chars": 8394
  },
  "YD/T 4961.1-2024": {
   "code": "YD/T 4961.1-2024",
@@ -5250,7 +5462,9 @@
   "industry": "通信",
   "url": "https://hbba.sacinfo.org.cn/stdDetail/ba699aa0fdb53fc3a19bcab1266d3fd0020853ca760823f17f1f65cecb522262",
   "pk": "ba699aa0fdb53fc3a19bcab1266d3fd0020853ca760823f17f1f65cecb522262",
-  "note": "hbba 检索发现"
+  "note": "hbba 检索发现",
+  "file": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/行业标准/YD_T 4961.1-2024 隐私计算 跨平台互联互通 第1部分：总体框架.pdf",
+  "chars": 6566
  },
  "YD/T 4948-2024": {
   "code": "YD/T 4948-2024",
@@ -5262,7 +5476,9 @@
   "industry": "通信",
   "url": "https://hbba.sacinfo.org.cn/stdDetail/61bb6caf6c2fa8c98f08244f77ecb3e2f5bbea8912a0b4ef4c2b0ef7d697e500",
   "pk": "61bb6caf6c2fa8c98f08244f77ecb3e2f5bbea8912a0b4ef4c2b0ef7d697e500",
-  "note": "hbba 检索发现"
+  "note": "hbba 检索发现",
+  "file": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/行业标准/YD_T 4948-2024 隐私计算 可信执行环境产品性能测试要求.pdf",
+  "chars": 6979
  },
  "YD/T 4947-2024": {
   "code": "YD/T 4947-2024",
@@ -5274,7 +5490,9 @@
   "industry": "通信",
   "url": "https://hbba.sacinfo.org.cn/stdDetail/61bb6caf6c2fa8c98f08244f77ecb3e220c069d63fc969dbb01fb77cddde6e45",
   "pk": "61bb6caf6c2fa8c98f08244f77ecb3e220c069d63fc969dbb01fb77cddde6e45",
-  "note": "hbba 检索发现"
+  "note": "hbba 检索发现",
+  "file": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/行业标准/YD_T 4947-2024 隐私计算 可信执行环境产品安全要求.pdf",
+  "chars": 10503
  },
  "YD/T 4692-2024": {
   "code": "YD/T 4692-2024",
@@ -5286,7 +5504,9 @@
   "industry": "通信",
   "url": "https://hbba.sacinfo.org.cn/stdDetail/17a10b1be7d3730d5315545e795e8d215ee94fc3277d4fd345bc5f428ead1d98",
   "pk": "17a10b1be7d3730d5315545e795e8d215ee94fc3277d4fd345bc5f428ead1d98",
-  "note": "hbba 检索发现"
+  "note": "hbba 检索发现",
+  "file": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/行业标准/YD_T 4692-2024 隐私计算 联邦学习产品性能要求和测试方法.pdf",
+  "chars": 22772
  },
  "YD/T 4691-2024": {
   "code": "YD/T 4691-2024",
@@ -5298,7 +5518,9 @@
   "industry": "通信",
   "url": "https://hbba.sacinfo.org.cn/stdDetail/17a10b1be7d3730d5315545e795e8d21aec9e8a2cfbeed07fca24e56645b48df",
   "pk": "17a10b1be7d3730d5315545e795e8d21aec9e8a2cfbeed07fca24e56645b48df",
-  "note": "hbba 检索发现"
+  "note": "hbba 检索发现",
+  "file": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/行业标准/YD_T 4691-2024 隐私计算 联邦学习产品安全要求和测试方法.pdf",
+  "chars": 29377
  },
  "YD/T 4690-2024": {
   "code": "YD/T 4690-2024",
@@ -5310,7 +5532,9 @@
   "industry": "通信",
   "url": "https://hbba.sacinfo.org.cn/stdDetail/17a10b1be7d3730d5315545e795e8d211f3113825ed1bca4b4ee1f97666f88b7",
   "pk": "17a10b1be7d3730d5315545e795e8d211f3113825ed1bca4b4ee1f97666f88b7",
-  "note": "hbba 检索发现"
+  "note": "hbba 检索发现",
+  "file": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/行业标准/YD_T 4690-2024 隐私计算 多方安全计算产品安全要求和测试方法.pdf",
+  "chars": 39736
  },
  "YD/T 4581-2023": {
   "code": "YD/T 4581-2023",
@@ -5322,7 +5546,9 @@
   "industry": "通信",
   "url": "https://hbba.sacinfo.org.cn/stdDetail/62e7e07594f5b9de85cc0461c4378dd77be871f0ac18b5ab6b2251d7307eb7a0",
   "pk": "62e7e07594f5b9de85cc0461c4378dd77be871f0ac18b5ab6b2251d7307eb7a0",
-  "note": "hbba 检索发现"
+  "note": "hbba 检索发现",
+  "file": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/行业标准/YD_T 4581-2023 隐私保护场景下安全多方计算技术指南.pdf",
+  "chars": 9878
  },
  "YD/T 4520-2023": {
   "code": "YD/T 4520-2023",
@@ -5334,7 +5560,9 @@
   "industry": "通信",
   "url": "https://hbba.sacinfo.org.cn/stdDetail/4a8489dd57280cda6971c356632ad98775f44c4d32016923dc8b8decd4a99c82",
   "pk": "4a8489dd57280cda6971c356632ad98775f44c4d32016923dc8b8decd4a99c82",
-  "note": "hbba 检索发现"
+  "note": "hbba 检索发现",
+  "file": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/行业标准/YD_T 4520-2023 大搜索中隐私保护技术要求.pdf",
+  "chars": 7182
  },
  "YD/T 4211-2023": {
   "code": "YD/T 4211-2023",
@@ -5346,7 +5574,9 @@
   "industry": "通信",
   "url": "https://hbba.sacinfo.org.cn/stdDetail/ea50016f93b8c5e6dafaff2930addc30deb17242d419aced475dae5c0b139582",
   "pk": "ea50016f93b8c5e6dafaff2930addc30deb17242d419aced475dae5c0b139582",
-  "note": "hbba 检索发现"
+  "note": "hbba 检索发现",
+  "file": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/行业标准/YD_T 4211-2023 域名服务隐私泄露风险防护指标要求.pdf",
+  "chars": 5212
  },
  "YD/T 3438-2019": {
   "code": "YD/T 3438-2019",
@@ -5670,7 +5900,9 @@
   "industry": "林业",
   "url": "https://hbba.sacinfo.org.cn/stdDetail/84104ba1dfe2508a0b00ca3aaac7508a53df73ecac1d9aacd07ec9737d57814a",
   "pk": "84104ba1dfe2508a0b00ca3aaac7508a53df73ecac1d9aacd07ec9737d57814a",
-  "note": "hbba 检索发现"
+  "note": "hbba 检索发现",
+  "file": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/行业标准/LY_T 2170-2026 林业草原网络安全技术要求.pdf",
+  "chars": 24464
  },
  "DL/T 2473.2—2022": {
   "code": "DL/T 2473.2—2022",
@@ -5682,7 +5914,9 @@
   "industry": "电力",
   "url": "https://hbba.sacinfo.org.cn/stdDetail/2df0bba1b8d34fe8295d9f479fca6db05fa6d47958955245494935b734969b67",
   "pk": "2df0bba1b8d34fe8295d9f479fca6db05fa6d47958955245494935b734969b67",
-  "note": "hbba 检索发现"
+  "note": "hbba 检索发现",
+  "file": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/行业标准/DL_T 2473.2—2022 可调节负荷并网运行与控制技术规范 第2部分：网络安全防护.pdf",
+  "chars": 11281
  },
  "JT/T 1545-2025": {
   "code": "JT/T 1545-2025",
@@ -5706,7 +5940,9 @@
   "industry": "电力",
   "url": "https://hbba.sacinfo.org.cn/stdDetail/fcaeeb98753619528a4006c78000ccc2709b75a654c1e094fec914c90859cac0",
   "pk": "fcaeeb98753619528a4006c78000ccc2709b75a654c1e094fec914c90859cac0",
-  "note": "hbba 检索发现"
+  "note": "hbba 检索发现",
+  "file": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/行业标准/DL_T 1931—2024 电力LTE无线通信网络安全防护要求.pdf",
+  "chars": 2929
  },
  "YD/T 6303-2024": {
   "code": "YD/T 6303-2024",
@@ -5742,7 +5978,9 @@
   "industry": "体育",
   "url": "https://hbba.sacinfo.org.cn/stdDetail/5f42a9e75d194bdbfbf651f6640819bbae94236accf0c28d3dfec77ee922fb42",
   "pk": "5f42a9e75d194bdbfbf651f6640819bbae94236accf0c28d3dfec77ee922fb42",
-  "note": "hbba 检索发现"
+  "note": "hbba 检索发现",
+  "file": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/行业标准/TY_T 1009.1-2024 体育赛事信息化 网络安全规范 第1部分：通用网络安全架构.pdf",
+  "chars": 5941
  },
  "YD/T 6017.3-2024": {
   "code": "YD/T 6017.3-2024",
@@ -5754,7 +5992,9 @@
   "industry": "通信",
   "url": "https://hbba.sacinfo.org.cn/stdDetail/d48822531a0084dd0a03264c5eeba6d2f67f9c2fb0288fe258571b59340406e6",
   "pk": "d48822531a0084dd0a03264c5eeba6d2f67f9c2fb0288fe258571b59340406e6",
-  "note": "hbba 检索发现"
+  "note": "hbba 检索发现",
+  "file": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/行业标准/YD_T 6017.3-2024 网络安全产品能力评价体系 第3部分：评价方法.pdf",
+  "chars": 19544
  },
  "YD/T 6017.2-2024": {
   "code": "YD/T 6017.2-2024",
@@ -5766,7 +6006,9 @@
   "industry": "通信",
   "url": "https://hbba.sacinfo.org.cn/stdDetail/d48822531a0084dd0a03264c5eeba6d2388309fb9a5cc16327b37167f2b6eb82",
   "pk": "d48822531a0084dd0a03264c5eeba6d2388309fb9a5cc16327b37167f2b6eb82",
-  "note": "hbba 检索发现"
+  "note": "hbba 检索发现",
+  "file": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/行业标准/YD_T 6017.2-2024 网络安全产品能力评价体系 第2部分：指标要求.pdf",
+  "chars": 10078
  },
  "YD/T 6017.1-2024": {
   "code": "YD/T 6017.1-2024",
@@ -5778,7 +6020,9 @@
   "industry": "通信",
   "url": "https://hbba.sacinfo.org.cn/stdDetail/d48822531a0084dd0a03264c5eeba6d2e4a53ce3d27840eaf70559a638958495",
   "pk": "d48822531a0084dd0a03264c5eeba6d2e4a53ce3d27840eaf70559a638958495",
-  "note": "hbba 检索发现"
+  "note": "hbba 检索发现",
+  "file": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/行业标准/YD_T 6017.1-2024 网络安全产品能力评价体系 第1部分：概念和模型.pdf",
+  "chars": 8172
  },
  "JR/T 0067—2021": {
   "code": "JR/T 0067—2021",
@@ -5790,7 +6034,9 @@
   "industry": "金融",
   "url": "https://hbba.sacinfo.org.cn/stdDetail/fb86e9dc67ebe9a4e971c0d529f09433038fd61839e0c0c8f067c35b6c8b15ea",
   "pk": "fb86e9dc67ebe9a4e971c0d529f09433038fd61839e0c0c8f067c35b6c8b15ea",
-  "note": "hbba 检索发现"
+  "note": "hbba 检索发现",
+  "file": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/行业标准/JR_T 0067—2021 证券期货业网络安全等级保护测评要求.pdf",
+  "chars": 324250
  },
  "JR/T 0060—2021": {
   "code": "JR/T 0060—2021",
@@ -5802,7 +6048,9 @@
   "industry": "金融",
   "url": "https://hbba.sacinfo.org.cn/stdDetail/7eb052a99aa337120a2d8d7375575877caefa190d8a49d6b7a719f71885a3042",
   "pk": "7eb052a99aa337120a2d8d7375575877caefa190d8a49d6b7a719f71885a3042",
-  "note": "hbba 检索发现"
+  "note": "hbba 检索发现",
+  "file": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/行业标准/JR_T 0060—2021 证券期货业网络安全等级保护基本要求.pdf",
+  "chars": 85662
  },
  "YD/T 4951-2024": {
   "code": "YD/T 4951-2024",
@@ -5814,7 +6062,9 @@
   "industry": "通信",
   "url": "https://hbba.sacinfo.org.cn/stdDetail/61bb6caf6c2fa8c98f08244f77ecb3e29f932ba96438439c4c71d28fa7faa27e",
   "pk": "61bb6caf6c2fa8c98f08244f77ecb3e29f932ba96438439c4c71d28fa7faa27e",
-  "note": "hbba 检索发现"
+  "note": "hbba 检索发现",
+  "file": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/行业标准/YD_T 4951-2024 基于公众电信网的车载远程通信终端网络安全技术要求.pdf",
+  "chars": 7906
  },
  "YD/T 4714-2024": {
   "code": "YD/T 4714-2024",
@@ -5826,7 +6076,9 @@
   "industry": "通信",
   "url": "https://hbba.sacinfo.org.cn/stdDetail/ef8ccbb3a9889a85a9c37fa45c066b3542fc41ed491598427cdedaf9781fb868",
   "pk": "ef8ccbb3a9889a85a9c37fa45c066b3542fc41ed491598427cdedaf9781fb868",
-  "note": "hbba 检索发现"
+  "note": "hbba 检索发现",
+  "file": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/行业标准/YD_T 4714-2024 5G网络安全态势感知系统技术要求.pdf",
+  "chars": 11252
  },
  "YD/T 4704-2024": {
   "code": "YD/T 4704-2024",
@@ -5838,7 +6090,9 @@
   "industry": "通信",
   "url": "https://hbba.sacinfo.org.cn/stdDetail/ef8ccbb3a9889a85a9c37fa45c066b35410b2f25dbb5b67645d1646a54b9bb71",
   "pk": "ef8ccbb3a9889a85a9c37fa45c066b35410b2f25dbb5b67645d1646a54b9bb71",
-  "note": "hbba 检索发现"
+  "note": "hbba 检索发现",
+  "file": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/行业标准/YD_T 4704-2024 网络空间安全仿真 网络安全检测指南.pdf",
+  "chars": 8630
  },
  "YD/T 4595-2023": {
   "code": "YD/T 4595-2023",
@@ -5850,7 +6104,9 @@
   "industry": "通信",
   "url": "https://hbba.sacinfo.org.cn/stdDetail/f6eef79fe9761fb3cec941ba9d722e2b5b7b258990738862da863ef34317ad30",
   "pk": "f6eef79fe9761fb3cec941ba9d722e2b5b7b258990738862da863ef34317ad30",
-  "note": "hbba 检索发现"
+  "note": "hbba 检索发现",
+  "file": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/行业标准/YD_T 4595-2023 网络空间安全仿真 网络安全试验知识的统一表示与接口要求.pdf",
+  "chars": 16033
  },
  "YD/T 4589-2023": {
   "code": "YD/T 4589-2023",
@@ -5862,7 +6118,9 @@
   "industry": "通信",
   "url": "https://hbba.sacinfo.org.cn/stdDetail/62e7e07594f5b9de85cc0461c4378dd71385cea3464c54fbc14e1b4fce121100",
   "pk": "62e7e07594f5b9de85cc0461c4378dd71385cea3464c54fbc14e1b4fce121100",
-  "note": "hbba 检索发现"
+  "note": "hbba 检索发现",
+  "file": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/行业标准/YD_T 4589-2023 网络空间安全仿真 网络安全知识获取系统的功能要求.pdf",
+  "chars": 7950
  },
  "YD/T 4586-2023": {
   "code": "YD/T 4586-2023",
@@ -5874,7 +6132,9 @@
   "industry": "通信",
   "url": "https://hbba.sacinfo.org.cn/stdDetail/62e7e07594f5b9de85cc0461c4378dd70618607f7a4b188ed6fada2d0e76bebc",
   "pk": "62e7e07594f5b9de85cc0461c4378dd70618607f7a4b188ed6fada2d0e76bebc",
-  "note": "hbba 检索发现"
+  "note": "hbba 检索发现",
+  "file": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/行业标准/YD_T 4586-2023 网络安全态势感知 数据采集要求.pdf",
+  "chars": 11135
  },
  "YD/T 4585-2023": {
   "code": "YD/T 4585-2023",
@@ -5886,7 +6146,9 @@
   "industry": "通信",
   "url": "https://hbba.sacinfo.org.cn/stdDetail/62e7e07594f5b9de85cc0461c4378dd7bbf4841f7eb758d43baa6280e79dc0e8",
   "pk": "62e7e07594f5b9de85cc0461c4378dd7bbf4841f7eb758d43baa6280e79dc0e8",
-  "note": "hbba 检索发现"
+  "note": "hbba 检索发现",
+  "file": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/行业标准/YD_T 4585-2023 电信网和互联网网络安全能力成熟度评价方法.pdf",
+  "chars": 14440
  },
  "YD/T 4584-2023": {
   "code": "YD/T 4584-2023",
@@ -5898,7 +6160,9 @@
   "industry": "通信",
   "url": "https://hbba.sacinfo.org.cn/stdDetail/62e7e07594f5b9de85cc0461c4378dd7b8871d5b11f550716b59f1d6b74fb7b0",
   "pk": "62e7e07594f5b9de85cc0461c4378dd7b8871d5b11f550716b59f1d6b74fb7b0",
-  "note": "hbba 检索发现"
+  "note": "hbba 检索发现",
+  "file": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/行业标准/YD_T 4584-2023 电信网和互联网网络安全能力成熟度评价模型.pdf",
+  "chars": 24838
  },
  "YD/T 4577-2023": {
   "code": "YD/T 4577-2023",
@@ -5910,7 +6174,9 @@
   "industry": "通信",
   "url": "https://hbba.sacinfo.org.cn/stdDetail/20d06d57337eab55a71f9e0b02a1cb13127244855768ae170ae42f174fb1fcfd",
   "pk": "20d06d57337eab55a71f9e0b02a1cb13127244855768ae170ae42f174fb1fcfd",
-  "note": "hbba 检索发现"
+  "note": "hbba 检索发现",
+  "file": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/行业标准/YD_T 4577-2023 网络安全仿真 恶意软件危害性测评方法.pdf",
+  "chars": 11373
  },
  "YD/T 4576-2023": {
   "code": "YD/T 4576-2023",
@@ -5922,7 +6188,9 @@
   "industry": "通信",
   "url": "https://hbba.sacinfo.org.cn/stdDetail/20d06d57337eab55a71f9e0b02a1cb131bda88ca787424fc3da80642b1545869",
   "pk": "20d06d57337eab55a71f9e0b02a1cb131bda88ca787424fc3da80642b1545869",
-  "note": "hbba 检索发现"
+  "note": "hbba 检索发现",
+  "file": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/行业标准/YD_T 4576-2023 网络安全众测平台第三方安全审计技术要求.pdf",
+  "chars": 9854
  },
  "YD/T 4571-2023": {
   "code": "YD/T 4571-2023",
@@ -5934,7 +6202,9 @@
   "industry": "通信",
   "url": "https://hbba.sacinfo.org.cn/stdDetail/20d06d57337eab55a71f9e0b02a1cb13f9adb2f0214bf4a616a8843da9e8ce4d",
   "pk": "20d06d57337eab55a71f9e0b02a1cb13f9adb2f0214bf4a616a8843da9e8ce4d",
-  "note": "hbba 检索发现"
+  "note": "hbba 检索发现",
+  "file": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/行业标准/YD_T 4571-2023 IPv6网络安全测评方法.pdf",
+  "chars": 8373
  },
  "MH/T 3035—2023": {
   "code": "MH/T 3035—2023",
@@ -5946,7 +6216,9 @@
   "industry": "民用航空",
   "url": "https://hbba.sacinfo.org.cn/stdDetail/cca6cdb75c447175519593456a2ed6e847409f9eaa2296c6c908616c299cf68c",
   "pk": "cca6cdb75c447175519593456a2ed6e847409f9eaa2296c6c908616c299cf68c",
-  "note": "hbba 检索发现"
+  "note": "hbba 检索发现",
+  "file": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/行业标准/MH_T 3035—2023 民用航空生产运行工业控制系统网络安全防护技术要求.pdf",
+  "chars": 15405
  },
  "DL／T 2614—2023": {
   "code": "DL／T 2614—2023",
@@ -5958,7 +6230,9 @@
   "industry": "电力",
   "url": "https://hbba.sacinfo.org.cn/stdDetail/65634f6f101261ac48e64bba2890762d9ccfa6138b6117a4491f513b177d273d",
   "pk": "65634f6f101261ac48e64bba2890762d9ccfa6138b6117a4491f513b177d273d",
-  "note": "hbba 检索发现"
+  "note": "hbba 检索发现",
+  "file": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/行业标准/DL／T 2614—2023 电力行业网络安全等级保护基本要求.pdf",
+  "chars": 4
  },
  "DL／T 2613—2023": {
   "code": "DL／T 2613—2023",
@@ -5970,7 +6244,9 @@
   "industry": "电力",
   "url": "https://hbba.sacinfo.org.cn/stdDetail/65634f6f101261ac48e64bba2890762d807b5bc8a1fa43d1b2dfb5d6602b9fd2",
   "pk": "65634f6f101261ac48e64bba2890762d807b5bc8a1fa43d1b2dfb5d6602b9fd2",
-  "note": "hbba 检索发现"
+  "note": "hbba 检索发现",
+  "file": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/行业标准/DL／T 2613—2023 电力行业网络安全等级保护测评指南.pdf",
+  "chars": 5369
  },
  "YD/T 2387-2023": {
   "code": "YD/T 2387-2023",
@@ -5982,7 +6258,9 @@
   "industry": "通信",
   "url": "https://hbba.sacinfo.org.cn/stdDetail/b8a1c96077056bb43bc7960d55e3ca9d4efe020380ef41f852865ea4b221b2ad",
   "pk": "b8a1c96077056bb43bc7960d55e3ca9d4efe020380ef41f852865ea4b221b2ad",
-  "note": "hbba 检索发现"
+  "note": "hbba 检索发现",
+  "file": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/行业标准/YD_T 2387-2023 网络安全监测系统技术要求.pdf",
+  "chars": 10186
  },
  "JT/T 904-2023": {
   "code": "JT/T 904-2023",
@@ -6006,7 +6284,9 @@
   "industry": "通信",
   "url": "https://hbba.sacinfo.org.cn/stdDetail/9009099e1bdbf0462504e7b6c46833345c8f24270df5b898e02feac6e761c59c",
   "pk": "9009099e1bdbf0462504e7b6c46833345c8f24270df5b898e02feac6e761c59c",
-  "note": "hbba 检索发现"
+  "note": "hbba 检索发现",
+  "file": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/行业标准/YD_T 4238-2023 基于公众电信网的体育赛事网络安全实施指南.pdf",
+  "chars": 6137
  },
  "YD/T 4237-2023": {
   "code": "YD/T 4237-2023",
@@ -6018,7 +6298,9 @@
   "industry": "通信",
   "url": "https://hbba.sacinfo.org.cn/stdDetail/9009099e1bdbf0462504e7b6c4683334d35734254c3edb4be945ad0ac4510a4c",
   "pk": "9009099e1bdbf0462504e7b6c4683334d35734254c3edb4be945ad0ac4510a4c",
-  "note": "hbba 检索发现"
+  "note": "hbba 检索发现",
+  "file": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/行业标准/YD_T 4237-2023 基于公众电信网的体育赛事网络安全总体要求.pdf",
+  "chars": 5440
  },
  "YD/T 4222-2023": {
   "code": "YD/T 4222-2023",
@@ -6030,7 +6312,9 @@
   "industry": "通信",
   "url": "https://hbba.sacinfo.org.cn/stdDetail/c4df0d0583db520278667035634a74ed03e2b85c63a8bf85f25d44d4b4a34512",
   "pk": "c4df0d0583db520278667035634a74ed03e2b85c63a8bf85f25d44d4b4a34512",
-  "note": "hbba 检索发现"
+  "note": "hbba 检索发现",
+  "file": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/行业标准/YD_T 4222-2023 网络安全防护同规划同建设同运行实施要求.pdf",
+  "chars": 10152
  },
  "RB/T 093-2022": {
   "code": "RB/T 093-2022",
@@ -6042,7 +6326,9 @@
   "industry": "认证认可",
   "url": "https://hbba.sacinfo.org.cn/stdDetail/63968ec2069643b9238102b74f4a562021d779cb49b4ed03d247bafcdd461b10",
   "pk": "63968ec2069643b9238102b74f4a562021d779cb49b4ed03d247bafcdd461b10",
-  "note": "hbba 检索发现"
+  "note": "hbba 检索发现",
+  "file": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/行业标准/RB_T 093-2022 社会公共安全领域 智能联网产品网络安全认证要求.pdf",
+  "chars": 13591
  },
  "JR/T 0254—2022": {
   "code": "JR/T 0254—2022",
@@ -6054,7 +6340,9 @@
   "industry": "金融",
   "url": "https://hbba.sacinfo.org.cn/stdDetail/a9bbc640a75fd7cb5844a546aa87bcf85b49002d92aa1699d6164f667de39f73",
   "pk": "a9bbc640a75fd7cb5844a546aa87bcf85b49002d92aa1699d6164f667de39f73",
-  "note": "hbba 检索发现"
+  "note": "hbba 检索发现",
+  "file": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/行业标准/JR_T 0254—2022 金融网络安全 信息科技外包评价指标数据元.pdf",
+  "chars": 50012
  },
  "JT/T 1418-2022": {
   "code": "JT/T 1418-2022",
@@ -6090,7 +6378,9 @@
   "industry": "劳动和劳动安全",
   "url": "https://hbba.sacinfo.org.cn/stdDetail/ec34b35b6335cf5648c65b46aa2b5e7e0962f9b3ea6e242a406861df9275962b",
   "pk": "ec34b35b6335cf5648c65b46aa2b5e7e0962f9b3ea6e242a406861df9275962b",
-  "note": "hbba 检索发现"
+  "note": "hbba 检索发现",
+  "file": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/行业标准/LD_T04—2022 人力资源社会保障网络安全监测和应急处置规范.pdf",
+  "chars": 19354
  },
  "YY/T 1843-2022": {
   "code": "YY/T 1843-2022",
@@ -6114,7 +6404,9 @@
   "industry": "水利",
   "url": "https://hbba.sacinfo.org.cn/stdDetail/a0e7215bb1081c18414ac5539e7c32b6174b54dda43dc5ecd5603417645d39bc",
   "pk": "a0e7215bb1081c18414ac5539e7c32b6174b54dda43dc5ecd5603417645d39bc",
-  "note": "hbba 检索发现"
+  "note": "hbba 检索发现",
+  "file": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/行业标准/SL_T 803—2020 水利网络安全保护技术规范.pdf",
+  "chars": 41855
  },
  "GY/T 352-2021": {
   "code": "GY/T 352-2021",
@@ -6126,7 +6418,9 @@
   "industry": "广播电视和网络视听",
   "url": "https://hbba.sacinfo.org.cn/stdDetail/ff379412e5cbe3927b56264cb214f853993f1e524c90e223b470881f5e43886b",
   "pk": "ff379412e5cbe3927b56264cb214f853993f1e524c90e223b470881f5e43886b",
-  "note": "hbba 检索发现"
+  "note": "hbba 检索发现",
+  "file": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/行业标准/GY_T 352-2021 广播电视网络安全等级保护基本要求.pdf",
+  "chars": 45949
  },
  "JR/T 0214—2021": {
   "code": "JR/T 0214—2021",
@@ -6138,7 +6432,9 @@
   "industry": "金融",
   "url": "https://hbba.sacinfo.org.cn/stdDetail/f0b4554a7187b09876d25697b1cdc665be8eb72cd81a2fb7ba63d58bdcb40e61",
   "pk": "f0b4554a7187b09876d25697b1cdc665be8eb72cd81a2fb7ba63d58bdcb40e61",
-  "note": "hbba 检索发现"
+  "note": "hbba 检索发现",
+  "file": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/行业标准/JR_T 0214—2021 金融网络安全 网络安全众测实施指南.pdf",
+  "chars": 16454
  },
  "JR/T 0213—2021": {
   "code": "JR/T 0213—2021",
@@ -6150,7 +6446,9 @@
   "industry": "金融",
   "url": "https://hbba.sacinfo.org.cn/stdDetail/f0b4554a7187b09876d25697b1cdc665c3a46a03ba989ca1f01f799185d78307",
   "pk": "f0b4554a7187b09876d25697b1cdc665c3a46a03ba989ca1f01f799185d78307",
-  "note": "hbba 检索发现"
+  "note": "hbba 检索发现",
+  "file": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/行业标准/JR_T 0213—2021 金融网络安全 Web 应用服务安全测试通用规范.pdf",
+  "chars": 22422
  },
  "YD/T 3799-2020": {
   "code": "YD/T 3799-2020",
@@ -6174,7 +6472,9 @@
   "industry": "广播电视和网络视听",
   "url": "https://hbba.sacinfo.org.cn/stdDetail/c91692fd1cc63048290d6ec2f892b5d46d3328d67e56ca130e720bba2d96e963",
   "pk": "c91692fd1cc63048290d6ec2f892b5d46d3328d67e56ca130e720bba2d96e963",
-  "note": "hbba 检索发现"
+  "note": "hbba 检索发现",
+  "file": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/行业标准/GY_T 337-2020 广播电视网络安全等级保护定级指南.pdf",
+  "chars": 12806
  },
  "JR/T 0072—2020": {
   "code": "JR/T 0072—2020",
@@ -6186,7 +6486,9 @@
   "industry": "金融",
   "url": "https://hbba.sacinfo.org.cn/stdDetail/97fd92c4cb56d248531e2df4dc49a08165fc1768af859d7ebd614974632e6b42",
   "pk": "97fd92c4cb56d248531e2df4dc49a08165fc1768af859d7ebd614974632e6b42",
-  "note": "hbba 检索发现"
+  "note": "hbba 检索发现",
+  "file": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/行业标准/JR_T 0072—2020 金融行业网络安全等级保护测评指南.pdf",
+  "chars": 385794
  },
  "JR/T 0071.6—2020": {
   "code": "JR/T 0071.6—2020",
@@ -6198,7 +6500,9 @@
   "industry": "金融",
   "url": "https://hbba.sacinfo.org.cn/stdDetail/97fd92c4cb56d248531e2df4dc49a081810acd8d6304608fed051b9058ca4bf8",
   "pk": "97fd92c4cb56d248531e2df4dc49a081810acd8d6304608fed051b9058ca4bf8",
-  "note": "hbba 检索发现"
+  "note": "hbba 检索发现",
+  "file": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/行业标准/JR_T 0071.6—2020 金融行业网络安全等级保护实施指引 第6部分：审计指引.pdf",
+  "chars": 9295
  },
  "JR/T 0071.5—2020": {
   "code": "JR/T 0071.5—2020",
@@ -6210,7 +6514,9 @@
   "industry": "金融",
   "url": "https://hbba.sacinfo.org.cn/stdDetail/97fd92c4cb56d248531e2df4dc49a081b088b5773d58ce86aad5de30d42bf16d",
   "pk": "97fd92c4cb56d248531e2df4dc49a081b088b5773d58ce86aad5de30d42bf16d",
-  "note": "hbba 检索发现"
+  "note": "hbba 检索发现",
+  "file": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/行业标准/JR_T 0071.5—2020 金融行业网络安全等级保护实施指引 第5部分：审计要求.pdf",
+  "chars": 7842
  },
  "JR/T 0071.4—2020": {
   "code": "JR/T 0071.4—2020",
@@ -6222,7 +6528,9 @@
   "industry": "金融",
   "url": "https://hbba.sacinfo.org.cn/stdDetail/97fd92c4cb56d248531e2df4dc49a081d0305f1d0b1b51976d0acca5881ae12e",
   "pk": "97fd92c4cb56d248531e2df4dc49a081d0305f1d0b1b51976d0acca5881ae12e",
-  "note": "hbba 检索发现"
+  "note": "hbba 检索发现",
+  "file": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/行业标准/JR_T 0071.4—2020 金融行业网络安全等级保护实施指引 第4部分：培训指引.pdf",
+  "chars": 5464
  },
  "JR/T 0071.3—2020": {
   "code": "JR/T 0071.3—2020",
@@ -6234,7 +6542,9 @@
   "industry": "金融",
   "url": "https://hbba.sacinfo.org.cn/stdDetail/97fd92c4cb56d248531e2df4dc49a08132756e4a18c2250c468a6ca088438e8a",
   "pk": "97fd92c4cb56d248531e2df4dc49a08132756e4a18c2250c468a6ca088438e8a",
-  "note": "hbba 检索发现"
+  "note": "hbba 检索发现",
+  "file": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/行业标准/JR_T 0071.3—2020 金融行业网络安全等级保护实施指引 第3部分：岗位能力要求和评价指引.pdf",
+  "chars": 8223
  },
  "JR/T 0071.2—2020": {
   "code": "JR/T 0071.2—2020",
@@ -6246,7 +6556,9 @@
   "industry": "金融",
   "url": "https://hbba.sacinfo.org.cn/stdDetail/97fd92c4cb56d248531e2df4dc49a0813cc1e42303be14714492e37e5d26f637",
   "pk": "97fd92c4cb56d248531e2df4dc49a0813cc1e42303be14714492e37e5d26f637",
-  "note": "hbba 检索发现"
+  "note": "hbba 检索发现",
+  "file": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/行业标准/JR_T 0071.2—2020 金融行业网络安全等级保护实施指引 第2部分：基本要求.pdf",
+  "chars": 106543
  },
  "JR/T 0071.1—2020": {
   "code": "JR/T 0071.1—2020",
@@ -6258,7 +6570,9 @@
   "industry": "金融",
   "url": "https://hbba.sacinfo.org.cn/stdDetail/97fd92c4cb56d248531e2df4dc49a081fc724053a9b1f855bb1cf313c57b5ca8",
   "pk": "97fd92c4cb56d248531e2df4dc49a081fc724053a9b1f855bb1cf313c57b5ca8",
-  "note": "hbba 检索发现"
+  "note": "hbba 检索发现",
+  "file": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/行业标准/JR_T 0071.1—2020 金融行业网络安全等级保护实施指引 第1部分：基础和术语.pdf",
+  "chars": 14857
  },
  "YD/T 3745-2020": {
   "code": "YD/T 3745-2020",
@@ -6306,7 +6620,9 @@
   "industry": "民用航空",
   "url": "https://hbba.sacinfo.org.cn/stdDetail/fab5677117f8697e3ad8aba7cb40259273a9dcdf45a6ef07a020faf39c693998",
   "pk": "fab5677117f8697e3ad8aba7cb40259273a9dcdf45a6ef07a020faf39c693998",
-  "note": "hbba 检索发现"
+  "note": "hbba 检索发现",
+  "file": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/行业标准/MH_T 0076—2020 民用航空网络安全等级保护基本要求.pdf",
+  "chars": 46426
  },
  "MH/T 0075—2020": {
   "code": "MH/T 0075—2020",
@@ -6318,7 +6634,9 @@
   "industry": "民用航空",
   "url": "https://hbba.sacinfo.org.cn/stdDetail/21bdd308bfdf9a71b5b502a526038f225fa6d47958955245494935b734969b67",
   "pk": "21bdd308bfdf9a71b5b502a526038f225fa6d47958955245494935b734969b67",
-  "note": "hbba 检索发现"
+  "note": "hbba 检索发现",
+  "file": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/行业标准/MH_T 0075—2020 民用航空网络安全监测数据接口格式规范.pdf",
+  "chars": 33077
  },
  "SJ/T 12080-2025": {
   "code": "SJ/T 12080-2025",
@@ -6366,7 +6684,9 @@
   "industry": "公共安全",
   "url": "https://hbba.sacinfo.org.cn/stdDetail/02beaeb8c871423b437d4a983d3e99fc9b77f5478cd83392b49b79e6875328b5",
   "pk": "02beaeb8c871423b437d4a983d3e99fc9b77f5478cd83392b49b79e6875328b5",
-  "note": "hbba 检索发现"
+  "note": "hbba 检索发现",
+  "file": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/行业标准/GA_T 1093-2023 安全防范 人脸识别应用 出入口控制人脸识别技术要求.pdf",
+  "chars": 12137
  },
  "YD/T 4087-2022": {
   "code": "YD/T 4087-2022",
@@ -6378,7 +6698,9 @@
   "industry": "通信",
   "url": "https://hbba.sacinfo.org.cn/stdDetail/6cb80d144064c5193ebeba45d6e97196627203a86cba628b0f73f24e526ca333",
   "pk": "6cb80d144064c5193ebeba45d6e97196627203a86cba628b0f73f24e526ca333",
-  "note": "hbba 检索发现"
+  "note": "hbba 检索发现",
+  "file": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/行业标准/YD_T 4087-2022 移动智能终端人脸识别安全技术要求及测试评估方法.pdf",
+  "chars": 21847
  },
  "SF/T 0106-2021": {
   "code": "SF/T 0106-2021",
@@ -6390,7 +6712,9 @@
   "industry": "司法",
   "url": "https://hbba.sacinfo.org.cn/stdDetail/168f1d826afd84de7731e2c879f69b72006875b07587c221d808b0c9ef76fbd4",
   "pk": "168f1d826afd84de7731e2c879f69b72006875b07587c221d808b0c9ef76fbd4",
-  "note": "hbba 检索发现"
+  "note": "hbba 检索发现",
+  "file": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/行业标准/SF_T 0106-2021 人像鉴定中人脸识别技术检验规范.pdf",
+  "chars": 3556
  },
  "GA/T 1756-2020": {
   "code": "GA/T 1756-2020",
@@ -6402,7 +6726,9 @@
   "industry": "公共安全",
   "url": "https://hbba.sacinfo.org.cn/stdDetail/70f36289819ed16ddf8e67587405b9a8c3a46a03ba989ca1f01f799185d78307",
   "pk": "70f36289819ed16ddf8e67587405b9a8c3a46a03ba989ca1f01f799185d78307",
-  "note": "hbba 检索发现"
+  "note": "hbba 检索发现",
+  "file": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/行业标准/GA_T 1756-2020 公安视频监控人像_人脸识别应用技术要求.pdf",
+  "chars": 14935
  },
  "GA/T 1755-2020": {
   "code": "GA/T 1755-2020",
@@ -6414,7 +6740,9 @@
   "industry": "公共安全",
   "url": "https://hbba.sacinfo.org.cn/stdDetail/7dfdcbcc28c7eb198f61209603cc9f95582a2d145c9d9ae6a8522a563cc38b3a",
   "pk": "7dfdcbcc28c7eb198f61209603cc9f95582a2d145c9d9ae6a8522a563cc38b3a",
-  "note": "hbba 检索发现"
+  "note": "hbba 检索发现",
+  "file": "/Users/luochen/Documents/2.法规、 标准、指南等/0.站点标准库/行业标准/GA_T 1755-2020 安全防范 人脸识别应用 人证核验设备通用技术要求.pdf",
+  "chars": 25365
  },
  "GA/T 1470-2018": {
   "code": "GA/T 1470-2018",
