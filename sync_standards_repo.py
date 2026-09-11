@@ -160,29 +160,45 @@ def main():
             {"content": base64.b64encode(readme).decode(), "encoding": "base64"})
     tree.append({"path": "README.md", "mode": "100644", "type": "blob", "sha": b["sha"]})
 
-    t = api("POST", f"/repos/{REPO}/git/trees", token, {"tree": tree})
-    if "sha" not in t:
-        sys.exit(f"tree 创建失败：{str(t)[:300]}")
+    if not tree:
+        print(f"\n无变更（复用 {reuse}），不创建提交。")
+        return
 
-    parent = None
+    # 仓库到 500+ 份文件后，一次性提交整棵树会被 GitHub 判为 Server Error。
+    # 改成 base_tree + 分批提交：每批只列本批变更，逐批推进 ref，中途失败也能续跑。
     ref = api("GET", f"/repos/{REPO}/git/ref/heads/{BRANCH}", token, raw=True)
-    if isinstance(ref.get("object"), dict):
-        parent = ref["object"]["sha"]
-    payload = {"message": f"standards: 同步 {len(files)} 份原文 {date.today().isoformat()}"
-                          f"（新增/更新 {upload}）", "tree": t["sha"]}
+    parent = ref["object"]["sha"] if isinstance(ref.get("object"), dict) else None
+    base = None
     if parent:
-        payload["parents"] = [parent]
-    c = api("POST", f"/repos/{REPO}/git/commits", token, payload)
-    if "sha" not in c:
-        sys.exit(f"commit 失败：{str(c)[:300]}")
+        pc = api("GET", f"/repos/{REPO}/git/commits/{parent}", token, raw=True)
+        base = (pc.get("tree") or {}).get("sha")
 
-    if parent:
-        r = api("PATCH", f"/repos/{REPO}/git/refs/heads/{BRANCH}", token, {"sha": c["sha"]})
-    else:
-        r = api("POST", f"/repos/{REPO}/git/refs", token,
-                {"ref": f"refs/heads/{BRANCH}", "sha": c["sha"]})
-    if "object" not in r and r.get("ref") is None:
-        sys.exit(f"ref 更新失败：{str(r)[:300]}")
+    CHUNK = 120
+    batches = [tree[i:i + CHUNK] for i in range(0, len(tree), CHUNK)]
+    for bi, batch in enumerate(batches, 1):
+        payload = {"tree": batch}
+        if base:
+            payload["base_tree"] = base
+        t = api("POST", f"/repos/{REPO}/git/trees", token, payload)
+        if "sha" not in t:
+            sys.exit(f"tree 创建失败（第 {bi}/{len(batches)} 批）：{str(t)[:300]}")
+        cpayload = {"message": f"standards: 同步 {len(files)} 份原文 {date.today().isoformat()}"
+                               f"（新增/更新 {upload}，第 {bi}/{len(batches)} 批）",
+                    "tree": t["sha"]}
+        if parent:
+            cpayload["parents"] = [parent]
+        c = api("POST", f"/repos/{REPO}/git/commits", token, cpayload)
+        if "sha" not in c:
+            sys.exit(f"commit 失败（第 {bi}/{len(batches)} 批）：{str(c)[:300]}")
+        if parent:
+            r = api("PATCH", f"/repos/{REPO}/git/refs/heads/{BRANCH}", token, {"sha": c["sha"]})
+        else:
+            r = api("POST", f"/repos/{REPO}/git/refs", token,
+                    {"ref": f"refs/heads/{BRANCH}", "sha": c["sha"]})
+        if "object" not in r and r.get("ref") is None:
+            sys.exit(f"ref 更新失败（第 {bi}/{len(batches)} 批）：{str(r)[:300]}")
+        parent, base = c["sha"], t["sha"]
+        print(f"  提交 {bi}/{len(batches)} → {c['sha'][:8]}（{len(batch)} 个路径）")
 
     print(f"\n已同步 {len(files)} 份（复用 {reuse} · 上传 {upload}）"
           f" → https://github.com/{REPO} (private) · commit {c['sha'][:8]}")
