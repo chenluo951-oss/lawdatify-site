@@ -94,7 +94,32 @@ def is_excluded(name, src):
         return True
     if len(re.findall(r"[\u4e00-\u9fa5]", name)) < 4:
         return True
+    # 已被 hide_items.py 下架的条目，重建时不再回流（清单见 sources/standards/excluded.json）
+    if _hidden_keys() and _nkey40(name) in _hidden_keys():
+        return True
     return False
+
+
+_HIDDEN = None
+
+
+def _nkey40(name):
+    n = re.sub(r"[（(].*?[)）]", "", name or "")
+    n = re.sub(r"[\s、，,。.:：\-—–_]+", "", n)
+    return n[:40]
+
+
+def _hidden_keys():
+    global _HIDDEN
+    if _HIDDEN is None:
+        _HIDDEN = set()
+        p = os.path.join(SITE, "sources/standards/excluded.json")
+        try:
+            for v in json.load(open(p, encoding="utf-8")).get("items", {}).values():
+                _HIDDEN.add(_nkey40(v.get("name", "")))
+        except Exception:
+            pass
+    return _HIDDEN
 
 RE_STD_CODE_STRICT = re.compile(r"^(GB|GA|YD|JR|DL|SB|YY|MH|JT|QX|SN|CB|TTAF|CCSA|CESA|CSAE)", re.I)
 

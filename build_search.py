@@ -56,6 +56,8 @@ def main():
     # ---------- 1. 法规与标准 ----------
     lib = jload(os.path.join(HERE, "sources", "standards", "library.json"), {})
     for it in lib.get("items", []):
+        if it.get("hidden"):
+            continue
         name = (it.get("name") or "").strip()
         code = (it.get("code") or "").strip()
         if not name:

@@ -61,6 +61,54 @@ LEVEL_CLS = {"法律": "b-purple", "行政法规": "b-purple", "部门规章": "
              "推荐性国家标准": "b-green", "国家标准化指导性技术文件": "b-ghost",
              "指引/指南": "b-ghost"}
 
+# 站内法规原文库（build_texts.py 产出）的条目映射
+TEXT_IDS = os.path.join(HERE, "sources", "standards", "text_ids.json")
+SEP_RE = re.compile(r"[\s\-—–/／\\()（）《》〈〉【】\[\]:：.、,，;；·|'\"]+")
+_TID = None
+
+
+def _nkey(s):
+    return SEP_RE.sub("", (s or "")).upper()
+
+
+def text_id(it):
+    global _TID
+    if _TID is None:
+        try:
+            _TID = json.load(open(TEXT_IDS, encoding="utf-8"))
+        except Exception:
+            _TID = {}
+    return _TID.get(_nkey((it.get("code") or "") + (it.get("name") or "")), "")
+
+
+def text_id_count():
+    global _TID
+    if _TID is None:
+        try:
+            _TID = json.load(open(TEXT_IDS, encoding="utf-8"))
+        except Exception:
+            _TID = {}
+    return len(_TID)
+
+
+def online_reader_url(it):
+    """标准类：openstd 详情深链 → 官方「在线预览」阅读器深链（图片式全文，供读者自行查阅）。"""
+    m = re.search(r"[?&]hcno=([A-Fa-f0-9]{32})", it.get("url") or "")
+    if m:
+        return ("https://openstd.samr.gov.cn/bzgk/std/showGb?type=online&hcno=" + m.group(1))
+    return ""
+
+
+def read_affordance(it):
+    """条目上的「读原文」入口：法规走站内原文库，标准走发布机构在线阅读器。"""
+    tid = text_id(it)
+    if tid:
+        return f'<a class="lb-read" href="texts.html#{tid}">读原文</a>'
+    ou = online_reader_url(it)
+    if ou:
+        return f'<a class="lb-read" href="{esc(ou)}" target="_blank" rel="noopener">官方在线阅读</a>'
+    return ""
+
 
 def item_card(it, idx):
     st = it.get("status", "现行有效")
@@ -97,6 +145,7 @@ data-text="{esc((it.get('name','')+' '+it.get('code','')+' '+it.get('issuer','')
       <span class="rd-badge {STATUS_CLS.get(st,'b-ghost')}">{esc(st)}</span>
       <span class="rd-badge {LEVEL_CLS.get(lv,'b-ghost')}">{esc(lv)}</span>
       <span class="rd-tag tg-region">{esc(it.get('topic',''))}</span>
+      {read_affordance(it)}
     </div>
     <h3>{title}</h3>
     <div class="rd-meta">{esc(' · '.join(metaparts))}</div>
@@ -171,6 +220,7 @@ def build_kb_index(items, duties, drafts, soon, stat_html="", board=""):
         soon_html = f'<div class="lb-rows">{srows}</div>'
     else:
         soon_html = '<p class="lb-empty">暂无即将实施条目。</p>'
+    n_online = text_id_count()
 
     # 义务清单统计（重构后为 大类 → 场景 → 义务 三级）
     cats = duties.get("categories", []) if isinstance(duties, dict) else []
@@ -197,6 +247,12 @@ def build_kb_index(items, duties, drafts, soon, stat_html="", board=""):
       <span>{duty_desc}。矩阵总览按「主题大类 × 业务场景」铺开，一屏看全覆盖面与整改优先级；
       逐条明细给出条款原文、标杆做法与可套用文案，并反查依据条款。</span>
       <span class="more">查看义务清单 →</span>
+    </a>
+    <a class="dcard lb-entry" href="texts.html" style="--dc:#7c3aed">
+      <b>📖 法规原文</b>
+      <span>法律、行政法规、部门规章与规范性文件的官方正文，{n_online} 部可在站内直接阅读、复制与下载 TXT；
+      标准正文受著作权保护，由条目页给出发布机构的官方在线阅读入口。</span>
+      <span class="more">进入法规原文 →</span>
     </a>
     <a class="dcard lb-entry" href="standards.html#pane-draft" style="--dc:#b45309">
       <b>📌 立法草案跟踪</b>
@@ -551,7 +607,8 @@ def duty_block(d, items, idx):
 
 def main():
     data = json.load(open(SRC, encoding="utf-8"))
-    items = data["items"]
+    # 下架条目（非规范性材料）只在 library.json 上打 hidden 标记，渲染层过滤，便于随时恢复
+    items = [x for x in data["items"] if not x.get("hidden")]
     today = datetime.date.today().isoformat()
 
     # 合规义务清单（三级结构）；回退到条目库内的旧式 duties
@@ -586,6 +643,7 @@ def main():
         ("标准", n_std),
         ("法律法规", n_law),
         ("本机原文", n_local),
+        ("站内可读原文", text_id_count()),
         ("在途草案", f"{len(drafts)} 项"),
         ("合规义务", f"{n_duty} 项"),
     ]]
