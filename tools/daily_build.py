@@ -53,6 +53,9 @@ STEPS = [
     ("合规审计",        [PY, "build_audit.py"],                      False),
     ("监管雷达",        [PY, "build_radar.py"],                      True),
     ("法律分析",        [PY, "build_analysis.py"],                   False),
+    # 公众号原文存档 → kb/wx.html + sources/wx/replaces.json
+    # 必须在 build_topics 之前：build_topics 读 replaces.json 把二手来源链接改指站内存档
+    ("公众号原文存档",  [PY, "tools/build_wx_archive.py"],           False),
     ("合规资讯·首页",   [PY, "build_topics.py"],                     True),
     ("今日更新",        [PY, "build_updates.py"],                    True),
     ("搜索索引",        [PY, "build_search.py"],                     False),
@@ -60,6 +63,7 @@ STEPS = [
     ("模块子导航",      [PY, "inject_subnav.py"],                    False),
     ("全站导航页脚",    [PY, "unify_chrome.py"],                     True),
     ("OG 元数据",       [PY, "inject_meta.py"],                      True),
+    ("站点体积体检",    [PY, "tools/site_size.py"],                  False),
     ("构建前护栏",      [PY, "preflight.py"],                        False),
 ]
 

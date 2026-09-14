@@ -49,6 +49,7 @@ PAGES = [
     "kb/index.html",
     "kb/standards.html",
     "kb/texts.html",
+    "kb/wx.html",
     "kb/benchmarks.html",
     "radar/index.html",
     "radar/calendar.html",

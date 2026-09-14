@@ -60,6 +60,36 @@ for _new in REPL.values():
     NEW_TIER[_new] = ("src-off", "官方原文",
                       "立法机关、监管机构、政府门户发布的原文")
 
+# ---------------------------------------------------------------- 站内存档改写
+# 这类内容的原文**只在发布机关官方微信公众号**上，PC 官网无对应页、微信外链必然失效
+# → 不做外链，改为指向站内全文存档（kb/wx.html，正文由 tools/fetch_wechat.py 抓取、
+#   tools/build_wx_archive.py 渲染）。映射：原二手外链 → sources/wx/<id>.json 的 id。
+# 与 REPL 的区别：REPL 是「换成另一个官方外链」，这里是「换成站内原文」。
+INTERNAL = {
+    # 阳曲县 5 起网络餐饮食品安全典型案例（原引新浪转载）
+    # → 公众号「阳曲县融媒体中心（阳曲微讯）」gh_005460440220，2026-09-10
+    "https://k.sina.com.cn/article_5952915705_162d248f906703nwwe.html": "e89d14e8c1",
+}
+
+
+def rel_prefix(path):
+    """回到站点根目录的相对前缀：news/index.html → '../'，news/reports/x.html → '../../'。"""
+    rel = os.path.relpath(path, ROOT).replace(os.sep, "/")
+    return "../" * rel.count("/")
+
+
+def patch_internal(text, path):
+    """把指向二手外链的 <a> 整段换成站内存档链接（href 与锚文本一并处理）。"""
+    prefix = rel_prefix(path)
+    n = 0
+    for old, wxid in INTERNAL.items():
+        pat = re.compile(r'<a href="%s"[^>]*>[^<]*</a>' % re.escape(old))
+        target = '<a href="%skb/wx.html#w-%s" title="原文只在发布机关官方微信公众号发布，' \
+                 'PC 官网无对应页；已存档全文于站内">站内原文存档</a>' % (prefix, wxid)
+        text, k = pat.subn(target, text)
+        n += k
+    return text, n
+
 
 def host_of(url):
     m = re.match(r"https?://([^/]+)/?", url)
@@ -114,14 +144,17 @@ def main():
         else:
             for old, nw in REPL.items():
                 new = new.replace(old, nw)
-        n = sum(src.count(o) for o in REPL)
+        # 站内存档改写（简报归档页 / 资讯流都适用；资讯流通常已由 build_topics 处理，此处幂等兜底）
+        new, n_int = patch_internal(new, path)
+        n = sum(src.count(o) for o in REPL) + n_int
         if new == src:
             continue
         total += n
-        print("%-6s %-3d处  %s" % ("写入" if apply else "待改", n,
-                                   os.path.relpath(path, ROOT)
-                                   if path.startswith(ROOT)
-                                   else os.path.relpath(path, SCRIPTS)))
+        print("%-6s %-3d处  %s%s" % ("写入" if apply else "待改", n,
+                                     os.path.relpath(path, ROOT)
+                                     if path.startswith(ROOT)
+                                     else os.path.relpath(path, SCRIPTS),
+                                     "（含站内存档 %d 处）" % n_int if n_int else ""))
         if apply:
             with open(path, "w", encoding="utf-8") as f:
                 f.write(new)

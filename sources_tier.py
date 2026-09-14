@@ -240,7 +240,9 @@ def tier_of(url, declared=None):
     """按 URL 主机判定来源层级；`declared` 为数据里已有的 src 字段（兼容旧值）。"""
     h = _host(url)
     if not h:
-        return {"official": "official", "analysis": "academic"}.get(declared or "", "other")
+        # 无外链时按数据里的显式声明定级（公众号存档：外链已脱掉，凭声明标识来源层级）
+        return {"official": "official", "analysis": "academic",
+                "wechat-official": "wechat-official"}.get(declared or "", "other")
 
     # 公众号先于其它规则判定（mp.weixin.qq.com 无机构信息，必须凭据放行）
     if h in WECHAT_HOSTS:

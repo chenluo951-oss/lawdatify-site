@@ -40,6 +40,16 @@ CACHE = os.path.join(HERE, "sources", "link_status.json")
 NATIVE = os.path.join(HERE, "sources", "news", "items.jsonl")
 NATIVE_VER = "站点直采"
 
+# 官方公众号原文存档：原二手来源 URL → 站内存档（由 tools/build_wx_archive.py 生成）。
+# 命中的条目不再指向失效/二手外链，改为链到 kb/wx.html#w-<id> 的站内全文存档。
+WX_REPLACES = {}
+
+try:
+    WX_REPLACES = json.load(open(os.path.join(HERE, "sources", "wx", "replaces.json"),
+                                 encoding="utf-8"))
+except (OSError, ValueError):
+    WX_REPLACES = {}
+
 # 六大领域：键为归一化名，值为展示名 + 主色
 DOMAINS = [
     ("数据合规", "#1b4f8a"),
@@ -308,6 +318,8 @@ def load_native(path=NATIVE):
             "kind": (r.get("kind") or "监管动态").strip(),
             "ver": NATIVE_VER,
             "file": "sources/news/items.jsonl",
+            # 来源为站内公众号原文存档（tools/fetch_wechat.py 抓取）时透传
+            **({"wx_id": (r.get("wx_id") or "").strip()} if r.get("wx_id") else {}),
         })
     return out
 
@@ -413,8 +425,8 @@ def is_root_url(u):
     return "/" not in p or p.rstrip("/").count("/") == 0
 
 
-def render_item_card(it, idx):
-    """单条资讯卡片。"""
+def render_item_card(it, idx, rel="../"):
+    """单条资讯卡片。`rel` 为回到站点根目录的相对前缀（首页传空串）。"""
     color = DOMAIN_COLOR.get(it["domain"], "#1b4f8a")
     url = it["url"]
     # 根域名先用覆盖表换成具体公告页
@@ -424,7 +436,20 @@ def render_item_card(it, idx):
                 url = deep
                 break
     link_html = ""
-    if url:
+    if it.get("wx_id"):
+        # 来源只在官方公众号发布、PC 官网无对应页 → 指向站内全文存档，不做微信外链
+        # （公众号链接是带签名的临时地址，必然短链失效，给出去等于给死链）
+        w = WX_REPLACES.get(it["url"]) or {}
+        org = it.get("wx_org") or w.get("org") or it.get("org") or ""
+        note = f'{esc(org)}官方公众号' if org else "发布机关官方公众号"
+        link_html = (
+            f'<a class="src src-wxin" href="{esc(rel)}kb/wx.html#w-{esc(it["wx_id"])}" '
+            f'title="原文只在{esc(org)}官方微信公众号发布，PC 官网无对应页；已存档全文于站内">'
+            f'站内原文存档 <span class="arw">→</span></a>'
+        )
+        link_html += (f'<span class="rd-src src-wx" title="{note}，已核验账号主体并存档全文">'
+                      f'官方公众号</span>')
+    elif url:
         host = re.sub(r"^https?://(www\.)?", "", url).split("/")[0]
         if is_root_url(url):
             # 仍没有可用深链：只显示机构名，不做成链接，绝不指向官网首页
@@ -654,6 +679,29 @@ def main():
     items = dedup(items)
     print(f"去重后 {len(items)} 条")
 
+    # 来源改写：命中「官方公众号原文存档」的条目，脱掉失效/二手外链。
+    # 这类内容的原文只在发布机关官方公众号上，PC 官网无对应页、微信外链必然失效，
+    # 故改为指向站内全文存档 kb/wx.html#w-<id>（id 由 tools/build_wx_archive.py 生成）。
+    n_wx = 0
+    for it in items:
+        if it.get("wx_id"):
+            # 直采库已直接给出存档 id（来源即公众号），无需再按 URL 匹配
+            it["wx_org"] = it.get("wx_org") or it.get("org") or ""
+            it["src"] = "wechat-official"
+            it["url"] = ""
+            n_wx += 1
+            continue
+        w = WX_REPLACES.get(it.get("url") or "")
+        if not w:
+            continue
+        it["wx_id"] = w["wx_id"]
+        it["wx_org"] = w.get("org") or it.get("org") or ""
+        it["src"] = "wechat-official"
+        it["url"] = ""          # 脱掉会失效的原外链
+        n_wx += 1
+    if n_wx:
+        print(f"来源改写：{n_wx} 条 → 站内公众号原文存档（原为二手转载或必然失效的公众号链）")
+
     # 链接校验闸门：分三类
     #   verified —— 有官方深链且实测 200，进资讯流（可溯源，满足对外分享要求）
     #   internal —— 无外链的内部行动建议，进知识库（不对外引用，无需外链）
@@ -666,7 +714,9 @@ def main():
     verified, internal, dead = [], [], []
     for it in items:
         u = it["url"]
-        if not u:
+        if it.get("wx_id"):
+            verified.append(it)          # 站内全文存档已落地，无需再验外链
+        elif not u:
             internal.append(it)
         elif status.get(u, "?") in OK_CODES:
             verified.append(it)

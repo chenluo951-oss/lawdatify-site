@@ -34,7 +34,10 @@
     [{
       "domain":   "数据合规",     # 必需，须命中 DOMAINS
       "title":    "…",            # 必需，≥6 字
-      "url":      "https://…",    # 必需，官方具体页面（禁官网首页根域名）
+      "url":      "https://…",    # 官方具体页面（禁官网首页根域名）；
+                                  # 若来源只在官方公众号发布（PC 官网无对应页），改填 wx_id
+      "wx_id":    "e89d14e8c1",   # 可选，指向 sources/wx/<id>.json 的公众号原文存档；
+                                  # 填了它则 tier 判为「官方公众号」、免外链实测
       "date":     "2026-09-14",   # 可选，默认今天
       "org":      "国家网信办",    # 可选，发布机构
       "kind":     "监管动态",      # 可选：新规发布/监管动态/处罚案例/专项行动/标准动态/立法进程
@@ -42,6 +45,15 @@
       "analysis": "…",            # 可选，朴朴视角解读
       "risk":     "中高"           # 可选：高/中高/中/低
     }]
+
+公众号来源的正确用法（三层降级的中间层）
+----------------------------------------
+地方监管机构的执法通报常只在官方公众号发布，PC 官网无对应页。此时：
+  1) python3 tools/fetch_wechat.py grab --query "…" --pick 0 --apply
+     → 落盘 sources/wx/<id>.json（正文 + 公众号名 + gh 号 + 发布日期）
+  2) 候选条目里填 "wx_id": "<id>"，不要填二手转载的 url
+  3) python3 tools/build_wx_archive.py → 渲染 kb/wx.html 并存档
+站点上该条目的来源会指向站内全文存档，标「官方公众号」徽章。
 
 落盘后由 build_topics.py 合并进资讯流 / 首页 FEED / 应对建议，
 故本脚本只负责数据质量，**不生成页面**。
@@ -170,6 +182,10 @@ def main():
     for c in cand:
         title = (c.get("title") or "").strip()
         url = (c.get("url") or "").strip()
+        # 公众号原文存档来源：来源只在发布机关官方微信公众号发布、PC 官网无对应页，
+        # 不能给外链（微信链接是带签名的临时地址）。候选给 wx_id 指向 sources/wx/<id>.json，
+        # 由 tools/fetch_wechat.py 抓取、tools/build_wx_archive.py 渲染为站内存档页。
+        wx_id = (c.get("wx_id") or "").strip()
         domain = normalize_domain(c.get("domain") or "")
         if domain not in DOMAIN_KEYS:
             domain = guess_domain(title + " " + (c.get("points") or ""))
@@ -178,22 +194,28 @@ def main():
             why = "标题过短"
         elif not domain or domain not in DOMAIN_KEYS:
             why = f"领域无法归一（{c.get('domain')}）"
+        elif wx_id:
+            if not os.path.exists(os.path.join(ROOT, "sources", "wx", wx_id + ".json")):
+                why = f"公众号存档 sources/wx/{wx_id}.json 不存在"
         elif not url.startswith("http"):
-            why = "缺少 http 链接"
+            why = "缺少 http 链接（或补 wx_id 指向公众号原文存档）"
         elif is_root_url(url):
             why = "链接是官网首页根域名，不可溯源"
         if why:
             rejected.append((title, why))
             continue
 
-        if url in seen_url or norm_title(title) in seen_title:
+        if (url and url in seen_url) or norm_title(title) in seen_title:
             dup.append(title)
             continue
 
-        tier = tier_of(url)
-        if tier == "other" and not a.allow_other:
-            rejected.append((title, f"来源属二手转载（{host_of(url)}），需换官方原文"))
-            continue
+        if wx_id:
+            tier = "wechat-official"
+        else:
+            tier = tier_of(url)
+            if tier == "other" and not a.allow_other:
+                rejected.append((title, f"来源属二手转载（{host_of(url)}），需换官方原文"))
+                continue
 
         d = (c.get("date") or today).strip()
         if not DATE_RE.match(d):
@@ -214,14 +236,21 @@ def main():
             "risk": (c.get("risk") or "").strip(),
             "tier": tier,
             "collected": today,
+            **({"wx_id": wx_id} if wx_id else {}),
         })
 
     # 可达性实测（403/429 视为 WAF 拦脚本 UA，浏览器可正常打开）
+    # 公众号存档条目无外链（url 为空或仅作记录），不入实测队列
     dead = []
     if accepted and not a.no_verify:
-        print(f"curl 实测 {len(accepted)} 条官方深链…")
+        todo = [it for it in accepted if it["url"].startswith("http") and not it.get("wx_id")]
+        if todo:
+            print(f"curl 实测 {len(todo)} 条官方深链…")
         keep = []
         for it in accepted:
+            if not it["url"].startswith("http") or it.get("wx_id"):
+                keep.append(it)
+                continue
             code = probe(it["url"])
             if code in OK_CODES:
                 it["http"] = code
