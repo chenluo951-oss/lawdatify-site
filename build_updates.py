@@ -226,6 +226,25 @@ def main():
         src = snap.get("date", "?")
     added, changed, removed = diff_items(items, snap)
 
+    # --- 站点直采合规动态（独立于本地简报的每日增量，见 tools/collect_news.py）---
+    nat_file = os.path.join(HERE, "sources", "news", "items.jsonl")
+    nat, nat_new = [], []
+    if os.path.exists(nat_file):
+        for line in open(nat_file, encoding="utf-8"):
+            line = line.strip()
+            if not line:
+                continue
+            try:
+                nat.append(json.loads(line))
+            except ValueError:
+                continue
+    # 本期新增 = 今天入库的动态；若今天没入库（未联网），回退到最近一次入库批次
+    today_nat = [x for x in nat if (x.get("collected") or "") == TODAY_S]
+    if not today_nat and nat:
+        last = max((x.get("collected") or "") for x in nat)
+        today_nat = [x for x in nat if (x.get("collected") or "") == last]
+    nat_new = sorted(today_nat, key=lambda x: (x.get("date") or ""), reverse=True)
+
     # --- 生效时间轴 ---
     def soon(days_lo, days_hi):
         out = []
@@ -287,18 +306,39 @@ def main():
     parts.append(f"""<div class="up-hero">
   <div class="up-date">{TODAY_S}</div>
   <div class="up-hero-t">今日更新</div>
-  <p class="up-hero-d">汇总法规、标准与监管动态的当日变化：新增与状态变更、生效倒计时、7 日内立法节点、
-  草案征求意见截止与进行中的监管行动，逐条附发布机构原文深链。</p>
+  <p class="up-hero-d">汇总当日新增的合规动态，以及法规、标准与监管节点变化：新增与状态变更、生效倒计时、
+  7 日内立法节点、草案征求意见截止与进行中的监管行动，逐条附发布机构原文深链。</p>
 </div>""")
 
     # 统计卡
     parts.append('<div class="stat-grid">')
+    parts.append(stat_card(len(nat_new), "今日新增合规动态", "站点直采 · 官方原文", "tone-new"))
     parts.append(stat_card(len(added), "新增法规 / 标准", "较上一期新增", "tone-new"))
     parts.append(stat_card(len(changed), "状态 / 内容变更", "施行日期或要点变化", "tone-chg"))
     parts.append(stat_card(len(today_eff), "今日生效", f"另有 {len(soon30)} 项 30 日内生效", "tone-eff"))
     parts.append(stat_card(len(cal7), "7 日内立法节点", f"{len(ongoing)} 项监管行动进行中", "tone-cal"))
     parts.append(stat_card(len(dl), "草案征求意见", "按截止日排序", "tone-drt"))
     parts.append("</div>")
+
+    # 0. 今日新增合规动态（站点直采，独立于本地简报）
+    parts.append('<div class="section-title"><span class="bar"></span>今日新增合规动态</div>')
+    if nat_new:
+        for it in nat_new:
+            url = it.get("url") or ""
+            nm = esc(it.get("title") or "")
+            t = f'<a href="{esc(url)}" target="_blank" rel="noopener">{nm}</a>' if url else nm
+            ana = (f'<p class="up-point">{esc(it.get("points") or "")}</p>'
+                   if it.get("points") else "")
+            parts.append(
+                f'<div class="up-item"><div class="up-title">{t}</div>'
+                f'<div class="up-chips"><span class="chip chip-new">NEW</span>'
+                f'<span class="chip">{esc(it.get("domain") or "")}</span>'
+                f'<span class="chip">{esc(it.get("kind") or "")}</span>'
+                f'<span class="chip">{esc(it.get("org") or "")}</span>'
+                f'<span class="chip chip-dim">{esc(it.get("date") or "")}</span></div>'
+                + ana + '</div>')
+    else:
+        parts.append('<p class="lead">本批次无新增动态，可查看下方法规标准增量与监管节点。</p>')
 
     # 1. 新增
     parts.append('<div class="section-title"><span class="bar"></span>最新收录条目</div>')
@@ -447,6 +487,7 @@ def main():
 
     print(f"已生成 updates/index.html")
     print(f"  基线 {src} | 新增 {len(added)} / 变更 {len(changed)} / 下线 {len(removed)}")
+    print(f"  今日新增合规动态 {len(nat_new)}（站点直采库 {len(nat)} 条）")
     print(f"  今日生效 {len(today_eff)} | 30日内 {len(soon30)} | 180日内 {len(soon180)}")
     print(f"  7日内立法节点 {len(cal7)} | 草案截止 {len(dl)} | 进行中行动 {len(ongoing)}")
 

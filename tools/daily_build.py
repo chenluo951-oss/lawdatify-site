@@ -1,0 +1,128 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""全站每日重建编排器 —— 一句话把站点所有模块刷到最新。
+
+为什么需要它
+------------
+站点模块多、依赖顺序有硬约束（踩过坑）：
+  · build_std_texts → build_std_pdf → build_texts（顺序颠倒会把新目录并进旧目录）；
+  · build_topics 会把全站页脚「数据更新至」重设为**最新资讯期次**，
+    因此它之后必须再跑一次 unify_chrome 才会刷回今天（否则页脚悄悄回退到往期并上线）；
+  · build_topics / build_radar / gen_briefs 等会整体重写页面，冲掉统一导航与 OG 标签，
+    所以 inject_subnav / unify_chrome / inject_meta 必须排在所有页面生成脚本之后。
+把顺序固化成脚本，避免每次靠记忆拼命令。
+
+覆盖模块
+--------
+今日更新 / 监管雷达（日历·动向·地图）/ 合规资讯（资讯流·应对建议）/ 法律分析 /
+合规知识库（条目库·义务矩阵·原文入口·高频法条·合规审计）/ 首页 FEED / 搜索索引。
+
+用法
+----
+    python3 tools/daily_build.py                 # 每日增量（含数据同步，不含重量级 PDF 重建）
+    python3 tools/daily_build.py --no-network    # 只重建页面，不联网抓取
+    python3 tools/daily_build.py --with-texts    # 新归档了标准正文时才加，会重生成原版 PDF
+    python3 tools/daily_build.py --skip-build    # 只跑数据同步
+"""
+
+import argparse
+import os
+import subprocess
+import sys
+import time
+
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+os.chdir(ROOT)
+
+VENV_PY = "/Users/luochen/.workbuddy/binaries/python/envs/default/bin/python"
+PY = VENV_PY if os.path.exists(VENV_PY) else sys.executable
+
+# (标签, 命令, 是否关键)  —— 关键步骤失败即中止，非关键失败只告警继续
+STEPS = [
+    # ---------- 1. 数据同步（独立于本地简报的站点自有数据源）----------
+    ("草案跟踪",        [PY, "fetch_drafts.py"],                     False),
+    ("原文抓取·每日",   [PY, "harvest.py", "--run", "--daily", "--limit", "60"], False),
+    ("私有库同步",      [PY, "harvest.py", "--sync"],               False),
+    ("台账并库",        [PY, "merge_ledgers.py"],                   False),
+    ("法规标准条目库",  [PY, "build_library_data.py"],              False),
+    ("语料合并",        [PY, "merge_corpus.py"],                    False),
+    ("义务逐字抽取",    [PY, "enrich_duties.py"],                   False),
+    # ---------- 2. 页面生成（顺序敏感）----------
+    ("知识库·义务矩阵", [PY, "build_standards.py"],                 True),
+    ("高频法条",        [PY, "build_citations.py"],                  False),
+    ("合规审计",        [PY, "build_audit.py"],                      False),
+    ("监管雷达",        [PY, "build_radar.py"],                      True),
+    ("法律分析",        [PY, "build_analysis.py"],                   False),
+    ("合规资讯·首页",   [PY, "build_topics.py"],                     True),
+    ("今日更新",        [PY, "build_updates.py"],                    True),
+    ("搜索索引",        [PY, "build_search.py"],                     False),
+    # ---------- 3. 统一外壳与自检（必须最后）----------
+    ("模块子导航",      [PY, "inject_subnav.py"],                    False),
+    ("全站导航页脚",    [PY, "unify_chrome.py"],                     True),
+    ("OG 元数据",       [PY, "inject_meta.py"],                      True),
+    ("构建前护栏",      [PY, "preflight.py"],                        False),
+]
+
+# 仅当 --with-texts（新归档了标准正文）时才跑，避免无谓重生成 290MB PDF
+TEXT_STEPS = [
+    ("标准正文库",      [PY, "build_std_texts.py"]),
+    ("标准原版 PDF",    [PY, "build_std_pdf.py"]),
+    ("站内原文页",      [PY, "build_texts.py"]),
+]
+
+
+def run(label, cmd, timeout=1800):
+    t0 = time.time()
+    print(f"\n▶ {label}　$ {' '.join(cmd[1:])}")
+    try:
+        r = subprocess.run(cmd, cwd=ROOT, capture_output=True, text=True, timeout=timeout)
+        out = (r.stdout or "") + (r.stderr or "")
+    except subprocess.TimeoutExpired:
+        print(f"  ✗ 超时（>{timeout}s）")
+        return False, time.time() - t0
+    lines = [x for x in out.strip().splitlines() if x.strip()]
+    for x in lines[-12:]:
+        print("    " + x[:190])
+    ok = r.returncode == 0
+    print(f"  {'✓' if ok else '✗'} {label} 退出码 {r.returncode}　{time.time() - t0:.1f}s")
+    return ok, time.time() - t0
+
+
+def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--no-network", action="store_true", help="跳过 fetch_drafts / harvest")
+    ap.add_argument("--with-texts", action="store_true", help="含标准正文库与原版 PDF 重建")
+    ap.add_argument("--skip-build", action="store_true", help="只跑数据同步")
+    a = ap.parse_args()
+
+    net_labels = {"草案跟踪", "原文抓取·每日", "私有库同步"}
+    steps = [s for s in STEPS if not (a.no_network and s[0] in net_labels)]
+    if a.skip_build:
+        steps = [s for s in steps if s[0] in
+                 {"草案跟踪", "原文抓取·每日", "私有库同步", "台账并库",
+                  "法规标准条目库", "语料合并", "义务逐字抽取"}]
+    if a.with_texts:
+        idx = [i for i, s in enumerate(steps) if s[0] == "法规标准条目库"]
+        pos = (idx[0] + 1) if idx else 1
+        steps = steps[:pos] + [(l, c, False) for l, c in TEXT_STEPS] + steps[pos:]
+
+    print(f"全站每日重建：{len(steps)} 步　python={PY}　{'含' if a.with_texts else '不含'} PDF 重建")
+    t0 = time.time()
+    failed, warned = [], []
+    for label, cmd, critical in steps:
+        ok, _ = run(label, cmd)
+        if not ok:
+            if critical:
+                failed.append(label)
+                print(f"\n× 关键步骤「{label}」失败，中止（避免把半成品推上线）")
+                break
+            warned.append(label)
+    print(f"\n==== 编排完成：{time.time() - t0:.0f}s　"
+          f"告警 {len(warned)} 项{'（' + '、'.join(warned) + '）' if warned else ''} ====")
+    if failed:
+        sys.exit(1)
+    print("下一步：核对 git diff，有实质变更再 commit + push（无变更不推送，省构建额度）")
+
+
+if __name__ == "__main__":
+    main()

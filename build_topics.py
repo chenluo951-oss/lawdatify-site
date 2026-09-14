@@ -1,7 +1,15 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-从网页版合规简报中提取结构化条目，按六大领域生成站点内容。
+汇总站点「合规资讯」数据，按领域生成 news/index.html、news/actions.html 与首页 FEED 区块。
+
+**两路独立来源**（用户 2026-09-14 硬性要求：站点内容与本地日报是相互独立的数据与资讯来源）
+
+    A. 站点直采库 sources/news/items.jsonl
+       —— 由 tools/collect_news.py 每日从官方来源检索入库，**不依赖本地简报**。
+          这是站点「每天都有新内容」的保底来源。
+    B. 本地简报网页版 news/reports/*.html
+       —— 有简报产出时一并并入（信息量更大，含深度版解读）；没有也不影响站点更新。
 
 设计要点
 --------
@@ -28,6 +36,9 @@ from sources_tier import tier_tag as src_tier_tag, audit_sources, tier_tally, TI
 HERE = os.path.dirname(os.path.abspath(__file__))
 REPORTS = os.path.join(HERE, "news", "reports")
 CACHE = os.path.join(HERE, "sources", "link_status.json")
+# 站点直采资讯库（独立于本地简报，逐行 JSON，见 tools/collect_news.py）
+NATIVE = os.path.join(HERE, "sources", "news", "items.jsonl")
+NATIVE_VER = "站点直采"
 
 # 六大领域：键为归一化名，值为展示名 + 主色
 DOMAINS = [
@@ -259,6 +270,48 @@ def parse_report(path):
     return items
 
 
+def load_native(path=NATIVE):
+    """读站点直采资讯库 sources/news/items.jsonl（独立于本地简报的那一路来源）。
+
+    字段已由 tools/collect_news.py 过闸（领域归一 / 引源分级 / 深链非根域名 / curl 实测），
+    这里只做形状对齐，让下游 dedup / 链接闸门 / 渲染无需分支。
+    """
+    if not os.path.exists(path):
+        return []
+    out = []
+    for line in open(path, encoding="utf-8"):
+        line = line.strip()
+        if not line:
+            continue
+        try:
+            r = json.loads(line)
+        except ValueError:
+            continue
+        title = (r.get("title") or "").strip()
+        domain = normalize_domain(r.get("domain") or "")
+        if domain not in DOMAIN_KEYS:
+            domain = guess_domain(title + " " + (r.get("points") or ""))
+        if not title or domain not in DOMAIN_KEYS:
+            continue
+        collected = (r.get("collected") or r.get("date") or "")[:10]
+        out.append({
+            "domain": domain,
+            "title": title,
+            "risk": (r.get("risk") or "").strip(),
+            "date": (r.get("date") or collected).strip(),
+            "org": (r.get("org") or "").strip(),
+            "meta": "",
+            "url": (r.get("url") or "").strip(),
+            "points": (r.get("points") or "").strip(),
+            "analysis": (r.get("analysis") or "").strip(),
+            "issue": collected,
+            "kind": (r.get("kind") or "监管动态").strip(),
+            "ver": NATIVE_VER,
+            "file": "sources/news/items.jsonl",
+        })
+    return out
+
+
 def dedup(items):
     """同一事件在多期/简版深度版重复出现时保留信息量最大的一条。"""
     best = {}
@@ -275,6 +328,7 @@ def dedup(items):
                 len(x["analysis"]) * 2
                 + len(x["points"])
                 + (500 if x["ver"] == "深度分析版" else 0)
+                + (250 if x["ver"] == NATIVE_VER else 0)   # 站点直采优先（新鲜且已过闸）
                 + (x["issue"] > cur["issue"]) * 300
             )
 
@@ -564,21 +618,38 @@ def replace_block(path, content):
 
 def main():
     do_verify = "--no-verify" not in sys.argv
-    if not os.path.isdir(REPORTS):
-        print("未找到 news/reports")
-        return
 
-    files = sorted(
-        f for f in os.listdir(REPORTS)
-        if f.endswith(".html") and not any(b in f for b in BLOCKED)
-    )
-    print(f"解析 {len(files)} 份网页版简报…")
+    # ---- 来源 A：站点直采库（独立于本地简报，站点每日更新的保底来源）----
     items = []
-    for f in files:
-        got = parse_report(os.path.join(REPORTS, f))
-        print(f"  {f[:40]:<42} {len(got)} 条")
-        items += got
-    print(f"解析合计 {len(items)} 条")
+    nat = load_native()
+    if nat:
+        print(f"站点直采库 sources/news/items.jsonl：{len(nat)} 条")
+        items += nat
+    else:
+        print("站点直采库为空（sources/news/items.jsonl 不存在或无有效条目）")
+
+    # ---- 来源 B：本地简报网页版（有就并入，没有不影响站点更新）----
+    files = []
+    if os.path.isdir(REPORTS):
+        files = sorted(
+            f for f in os.listdir(REPORTS)
+            if f.endswith(".html") and not any(b in f for b in BLOCKED)
+        )
+    if files:
+        print(f"解析 {len(files)} 份网页版简报…")
+        for f in files:
+            got = parse_report(os.path.join(REPORTS, f))
+            if got:
+                print(f"  {f[:40]:<42} {len(got)} 条")
+            items += got
+        print(f"简报解析合计 {len(items) - len(nat)} 条")
+    else:
+        print("未找到 news/reports/*.html —— 本次仅用站点直采库（不影响站点更新）")
+
+    print(f"合并合计 {len(items)} 条")
+    if not items:
+        print("× 两路来源均为空，不重写页面（避免把资讯流清空）")
+        return
 
     items = dedup(items)
     print(f"去重后 {len(items)} 条")
@@ -665,6 +736,7 @@ def main():
 
     meta = {
         "generated": datetime.now().strftime("%Y-%m-%d %H:%M"),
+        "native_items": len(nat),
         "news_items": len(verified),
         "kb_actions": len(internal),
         "dead_links": len(dead),
