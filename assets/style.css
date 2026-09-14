@@ -328,6 +328,7 @@ footer .inner{flex-direction:column;align-items:flex-start;gap:10px}
 .rd-src{font-size:11px;font-weight:500;border-radius:4px;padding:1px 6px;margin-left:8px;
   white-space:nowrap;vertical-align:2px}
 .rd-src.src-off{color:#0f7b6c;background:#eaf6f3;border:1px solid #cfe8e2}
+.rd-src.src-wx{color:#137a4b;background:#eaf7ef;border:1px solid #cde8d9}
 .rd-src.src-ana{color:#6c5bb0;background:#f1effa;border:1px solid #dcd7f2}
 .rd-src.src-media{color:#1b4f8a;background:#eef3fa;border:1px solid #d5e1f2}
 .rd-src.src-aca{color:#6c5bb0;background:#f1effa;border:1px solid #dcd7f2}

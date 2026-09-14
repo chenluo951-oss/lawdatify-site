@@ -45,10 +45,11 @@
 import re
 from urllib.parse import urlparse
 
-TIER_ORDER = ("official", "gov-media", "academic", "other")
+TIER_ORDER = ("official", "wechat-official", "gov-media", "academic", "other")
 
 TIER_LABEL = {
     "official": "官方原文",
+    "wechat-official": "官方公众号",
     "gov-media": "官方媒体",
     "academic": "专业机构",
     "other": "二手转载",
@@ -56,6 +57,7 @@ TIER_LABEL = {
 
 TIER_CLASS = {
     "official": "src-off",
+    "wechat-official": "src-wx",
     "gov-media": "src-media",
     "academic": "src-aca",
     "other": "src-oth",
@@ -63,10 +65,41 @@ TIER_CLASS = {
 
 TIER_DESC = {
     "official": "立法机关、监管机构、政府门户发布的原文",
+    "wechat-official": ("发布机关自己的微信公众号（机构认证主体），属一等来源；"
+                        "微信生态封闭，PC 端无同类官网页时以公众号原文为准"),
     "gov-media": "人民日报、新华社、央视、澎湃等官方媒体",
     "academic": "官方学术机构、标准化组织与行业协会",
     "other": "商业媒体、机构博客或二手转载",
 }
+
+# ---------------------------------------------------------------- 官方公众号
+# 为什么单列一档
+# --------------
+# 引源口径里「官方公众号」本来就是一等来源（网信中国、市说新语、网安局等），
+# 但地方监管局的典型案例、专项行动多为「只在公众号发、PC 官网没有对应页」，
+# 于是这类条目过去会被判成 other（二手转载）而无法入库。
+#
+# 难点：公众号文章的 URL 里**不含**公众号名称，只有 mp.weixin.qq.com 这个公共域名，
+# 无脑放行会把营销号一起放进来。所以这里要求「凭据」二选一：
+#   ① URL 带 __biz 参数，且 __biz 命中 WECHAT_BIZ 白名单（机构认证主体）；
+#   ② 数据里显式声明 src="wechat-official"（由人工核对发布机关后填写）。
+# 两者都没有 → 仍然归 other，不放过。
+WECHAT_HOSTS = {"mp.weixin.qq.com", "weixin.qq.com"}
+
+# __biz → 公众号名（只登记机构主体：监管部门、政府机关、官方媒体）
+# 新增时务必确认「微信认证主体」是该机构本身，不要登记个人号或自媒体号。
+WECHAT_BIZ = {
+    # 中央机构
+    "MzA5MjM0NTQ2Mw==": "市说新语（市场监管总局）",
+    "Mzg3MDA1NTQxNw==": "网信中国（中央网信办）",
+}
+
+# 允许按公众号名判定（人工核实后填 src 字段时用），统一小写包含匹配
+WECHAT_ACCOUNTS = (
+    "市说新语", "网信中国", "网安局", "公安部网安局", "市场监管",
+    "市场监督管理局", "市场监管局", "监督管理局", "网信办",
+    "人民政府", "融媒", "发布", "市场监管半月沙龙",
+)
 
 # ---------------------------------------------------------------- 链接性质
 # 读者反馈里最多的一类「链接有问题」并不是 404，而是链接落在发布机构的
@@ -191,11 +224,27 @@ def _host(url):
     return h
 
 
+def _wechat_tier(url, declared=None):
+    """公众号链接的定级：有凭据才算官方公众号，否则仍是二手转载。"""
+    if (declared or "").strip() in ("wechat-official", "official"):
+        return "wechat-official"
+    m = re.search(r"[?&]__biz=([^&#]+)", url or "")
+    if m:
+        from urllib.parse import unquote
+        if unquote(m.group(1)) in WECHAT_BIZ:
+            return "wechat-official"
+    return "other"
+
+
 def tier_of(url, declared=None):
     """按 URL 主机判定来源层级；`declared` 为数据里已有的 src 字段（兼容旧值）。"""
     h = _host(url)
     if not h:
         return {"official": "official", "analysis": "academic"}.get(declared or "", "other")
+
+    # 公众号先于其它规则判定（mp.weixin.qq.com 无机构信息，必须凭据放行）
+    if h in WECHAT_HOSTS:
+        return _wechat_tier(url, declared)
 
     for cand in (h, "www." + h):
         if cand in OFFICIAL_HOSTS:
@@ -281,7 +330,7 @@ def audit_sources(items, kind_key="type", url_key="url", name_key="title",
         if rule == "soft":
             continue
         tier = tier_of(url, it.get("src"))
-        if tier == "official":
+        if tier in ("official", "wechat-official"):
             continue
         if rule == "strict" or tier == "other":
             bad.append({

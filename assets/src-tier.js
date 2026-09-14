@@ -1,22 +1,34 @@
 /* 引源分级 · 浏览器端实现（与 sources_tier.py 同口径，改一处要同步改另一处）
  *
  * 站点硬规则：立法 / 标准发布生效 / 合规专项行动 / 监管处罚案例，
- * 必须引用官方账号原文（official）；合规资讯可引官方媒体（gov-media）
- * 与官方学术机构、协会组织（academic）。二手转载（other）不可作为依据。
+ * 必须引用官方账号原文（official / wechat-official）；合规资讯可引官方媒体
+ * （gov-media）与官方学术机构、协会组织（academic）。二手转载（other）不可作为依据。
+ *
+ * wechat-official：发布机关自己的微信公众号。地方监管局的典型案例常只在公众号
+ * 发布、PC 官网无对应页，因此单列一档。但公众号域名不含机构信息，必须有凭据
+ * （__biz 命中白名单，或数据里显式声明 src="wechat-official"）才放行，否则仍算 other。
  */
 (function () {
   var LABEL = {
     official: '官方原文',
+    'wechat-official': '官方公众号',
     'gov-media': '官方媒体',
     academic: '专业机构',
     other: '二手转载'
   };
   var CLASS = {
     official: 'src-off',
+    'wechat-official': 'src-wx',
     'gov-media': 'src-media',
     academic: 'src-aca',
     other: 'src-oth'
   };
+
+  var WECHAT_HOSTS = ['mp.weixin.qq.com', 'weixin.qq.com'];
+  var WECHAT_BIZ = [
+    'MzA5MjM0NTQ2Mw==',  // 市说新语（市场监管总局）
+    'Mzg3MDA1NTQxNw=='   // 网信中国（中央网信办）
+  ];
 
   var OFFICIAL_HOSTS = [
     'npc.gov.cn', 'flk.npc.gov.cn', 'cac.gov.cn', 'beian.cac.gov.cn', '12377.cn',
@@ -51,6 +63,15 @@
   function tierOf(url, declared) {
     var h = hostOf(url);
     if (!h) return declared === 'official' ? 'official' : 'other';
+    if (WECHAT_HOSTS.indexOf(h) >= 0) {
+      if (declared === 'wechat-official' || declared === 'official') return 'wechat-official';
+      var m = /[?&]__biz=([^&#]+)/.exec(url || '');
+      if (m) {
+        var biz = decodeURIComponent(m[1]);
+        if (WECHAT_BIZ.indexOf(biz) >= 0) return 'wechat-official';
+      }
+      return 'other';
+    }
     if (OFFICIAL_HOSTS.indexOf(h) >= 0 || MEDIA_HOSTS.indexOf(h) >= 0 ||
         ACADEMIC_HOSTS.indexOf(h) >= 0) {
       if (OFFICIAL_HOSTS.indexOf(h) >= 0) return 'official';

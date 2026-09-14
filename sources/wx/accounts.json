@@ -1,0 +1,13 @@
+{
+  "_note": "公众号身份台账：gh 号 / __biz → 认证主体。供 sources_tier.py 判定 wechat-official 与人工核对使用。",
+  "accounts": {
+    "gh_005460440220": {
+      "gh": "gh_005460440220",
+      "biz": "",
+      "name": "阳曲县融媒体中心（阳曲微讯）",
+      "seen": 1,
+      "last": "2026-09-14 11:25",
+      "verified": false
+    }
+  }
+}
