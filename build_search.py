@@ -179,22 +179,8 @@ def main():
                            " ".join(a.get("tags") or [])]).strip(),
         })
 
-    # ---------- 7.5 官方公众号原文存档 ----------
-    wx = jload(os.path.join(HERE, "kb", "wx", "index.json"), {})
-    for x in (wx.get("items") if isinstance(wx, dict) else wx) or []:
-        items.append({
-            "t": x.get("title") or "", "c": "wx",
-            "u": "kb/wx.html#w-" + (x.get("id") or ""),
-            "s": " · ".join([y for y in [x.get("org"), x.get("pub"),
-                                         "官方公众号原文存档"] if y]),
-            "d": clean("、".join([y for y in [x.get("org"), x.get("account"),
-                                              x.get("topic")] if y]), 220),
-            "k": " ".join([x.get("title") or "", x.get("org") or "",
-                           x.get("account") or "", x.get("topic") or "",
-                           x.get("gh") or ""]).strip(),
-        })
-
     # ---------- 8. 站内页面 ----------
+
     pages = [
         ("今日更新", "updates/index.html", "法规标准增量、生效倒计时、立法节点与草案截止"),
         ("监管动态", "news/index.html", "监管动态全貌：即将生效、推进中行动、最新事件与应对建议、全球态势"),
@@ -205,7 +191,6 @@ def main():
         ("合规知识库", "kb/index.html", "资料库、义务清单与草案跟踪"),
         ("合规义务清单", "kb/standards.html", "17 大类 77 场景 220 项义务，矩阵总览 + 逐条明细，配条款原文与标杆做法"),
         ("法规原文库", "kb/texts.html", "法律、行政法规、部门规章与规范性文件正文，按官方发文版式排印"),
-        ("公众号原文存档", "kb/wx.html", "发布机关官方公众号发布的执法通报与典型案例全文存档，官网无对应页者在此溯源"),
         ("高频引用法条", "kb/citations.html", "执法与司法高频援引条款，含法条竞合与抗辩思路"),
         ("合规审计", "kb/audit.html", "按义务清单逐项自评的合规审计模板与评分口径"),
         ("专题分析", "analysis/index.html", "深度专题研究，结论先行、附官方深链"),

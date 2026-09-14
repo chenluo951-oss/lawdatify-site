@@ -67,7 +67,7 @@ def main():
             "org": org,
             "date": (d.get("pub") or "")[:10],
             "domain": dom,
-            "kind": d.get("kind") or "监管动态",
+            "kind": d.get("kind") or guess_kind(title),
             "risk": "",
             "points": (d.get("body") or "")[:90].replace("\n", " "),
             "analysis": "",

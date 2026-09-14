@@ -165,7 +165,6 @@ def render_mod_entries():
         ("news/calendar.html", "立法日历"),
         ("news/actions.html", "应对建议"),
         ("news/map.html", "全球监管地图"),
-        ("kb/wx.html", "公众号原文存档"),
         ("news/briefs.html", "简报归档"),
     ]
     chips = "".join(f'<a class="me" href="{u}">{t} →</a>' for u, t in items)
