@@ -22,8 +22,12 @@ editor_server.py —— 本站专用的「本地内容编辑器」（仅本机�
     本文件本身可入仓（无密钥）；界面产物只写 _private/。
 
 用法
-    python3 editor_server.py                 # 默认 127.0.0.1:8799
+    python3 editor_server.py                 # 默认 127.0.0.1:8799（数据目录=本文件所在目录）
     python3 editor_server.py --port 8801
+    python3 editor_server.py --root /path/to/lawdatify-site   # 编辑器可放在别处，指向站点仓库
+也可设环境变量 LAWDATIFY_ROOT 指定站点仓库根目录。
+    python3 editor_server.py --root /path/to/lawdatify-site   # 编辑器可放在别处，指向站点仓库
+也可设环境变量 LAWDATIFY_ROOT 指定站点仓库根目录（例如桌面「合规资讯简报」里的副本）。
 """
 import argparse
 import json
@@ -39,16 +43,30 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from urllib.parse import urlparse, parse_qs
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-sys.path.insert(0, HERE)
+
+
+def _resolve_root():
+    """站点仓库根目录：编辑器本体可放在任意位置（如桌面「合规资讯简报」），
+    用 --root 或环境变量 LAWDATIFY_ROOT 指向真正的站点仓库。"""
+    for i, a in enumerate(sys.argv):
+        if a == "--root" and i + 1 < len(sys.argv):
+            return sys.argv[i + 1]
+        if a.startswith("--root="):
+            return a.split("=", 1)[1]
+    return os.environ.get("LAWDATIFY_ROOT") or HERE
+
+
+ROOT = os.path.realpath(_resolve_root())
+sys.path.insert(0, ROOT)              # 让 edits / search_sources 从仓库导入（单一事实来源）
 import edits as E  # noqa: E402
 import search_sources as SS  # noqa: E402
 
-KB = os.path.join(HERE, "kb", "texts")
+KB = os.path.join(ROOT, "kb", "texts")
 IDX_LAW = os.path.join(KB, "index.json")
 IDX_STD = os.path.join(KB, "std_index.json")
-LIB = os.path.join(HERE, "sources", "standards", "library.json")
-DUTY = os.path.join(HERE, "sources", "standards", "duties.json")
-HOT = os.path.join(HERE, "sources", "standards", "hot_articles.json")
+LIB = os.path.join(ROOT, "sources", "standards", "library.json")
+DUTY = os.path.join(ROOT, "sources", "standards", "duties.json")
+HOT = os.path.join(ROOT, "sources", "standards", "hot_articles.json")
 
 KINDS = {
     "law": "法规原文",
@@ -270,7 +288,7 @@ def run_steps(steps, name):
         try:
             for script, label in steps:
                 _say("▶ %s（%s）" % (label, script))
-                p = subprocess.run([py, os.path.join(HERE, script)], cwd=HERE,
+                p = subprocess.run([py, os.path.join(ROOT, script)], cwd=ROOT,
                                    capture_output=True, text=True)
                 for ln in (p.stdout or "").rstrip().splitlines():
                     _say("   " + ln)
@@ -307,7 +325,7 @@ def run_push():
         ok = True
 
         def sh(args):
-            p = subprocess.run(args, cwd=HERE, capture_output=True, text=True)
+            p = subprocess.run(args, cwd=ROOT, capture_output=True, text=True)
             for ln in (p.stdout or "").rstrip().splitlines():
                 _say("   " + ln)
             for ln in (p.stderr or "").rstrip().splitlines():
@@ -316,7 +334,7 @@ def run_push():
 
         try:
             sh(["git", "add", "-A"])
-            st = subprocess.run(["git", "status", "--porcelain"], cwd=HERE,
+            st = subprocess.run(["git", "status", "--porcelain"], cwd=ROOT,
                                 capture_output=True, text=True).stdout.strip()
             if st:
                 _say("▶ 提交本地变更（%d 个路径）" % len(st.splitlines()))
@@ -324,13 +342,13 @@ def run_push():
             else:
                 _say("▶ 工作区无变更，直接核对远端")
             _say("▶ 通过 GitHub Data API 发布")
-            if sh([sys.executable, os.path.join(HERE, "push_via_api.py")]) != 0:
+            if sh([sys.executable, os.path.join(ROOT, "push_via_api.py")]) != 0:
                 ok = False
-            local_tree = subprocess.run(["git", "rev-parse", "HEAD^{tree}"], cwd=HERE,
+            local_tree = subprocess.run(["git", "rev-parse", "HEAD^{tree}"], cwd=ROOT,
                                         capture_output=True, text=True).stdout.strip()
             _say("本地 HEAD tree：%s" % local_tree[:12])
             sh(["git", "fetch", "origin", "main"])
-            remote_tree = subprocess.run(["git", "rev-parse", "origin/main^{tree}"], cwd=HERE,
+            remote_tree = subprocess.run(["git", "rev-parse", "origin/main^{tree}"], cwd=ROOT,
                                          capture_output=True, text=True).stdout.strip()
             if remote_tree and remote_tree == local_tree:
                 _say("✓ 远端 tree 与本地一致，站点已上线")
@@ -397,8 +415,8 @@ class Handler(BaseHTTPRequestHandler):
     def _static(self, rel):
         """只读地把仓库目录当站点根提供，便于在编辑器里就地预览效果。"""
         rel = rel.split("?")[0].split("#")[0]
-        full = os.path.realpath(os.path.join(HERE, rel))
-        if not full.startswith(os.path.realpath(HERE) + os.sep) and full != os.path.realpath(HERE):
+        full = os.path.realpath(os.path.join(ROOT, rel))
+        if not full.startswith(os.path.realpath(ROOT) + os.sep) and full != os.path.realpath(ROOT):
             return self._send(403, {"error": "forbidden"})
         if os.path.isdir(full):
             full = os.path.join(full, "index.html")
@@ -519,7 +537,9 @@ class Handler(BaseHTTPRequestHandler):
 
 
 def editor_page():
-    tpl = open(os.path.join(HERE, "tools", "editor_page.html"), encoding="utf-8").read()
+    local = os.path.join(HERE, "editor_page.html")
+    src = local if os.path.exists(local) else os.path.join(ROOT, "tools", "editor_page.html")
+    tpl = open(src, encoding="utf-8").read()
     return tpl
 
 
@@ -528,13 +548,14 @@ def main():
     global PAGE
     ap = argparse.ArgumentParser()
     ap.add_argument("--port", type=int, default=8799)
+    ap.add_argument("--root", default=None, help="站点仓库根目录（默认=本文件所在目录）")
     ap.add_argument("--no-browser", action="store_true")
     a = ap.parse_args()
     PAGE = editor_page()
     # 留一份静态副本备查（_private/ 不入仓）
     try:
-        os.makedirs(os.path.join(HERE, "_private"), exist_ok=True)
-        open(os.path.join(HERE, "_private", "editor.html"), "w",
+        os.makedirs(os.path.join(ROOT, "_private"), exist_ok=True)
+        open(os.path.join(ROOT, "_private", "editor.html"), "w",
              encoding="utf-8").write(PAGE)
     except OSError:
         pass
