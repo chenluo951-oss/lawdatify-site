@@ -18,7 +18,11 @@ import os
 import re
 import html
 import json
+import sys
 import datetime
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from sources_tier import tier_of, tier_tag  # noqa: E402
 
 # 路径可配置：本地默认读 skill 的 references；云端（GitHub Actions）通过 REFS_DIR
 # 指向仓库内 sources/references/。DST_ROOT 恒为脚本所在目录，本地/云端通用。
@@ -387,6 +391,24 @@ def parse_bench():
     return cats
 
 
+def bench_tier_tag(link):
+    """对标库专用来源标注。
+
+    本页的样本是「机构发布的行业报告」，用途是排版 / 结构 / 图表对标，
+    不是监管依据。因此 other 层级（机构自有站点、商业媒体）统一标注为
+    「行业参考」，避免与「二手转载」混淆；命中官方/官方媒体/专业机构的
+    仍按全站四级口径显示。
+    """
+    if not link:
+        return ""
+    if tier_of(link) == "other":
+        return (
+            '<span class="rd-src src-ref" title="机构发布的行业报告，仅用于排版与结构对标，'
+            '不作为监管依据；引用监管要求请以法规标准库原文为准">行业参考</span>'
+        )
+    return tier_tag(link)
+
+
 def render_bench(cats):
     """渲染 kb/benchmarks.html。"""
     n_cat = len(cats)
@@ -422,7 +444,7 @@ def render_bench(cats):
                 f"""<div class="bm-card">
   <div class="bm-org">{h(s['机构'])}</div>
   <div class="bm-title">{h(s['标题'])}</div>
-  <div class="bm-meta"><span class="bm-date">{h(s['发布日期'])}</span></div>
+  <div class="bm-meta"><span class="bm-date">{h(s['发布日期'])}</span>{bench_tier_tag(link)}</div>
   <div class="bm-linkbox">深链：{link_html}</div>
   {pts_html}
 </div>"""
@@ -457,7 +479,10 @@ def render_bench(cats):
 .bm-card{{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:14px;box-shadow:var(--shadow)}}
 .bm-org{{font-size:12px;color:var(--muted);font-weight:600;letter-spacing:.2px;text-transform:uppercase}}
 .bm-title{{font-size:15px;font-weight:600;color:#222;margin:4px 0 6px;line-height:1.4}}
-.bm-meta{{font-size:12px;color:var(--muted);margin-bottom:8px}}
+.bm-meta{{font-size:12px;color:var(--muted);margin-bottom:8px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}}
+.bm-meta .rd-src{{margin-left:0}}
+.bm-note{{background:#f7f6f2;border:1px solid var(--line);border-left:3px solid #b4b2a9;border-radius:8px;padding:12px 14px;margin:18px 0 4px;font-size:12.5px;color:#444441;line-height:1.75}}
+.bm-note b{{color:#2c2c2a;font-weight:600}}
 .bm-linkbox{{font-size:12px;margin-bottom:8px;word-break:break-all}}
 .bm-link{{color:var(--brand-2,#0f6e8c);text-decoration:none;border-bottom:1px dotted var(--brand-2,#0f6e8c)}}
 .bm-link:hover{{background:var(--brand-2,#0f6e8c);color:#fff}}
@@ -473,7 +498,7 @@ def render_bench(cats):
 <div class="pagehead"><div class="inner">
   <div class="crumb"><a href="../index.html">首页</a> / <a href="index.html">合规知识库</a> / 报告对标库</div>
   <h1>行业报告排版对标库</h1>
-  <p>持续沉淀 ESG / 法律 / 券商研报等专业报告的「结构特征+可借鉴点」，作为打磨合规资讯简报排版格式的对标基准。每 2 天由自动化收集更新；所有链接均为发布机构官网的具体深链（非首页根域名）。</p>
+  <p>持续沉淀 ESG / 法律 / 券商研报等专业报告的「结构特征+可借鉴点」，作为打磨合规资讯简报排版格式的对标基准。每 2 天由自动化收集更新；链接均指向发布机构官网上的具体页面（非首页根域名）。</p>
 </div></div>
 
 <div class="wrap">
@@ -481,6 +506,10 @@ def render_bench(cats):
     <div class="bm-stat"><div class="n">{n_cat}</div><div class="l">对标分类</div></div>
     <div class="bm-stat"><div class="n">{n_smp}</div><div class="l">累计样本</div></div>
     <div class="bm-stat"><div class="n">每 2 天</div><div class="l">收集频率</div></div>
+  </div>
+
+  <div class="bm-note">
+    <b>来源标注说明</b>：本页样本属<b>行业参考</b>——它们是机构自己发布的报告，用途是排版、结构与图表对标，<b>不作为监管依据</b>；引用监管要求请以「法规标准库」中的官方原文为准。层级沿用全站四级口径：<span class="rd-src src-off" style="margin-left:0">官方原文</span><span class="rd-src src-media">官方媒体</span><span class="rd-src src-aca">专业机构</span><span class="rd-src src-ref">行业参考</span>。
   </div>
 
   <div style="margin-top:18px">{body_html}</div>
