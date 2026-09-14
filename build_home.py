@@ -16,7 +16,7 @@
 数据源：
   sources/radar/{calendar,actions,global}.json  —— build_radar.load
   sources/news/items.jsonl                       —— build_topics.build_feed（复用已校验结果）
-  kb/wx/index.json                               —— 公众号原文存档元数据
+  kb/wx/index.json                               —— 公众号来源存档元数据
 
 与 build_topics / build_radar 解耦：本脚本只写首页 index.html，不重写 news/ 子页。
 """
@@ -76,7 +76,7 @@ def render_kpi(n_feed, n_future, n_running, n_juris, n_wx):
         (n_future, "未来合规节点"),
         (n_running, "推进中行动"),
         (n_juris, "覆盖辖区"),
-        (n_wx, "公众号原文存档"),
+        (n_wx, "公众号来源"),
     ]
     cells = "".join(
         f'<div class="kpi-card"><b>{v}</b><span>{t}</span></div>' for v, t in cards
