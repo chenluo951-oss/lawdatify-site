@@ -41,6 +41,7 @@ from urllib.parse import urlparse, parse_qs
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 import edits as E  # noqa: E402
+import search_sources as SS  # noqa: E402
 
 KB = os.path.join(HERE, "kb", "texts")
 IDX_LAW = os.path.join(KB, "index.json")
@@ -422,16 +423,20 @@ class Handler(BaseHTTPRequestHandler):
         if p.startswith("/site/"):
             return self._static(p[len("/site/"):])
         if p == "/api/state":
+            _seeds = SS.load()
             return self._send(200, {
                 "counts": {"law": len(IDX.law), "std": len(IDX.std),
                            "library": len(IDX.library), "duty": len(IDX.duty),
-                           "hot": len(IDX.hot)},
+                           "hot": len(IDX.hot), "seeds": len(_seeds["items"])},
                 "edits": E.stats(),
                 "build": {"running": RUN["running"], "name": RUN["name"],
                           "ok": RUN["ok"], "lines": len(RUN["log"])},
             })
         if p == "/api/list":
             kind = (q.get("kind") or ["law"])[0]
+            if kind == "seeds":
+                limit = int((q.get("limit") or ["400"])[0])
+                return self._send(200, SS.list((q.get("q") or [""])[0], limit))
             if kind not in KINDS:
                 return self._send(400, {"error": "bad kind"})
             limit = int((q.get("limit") or ["400"])[0])
@@ -439,6 +444,15 @@ class Handler(BaseHTTPRequestHandler):
         if p == "/api/doc":
             kind = (q.get("kind") or [""])[0]
             key = (q.get("key") or [""])[0]
+            if kind == "seeds":
+                if not key:
+                    return self._send(400, {"error": "bad args"})
+                e = SS.get(key)
+                if not e:
+                    return self._send(404, {"error": "not found"})
+                return self._send(200, {"kind": "seeds", "key": key, "mode": "seed",
+                                        "item": {"label": e.get("name"), "sub": e.get("agency")},
+                                        "entry": e})
             if kind not in KINDS or not key:
                 return self._send(400, {"error": "bad args"})
             return self._send(200, doc_payload(kind, key))
@@ -483,6 +497,12 @@ class Handler(BaseHTTPRequestHandler):
                                                     b.get("label", "")))
             if p == "/api/hide/del":
                 return self._send(200, E.del_hidden(int(b["idx"])))
+            if p == "/api/seed":
+                return self._send(200, SS.save_entry(b.get("entry") or b))
+            if p == "/api/seed/del":
+                if not b.get("id"):
+                    return self._send(400, {"error": "missing id"})
+                return self._send(200, SS.remove(b["id"]))
             if p == "/api/build":
                 which = b.get("mode") or "quick"
                 steps = FULL_STEPS if which == "full" else QUICK_STEPS

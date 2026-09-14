@@ -1,0 +1,503 @@
+{
+  "_meta": {
+    "updated": "2026-09-14",
+    "note": "本站每日检索的官方集中发布源注册表。由本地内容编辑器（检索来源标签）人工增删；每日自动化读取 enabled 来源的 host 作为 WebSearch allowed_domains。新增来源请填真实可溯源的具体栏目/深链页，而非机构官网首页。"
+  },
+  "items": [
+    {
+      "id": "samr-cfws",
+      "name": "市场监管行政处罚文书网",
+      "agency": "国家市场监督管理总局",
+      "url": "https://cfws.samr.gov.cn/detail.html?docid=",
+      "host": "cfws.samr.gov.cn",
+      "category": "行政处罚",
+      "domains": [
+        "价格合规",
+        "平台合规",
+        "产品合规",
+        "数据合规"
+      ],
+      "region": "全国",
+      "feed": [
+        "news",
+        "radar"
+      ],
+      "tier": "official",
+      "note": "地方市监局处罚决定书官方深链，可按文号检索；是价格违法/虚假宣传/食安处罚的一手来源。",
+      "added": "2026-09-14",
+      "enabled": true
+    },
+    {
+      "id": "gsxt",
+      "name": "国家企业信用信息公示系统",
+      "agency": "国家市场监督管理总局",
+      "url": "https://www.gsxt.gov.cn/index.html",
+      "host": "www.gsxt.gov.cn",
+      "category": "信用公示",
+      "domains": [
+        "平台合规",
+        "产品合规",
+        "价格合规"
+      ],
+      "region": "全国",
+      "feed": [
+        "news",
+        "radar"
+      ],
+      "tier": "official",
+      "note": "企业行政处罚、经营异常、严重违法失信名单的官方公示平台。",
+      "added": "2026-09-14",
+      "enabled": true
+    },
+    {
+      "id": "creditchina",
+      "name": "信用中国",
+      "agency": "国家公共信用和地理空间信息中心（国家发展改革委）",
+      "url": "https://www.creditchina.gov.cn/",
+      "host": "www.creditchina.gov.cn",
+      "category": "信用公示",
+      "domains": [
+        "平台合规",
+        "价格合规",
+        "数据合规"
+      ],
+      "region": "全国",
+      "feed": [
+        "news",
+        "radar"
+      ],
+      "tier": "official",
+      "note": "失信惩戒、重大税收违法、行政处罚等联合惩戒信息的集中发布。",
+      "added": "2026-09-14",
+      "enabled": true
+    },
+    {
+      "id": "chinatax-penalty",
+      "name": "重大税收违法失信案件信息公布栏",
+      "agency": "国家税务总局",
+      "url": "http://www.chinatax.gov.cn/chinatax/c101249/n2020011502/index.html",
+      "host": "www.chinatax.gov.cn",
+      "category": "行政处罚",
+      "domains": [
+        "平台合规"
+      ],
+      "region": "全国",
+      "feed": [
+        "news",
+        "radar"
+      ],
+      "tier": "official",
+      "note": "重大税收违法失信当事人（黑名单）按月公布。",
+      "added": "2026-09-14",
+      "enabled": true
+    },
+    {
+      "id": "court-bankruptcy",
+      "name": "全国企业破产重整案件信息网",
+      "agency": "最高人民法院",
+      "url": "http://pccz.court.gov.cn/pcajxxw/index/xxwsy",
+      "host": "pccz.court.gov.cn",
+      "category": "司法",
+      "domains": [
+        "平台合规"
+      ],
+      "region": "全国",
+      "feed": [
+        "news",
+        "radar"
+      ],
+      "tier": "official",
+      "note": "破产重整、清算、和解案件信息公开，关联平台商户履约风险。",
+      "added": "2026-09-14",
+      "enabled": true
+    },
+    {
+      "id": "csrc-penalty",
+      "name": "中国证监会行政处罚",
+      "agency": "中国证券监督管理委员会",
+      "url": "https://www.csrc.gov.cn/csrc/c101928/",
+      "host": "www.csrc.gov.cn",
+      "category": "行政处罚",
+      "domains": [
+        "平台合规",
+        "数据合规"
+      ],
+      "region": "全国",
+      "feed": [
+        "news",
+        "radar"
+      ],
+      "tier": "official",
+      "note": "证券期货违法违规行政处罚决定书（含编造传播虚假信息、内幕交易等）。",
+      "added": "2026-09-14",
+      "enabled": true
+    },
+    {
+      "id": "csrc-neris",
+      "name": "证监会综合查询（处罚决定库）",
+      "agency": "中国证券监督管理委员会",
+      "url": "https://neris.csrc.gov.cn/falvfagui/multipleFindController/indexJsp?type=2",
+      "host": "neris.csrc.gov.cn",
+      "category": "行政处罚",
+      "domains": [
+        "平台合规"
+      ],
+      "region": "全国",
+      "feed": [
+        "news",
+        "radar"
+      ],
+      "tier": "official",
+      "note": "证监会及各地证监局处罚决定书的综合检索入口。",
+      "added": "2026-09-14",
+      "enabled": true
+    },
+    {
+      "id": "nfra-penalty",
+      "name": "国家金融监督管理总局 行政处罚",
+      "agency": "国家金融监督管理总局",
+      "url": "https://www.nfra.gov.cn/cn/view/pages/ItemList.html?itemId=4113",
+      "host": "www.nfra.gov.cn",
+      "category": "行政处罚",
+      "domains": [
+        "平台合规"
+      ],
+      "region": "全国",
+      "feed": [
+        "news",
+        "radar"
+      ],
+      "tier": "official",
+      "note": "银行、保险、理财等金融机构行政处罚信息公示（总局机关栏目）。",
+      "added": "2026-09-14",
+      "enabled": true
+    },
+    {
+      "id": "pbc-penalty",
+      "name": "中国人民银行 行政处罚",
+      "agency": "中国人民银行",
+      "url": "http://www.pbc.gov.cn/zhengwugongkai/128020/128029/index.html",
+      "host": "www.pbc.gov.cn",
+      "category": "行政处罚",
+      "domains": [
+        "平台合规",
+        "数据合规"
+      ],
+      "region": "全国",
+      "feed": [
+        "news",
+        "radar"
+      ],
+      "tier": "official",
+      "note": "反洗钱、客户尽调、征信等行政处罚；信息在政务公开栏目。",
+      "added": "2026-09-14",
+      "enabled": true
+    },
+    {
+      "id": "miit-app",
+      "name": "工信部 信息通信管理局 APP 侵害用户权益通报",
+      "agency": "工业和信息化部",
+      "url": "https://www.miit.gov.cn/jgsj/xgj/fwjd",
+      "host": "www.miit.gov.cn",
+      "category": "通报",
+      "domains": [
+        "数据合规"
+      ],
+      "region": "全国",
+      "feed": [
+        "news",
+        "radar"
+      ],
+      "tier": "official",
+      "note": "关于侵害用户权益行为的 APP(SDK) 通报（个人信息保护系列专项行动），可按批检索。",
+      "added": "2026-09-14",
+      "enabled": true
+    },
+    {
+      "id": "cac-app",
+      "name": "国家网信办 违法违规收集使用个人信息 App 通报",
+      "agency": "国家互联网信息办公室",
+      "url": "https://www.cac.gov.cn/",
+      "host": "www.cac.gov.cn",
+      "category": "通报",
+      "domains": [
+        "数据合规",
+        "算法合规",
+        "AI合规"
+      ],
+      "region": "全国",
+      "feed": [
+        "news",
+        "radar"
+      ],
+      "tier": "official",
+      "note": "中央网信办组织的 App（含小程序）违法违规收集使用个人信息通报；具体深链形如 /2026-06/11/c_xxxx.htm。",
+      "added": "2026-09-14",
+      "enabled": true
+    },
+    {
+      "id": "cac-algo",
+      "name": "互联网信息服务算法备案系统",
+      "agency": "国家互联网信息办公室",
+      "url": "https://beian.cac.gov.cn/",
+      "host": "beian.cac.gov.cn",
+      "category": "标准",
+      "domains": [
+        "算法合规",
+        "AI合规"
+      ],
+      "region": "全国",
+      "feed": [
+        "news",
+        "radar"
+      ],
+      "tier": "official",
+      "note": "算法备案官方查询系统（合法深链，可查已备案算法清单）。",
+      "added": "2026-09-14",
+      "enabled": true
+    },
+    {
+      "id": "mps-netsafe",
+      "name": "公安部 网络安全通报 / 网安局",
+      "agency": "公安部",
+      "url": "https://www.mps.gov.cn/",
+      "host": "www.mps.gov.cn",
+      "category": "通报",
+      "domains": [
+        "数据合规"
+      ],
+      "region": "全国",
+      "feed": [
+        "news",
+        "radar"
+      ],
+      "tier": "official",
+      "note": "App 违法违规收集个人信息通报常由「国家网络与信息安全信息通报中心」发布，多经 cac.gov.cn 转载；可一并监控。",
+      "added": "2026-09-14",
+      "enabled": true
+    },
+    {
+      "id": "nmpa-fxj",
+      "name": "国家药监局 飞行检查",
+      "agency": "国家药品监督管理局",
+      "url": "https://www.nmpa.gov.cn/xxgk/fxjzh/index.html",
+      "host": "www.nmpa.gov.cn",
+      "category": "通报",
+      "domains": [
+        "产品合规"
+      ],
+      "region": "全国",
+      "feed": [
+        "news",
+        "radar"
+      ],
+      "tier": "official",
+      "note": "药品/医疗器械/化妆品生产企业飞行检查通告，关联平台在售商品质量。",
+      "added": "2026-09-14",
+      "enabled": true
+    },
+    {
+      "id": "nmpa-recall",
+      "name": "国家药监局 召回与通告",
+      "agency": "国家药品监督管理局",
+      "url": "https://www.nmpa.gov.cn/xxgk/",
+      "host": "www.nmpa.gov.cn",
+      "category": "通报",
+      "domains": [
+        "产品合规"
+      ],
+      "region": "全国",
+      "feed": [
+        "news",
+        "radar"
+      ],
+      "tier": "official",
+      "note": "药品/医疗器械/化妆品召回、停产整改等通告（信息公开栏目）。",
+      "added": "2026-09-14",
+      "enabled": true
+    },
+    {
+      "id": "mee-penalty",
+      "name": "生态环境部 行政处罚与通报",
+      "agency": "生态环境部",
+      "url": "https://www.mee.gov.cn/",
+      "host": "www.mee.gov.cn",
+      "category": "行政处罚",
+      "domains": [
+        "产品合规"
+      ],
+      "region": "全国",
+      "feed": [
+        "news",
+        "radar"
+      ],
+      "tier": "official",
+      "note": "生态环境违法处罚、排污许可等通报（政务公开栏目）。",
+      "added": "2026-09-14",
+      "enabled": true
+    },
+    {
+      "id": "customs",
+      "name": "海关总署",
+      "agency": "海关总署",
+      "url": "http://www.customs.gov.cn/",
+      "host": "www.customs.gov.cn",
+      "category": "综合",
+      "domains": [
+        "平台合规",
+        "产品合规"
+      ],
+      "region": "全国",
+      "feed": [
+        "news",
+        "radar"
+      ],
+      "tier": "official",
+      "note": "进出口合规、跨境电商监管、走私与侵权通报。",
+      "added": "2026-09-14",
+      "enabled": true
+    },
+    {
+      "id": "mot",
+      "name": "交通运输部",
+      "agency": "交通运输部",
+      "url": "https://www.mot.gov.cn/",
+      "host": "www.mot.gov.cn",
+      "category": "综合",
+      "domains": [
+        "平台合规"
+      ],
+      "region": "全国",
+      "feed": [
+        "news",
+        "radar"
+      ],
+      "tier": "official",
+      "note": "网络货运、物流配送、出行平台监管与专项整治。",
+      "added": "2026-09-14",
+      "enabled": true
+    },
+    {
+      "id": "mct",
+      "name": "文化和旅游部 文化市场综合执法",
+      "agency": "文化和旅游部",
+      "url": "https://www.mct.gov.cn/",
+      "host": "www.mct.gov.cn",
+      "category": "综合",
+      "domains": [
+        "平台合规"
+      ],
+      "region": "全国",
+      "feed": [
+        "news",
+        "radar"
+      ],
+      "tier": "official",
+      "note": "在线旅游、演出票务、文娱内容合规与执法信息。",
+      "added": "2026-09-14",
+      "enabled": true
+    },
+    {
+      "id": "nrta",
+      "name": "国家广播电视总局",
+      "agency": "国家广播电视总局",
+      "url": "http://www.nrta.gov.cn/",
+      "host": "www.nrta.gov.cn",
+      "category": "综合",
+      "domains": [
+        "平台合规",
+        "算法合规",
+        "AI合规"
+      ],
+      "region": "全国",
+      "feed": [
+        "news",
+        "radar"
+      ],
+      "tier": "official",
+      "note": "网络视听、短视频/直播内容合规与算法推荐治理。",
+      "added": "2026-09-14",
+      "enabled": true
+    },
+    {
+      "id": "nia",
+      "name": "国家移民管理局",
+      "agency": "国家移民管理局",
+      "url": "https://www.nia.gov.cn/",
+      "host": "www.nia.gov.cn",
+      "category": "综合",
+      "domains": [
+        "平台合规"
+      ],
+      "region": "全国",
+      "feed": [
+        "news",
+        "radar"
+      ],
+      "tier": "official",
+      "note": "出入境、外籍人员服务等政策发布（综合参考）。",
+      "added": "2026-09-14",
+      "enabled": true
+    },
+    {
+      "id": "jswx",
+      "name": "江苏省网信办 执法通报",
+      "agency": "江苏省互联网信息办公室",
+      "url": "https://www.jswx.gov.cn/zhengce/zhifa/",
+      "host": "www.jswx.gov.cn",
+      "category": "通报",
+      "domains": [
+        "数据合规"
+      ],
+      "region": "省-江苏",
+      "feed": [
+        "news",
+        "radar"
+      ],
+      "tier": "official",
+      "note": "省级网信办常转载公安部网安局 App 违法违规收集个人信息通报，是网安通报可用的官方 PC 深链。",
+      "added": "2026-09-14",
+      "enabled": true
+    },
+    {
+      "id": "bjca",
+      "name": "北京市通信管理局 App 通报",
+      "agency": "北京市通信管理局",
+      "url": "https://bjca.miit.gov.cn/xwdt/gzdt/",
+      "host": "bjca.miit.gov.cn",
+      "category": "通报",
+      "domains": [
+        "数据合规"
+      ],
+      "region": "省-北京",
+      "feed": [
+        "news",
+        "radar"
+      ],
+      "tier": "official",
+      "note": "省级通信管理局问题移动互联网应用程序通报（个人信息保护专项整治）。",
+      "added": "2026-09-14",
+      "enabled": true
+    },
+    {
+      "id": "nxca",
+      "name": "宁夏通信管理局 App 通报",
+      "agency": "宁夏回族自治区通信管理局",
+      "url": "https://nxca.miit.gov.cn/zwgk/tzgg/",
+      "host": "nxca.miit.gov.cn",
+      "category": "通报",
+      "domains": [
+        "数据合规"
+      ],
+      "region": "省-宁夏",
+      "feed": [
+        "news",
+        "radar"
+      ],
+      "tier": "official",
+      "note": "省级通信管理局侵害用户权益 App（小程序）通报。",
+      "added": "2026-09-14",
+      "enabled": true
+    }
+  ]
+}

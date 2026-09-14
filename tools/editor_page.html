@@ -220,7 +220,8 @@ function loadState(){
       "标准 <b>" + s.counts.std + "</b><span class='sep'>|</span>" +
       "条目 <b>" + s.counts.library + "</b><span class='sep'>|</span>" +
       "义务 <b>" + s.counts.duty + "</b><span class='sep'>|</span>" +
-      "高频法条 <b>" + s.counts.hot + "</b>" +
+      "高频法条 <b>" + s.counts.hot + "</b><span class='sep'>|</span>" +
+      "检索来源 <b>" + s.counts.seeds + "</b>" +
       "<span class='sep'>|</span>人工修改 规则 <b>" + s.edits.rules + "</b> / 字段 <b>" +
       s.edits.patches + "</b> / 下架 <b>" + s.edits.hide + "</b>" +
       (s.edits.updated ? "<span class='sep'>|</span>更新 " + esc(s.edits.updated) : "");
@@ -230,8 +231,9 @@ function loadState(){
   });
 }
 
-var KIND_ORDER = ["law","std","library","duty","hot"];
-var KIND_NAME = { law:"法规原文", std:"标准正文", library:"条目库", duty:"合规义务", hot:"高频法条" };
+var KIND_ORDER = ["law","std","library","duty","hot","seeds"];
+var KIND_NAME = { law:"法规原文", std:"标准正文", library:"条目库", duty:"合规义务", hot:"高频法条", seeds:"检索来源" };
+var SEED_CATS = ["行政处罚","信用公示","立法发布","专项行动","通报","标准","司法","综合"];
 
 function renderTabs(){
   $("tabs").innerHTML = KIND_ORDER.map(function(k){
@@ -257,9 +259,11 @@ function loadList(){
   .then(function(d){
     S.list = d.items; S.total = d.total; S.shown = d.shown;
     var html = S.list.map(function(it){
-      return "<div class='li" + (it.key===S.key?" on":"") + (it.hidden?" hid":"") +
+      var off = (S.kind === "seeds") ? !it.enabled : it.hidden;
+      var badge = off ? (S.kind === "seeds" ? "已停用" : "已下架") : "";
+      return "<div class='li" + (it.key===S.key?" on":"") + (off?" hid":"") +
         "' data-k='" + esc(it.key) + "'>" +
-        "<span class='t'>" + esc(it.label) + (it.hidden?"<span class='badge'>已下架</span>":"") + "</span>" +
+        "<span class='t'>" + esc(it.label) + (badge?"<span class='badge'>" + badge + "</span>":"") + "</span>" +
         "<span class='m'>" + esc([it.sub, it.topic, it.status,
             (it.chars? it.chars + " 字" : "")].filter(Boolean).join(" · ")) + "</span></div>";
     }).join("");
@@ -293,6 +297,17 @@ function kindLabel(){ return KIND_NAME[S.kind] || S.kind; }
 function renderDoc(){
   var d = S.doc;
   if(!d){
+    if(S.kind === "seeds"){
+      $("doc").innerHTML = "<div class='doc-empty'>检索来源 = 本站每日检索的官方集中发布源。<br>" +
+        "点「＋ 新增来源」登记一个新的官方发布网站，它会写入 sources/seeds.json 并纳入次日检索。<br><br>" +
+        "<button class='btn primary' id='btnNewSeed'>＋ 新增来源</button></div>";
+      $("btnNewSeed").onclick = function(){
+        S.key = "__new__";
+        S.doc = { mode:"seed", kind:"seeds", item:{}, entry: blankSeed(), isNew:true };
+        renderDoc();
+      };
+      return;
+    }
     $("doc").innerHTML = "<div class='doc-empty'>从左侧选一条内容开始校对。<br>" +
       "修改会写入覆盖层，下次重建自动叠加，不会被自动同步冲掉。</div>";
     return;
@@ -316,16 +331,20 @@ function renderDoc(){
       encodeURIComponent(it.id) + "'>在阅读器预览</a>");
   }
   if(it.url) acts.push("<a class='btn' target='_blank' href='" + esc(it.url) + "'>官方发布页</a>");
-  acts.push("<button class='btn " + (d.hidden?"":"danger") + "' id='btnHide'>" +
-    (d.hidden ? "恢复上站" : "下架此条") + "</button>");
+  if(d.mode !== "seed"){
+    acts.push("<button class='btn " + (d.hidden?"":"danger") + "' id='btnHide'>" +
+      (d.hidden ? "恢复上站" : "下架此条") + "</button>");
+  }
 
   var body = head +
     "<p class='doc-meta'>" + meta.join("") + "</p>" +
     "<div class='doc-acts'>" + acts.join("") + "</div>";
 
-  body += (d.mode === "text") ? textEditor(d) : recordEditor(d);
+  body += (d.mode === "text") ? textEditor(d)
+         : (d.mode === "seed" ? seedsEditor(d) : recordEditor(d));
   $("doc").innerHTML = body;
   bindDoc();
+  if(d.mode === "seed"){ bindSeeds(); return; }
   if(d.mode === "text"){
     var ta = $("body");
     if(ta) ta.addEventListener("mouseup", function(){ fillFindFromSelection(); });
@@ -406,6 +425,83 @@ function recordEditor(d){
       "<button class='btn' id='btnRule'>保存规则</button></div>" + rulesList(d) + "</div>";
   }
   return h;
+}
+
+/* ---------------- 检索来源（seeds） ---------------- */
+function blankSeed(){
+  return { id:"", name:"", agency:"", url:"", host:"", category:"通报",
+    domains:["数据合规"], region:"全国", feed:["news","radar"], tier:"official",
+    note:"", added:"", enabled:true };
+}
+function seedsEditor(d){
+  var e = d.entry || {};
+  var isNew = !!d.isNew;
+  var catOpts = SEED_CATS.map(function(c){
+    return "<option value='" + c + "'" + ((e.category||"") === c ? " selected" : "") + ">" + c + "</option>";
+  }).join("");
+  function f(label, key, val, ph, w){
+    return "<div class='fld'><div class='k'><b>" + esc(key) + "</b></div>" +
+      "<input data-seed='" + esc(key) + "' value='" + esc(val == null ? "" : val) + "'" +
+      (ph ? " placeholder='" + esc(ph) + "'" : "") +
+      " style='width:" + (w || "100%") + ";border:1px solid var(--line);border-radius:8px;padding:7px 10px;outline:none'></div>";
+  }
+  var h = "<div class='sec'><h2>" + (isNew ? "新增检索来源" : "编辑检索来源") + "</h2>" +
+    "<p class='hint'>url 填具体栏目 / 深链页（禁官网首页根域名）；host 留空会自动按 url 推导。" +
+    "domains / feed 用逗号分隔。保存后写入 sources/seeds.json，次日检索自动纳入。</p>" +
+    f("名称", "name", e.name, "如 市场监管行政处罚文书网") +
+    f("发布机关", "agency", e.agency, "如 国家市场监督管理总局") +
+    f("栏目/深链页 URL", "url", e.url, "https://...") +
+    f("域名 host（留空自动）", "host", e.host, "cfws.samr.gov.cn") +
+    "<div class='grid2'>" +
+      "<div class='fld'><div class='k'><b>category</b></div><select data-seed='category' " +
+        "style='width:100%;border:1px solid var(--line);border-radius:8px;padding:7px 10px'>" + catOpts + "</select></div>" +
+      f("region", "region", e.region || "全国", "全国 / 省-XX") +
+    "</div>" +
+    f("domains（逗号分隔）", "domains", (e.domains || []).join(","), "数据合规,平台合规") +
+    f("feed（逗号分隔）", "feed", (e.feed || []).join(","), "news,radar") +
+    "<div class='fld'><div class='k'><b>note</b></div><textarea data-seed='note' class='plain' " +
+      "placeholder='为什么收、怎么用'>" + esc(e.note || "") + "</textarea></div>" +
+    "<div class='row' style='margin-top:6px'><label class='pill " + (e.enabled !== false ? "ok" : "") +
+      "' style='cursor:pointer'><input type='checkbox' data-seed='enabled'" +
+      (e.enabled !== false ? " checked" : "") + "> 纳入每日检索（enabled）</label></div>" +
+    "</div>";
+  var acts = "<div class='doc-acts'><button class='btn primary' id='btnSaveSeed'>" +
+    (isNew ? "保存新增" : "保存修改") + "</button>";
+  if(!isNew) acts += "<button class='btn danger' id='btnDelSeed'>删除此来源</button>";
+  acts += "<button class='btn' id='btnCancelSeed'>返回</button></div>";
+  return h + acts;
+}
+function bindSeeds(){
+  var d = S.doc;
+  var save = $("btnSaveSeed");
+  if(save) save.onclick = function(){
+    var g = function(k){ var el = document.querySelector("[data-seed='" + k + "']"); return el ? el.value : ""; };
+    var gc = function(k){ var el = document.querySelector("[data-seed='" + k + "']"); return el ? el.checked : false; };
+    var entry = {
+      id: (d.entry && d.entry.id) || "",
+      name: g("name"), agency: g("agency"), url: g("url"), host: g("host"),
+      category: g("category"), region: g("region") || "全国",
+      domains: g("domains"), feed: g("feed"), note: g("note"),
+      enabled: gc("enabled")
+    };
+    if(!entry.name.trim()) return toast("名称不能为空", true);
+    if(!entry.url.trim()) return toast("栏目/深链页 URL 不能为空", true);
+    post("/api/seed", { entry: entry }).then(function(r){
+      toast(d.isNew ? "已新增来源" : "已保存修改");
+      if(r && r.id) S.key = r.id;
+      S.doc = null;
+      return refreshAll();
+    }).catch(function(e){ toast("保存失败：" + e.message, true); });
+  };
+  var del = $("btnDelSeed");
+  if(del) del.onclick = function(){
+    if(!confirm("确定删除该检索来源？")) return;
+    post("/api/seed/del", { id: d.entry.id }).then(function(){
+      toast("已删除来源"); S.key = ""; S.doc = null; return refreshAll();
+    });
+  };
+  var cancel = $("btnCancelSeed");
+  if(cancel) cancel.onclick = function(){ S.key = ""; S.doc = null; renderDoc(); loadList(); };
 }
 
 function fillFindFromSelection(){
