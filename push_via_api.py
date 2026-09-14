@@ -21,11 +21,10 @@ base_tree，最终仍得到完整的树。
 
 用法：
   python3 push_via_api.py            # 推送（幂等：按远端树 vs 本地文件比对）
-  python3 push_via_api.py --align    # 把本地历史对齐到远端 HEAD（见 align() 注释）
+  python3 push_via_api.py --check    # 与远端对账：比对内容（tree），见 check() 注释
 """
 
 import base64
-import datetime
 import json
 import os
 import subprocess
@@ -76,95 +75,44 @@ def git(*args):
                           capture_output=True, text=True).stdout
 
 
-# --- 把本地历史对齐到远端（--align） --------------------------------------
-# 为什么需要：API 推送产生的 commit 由 GitHub 生成（作者/时间与我们无关），本地拿不到
-# 这个对象，于是本地永远显示 "ahead 1"，且以后网络恢复时 `git push` 会被判非快进。
-# 做法：从远端 HEAD 往回走，直到遇到本地已有的提交；把中间缺失的提交按「原始字节」
-# 重建（tree/parent/author/committer/message 全部还原），用 sha 相等来证明重建无误，
-# 再写回本地对象库并移动 refs。
-
-def _ts(iso):
-    """ISO 8601 → git 的 '<unix> <±HHMM>'。"""
-    dt = datetime.datetime.fromisoformat(iso.replace("Z", "+00:00"))
-    off = int((dt.utcoffset() or datetime.timedelta(0)).total_seconds())
-    sign = "+" if off >= 0 else "-"
-    m = abs(off) // 60
-    return f"{int(dt.timestamp())} {sign}{m // 60:02d}{m % 60:02d}"
+# --- 与远端对账（--check）------------------------------------------------
+# 为什么不做「历史对齐」：API 推送产生的 commit 在 GitHub 侧生成，其**对象字节无法可靠还原**
+# ——实测按 tree/parent/author/committer/message 逐字节重建，sha 仍不相等（GitHub 的服务端
+# 身份与消息规范化不可见），因此本地 ref 与远端不可能自动重合。
+# 正确的同步判据是**内容**而不是 commit sha：
+#   --check  比对「远端 HEAD 的 tree」与「本地 HEAD 的 tree」，一致即视为已同步（退出码 0/1），
+#            并把 refs/remotes/origin/<br> 指向远端 HEAD，让 git status 反映真实关系。
+# 以后网络恢复时，`git fetch && git reset --soft origin/main` 可一次性把 sha 也对齐。
 
 
-def _raw_commit(c):
-    """还原 commit 对象的原始字节（末尾恰好一个换行）。"""
-    lines = [f"tree {c['tree']['sha']}"]
-    for p in c.get("parents", []):
-        lines.append(f"parent {p['sha']}")
-    a, m = c["author"], c["committer"]
-    lines.append(f"author {a['name']} <{a['email']}> {_ts(a['date'])}")
-    lines.append(f"committer {m['name']} <{m['email']}> {_ts(m['date'])}")
-    msg = c.get("message") or ""
-    if not msg.endswith("\n"):
-        msg += "\n"
-    return ("\n".join(lines) + "\n\n" + msg).encode("utf-8")
-
-
-def _have(sha):
-    return subprocess.run(["git", "-C", HERE, "cat-file", "-e", sha],
-                          capture_output=True).returncode == 0
-
-
-def _hash_object(raw, write=False):
-    cmd = ["git", "-C", HERE, "hash-object", "-t", "commit", "--stdin"]
-    if write:
-        cmd.insert(4, "-w")
-    r = subprocess.run(cmd, input=raw, capture_output=True)
-    return r.stdout.decode().strip()
-
-
-def align():
+def _remote_head():
     ref = api("GET", f"/repos/{REPO}/git/ref/heads/{BRANCH}")
     if "object" not in ref:
-        print("无法获取远端 ref:", ref)
+        print("无法获取远端 ref:", str(ref)[:200])
+        return None
+    return ref["object"]["sha"]
+
+
+def remote_tree(sha):
+    return (api("GET", f"/repos/{REPO}/git/commits/{sha}").get("tree") or {}).get("sha")
+
+
+def check():
+    head = _remote_head()
+    if not head:
         return 1
-    head = ref["object"]["sha"]
-    if _have(head):
-        print(f"本地已含远端 HEAD {head[:8]}，无需对齐。")
-        return 0
-
-    chain, sha = [], head
-    while not _have(sha):
-        c = api("GET", f"/repos/{REPO}/git/commits/{sha}")
-        if "tree" not in c:
-            print("取 commit 失败:", str(c)[:200])
-            return 1
-        chain.append(c)
-        ps = c.get("parents") or []
-        if not ps:
-            print("追到根提交仍无本地对象，放弃对齐。")
-            return 1
-        sha = ps[0]["sha"]
-    print(f"共同祖先 {sha[:8]}，需补建 {len(chain)} 个远端提交")
-
-    for c in reversed(chain):
-        got = _hash_object(_raw_commit(c), write=True)
-        if got != c["sha"]:
-            print(f"  ✗ 重建 {c['sha'][:8]} 失败（得到 {got[:8]}）—— 本地与远端仍不一致，请人工处理")
-            return 1
-        print(f"  ✓ 重建 {c['sha'][:8]}")
-
-    # 安全门：只有「远端 HEAD 的树 == 本地 HEAD 的树」且工作区干净时才移动 ref，
-    # 否则会把工作区置于与所指提交不符的状态。
-    if git("status", "--porcelain").strip():
-        print("工作区有未提交改动，已重建对象但不移动 ref（先 commit 再跑 --align）。")
-        return 0
-    local_head = git("rev-parse", "HEAD").strip()
-    local_tree = git("rev-parse", "HEAD^{tree}").strip()
-    remote_tree = api("GET", f"/repos/{REPO}/git/commits/{head}").get("tree", {}).get("sha")
-    if local_tree != remote_tree:
-        print(f"树不一致（本地 {local_tree[:8]} / 远端 {remote_tree[:8]}），不移动 ref。")
-        return 0
-    git("update-ref", f"refs/heads/{BRANCH}", head, local_head)
+    rt = remote_tree(head)
+    lt = git("rev-parse", "HEAD^{tree}").strip()
+    if not rt:
+        print("取远端 tree 失败")
+        return 1
     git("update-ref", f"refs/remotes/origin/{BRANCH}", head)
-    print(f"✓ 本地已对齐远端 {head[:8]}（refs/heads/{BRANCH} 与 origin/{BRANCH}）")
-    return 0
+    print(f"远端 {head[:8]} tree {rt[:8]} ｜ 本地 HEAD tree {lt[:8]}")
+    if rt == lt:
+        print("✓ 内容一致：线上 == 本地（commit sha 不同是 API 推送的已知副作用，不影响上线）")
+        return 0
+    print("✗ 内容不一致：本地有未推送的改动，请重跑推送后再核")
+    return 1
 
 
 def main():
@@ -285,13 +233,15 @@ def main():
               {"sha": new_commit["sha"], "force": False})
     if "object" in upd:
         print("✓ 已快进 refs/heads/main →", new_commit["sha"][:8])
-        print("接下来请把本地对齐远端：git fetch origin && git reset --soft origin/main")
+        # 让本地也知道远端真实位置（否则 git status 永远显示 ahead，且与远端 sha 不符）
+        git("update-ref", f"refs/remotes/origin/{BRANCH}", new_commit["sha"])
+        print("已更新 refs/remotes/origin/main；内容对账请跑 --check")
         return 0
     print("更新 ref 失败:", upd)
     return 1
 
 
 if __name__ == "__main__":
-    if "--align" in sys.argv:
-        sys.exit(align())
+    if "--check" in sys.argv:
+        sys.exit(check())
     sys.exit(main())

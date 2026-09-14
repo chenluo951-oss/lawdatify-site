@@ -50,6 +50,22 @@ try:
 except (OSError, ValueError):
     WX_REPLACES = {}
 
+# 存档元数据（id → 标题/机关/日期），用于识别「简报里已被换成站内链」的条目。
+# 为什么需要：tools/fix_pending_sources.py 会把归档简报页里的原外链直接替换成
+# ../../kb/wx.html#w-<id>，此后 build_topics 解析简报时拿到的是相对链接，
+# 按「原二手 URL」查 WX_REPLACES 必然查不到 → 会被链接闸门当无效链接剔除，
+# 结果公众号来源反而进不了资讯流。所以这里同时认「站内存档链」。
+WX_META = {}
+try:
+    for _w in json.load(open(os.path.join(HERE, "kb", "wx", "index.json"),
+                             encoding="utf-8")).get("items", []):
+        if _w.get("id"):
+            WX_META[_w["id"]] = _w
+except (OSError, ValueError, AttributeError):
+    WX_META = {}
+
+RE_WX_INTERNAL = re.compile(r"kb/wx\.html#w-([A-Za-z0-9_-]+)")
+
 # 六大领域：键为归一化名，值为展示名 + 主色
 DOMAINS = [
     ("数据合规", "#1b4f8a"),
@@ -691,7 +707,20 @@ def main():
             it["url"] = ""
             n_wx += 1
             continue
-        w = WX_REPLACES.get(it.get("url") or "")
+        u = it.get("url") or ""
+        m = RE_WX_INTERNAL.search(u)
+        if m:
+            # 简报里的外链已被换成站内存档链（fix_pending_sources），这里认回来，
+            # 否则相对链接会被链接闸门判为无效而整条剔除。
+            wid = m.group(1)
+            meta = WX_META.get(wid) or {}
+            it["wx_id"] = wid
+            it["wx_org"] = meta.get("org") or it.get("org") or ""
+            it["src"] = "wechat-official"
+            it["url"] = ""          # 站内相对链接不是外链，不能拿去实测
+            n_wx += 1
+            continue
+        w = WX_REPLACES.get(u)
         if not w:
             continue
         it["wx_id"] = w["wx_id"]
