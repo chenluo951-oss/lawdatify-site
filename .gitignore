@@ -19,11 +19,14 @@ out/
 .env
 .env.*
 
-# 站点只发布网页版：PDF/Word 保留本机，不上传（用户 2026-09-08 决定）
+# 站点只发布网页版：简报 PDF/Word 保留本机，不上传（用户 2026-09-08 决定）
 news/reports/*.pdf
 news/reports/*.docx
 *.pdf
 *.docx
+
+# 例外：标准原版 PDF 直读（用户 2026-09-14 要求标准正文直接用 PDF、不再靠 OCR）
+!kb/std/*.pdf
 
 # 含编造链接、待复核的报告（隔离区，不发布）
 _quarantine/

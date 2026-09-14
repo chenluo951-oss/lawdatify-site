@@ -42,6 +42,7 @@
     audit_sources(items, kind_key="type", strict=False)
 """
 
+import re
 from urllib.parse import urlparse
 
 TIER_ORDER = ("official", "gov-media", "academic", "other")
@@ -66,6 +67,55 @@ TIER_DESC = {
     "academic": "官方学术机构、标准化组织与行业协会",
     "other": "商业媒体、机构博客或二手转载",
 }
+
+# ---------------------------------------------------------------- 链接性质
+# 读者反馈里最多的一类「链接有问题」并不是 404，而是链接落在发布机构的
+# 栏目页 / 首页上——点得开，但翻不到对应条目。所以除了「来源层级」，
+# 还要把「链接性质」也标出来，不让读者把它误当成原文页。
+DEPTH_LABEL = {
+    "deep": "直达具体内容页",
+    "list": "发布机构栏目页——站内已收录同源条目，可在本页直接阅读",
+    "home": "发布机构首页——仅用于标注机构出处",
+}
+DEPTH_SHORT = {"list": "栏目", "home": "首页"}
+
+_LIST_RX = re.compile(
+    r"(/col/col\d+"
+    r"|/(?:index|default|list|more|main)(?:_\d+)?\.(?:html?|jsp|shtml|aspx)$"
+    r"|/(?:tzgg|bmdt|xxgk|zwgk|gkmlpt|notice|news|zxdt|gsgg|gggs|ajgs|fldes|"
+    r"fldys|zlxx|spaq|shgyjs|xxfb)/?$"
+    r"|/assuntos/noticias/?$)", re.I)
+
+
+def link_depth(url):
+    """deep = 可直达具体条目；list = 机构栏目/列表页；home = 机构首页。"""
+    u = (url or "").strip()
+    if not u:
+        return "home"
+    try:
+        p = urlparse(u)
+    except Exception:
+        return "deep"
+    path = p.path or "/"
+    if path.strip("/") == "":
+        return "home"
+    # ① 具体条目特征优先：带文档扩展名（但 /col/…/index.html 仍是栏目页），
+    #    或路径里出现条目级片段（art/、newsDetail、content/、post_、t28094299.shtml…）
+    if re.search(r"\.(?:html?|shtml|jsp|aspx|pdf|docx?)$", path, re.I):
+        if re.search(r"/(?:index|default|list|more|main)(?:_\d+)?\.", path, re.I):
+            return "list"
+        return "deep"
+    if re.search(r"/(?:art/|newsDetail|article/|content/|post_|detail|show/|t\d{6,})",
+                 path, re.I):
+        return "deep"
+    if _LIST_RX.search(path):
+        return "list"
+    if path.endswith("/") and not p.query:
+        return "list"
+    segs = [s for s in path.split("/") if s]
+    if len(segs) == 1 and not p.query:
+        return "list"
+    return "deep"
 
 # ---------------------------------------------------------------- 官方来源
 # 命中即 official。先用具体域名，再用后缀规则兜底（gov.cn / .gov / .go.jp …）
@@ -163,10 +213,14 @@ def tier_of(url, declared=None):
 
 
 def tier_tag(url, declared=None, with_title=True):
-    """渲染一枚来源层级徽章（class 已在 assets/style.css 定义）。"""
+    """渲染来源徽章：层级 + 链接性质（栏目页/首页会额外标出）。"""
     t = tier_of(url, declared)
-    title = f' title="{TIER_DESC[t]}"' if with_title else ""
-    return f'<span class="rd-src {TIER_CLASS[t]}"{title}>{TIER_LABEL[t]}</span>'
+    d = link_depth(url)
+    tip = TIER_DESC[t] if d == "deep" else TIER_DESC[t] + "；" + DEPTH_LABEL[d]
+    title = f' title="{tip}"' if with_title else ""
+    extra = DEPTH_SHORT.get(d, "")
+    tail = f'<i class="rd-src-d">{extra}</i>' if extra else ""
+    return f'<span class="rd-src {TIER_CLASS[t]}"{title}>{TIER_LABEL[t]}{tail}</span>'
 
 
 # ---------------------------------------------------------------- 硬规则校验

@@ -25,6 +25,7 @@ import harvest as H
 import edits as E
 
 HOT = os.path.join(HERE, "sources", "standards", "hot_articles.json")
+COMPETE = os.path.join(HERE, "sources", "standards", "compete_law.json")
 COUNTS = os.path.join(HERE, "sources", "standards", "citation_counts.json")
 TEXT_INDEX = os.path.join(HERE, "kb", "texts", "index.json")
 OUT = os.path.join(HERE, "kb", "citations.html")
@@ -148,6 +149,25 @@ PAGE_CSS = """
 .ct-quote{grid-column:1/-1;background:#fffdf5;border:1px solid #f0e2c0}
 .ct-quote p{font-family:"Songti SC","宋体",serif;font-size:14.5px;line-height:2.0;color:#3a3226}
 .ct-cases{grid-column:1/-1}
+.ct-compete{grid-column:1/-1;background:#fbfaf7;border:1px solid #f0e9dc}
+.ct-comp+.ct-comp{margin-top:16px;padding-top:14px;border-top:1px dashed #e6ddc9}
+.ct-cp-t{margin:0 0 8px;font-size:14.5px;font-weight:700;color:var(--ink)}
+.ct-cp-lab{display:inline-block;margin-right:8px;padding:1px 7px;border-radius:4px;
+  background:#eef3fa;color:#1b4f8a;font-size:11.5px;font-weight:700;vertical-align:1px;white-space:nowrap}
+.ct-cp-issue,.ct-cp-rule,.ct-cp-guide{margin:0 0 9px;font-size:13.5px;line-height:1.9;color:var(--ink-2)}
+.ct-cp-tw{overflow-x:auto;margin:11px 0}
+.ct-cp-tb{width:100%;border-collapse:collapse;font-size:12.5px;background:#fff}
+.ct-cp-tb th,.ct-cp-tb td{border:1px solid var(--line);padding:7px 9px;text-align:left;
+  vertical-align:top;line-height:1.75}
+.ct-cp-tb thead th{background:#f4f6fa;color:var(--ink);font-weight:700;white-space:nowrap}
+.ct-cp-tb tbody th{background:#fbfcfd;color:var(--ink-2);font-weight:700;white-space:nowrap;width:100px}
+.ct-cp-df{margin:11px 0 8px;padding:11px 13px;background:#fff;border:1px solid var(--line);border-radius:8px}
+.ct-cp-df h5{margin:0 0 7px;font-size:12.5px;color:#8a6d1f;letter-spacing:.3px}
+.ct-cp-df ul{margin:0;padding:0;list-style:none}
+.ct-cp-df li{font-size:13px;line-height:1.88;color:var(--ink-2);margin-bottom:6px}
+.ct-cp-df li:last-child{margin-bottom:0}
+.ct-cp-df li b{color:var(--ink);margin-right:7px}
+.ct-cp-basis{margin:7px 0 0;font-size:11.5px;color:var(--faint);line-height:1.8}
 .ct-case{background:#fff;border:1px solid var(--line);border-radius:10px;padding:13px 15px;margin-top:10px}
 .ct-case:first-of-type{margin-top:0}
 .ct-ck{display:inline-block;font-size:11.5px;padding:2px 9px;border-radius:999px;margin-right:8px;font-weight:700}
@@ -293,7 +313,51 @@ def sec(title, body, cls=""):
     return f'<div class="ct-sec {cls}"><h4>{title}</h4>{body}</div>'
 
 
-def render(items, counts, dm_name, law_index):
+def load_compete():
+    """按法条 id 归集竞合关系（一组竞合关系可同时挂在多条法条上）。"""
+    try:
+        d = json.load(open(COMPETE, encoding="utf-8"))
+    except Exception:
+        return {}
+    out = {}
+    for cp in d.get("items", []):
+        for a in cp.get("anchors", []):
+            out.setdefault(a, []).append(cp)
+    return out
+
+
+def render_compete(cps):
+    """法条竞合与抗辩思路：两条轨道的逐项对比 + 引导动作 + 抗辩要点。"""
+    if not cps:
+        return ""
+    out = []
+    for cp in cps:
+        rows = "".join(
+            f'<tr><th>{esc(r.get("k", ""))}</th><td>{esc(r.get("a", ""))}</td>'
+            f'<td>{esc(r.get("b", ""))}</td></tr>' for r in cp.get("rows", []))
+        dfs = "".join(
+            f'<li><b>{esc(d.get("p", ""))}</b><span>{esc(d.get("h", ""))}</span></li>'
+            for d in cp.get("defense", []))
+        basis = "；".join(esc(b) for b in cp.get("basis", []))
+        out.append(
+            '<div class="ct-comp">'
+            f'<p class="ct-cp-t">{esc(cp.get("title", ""))}</p>'
+            f'<p class="ct-cp-issue"><span class="ct-cp-lab">竞合情形</span>'
+            f'{esc(cp.get("issue", ""))}</p>'
+            f'<p class="ct-cp-rule"><span class="ct-cp-lab">适用顺位</span>'
+            f'{esc(cp.get("rule", ""))}</p>'
+            '<div class="ct-cp-tw"><table class="ct-cp-tb">'
+            '<thead><tr><th>维度</th><th>轨道 A</th><th>轨道 B</th></tr></thead>'
+            f'<tbody>{rows}</tbody></table></div>'
+            f'<p class="ct-cp-guide"><span class="ct-cp-lab">引导动作</span>'
+            f'{esc(cp.get("guide", ""))}</p>'
+            f'<div class="ct-cp-df"><h5>抗辩要点</h5><ul>{dfs}</ul></div>'
+            f'<p class="ct-cp-basis">依据：{basis}</p>'
+            '</div>')
+    return "".join(out)
+
+
+def render(items, counts, dm_name, law_index, compete=None):
     heat_max = max([counts.get(x["id"], 0) for x in items] + [1])
     dm_count = collections.Counter(x["domain"] for x in items)
     order = [d["id"] for d in json.load(open(HOT, encoding="utf-8"))["domains"]]
@@ -338,17 +402,21 @@ def render(items, counts, dm_name, law_index):
         if law_rec.get("url"):
             src_link += (f'<a class="ct-link" href="{esc(law_rec["url"])}" target="_blank" '
                          f'rel="noopener">法规官方发布页 &#8599;</a>')
+        cp_html = render_compete((compete or {}).get(x["id"]))
         body = '<div class="ct-secs">' + \
                sec("条文原文（摘录）", f'<p>{esc(x["quote"])}</p>', "ct-quote") + \
                sec("合规场景", f'<p>{esc(x["scene"])}</p>') + \
                sec("处罚标准", f'<p>{esc(x["penalty"])}</p>') + \
                sec("法律责任", f'<p>{esc(x["liability"])}</p>') + \
+               (sec("法条竞合与抗辩思路", cp_html, "ct-compete") if cp_html else "") + \
                sec("正面示例", f'<p>{esc(x["positive"])}</p>') + \
                sec("真实案例（%d）" % len(arts), cases_html, "ct-cases") + \
                '</div>' + \
                '<div class="ct-acts"><button class="ct-btn ct-tocopy">复制本条</button>' + src_link + '</div>'
         search_text = " ".join([x["law"], x.get("law_short", ""), x["art"], x["headline"],
                                 x["scene"], x["penalty"], x["liability"], x["positive"]] +
+                               [(cp.get("title", "") + cp.get("issue", "") + cp.get("guide", ""))
+                                for cp in (compete or {}).get(x["id"], [])] +
                                [c["title"] + c["summary"] for c in arts])
         cards.append(
             f'<article class="ct-card" id="{esc(x["id"])}" data-dm="{esc(x["domain"])}" '
@@ -396,7 +464,10 @@ def main():
     if missing:
         print("以下法条未匹配到站内原文：", missing)
     counts = load_counts(items, recount="--recount" in sys.argv)
-    render(items, counts, dm_name, law_index)
+    compete = load_compete()
+    n_cp = sum(1 for x in items if compete.get(x["id"]))
+    print("法条竞合与抗辩：%d 条法条已挂载竞合分析" % n_cp)
+    render(items, counts, dm_name, law_index, compete)
 
 
 if __name__ == "__main__":

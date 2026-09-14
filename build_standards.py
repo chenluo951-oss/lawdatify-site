@@ -138,6 +138,33 @@ def online_reader_url(it):
 
 # 抓取台账：给出「发布机构公开可直接下载的正文」深链（目前主要是行业标准）
 LEDGER = os.path.join(HERE, "sources", "standards", "harvest_ledger.json")
+COMPETE = os.path.join(HERE, "sources", "standards", "compete_law.json")
+STD_PDF = os.path.join(HERE, "kb", "texts", "std_pdf.json")
+STD_TEXT_IDS = os.path.join(HERE, "sources", "standards", "std_text_ids.json")
+_SPDF = None
+_STID = None
+
+
+def std_text_ids():
+    """标准编号（归一化）→ 站内标准正文 id。键含 `STD::` 前缀版与裸编号版两种。"""
+    global _STID
+    if _STID is None:
+        try:
+            _STID = json.load(open(STD_TEXT_IDS, encoding="utf-8"))
+        except Exception:
+            _STID = {}
+    return _STID
+
+
+def std_pdf_map():
+    """{原文 id: {file,pages,bytes}} —— 站点内已发布的原版标准 PDF。"""
+    global _SPDF
+    if _SPDF is None:
+        try:
+            _SPDF = json.load(open(STD_PDF, encoding="utf-8")).get("items", {})
+        except Exception:
+            _SPDF = {}
+    return _SPDF
 _LED = None
 
 
@@ -157,8 +184,15 @@ def ledger_pdf_url(it):
 
 
 def read_affordance(it):
-    """条目上的原文入口：站内原文库 → 发布机构公开 PDF → 官方在线阅读器。"""
+    """条目上的原文入口：站内原版 PDF 直读 → 站内原文库 → 发布机构公开 PDF → 官方在线阅读器。"""
     tid = text_id(it)
+    if not tid:
+        c = _nkey(it.get("code") or "")
+        if c:
+            tid = std_text_ids().get("STD::" + c) or std_text_ids().get(c) or ""
+    if tid and tid in std_pdf_map():
+        return (f'<a class="lb-read lb-read-pdf" href="texts.html#{tid}" '
+                f'title="站内原版 PDF：版式与官方发布件一致">原版 PDF 直读</a>')
     if tid:
         return f'<a class="lb-read" href="texts.html#{tid}">读原文</a>'
     pdf = ledger_pdf_url(it)
@@ -585,6 +619,42 @@ def render_duty_matrix(cats):
             f'<td class="dm-sum">{n_duty}</td></tr></tfoot></table></div>')
 
 
+_CP = None
+
+
+def compete_map():
+    """{key: {'short','title','issue','anchor'}} —— 来自 compete_law.json。"""
+    global _CP
+    if _CP is None:
+        try:
+            its = json.load(open(COMPETE, encoding="utf-8"))["items"]
+        except Exception:
+            its = []
+        _CP = {}
+        for x in its:
+            _CP[x["key"]] = {
+                "title": x.get("title", ""),
+                "short": (x.get("title", "").split("：")[0] or x["key"]),
+                "issue": x.get("issue", ""),
+                "anchor": (x.get("anchors") or [""])[0],
+            }
+    return _CP
+
+
+def compete_html(duty):
+    """义务卡片上的「法条竞合与抗辩」入口，指向高频法条页对应法条。"""
+    cm = compete_map()
+    ks = [k for k in (duty.get("compete") or []) if k in cm]
+    if not ks:
+        return ""
+    chips = "".join(
+        f'<a href="citations.html#{esc(cm[k]["anchor"])}" '
+        f'title="{esc(cm[k]["title"])}——{esc(cm[k]["issue"][:120])}">{esc(cm[k]["short"])}</a>'
+        for k in ks)
+    return ('<div class="lb-comp"><span class="lb-comp-l">法条竞合与抗辩</span>'
+            + chips + '</div>')
+
+
 def render_duty_tree(cats, items):
     """合规义务清单 · 逐条明细：主题大类 → 场景 → 具体义务 三级。"""
     # 关联义务索引：rel 键 cat|scene|t → 页内锚点
@@ -638,6 +708,7 @@ def render_duty_tree(cats, items):
                     f'<div class="lb-d2-t">{rk}<b>{esc(d["t"])}</b></div>'
                     f'<div class="lb-d2-d">{esc(d["d"])}</div>{ref_html}'
                     f'{rel_html(d)}'
+                    f'{compete_html(d)}'
                     f'{render_articles(d.get("articles"))}</div>')
 
             pkey = f'{c["id"]}|{s["name"]}'

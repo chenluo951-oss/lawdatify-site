@@ -78,6 +78,29 @@ def scan_roots():
     return href_hits, text_hits
 
 
+def scan_depth():
+    """C. 外链性质：区分「直达具体条目」与「机构栏目页/首页」。
+
+    读者反馈里最多的一类「链接有问题」不是 404，而是链接落在机构的栏目页上——
+    点得开，但翻不到对应条目。这里在构建前把清单打出来，便于逐条回溯深链。
+    """
+    try:
+        sys.path.insert(0, HERE)
+        from sources_tier import link_depth, tier_of
+    except Exception:
+        return None
+    bad = {}
+    for p in html_files():
+        rel = os.path.relpath(p, HERE)
+        t = open(p, encoding="utf-8", errors="ignore").read()
+        for u in set(re.findall(r'href="(https?://[^"#]+)"', t)):
+            d = link_depth(u)
+            if d != "deep":
+                bad.setdefault(u, {"depth": d, "tier": tier_of(u), "pages": []})
+                bad[u]["pages"].append(rel)
+    return bad
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--quiet", action="store_true")
@@ -109,6 +132,19 @@ def main():
             print(f"     {u}  ← {sorted(set(ps))[:3]}（{len(ps)} 处）")
     if not href_hits and not text_hits:
         print("   0 ✓（beian.cac.gov.cn 为允许项）")
+
+    print("== C. 外链性质（栏目页 / 首页） ==")
+    bad = scan_depth()
+    if bad is None:
+        print("   （sources_tier 不可用，跳过）")
+    elif not bad:
+        print("   全部直达具体内容页 ✓")
+    else:
+        for u, v in sorted(bad.items()):
+            mark = "△" if v["depth"] == "list" else "○"
+            print(f'   {mark} [{v["depth"]}] {u[:100]}')
+            print(f'       ← {sorted(set(v["pages"]))[:2]}')
+        print(f"   合计 {len(bad)} 条非深链（不阻断构建，建议逐条回溯官方具体页）")
 
     print("== 完成 ==")
     sys.exit(exit_code)
