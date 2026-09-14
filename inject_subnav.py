@@ -30,7 +30,7 @@ KB_NAV = [
 ]
 
 BOUNDARY = {
-    "news": "本模块回答<b>监管动态全貌</b>——即将生效的法规（立法日历）、正在推进的监管行动、"
+    "news": "本模块回答<b>合规动态全貌</b>——即将生效的法规（立法日历）、正在推进的监管行动、"
             "已发生的事件与应对建议、全球监管态势，一屏纵览。规则条文本身见 "
             "<a href=\"../kb/index.html\">合规知识库</a>。",
     "kb": None,  # 知识库总览已有「三个模块怎么分」区块，不再重复
@@ -41,7 +41,7 @@ GROUPS = [
     ("kb", KB_NAV),
 ]
 
-MODULE_NAMES = {"news": "监管动态", "kb": "合规知识库"}
+MODULE_NAMES = {"news": "合规动态", "kb": "合规知识库"}
 
 BLOCK_RE = re.compile(r"<!-- SUBNAV:START -->.*?<!-- SUBNAV:END -->", re.S)
 

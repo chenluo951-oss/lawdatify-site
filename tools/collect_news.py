@@ -40,7 +40,7 @@
                                   # 填了它则 tier 判为「官方公众号」、免外链实测
       "date":     "2026-09-14",   # 可选，默认今天
       "org":      "国家网信办",    # 可选，发布机构
-      "kind":     "监管动态",      # 可选：新规发布/监管动态/处罚案例/专项行动/标准动态/立法进程
+      "kind":     "合规动态",      # 可选：新规发布/合规动态/处罚案例/专项行动/标准动态/立法进程
       "points":   "…",            # 可选，要点
       "analysis": "…",            # 可选，朴朴视角解读
       "risk":     "中高"           # 可选：高/中高/中/低
@@ -76,7 +76,7 @@ from sources_tier import tier_of, TIER_LABEL  # noqa: E402
 
 STORE = os.path.join(ROOT, "sources", "news", "items.jsonl")
 OK_CODES = {"200", "403", "429"}
-KINDS = ["新规发布", "监管动态", "处罚案例", "专项行动", "标准动态", "立法进程",
+KINDS = ["新规发布", "合规动态", "处罚案例", "专项行动", "标准动态", "立法进程",
          "司法动态", "国际动态"]
 DATE_RE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
 
@@ -220,9 +220,9 @@ def main():
         d = (c.get("date") or today).strip()
         if not DATE_RE.match(d):
             d = today
-        kind = (c.get("kind") or "监管动态").strip()
+        kind = (c.get("kind") or "合规动态").strip()
         if kind not in KINDS:
-            kind = "监管动态"
+            kind = "合规动态"
 
         accepted.append({
             "domain": domain,

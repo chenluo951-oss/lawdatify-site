@@ -6,7 +6,7 @@ build_search.py — 生成全站检索索引 assets/search-index.json
 索引覆盖（可被真实搜到的内容，而非只有几个页面）：
   law    法规与标准      sources/standards/library.json（1000+ 条，含编号/发布机构/状态）
   duty   合规义务        sources/standards/duties.json（220 项，含条款原文与出处）
-  news   监管动态        news/index.html 已发布条目（含领域/机构/日期/要点）
+  news   合规动态        news/index.html 已发布条目（含领域/机构/日期/要点）
   action 监管行动        sources/radar/actions.json
   cal    立法节点        sources/radar/calendar.json
   dra    草案征求意见     sources/library/drafts.json
@@ -27,7 +27,7 @@ OUT = os.path.join(HERE, "assets", "search-index.json")
 CATS = [
     ("law", "法规标准"),
     ("duty", "合规义务"),
-    ("news", "监管动态"),
+    ("news", "合规动态"),
     ("action", "监管行动"),
     ("cal", "立法节点"),
     ("dra", "草案征求意见"),
@@ -103,7 +103,7 @@ def main():
                                    " ".join(quotes)]).strip(),
                 })
 
-    # ---------- 3. 监管动态（解析已发布资讯页） ----------
+    # ---------- 3. 合规动态（解析已发布资讯页） ----------
     news_html = os.path.join(HERE, "news", "index.html")
     if os.path.exists(news_html):
         s = open(news_html, encoding="utf-8").read()
@@ -183,10 +183,10 @@ def main():
 
     pages = [
         ("今日更新", "updates/index.html", "法规标准增量、生效倒计时、立法节点与草案截止"),
-        ("监管动态", "news/index.html", "监管动态全貌：即将生效、推进中行动、最新事件与应对建议、全球态势"),
+        ("合规动态", "news/index.html", "合规动态全貌：即将生效、推进中行动、最新事件与应对建议、全球态势"),
         ("立法日历", "news/calendar.html", "法律法规与标准的生效、实施、过渡期节点"),
         ("应对建议", "news/actions.html", "进行中监管行动与按领域给出的整改落地建议"),
-        ("全球监管地图", "news/map.html", "按地域查看监管动态分布"),
+        ("全球监管地图", "news/map.html", "按地域查看合规动态分布"),
         ("简报归档", "news/briefs.html", "日报 / 周报 / 月报全期次归档"),
         ("合规知识库", "kb/index.html", "资料库、义务清单与草案跟踪"),
         ("合规义务清单", "kb/standards.html", "17 大类 77 场景 220 项义务，矩阵总览 + 逐条明细，配条款原文与标杆做法"),

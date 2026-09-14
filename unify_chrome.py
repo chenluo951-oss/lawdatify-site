@@ -45,11 +45,11 @@ PAGES = [
 ]
 
 # 导航项：(相对站点根路径, 文案)。PRM 与搜索是工具页，不进主导航。
-# 监管雷达已与合规资讯合并为「监管动态」（news/ 模块）：立法日历 / 应对建议 / 全球监管地图。
+# 监管雷达已与合规资讯合并为「合规动态」（news/ 模块）：立法日历 / 应对建议 / 全球监管地图。
 NAV_ITEMS = [
     ("index.html", "首页"),
     ("updates/index.html", "今日更新"),
-    ("news/index.html", "监管动态"),
+    ("news/index.html", "合规动态"),
     ("analysis/index.html", "法律分析"),
     ("kb/index.html", "合规知识库"),
     ("about.html", "关于"),
@@ -82,11 +82,11 @@ def build_footer(rel: str) -> str:
     p = "../" * rel.count("/")
     return (
         '<footer><div class="inner">\n'
-        '  <div class="foot-brand">合规<span>无终点</span> · 法规标准与监管动态库</div>\n'
+        '  <div class="foot-brand">合规<span>无终点</span> · 法规标准与合规动态库</div>\n'
         '  <div class="foot-desc">由个人独立维护 · 内容基于监管机构官网公开信息整理，逐条附原文深链</div>\n'
         '  <div class="foot-links">\n'
         f'    <a href="{p}updates/index.html">今日更新</a>·\n'
-        f'    <a href="{p}news/index.html">监管动态</a>·\n'
+        f'    <a href="{p}news/index.html">合规动态</a>·\n'
         f'    <a href="{p}kb/index.html">知识库</a>·\n'
         f'    <a href="{p}analysis/index.html">法律分析</a>·\n'
         f'    <a href="{p}news/briefs.html">简报归档</a>·\n'

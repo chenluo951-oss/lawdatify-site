@@ -381,7 +381,7 @@ HTML = """<!DOCTYPE html>
   <div class="navlinks">
     <a href="../index.html">首页</a>
     <a href="../updates/index.html">今日更新</a>
-    <a href="../news/index.html">监管动态</a>
+    <a href="../news/index.html">合规动态</a>
     <a href="../news/index.html">合规资讯</a>
     <a href="../analysis/index.html">法律分析</a>
     <a href="../kb/index.html">合规知识库</a>
@@ -392,7 +392,7 @@ HTML = """<!DOCTYPE html>
 <!-- SUBNAV:START --><!-- SUBNAV:END -->
 
 <div class="pagehead"><div class="inner">
-  <div class="crumb"><a href="../index.html">首页</a> / <a href="../news/index.html">监管动态</a> / 公众号原文存档</div>
+  <div class="crumb"><a href="../index.html">首页</a> / <a href="../news/index.html">合规动态</a> / 公众号原文存档</div>
   <h1>公众号原文存档</h1>
   <p>发布机关<b>官方微信公众号</b>发布的执法通报与典型案例，逐篇存档全文，可检索、可深链、可下载。<br>
      收录对象是<b>只在公众号发布、PC 官网没有对应页</b>的内容——这类来源无法提供长期有效的外部深链，故以站内原文存档方式溯源。</p>

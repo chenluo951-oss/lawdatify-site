@@ -1,6 +1,6 @@
 {
  "_meta": {
-  "desc": "全球辖区监管动态数据源（用于监管地图）。group 用于地图分区：na 北美 / sa 拉美 / eu 欧洲 / apac 亚太 / mea 中东非。src=official 表示监管机构官网具体页面；src=analysis 表示可溯源的专业评述文章页。",
+  "desc": "全球辖区合规动态数据源（用于监管地图）。group 用于地图分区：na 北美 / sa 拉美 / eu 欧洲 / apac 亚太 / mea 中东非。src=official 表示监管机构官网具体页面；src=analysis 表示可溯源的专业评述文章页。",
   "updated": "2026-09-09"
  },
  "jurisdictions": [

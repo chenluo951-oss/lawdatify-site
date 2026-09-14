@@ -169,8 +169,8 @@ KIND_KEYWORDS = [
 def guess_kind(text):
     """按标题关键词推断内容类型，用于公众号等只按内容归类的条目。
 
-    优先级：处罚案例/执法通报 > 专项行动 > 新规发布 > 政策问答/专题述评 > 监管动态。
-    命中第一条即返回；都不命中回落「监管动态」。
+    优先级：处罚案例/执法通报 > 专项行动 > 新规发布 > 政策问答/专题述评 > 合规动态。
+    命中第一条即返回；都不命中回落「合规动态」。
     """
     t = text or ""
     for pat, kind in KIND_KEYWORDS:
@@ -181,7 +181,7 @@ def guess_kind(text):
             if kind == "政策问答" and re.search(r"述评|评论|观察|评析|研判", t):
                 return "专题述评"
             return kind
-    return "监管动态"
+    return "合规动态"
 
 # 不发布名单：与 gen_briefs.py 保持一致。含编造链接的期次不解析、不进站点。
 BLOCKED = ("简报_2026-09-06",)
@@ -362,7 +362,7 @@ def load_native(path=NATIVE):
             "points": (r.get("points") or "").strip(),
             "analysis": (r.get("analysis") or "").strip(),
             "issue": collected,
-            "kind": (r.get("kind") or "监管动态").strip(),
+            "kind": (r.get("kind") or "合规动态").strip(),
             "ver": NATIVE_VER,
             "file": "sources/news/items.jsonl",
             # 来源为站内公众号原文存档（tools/fetch_wechat.py 抓取）时透传
@@ -649,7 +649,7 @@ def render_kb_cards(news_items, actions):
         more = ""
         if n_news.get(d):
             more = (f'<div class="kb-more">'
-                    f'<a href="../news/index.html#g-{esc(d)}">该领域 {n_news[d]} 条监管动态 →</a></div>')
+                    f'<a href="../news/index.html#g-{esc(d)}">该领域 {n_news[d]} 条合规动态 →</a></div>')
         cards.append(f"""<div class="kb-card">
   <div class="kb-h"><span class="dot" style="background:{color}"></span><h3>{esc(d)}</h3>
     <span class="kb-n">{len(lst)} 项要点</span></div>

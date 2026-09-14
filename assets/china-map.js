@@ -58,7 +58,7 @@
         var provs = data.provinces || [];
         var h = [];
         h.push('<svg class="geo-svg cn-svg" viewBox="' + esc(data.viewBox) +
-               '" role="img" aria-label="中国省级监管动态分布地图（示意）">');
+               '" role="img" aria-label="中国省级合规动态分布地图（示意）">');
         provs.forEach(function (p) {
           if (!p.name || p.name === '南海诸岛') {
             // 南海诸岛与九段线：仅描边示意，保证地图完整规范

@@ -64,7 +64,7 @@
 
         var h = [];
         h.push('<svg class="geo-svg" viewBox="0 0 ' + vb[0] + ' ' + vb[1] +
-               '" role="img" aria-label="全球监管动态分布地图（示意）">');
+               '" role="img" aria-label="全球合规动态分布地图（示意）">');
         h.push('<g class="geo-other">');
         for (var i = 0; i < geo.other.length; i++) {
           h.push('<path d="' + geo.other[i] + '"/>');

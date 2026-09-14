@@ -269,7 +269,7 @@ def fig_matrix(rows):
     inner = (f'<table class="ft"><thead><tr>{th}</tr></thead>'
              f'<tbody>{"".join(trs)}</tbody></table>')
     return figure(inner, "图1：朴朴超市合规风险热力矩阵（按风险主题 × 业务环节）",
-                  "朴朴超市法务合规部基于公开监管动态内部评估") + legend()
+                  "朴朴超市法务合规部基于公开合规动态内部评估") + legend()
 
 
 _WL_ROWS = [
@@ -466,7 +466,7 @@ def build_brief(data, meta):
 
     # 四、朴朴超市业务专题
     out.append(h1_sec(S["pupu"], "s-pupu"))
-    out.append(note("说明：本板块聚焦与朴朴超市（生鲜电商 / 前置仓即时零售）业务直接相关的监管动态，"
+    out.append(note("说明：本板块聚焦与朴朴超市（生鲜电商 / 前置仓即时零售）业务直接相关的合规动态，"
                     "逐项评估合规风险等级（高 / 中高 / 中 / 低）并给出应对建议。"))
     out.append(fig_matrix(data["matrix_rows"]))
     for title, risk, scope, impact, action in data["pupu_items"]:
@@ -595,7 +595,7 @@ def build_deep(base_data, base_meta):
 
     # 四、朴朴超市业务专题
     out.append(h1_sec(S["pupu"], "s-pupu"))
-    out.append(note("说明：本板块聚焦与朴朴超市（生鲜电商 / 前置仓即时零售）业务直接相关的监管动态，"
+    out.append(note("说明：本板块聚焦与朴朴超市（生鲜电商 / 前置仓即时零售）业务直接相关的合规动态，"
                     "逐项评估合规风险等级并给出应对建议。"))
     out.append(fig_matrix(base_data["matrix_rows"]))
     for title, risk, scope, impact, action in base_data["pupu_items"]:

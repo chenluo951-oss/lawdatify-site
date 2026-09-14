@@ -74,7 +74,7 @@ def main():
         p.alignment = WD_ALIGN_PARAGRAPH.CENTER
         set_font(p.add_run("近 3 期回顾：　" + "　·　".join(prev)), 9, False, LGRAY, HEITI)
     p = doc.add_paragraph(); p.alignment = WD_ALIGN_PARAGRAPH.CENTER
-    set_font(p.add_run("覆盖口径：六大合规领域公开监管动态与通报处罚"), 9, False, GRAY, HEITI)
+    set_font(p.add_run("覆盖口径：六大合规领域公开合规动态与通报处罚"), 9, False, GRAY, HEITI)
     p = doc.add_paragraph(); p.alignment = WD_ALIGN_PARAGRAPH.CENTER
     set_font(p.add_run("审核与签发：朴朴超市法务合规部"), 9, False, GRAY, HEITI)
     doc.add_paragraph()
@@ -212,7 +212,7 @@ def main():
         add_body(doc, f"{i}. {s}")
     # 四、朴朴专题
     add_h1(doc, M["sections"]["pupu"])
-    add_body(doc, "说明：本板块聚焦与朴朴超市业务直接相关的监管动态，逐项评估合规风险等级并给出应对建议。", color=GRAY, name=HEITI, size=10)
+    add_body(doc, "说明：本板块聚焦与朴朴超市业务直接相关的合规动态，逐项评估合规风险等级并给出应对建议。", color=GRAY, name=HEITI, size=10)
     rc_color = {"高":(0xC0,0x39,0x2B),"中高":(0xD3,0x54,0x00),"中":(0xB8,0x86,0x0B),"低":(0x5B,0x8C,0x5A)}
     for title, risk, scope, impact, action in D["pupu_items"]:
         p = doc.add_paragraph(); set_font(p.add_run(f"▍{title}"), 11.5, True, None, HEITI)

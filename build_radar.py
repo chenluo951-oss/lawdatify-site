@@ -3,7 +3,7 @@
 
 输入：sources/radar/{calendar,actions,global}.json —— 人工核实维护的结构化数据
 输出：news/calendar.html（立法日历）、news/map.html（全球监管地图）
-      （news/index.html 与 news/actions.html 已并入「监管动态」的 news/index.html 与 news/actions.html）
+      （news/index.html 与 news/actions.html 已并入「合规动态」的 news/index.html 与 news/actions.html）
 
 设计约束：
 - 幂等：每次运行整体重写输出页，随后自动调用 unify_chrome / inject_meta 恢复
@@ -229,7 +229,7 @@ def page_calendar(cal):
 
     return page(
         "立法日历", "法律与标准的施行日、征求意见截止与申报节点的月历视图，覆盖中国与主要海外辖区。",
-        '<a href="index.html">监管动态</a> / 立法日历',
+        '<a href="index.html">合规动态</a> / 立法日历',
         "立法日历",
         "把散落在各机构的公开信息重排到一张月历上：哪些规定即将施行、哪些意见正在征集、"
         "哪些申报节点会过期。每条附发布机构原文深链，可直接点开核对。",
@@ -275,7 +275,7 @@ def page_actions(acts):
 
     return page(
         "监管动向", "正在推进的专项治理、监督检查与安全调查，含适用对象与最新进展。立法草案另见知识库·草案跟踪。",
-        '<a href="index.html">监管动态</a> / 监管动向',
+        '<a href="index.html">合规动态</a> / 监管动向',
         "监管动向",
         "监管不止写在纸上，更在执行里。这里追踪各主管部门正在推进的动作，标注适用对象、"
         "重点内容与最新进展，便于判断是否需要同步开展内部自查。",
@@ -344,7 +344,7 @@ def page_map(g):
         '<div class="geo-frame" id="geoMap"></div>',
         '<div class="cn-bar" id="cnBar">'
         '<button class="cn-back" id="cnBack" type="button">← 返回全球</button>'
-        '<span class="cn-mode">当前视图：<b>中国 · 省市级监管态势</b>，点击省份查看地方监管动态</span></div>',
+        '<span class="cn-mode">当前视图：<b>中国 · 省市级监管态势</b>，点击省份查看地方合规动态</span></div>',
         '<div class="cn-panel" id="cnPanel"></div>',
         '<div class="rd-mapres" id="mapres"></div>',
         '<div class="rd-glist" id="glist">' + "".join(list_html) + "</div>",
@@ -389,7 +389,7 @@ def page_map(g):
       if(!its.length) return;
       var rows=its.map(function(it){{
         return '<div class="rd-item rd-gitem"><div class="rd-body"><div class="rd-row">'
-          +'<span class="rd-badge b-blue">'+(it.type||'监管动态')+'</span>'
+          +'<span class="rd-badge b-blue">'+(it.type||'合规动态')+'</span>'
           +'<span class="rd-tags"><span class="rd-tag">'+(it.domain||'')+'</span></span>'
           +'<span class="rd-count past">'+(it.date||'')+'</span></div>'
           +'<h3><a href="'+it.url+'" target="_blank" rel="noopener">'+it.title+'</a>'
@@ -401,7 +401,7 @@ def page_map(g):
       blocks+='<div class="rd-gblock cn-block" data-prov="'+p.name+'" style="display:none">'
         +'<h4 class="rd-gh">'+p.name+'<span>'+its.length+'</span></h4>'+rows+'</div>';
     }});
-    var head='<div class="rd-note">共收录 <b>'+total+'</b> 条 2026 年省级地方监管动态，'
+    var head='<div class="rd-note">共收录 <b>'+total+'</b> 条 2026 年省级地方合规动态，'
       +'覆盖 '+provs.filter(function(p){{return (p.items||[]).length;}}).length
       +' 个省级行政区。全国性法律法规与部门规章适用于全部省份，此处仅列<b>省级市场监管部门的属地监管动作</b>。'
       +'点击卡片查看该省详情。</div><div class="cn-grid">'+cards+'</div>'+blocks;
@@ -478,7 +478,7 @@ def page_map(g):
 
     return page(
         "全球监管地图", "按司法辖区查看立法、执法与规则动态，覆盖中国、欧盟、美国、日韩、印度、东南亚、拉美与中东非。",
-        '<a href="index.html">监管动态</a> / 全球监管地图',
+        '<a href="index.html">合规动态</a> / 全球监管地图',
         "全球监管地图",
         "出海或跨境业务常问「这个国家现在什么口径」。真实地理轮廓着色呈现已核实的立法、"
         "执法与规则动向，点击辖区即可下钻全部条目。",
@@ -777,7 +777,7 @@ def write(rel, content):
 
 
 def write_to(d, rel, content):
-    """写到指定目录（合并后日历/地图落到 news/，与「监管动态」同模块）。"""
+    """写到指定目录（合并后日历/地图落到 news/，与「合规动态」同模块）。"""
     p = os.path.join(d, rel)
     os.makedirs(os.path.dirname(p), exist_ok=True)
     with open(p, "w", encoding="utf-8") as f:
@@ -789,7 +789,7 @@ def main():
     cal = load("calendar.json")
     g = load("global.json")
 
-    # 引源校验：立法日历 / 全球监管（监管动向已并入「监管动态/应对建议」，由 build_topics 渲染）。
+    # 引源校验：立法日历 / 全球监管（监管动向已并入「合规动态/应对建议」，由 build_topics 渲染）。
     # 不阻断构建（数据由人工核实维护），但每次构建都把待替换清单打出来。
     print("  —— 引源校验 ——")
     for label, items, kind_key, name_key in (
@@ -801,7 +801,7 @@ def main():
         print("    " + label + " 层级分布：" +
               " / ".join(f"{TIER_LABEL[k]} {v}" for k, v in tally.items() if v))
 
-    # 合并后：立法日历 / 全球监管地图落到 news/（与「监管动态」同模块）；
+    # 合并后：立法日历 / 全球监管地图落到 news/（与「合规动态」同模块）；
     # news/index.html 与 news/actions.html 已并入 news/index.html 与 news/actions.html。
     news_dir = os.path.join(HERE, "news")
     os.makedirs(news_dir, exist_ok=True)

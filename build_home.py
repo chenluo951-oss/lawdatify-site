@@ -1,15 +1,15 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""首页（监管动态·可视化）生成器。
+"""首页（合规动态·可视化）生成器。
 
 替换 index.html 中三块标记内容（幂等，骨架其余部分不动）：
 
-  <!-- RADAR:START -->   … <!-- RADAR:END -->   监管动态驾驶舱
-      KPI 看板（监管动态 / 未来节点 / 推进中行动 / 覆盖辖区 / 公众号原文）
+  <!-- RADAR:START -->   … <!-- RADAR:END -->   合规动态驾驶舱
+      KPI 看板（合规动态 / 未来节点 / 推进中行动 / 覆盖辖区 / 公众号原文）
       + 三栏倒计时牌（即将到期 / 推进中行动 / 全球最新动态，链 news/ 子页）
       + 领域分布条形图（数据看板·按已收录条数）
-      + 模块入口（监管动态总览 / 立法日历 / 应对建议 / 全球地图 / 公众号原文 / 简报归档）
-  <!-- FEED:START -->    … <!-- FEED:END -->    最新监管动态流
+      + 模块入口（合规动态总览 / 立法日历 / 应对建议 / 全球地图 / 公众号原文 / 简报归档）
+  <!-- FEED:START -->    … <!-- FEED:END -->    最新合规动态流
       （合并「监管雷达 + 合规资讯」后统一在此呈现，逐条附官方深链与公众号原文标记）
   <!-- GEOMETA:START --> … <!-- GEOMETA:END -->  全球监管地图元数据（window.GEO_META）
 
@@ -24,7 +24,7 @@ import json
 import os
 import re
 import sys
-from datetime import date
+from datetime import date, timedelta
 
 from build_topics import build_feed, DOMAIN_KEYS, DOMAIN_COLOR, esc
 from build_radar import load as radar_load
@@ -35,6 +35,7 @@ INDEX = os.path.join(HERE, "index.html")
 RADAR_S, RADAR_E = "<!-- RADAR:START -->", "<!-- RADAR:END -->"
 FEED_S, FEED_E = "<!-- FEED:START -->", "<!-- FEED:END -->"
 GEO_S, GEO_E = "<!-- GEOMETA:START -->", "<!-- GEOMETA:END -->"
+PULSE_S, PULSE_E = "<!-- PULSE:START -->", "<!-- PULSE:END -->"
 
 RUN_STATUSES = ("进行中", "待施行", "待发布", "待审议")
 
@@ -69,19 +70,61 @@ def load_wx():
         return []
 
 
+def load_duties():
+    """合规义务总数（17 大类 / 77 场景 / 220 项，随数据源动态计算）。"""
+    p = os.path.join(HERE, "sources", "standards", "duties.json")
+    try:
+        d = json.load(open(p, encoding="utf-8"))
+    except (OSError, ValueError):
+        return 0
+    n = 0
+    for c in d.get("categories", []):
+        for s in c.get("scenes", []):
+            n += len(s.get("duties", []) or [])
+    return n
+
+
 # ---------------------------------------------------------------- KPI 看板
 def render_kpi(n_feed, n_future, n_running, n_juris, n_wx):
+    # 每张卡都可点击直达对应模块（req: 驾驶舱数字不应只是展示）
     cards = [
-        (n_feed, "监管动态"),
-        (n_future, "未来合规节点"),
-        (n_running, "推进中行动"),
-        (n_juris, "覆盖辖区"),
-        (n_wx, "公众号来源"),
+        (n_feed, "合规动态", "news/index.html"),
+        (n_future, "未来合规节点", "news/calendar.html"),
+        (n_running, "推进中行动", "news/actions.html"),
+        (n_juris, "覆盖辖区", "news/map.html"),
+        (n_wx, "公众号来源", "kb/wx.html"),
     ]
     cells = "".join(
-        f'<div class="kpi-card"><b>{v}</b><span>{t}</span></div>' for v, t in cards
+        f'<a class="kpi-card" href="{u}"><b>{v}</b><span>{t}</span></a>'
+        for v, t, u in cards
     )
     return f'<div class="kpi">{cells}</div>'
+
+
+# ---------------------------------------------------------------- 今日合规速览
+def render_pulse(n_future_90, n_future_30, n_running, n_week, n_wx, n_duties):
+    """首页黄金位：用「打开网站第一眼该看什么」替代「四个模块分别是什么」。
+
+    每条都是可点击的实时信号，带数字 + 一句「为什么现在要看」+ 去向。
+    """
+    rows = [
+        ("📅", f"{n_future_90}", "部法规 / 标准将在 90 天内施行",
+         f"其中 {n_future_30} 部本月生效 · 立法日历逐条附官方深链", "news/calendar.html"),
+        ("🛡️", f"{n_running}", "项监管行动正在推进",
+         "清朗·AI 乱象 / 食安整治 / 数据出境… · 应对建议一键直达", "news/actions.html"),
+        ("📰", f"{n_week}", "条合规动态本周新增",
+         f"含 {n_wx} 篇官方公众号原文 · 合规动态流逐条可溯源", "news/index.html"),
+        ("📚", f"{n_duties}", "项合规义务随时可查",
+         "逐条配法律 / 标准条款原文与可套用文案 · 知识库直达", "kb/index.html"),
+    ]
+    body = "".join(
+        f'<a class="pulse-row" href="{u}">'
+        f'<span class="pulse-ico">{ic}</span>'
+        f'<span class="pulse-main"><b>{n}</b> {label}<i>{sub}</i></span>'
+        f'<span class="pulse-go">→</span></a>'
+        for ic, n, label, sub, u in rows
+    )
+    return f'<div class="pulse">{body}</div>'
 
 
 # ---------------------------------------------------------------- 三栏倒计时牌
@@ -153,7 +196,7 @@ def render_dist(verified):
             f'style="width:{w}%;background:{color}"></span></span>'
             f'<span class="dist-n">{c}</span></div>'
         )
-    return (f'<div class="dist"><div class="dist-h">监管动态 · 领域分布'
+    return (f'<div class="dist"><div class="dist-h">合规动态 · 领域分布'
             f'<span class="dist-sub">按已收录条数</span></div>'
             f'{"".join(rows)}</div>')
 
@@ -161,7 +204,7 @@ def render_dist(verified):
 # ---------------------------------------------------------------- 模块入口
 def render_mod_entries():
     items = [
-        ("news/index.html", "监管动态总览"),
+        ("news/index.html", "合规动态总览"),
         ("news/calendar.html", "立法日历"),
         ("news/actions.html", "应对建议"),
         ("news/map.html", "全球监管地图"),
@@ -187,7 +230,7 @@ def render_feed(verified, n=10):
             f'<span class="hl-m">{esc(it["date"])}</span></a>'
         )
     more = (f'<div class="feed-more"><a href="news/index.html">查看全部 '
-            f'{len(verified)} 条监管动态 →</a></div>')
+            f'{len(verified)} 条合规动态 →</a></div>')
     return f'<div class="hlist">{"".join(rows)}</div>{more}'
 
 
@@ -212,11 +255,22 @@ def main():
     g = radar_load("global.json")
     wx = load_wx()
 
-    today = date.today().strftime("%Y-%m-%d")
-    n_future = sum(1 for i in cal["items"] if i["date"] >= today)
+    today = date.today()
+    today_s = today.strftime("%Y-%m-%d")
+    n_future = sum(1 for i in cal["items"] if i["date"] >= today_s)
     n_running = sum(1 for i in acts["items"]
                     if i.get("status") in RUN_STATUSES)
     n_juris = len({i["code"] for i in g["items"]})
+
+    # 今日合规速览所需的实时信号
+    n_future_90 = sum(1 for i in cal["items"]
+                      if today_s <= i["date"] <= (today + timedelta(days=90)).strftime("%Y-%m-%d"))
+    n_future_30 = sum(1 for i in cal["items"]
+                      if today_s <= i["date"] <= (today + timedelta(days=30)).strftime("%Y-%m-%d"))
+    week_ago = (today - timedelta(days=7)).strftime("%Y-%m-%d")
+    n_week = sum(1 for it in verified
+                 if it.get("date") and week_ago <= it["date"] <= today_s)
+    n_duties = load_duties()
 
     radar_html = (
         render_kpi(len(verified), n_future, n_running, n_juris, len(wx))
@@ -224,15 +278,17 @@ def main():
         + render_dist(verified)
         + render_mod_entries()
     )
+    pulse_html = render_pulse(n_future_90, n_future_30, n_running, n_week, len(wx), n_duties)
     feed_html = render_feed(verified)
     geo_js = render_geo(g)
 
     ok = True
+    ok &= replace_block(INDEX, PULSE_S, PULSE_E, pulse_html)
     ok &= replace_block(INDEX, RADAR_S, RADAR_E, radar_html)
     ok &= replace_block(INDEX, FEED_S, FEED_E, feed_html)
     ok &= replace_block(INDEX, GEO_S, GEO_E, geo_js)
     if ok:
-        print(f"  index.html ✓ 监管动态驾驶舱（KPI×5 + 领域分布 + 最新 {min(10, len(verified))} 条）"
+        print(f"  index.html ✓ 合规动态驾驶舱（速览 + KPI×5 + 领域分布 + 最新 {min(10, len(verified))} 条）"
               f" · 全球 {n_juris} 辖区")
     else:
         print("  index.html 写入失败（未找到标记）")

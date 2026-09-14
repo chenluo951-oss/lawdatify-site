@@ -283,7 +283,7 @@ def draft_card(d):
 def build_kb_index(items, duties, drafts, soon, stat_html="", board=""):
     """合规知识库总览：定位三大件入口 + 时效提醒 + 模块边界说明。
 
-    与 build_topics.py 的分工：动态类内容（监管动态、应对建议）归「合规资讯」，
+    与 build_topics.py 的分工：动态类内容（合规动态、应对建议）归「合规资讯」，
     这里只放长效知识——法规标准原文、义务清单、立法草案。
     """
     today = datetime.date.today().isoformat()
@@ -384,11 +384,11 @@ def build_kb_index(items, duties, drafts, soon, stat_html="", board=""):
   </div>
   <div class="lb-bound">
     <div class="lb-bd">
-      <div class="lb-bd-h"><b>监管动态</b><span class="lb-tag t-future">未来 / 进行中 · 每日更新</span></div>
+      <div class="lb-bd-h"><b>合规动态</b><span class="lb-tag t-future">未来 / 进行中 · 每日更新</span></div>
       <p>合并「监管雷达 + 合规资讯」后的统一入口，回答「何时生效、何地监管、何种行动、发生了什么、我们该做什么」：
       立法日程与施行倒计时、监管专项行动与执法态势、全球监管地图、六大领域最新监管事件（逐条附官方公众号/官网深链）、
       简报归档，以及从简报沉淀的应对建议。</p>
-      <a href="../news/index.html">进入监管动态 →</a>
+      <a href="../news/index.html">进入合规动态 →</a>
     </div>
     <div class="lb-bd on">
       <div class="lb-bd-h"><b>合规知识库</b><span class="lb-tag t-long">长期稳定</span></div>

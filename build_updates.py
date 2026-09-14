@@ -454,7 +454,7 @@ def main():
   <a class="brand" href="../index.html">law<span>datify</span></a>
   <div class="navlinks">
     <a href="../index.html">首页</a>
-    <a href="../news/index.html">监管动态</a>
+    <a href="../news/index.html">合规动态</a>
     <a href="../news/index.html">合规资讯</a>
     <a href="../analysis/index.html">法律分析</a>
     <a href="../kb/index.html">合规知识库</a>
@@ -473,7 +473,7 @@ def main():
 </div>
 
 <footer><div class="inner">
-  <div class="foot-brand">合规<span>无终点</span> · 法规标准与监管动态库</div>
+  <div class="foot-brand">合规<span>无终点</span> · 法规标准与合规动态库</div>
   <div class="foot-desc">由个人独立维护 · 内容基于监管机构官网公开信息整理，逐条附原文深链</div>
 </div></footer>
 </body>

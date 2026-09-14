@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>站内搜索 · 合规无终点</title>
-<link rel="stylesheet" href="assets/style.css?v=1789372004">
+<link rel="stylesheet" href="assets/style.css?v=1789381149">
 <!-- SOCIAL:START -->
 <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
 <link rel="apple-touch-icon" href="assets/favicon.svg">
@@ -90,7 +90,7 @@
   <div class="navlinks">
     <a href="index.html">首页</a>
     <a href="updates/index.html">今日更新</a>
-    <a href="news/index.html">监管动态</a>
+    <a href="news/index.html">合规动态</a>
     <a href="analysis/index.html">法律分析</a>
     <a href="kb/index.html">合规知识库</a>
     <a href="about.html">关于</a>
@@ -101,13 +101,13 @@
 <div class="pagehead"><div class="inner">
   <div class="crumb"><a href="index.html">首页</a> / 搜索</div>
   <h1>站内搜索</h1>
-  <p>覆盖法规标准、合规义务（含条款原文）、监管动态、监管行动、立法节点与专题分析——输入即搜，命中正文直达。</p>
+  <p>覆盖法规标准、合规义务（含条款原文）、合规动态、监管行动、立法节点与专题分析——输入即搜，命中正文直达。</p>
 </div></div>
 
 <div class="srch-wrap">
   <div class="srch-box">
     <span class="ico">🔍</span>
-    <input id="q" type="search" placeholder="试试「摇一摇」「划线价」「分装称重」「算法备案」…" autocomplete="off" aria-label="搜索关键词">
+    <input id="q" type="search" placeholder="试试「隐私政策」「四步」「摇一摇」「划线价」「分装称重」「算法备案」…（支持模糊/同义/中阿数字）" autocomplete="off" aria-label="搜索关键词">
     <button class="clr" id="clr" title="清空" aria-label="清空">×</button>
   </div>
 
@@ -122,17 +122,20 @@
     <button data-q="未成年人">未成年人</button>
     <button data-q="AI 标识">AI 标识</button>
     <button data-q="合规审计">合规审计</button>
+    <button data-q="隐私政策">隐私政策</button>
+    <button data-q="四步">四步</button>
+    <button data-q="随附义务">随附义务</button>
   </div>
   <div class="srch-count" id="cnt"></div>
   <div id="list"></div>
 </div>
 
 <footer><div class="inner">
-  <div class="foot-brand">合规<span>无终点</span> · 法规标准与监管动态库</div>
+  <div class="foot-brand">合规<span>无终点</span> · 法规标准与合规动态库</div>
   <div class="foot-desc">由个人独立维护 · 内容基于监管机构官网公开信息整理，逐条附原文深链</div>
   <div class="foot-links">
     <a href="updates/index.html">今日更新</a>·
-    <a href="news/index.html">监管动态</a>·
+    <a href="news/index.html">合规动态</a>·
     <a href="kb/index.html">知识库</a>·
     <a href="analysis/index.html">法律分析</a>·
     <a href="news/briefs.html">简报归档</a>·
@@ -147,7 +150,26 @@ var IDX=null, CAT='ALL', RAW='', CATN={};
 function $(id){ return document.getElementById(id); }
 function esc(s){ return String(s==null?'':s).replace(/[&<>"]/g,function(c){
   return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
-function terms(q){ return q.toLowerCase().split(/\s+/).filter(function(x){return x.length>0;}); }
+function norm(s){
+  // 归一化：去标点/空白、小写；中文数字↔阿拉伯（四↔4、十↔10），让「四步」能命中「4步」
+  s=String(s==null?'':s).toLowerCase();
+  s=s.replace(/[\s，。、；：？！“”‘’（）()\[\]【】{}<>《》,.;:?!'"·\-_/\\|]/g,'');
+  var cn="零一二三四五六七八九";
+  s=s.replace(/[零一二三四五六七八九]/g,function(c){return cn.indexOf(c);});
+  s=s.replace(/十/g,'10').replace(/百/g,'100');
+  return s;
+}
+function bigrams(s){ var o={}; for(var i=0;i+1<s.length;i++){ var g=s.substr(i,2); o[g]=(o[g]||0)+1; } return o; }
+var ALIAS={
+  "隐私政策":"个人信息保护政策 隐私政策 处理规则",
+  "个保法":"个人信息保护法","个保":"个人信息保护",
+  "算法":"算法推荐 算法备案 推荐算法","网安":"网络安全","电商":"电子商务 电商法",
+  "四步":"4步 四步 四步点击 可访问","4步":"四步 四步点击 可访问","可访问":"隐私政策 易于访问 四步点击",
+  "随附":"附随 一并 隐私政策","告知":"告知 显著方式 清晰易懂"
+};
+function expand(ts){ var out=[]; for(var i=0;i<ts.length;i++){ var t=ts[i]; out.push(t);
+  if(ALIAS[t]){ ALIAS[t].split(/\s+/).forEach(function(a){ if(a) out.push(a); }); } } return out; }
+function terms(q){ return expand(q.toLowerCase().split(/\s+/).map(norm).filter(function(x){return x.length>0;})); }
 function hl(text,ts){
   var out=esc(text||''); if(!ts.length) return out;
   var safe=ts.map(function(t){return t.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');});
@@ -155,12 +177,19 @@ function hl(text,ts){
   catch(e){ return out; }
 }
 function score(it,ts,strict){
-  var hay=((it.t||'')+' '+(it.k||'')+' '+(it.s||'')+' '+(it.d||'')).toLowerCase();
-  var tt=(it.t||'').toLowerCase(), s=0, hit=0;
+  var hay=norm((it.t||'')+' '+(it.k||'')+' '+(it.s||'')+' '+(it.d||''));
+  var tt=norm(it.t||''), s=0, hit=0;
   for(var i=0;i<ts.length;i++){
-    var t=ts[i];
-    if(tt.indexOf(t)===0) s+=60; else if(tt.indexOf(t)>=0) s+=40;
-    if(hay.indexOf(t)>=0){ s+=12; hit++; }
+    var t=ts[i]; if(!t) continue;
+    if(tt.indexOf(t)===0) s+=70; else if(tt.indexOf(t)>=0) s+=50;
+    if(hay.indexOf(t)>=0){ s+=14; hit++; continue; }
+    // 模糊：2-gram 重叠容错（typo / 词序 / 中阿数字混用）
+    if(t.length>=2){
+      var bg=bigrams(t), hbg=bigrams(hay), ov=0, tot=0;
+      for(var g in bg){ tot++; if(hbg[g]) ov++; }
+      if(tot && ov/tot>=0.5){ s+=22; hit++; }
+      else if(tot && ov>0){ s+=7; }
+    }
   }
   if(hit<ts.length){
     if(strict||hit===0) return -1;   // 严格模式要求全部命中

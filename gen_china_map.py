@@ -14,7 +14,7 @@ SRC = "/tmp/china_full.json"
 DST = os.path.join(os.path.dirname(os.path.abspath(__file__)),
                    "sources", "radar", "china.json")
 
-# 省级监管动态（全部为政府官网具体页面深链，2026 年内）
+# 省级合规动态（全部为政府官网具体页面深链，2026 年内）
 PROV_ITEMS = {
     "上海市": [{
         "date": "2026-08-27", "type": "政策宣贯", "domain": "平台合规",

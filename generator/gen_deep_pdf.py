@@ -394,7 +394,7 @@ def build(base_data, base_meta):
     # 七、朴朴超市业务专题（base）
     story.append(Spacer(1, SP_L))
     story.append(G.h1_block(base_meta["sections"]["pupu"], S))
-    story.append(Paragraph("说明：本板块聚焦与朴朴超市（生鲜电商/前置仓即时零售）业务直接相关的监管动态，"
+    story.append(Paragraph("说明：本板块聚焦与朴朴超市（生鲜电商/前置仓即时零售）业务直接相关的合规动态，"
                            "逐项评估合规风险等级并给出应对建议。", S["note"]))
     # 热力矩阵：图 + 图注 + 资料来源 + 图例 整体 KeepTogether，确保图例不与矩阵分页 orphan
     story.append(KeepTogether([G.fig3_matrix(F, base_data["matrix_rows"]),
