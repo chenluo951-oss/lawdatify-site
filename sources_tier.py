@@ -155,6 +155,11 @@ GOV_MEDIA_HOSTS = {
     "qstheory.cn", "www.qstheory.cn", "stdaily.com", "www.stdaily.com",
     "thepaper.cn", "www.thepaper.cn", "jfdaily.com", "www.jfdaily.com",
     "chinapeace.gov.cn",
+    # 行业机关报 / 省级重点新闻网站（均有主管主办单位，属官方媒体）
+    "ccn.com.cn", "www.ccn.com.cn",          # 中国消费者报（市场监管总局主管）
+    "stcn.com", "www.stcn.com",              # 证券时报（人民日报社主管）
+    "jschina.com.cn", "jsnews.jschina.com.cn",  # 中国江苏网（新华报业）
+    "jntimes.cn",                            # 江南时报（新华报业）
 }
 
 # ---------------------------------------------------------------- 学术 / 协会
@@ -202,10 +207,13 @@ def tier_of(url, declared=None):
 
     if h.endswith(OFFICIAL_SUFFIX) or any(s in h for s in ("gov.cn", "europa.eu")):
         return "official"
-    # 官方媒体的子域名（m.gmw.cn / wlaq.gmw.cn / m.thepaper.cn …）也要归到同一层级
+    # 官方媒体的子域名（m.gmw.cn / wlaq.gmw.cn / m.thepaper.cn / qzswap.stcn.com …）
+    # 也要归到同一层级
     if any(s in h for s in ("people.com.cn", "xinhuanet.com", "news.cn", "cctv.com",
                             "gmw.cn", "ce.cn", "thepaper.cn", "cnr.cn",
-                            "chinanews.com.cn", "qstheory.cn", "stdaily.com")):
+                            "chinanews.com.cn", "qstheory.cn", "stdaily.com",
+                            "ccn.com.cn", "stcn.com", "jschina.com.cn",
+                            "xhby.net", "jntimes.cn")):
         return "gov-media"
     if h.endswith(ACADEMIC_SUFFIX):
         return "academic"
