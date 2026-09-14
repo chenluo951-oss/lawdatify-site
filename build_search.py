@@ -134,7 +134,7 @@ def main():
     acts = jload(os.path.join(HERE, "sources", "radar", "actions.json"), {})
     for a in (acts.get("items") if isinstance(acts, dict) else acts) or []:
         items.append({
-            "t": a.get("name") or "", "c": "action", "u": "radar/actions.html",
+            "t": a.get("name") or "", "c": "action", "u": "news/actions.html",
             "s": " · ".join([x for x in [a.get("issuer"), a.get("region"),
                                          a.get("status"), a.get("period")] if x]),
             "d": clean(a.get("focus") or a.get("desc") or "", 260),
@@ -148,7 +148,7 @@ def main():
     for e in (cal.get("items") if isinstance(cal, dict) else cal) or []:
         items.append({
             "t": e.get("title") or e.get("name") or "", "c": "cal",
-            "u": "radar/calendar.html",
+            "u": "news/calendar.html",
             "s": " · ".join([x for x in [e.get("date"), e.get("type"), e.get("region")] if x]),
             "d": clean(e.get("note") or e.get("desc") or "", 200),
             "k": " ".join([e.get("title") or e.get("name") or "", e.get("type") or "",
@@ -197,12 +197,10 @@ def main():
     # ---------- 8. 站内页面 ----------
     pages = [
         ("今日更新", "updates/index.html", "法规标准增量、生效倒计时、立法节点与草案截止"),
-        ("监管雷达", "radar/index.html", "何时生效、何地监管、何种行动：立法日历与监管动向"),
-        ("立法日历", "radar/calendar.html", "法律法规与标准的生效、实施、过渡期节点"),
-        ("监管动向", "radar/actions.html", "进行中与已结束的专项整治、执法行动"),
-        ("全球监管地图", "radar/map.html", "按地域查看监管动态分布"),
-        ("合规资讯", "news/index.html", "六大领域监管动态流，逐条附官方深链"),
-        ("应对建议", "news/actions.html", "按领域给出的整改与落地建议"),
+        ("监管动态", "news/index.html", "监管动态全貌：即将生效、推进中行动、最新事件与应对建议、全球态势"),
+        ("立法日历", "news/calendar.html", "法律法规与标准的生效、实施、过渡期节点"),
+        ("应对建议", "news/actions.html", "进行中监管行动与按领域给出的整改落地建议"),
+        ("全球监管地图", "news/map.html", "按地域查看监管动态分布"),
         ("简报归档", "news/briefs.html", "日报 / 周报 / 月报全期次归档"),
         ("合规知识库", "kb/index.html", "资料库、义务清单与草案跟踪"),
         ("合规义务清单", "kb/standards.html", "17 大类 77 场景 220 项义务，矩阵总览 + 逐条明细，配条款原文与标杆做法"),

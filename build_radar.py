@@ -2,7 +2,8 @@
 """监管雷达生成器：立法日历 / 监管动向 / 全球监管地图。
 
 输入：sources/radar/{calendar,actions,global}.json —— 人工核实维护的结构化数据
-输出：radar/{index,calendar,actions,map}.html
+输出：news/calendar.html（立法日历）、news/map.html（全球监管地图）
+      （news/index.html 与 news/actions.html 已并入「监管动态」的 news/index.html 与 news/actions.html）
 
 设计约束：
 - 幂等：每次运行整体重写输出页，随后自动调用 unify_chrome / inject_meta 恢复
@@ -228,7 +229,7 @@ def page_calendar(cal):
 
     return page(
         "立法日历", "法律与标准的施行日、征求意见截止与申报节点的月历视图，覆盖中国与主要海外辖区。",
-        '<a href="index.html">监管雷达</a> / 立法日历',
+        '<a href="index.html">监管动态</a> / 立法日历',
         "立法日历",
         "把散落在各机构的公开信息重排到一张月历上：哪些规定即将施行、哪些意见正在征集、"
         "哪些申报节点会过期。每条附发布机构原文深链，可直接点开核对。",
@@ -274,7 +275,7 @@ def page_actions(acts):
 
     return page(
         "监管动向", "正在推进的专项治理、监督检查与安全调查，含适用对象与最新进展。立法草案另见知识库·草案跟踪。",
-        '<a href="index.html">监管雷达</a> / 监管动向',
+        '<a href="index.html">监管动态</a> / 监管动向',
         "监管动向",
         "监管不止写在纸上，更在执行里。这里追踪各主管部门正在推进的动作，标注适用对象、"
         "重点内容与最新进展，便于判断是否需要同步开展内部自查。",
@@ -477,7 +478,7 @@ def page_map(g):
 
     return page(
         "全球监管地图", "按司法辖区查看立法、执法与规则动态，覆盖中国、欧盟、美国、日韩、印度、东南亚、拉美与中东非。",
-        '<a href="index.html">监管雷达</a> / 全球监管地图',
+        '<a href="index.html">监管动态</a> / 全球监管地图',
         "全球监管地图",
         "出海或跨境业务常问「这个国家现在什么口径」。真实地理轮廓着色呈现已核实的立法、"
         "执法与规则动向，点击辖区即可下钻全部条目。",
@@ -646,17 +647,17 @@ def home_deck(cal, acts, g):
     return f"""<div class="deck">
   <div class="deck-col">
     <div class="deck-h"><span class="deck-ico" style="background:#eef6fb;color:#1b4f8a">📅</span>
-      即将到期 <a href="radar/calendar.html">日历 →</a></div>
+      即将到期 <a href="news/calendar.html">日历 →</a></div>
     {col1}
   </div>
   <div class="deck-col">
     <div class="deck-h"><span class="deck-ico" style="background:#eaf6f3;color:#0f7b6c">🛡️</span>
-      推进中的行动 <a href="radar/actions.html">全部 →</a></div>
+      推进中的行动 <a href="news/actions.html">全部 →</a></div>
     {col2}
   </div>
   <div class="deck-col">
     <div class="deck-h"><span class="deck-ico" style="background:#f1effa;color:#6c5bb0">🌐</span>
-      全球最新动态 <a href="radar/map.html">地图 →</a></div>
+      全球最新动态 <a href="news/map.html">地图 →</a></div>
     {col3}
   </div>
 </div>"""
@@ -775,17 +776,24 @@ def write(rel, content):
     return rel
 
 
+def write_to(d, rel, content):
+    """写到指定目录（合并后日历/地图落到 news/，与「监管动态」同模块）。"""
+    p = os.path.join(d, rel)
+    os.makedirs(os.path.dirname(p), exist_ok=True)
+    with open(p, "w", encoding="utf-8") as f:
+        f.write(content)
+    return rel
+
+
 def main():
     cal = load("calendar.json")
-    acts = load("actions.json")
     g = load("global.json")
 
-    # 引源校验：立法/标准/专项行动/处罚类必须 official，资讯类可官方媒体/专业机构。
+    # 引源校验：立法日历 / 全球监管（监管动向已并入「监管动态/应对建议」，由 build_topics 渲染）。
     # 不阻断构建（数据由人工核实维护），但每次构建都把待替换清单打出来。
     print("  —— 引源校验 ——")
     for label, items, kind_key, name_key in (
         ("立法日历", cal.get("items", []), "type", "title"),
-        ("监管动向", acts.get("items", []), ["series", "name"], "name"),
         ("全球监管", g.get("items", []), "type", "title"),
     ):
         tally = tier_tally(items)
@@ -793,21 +801,17 @@ def main():
         print("    " + label + " 层级分布：" +
               " / ".join(f"{TIER_LABEL[k]} {v}" for k, v in tally.items() if v))
 
-    os.makedirs(OUT, exist_ok=True)
+    # 合并后：立法日历 / 全球监管地图落到 news/（与「监管动态」同模块）；
+    # news/index.html 与 news/actions.html 已并入 news/index.html 与 news/actions.html。
+    news_dir = os.path.join(HERE, "news")
+    os.makedirs(news_dir, exist_ok=True)
     pages = [
-        ("index.html", page_index(cal, acts, g)),
         ("calendar.html", page_calendar(cal)),
-        ("actions.html", page_actions(acts)),
         ("map.html", page_map(g)),
     ]
     for rel, html_ in pages:
-        write(rel, html_)
-        print(f"  radar/{rel:<16} {len(html_):>6} B ✓")
-
-    if refresh_home_radar(cal, acts, g):
-        print("  index.html（雷达区块）刷新 ✓")
-    else:
-        print("  index.html（雷达区块）未找到标记，跳过")
+        write_to(news_dir, rel, html_)
+        print(f"  news/{rel:<16} {len(html_):>6} B ✓")
 
     # 恢复统一导航 / 页脚 / 分享元数据
     import importlib.util

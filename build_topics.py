@@ -657,9 +657,12 @@ def replace_block(path, content):
     return True
 
 
-def main():
-    do_verify = "--no-verify" not in sys.argv
+def build_feed(do_verify=True):
+    """加载并校验资讯流可用条目（verified / internal / dead）。
 
+    供 build_home.py 复用，避免重复跑链接校验闸门。链接状态缓存在
+    sources/link_status.json，增量校验，重复调用几乎无额外成本。
+    """
     # ---- 来源 A：站点直采库（独立于本地简报，站点每日更新的保底来源）----
     items = []
     nat = load_native()
@@ -756,6 +759,12 @@ def main():
         for it, st in dead[:12]:
             print(f"    [{st}] {it['title'][:38]}")
     print(f"资讯流 {len(verified)} 条（深链实测 200）｜知识库素材 {len(internal)} 条（内部行动建议）")
+    return verified, internal, dead, len(nat)
+
+
+def main():
+    do_verify = "--no-verify" not in sys.argv
+    verified, internal, dead, nat = build_feed(do_verify)
 
     # 引源校验：立法/标准/专项行动/处罚类必须 official；资讯类允许官方媒体与专业机构
     print("  —— 引源校验 ——")
@@ -792,8 +801,8 @@ def main():
     # 知识库改为长效知识总览，由 build_standards.py 生成，不再接收动态内容。
     if replace_block(os.path.join(HERE, "news", "actions.html"), render_kb_cards(verified, internal)):
         print("  news/actions.html ✓")
-    if replace_block(os.path.join(HERE, "index.html"), render_home_latest(verified)):
-        print("  index.html ✓")
+    # 首页 RADAR/FEED/GEOMETA 三块由 build_home.py 统一生成
+    # （在 daily_build 编排中晚于本步执行，避免被重复写入覆盖）
 
     # 刷新全站「数据更新至」时间戳（页脚 UPDATED 区块，见 unify_chrome.py）
     try:
@@ -815,7 +824,7 @@ def main():
 
     meta = {
         "generated": datetime.now().strftime("%Y-%m-%d %H:%M"),
-        "native_items": len(nat),
+        "native_items": nat,
         "news_items": len(verified),
         "kb_actions": len(internal),
         "dead_links": len(dead),

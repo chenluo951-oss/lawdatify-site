@@ -46,8 +46,10 @@ import html as htmlmod
 import json
 import os
 import re
+import random
 import subprocess
 import sys
+import time
 from datetime import datetime, timezone, timedelta
 
 HERE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -59,6 +61,38 @@ UA_PC = ("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 "
          "(KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36")
 UA_WX = ("Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15 "
          "(KHTML, like Gecko) Mobile/15E148 MicroMessenger/8.0.44")
+
+# 反爬绕过：UA 池轮换（搜狗会按 UA 指纹限流），每次请求随机取一个。
+UA_POOL = [
+    UA_PC,
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
+    "(KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36",
+    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 "
+    "(KHTML, like Gecko) Version/17.4 Safari/605.1.15",
+    "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 "
+    "(KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+    "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 "
+    "(KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36",
+]
+
+
+def pick_ua():
+    return random.choice(UA_POOL)
+
+
+def prime_cookie(cookie="/tmp/.sogou_wx.cookie"):
+    """先 GET 搜狗首页，刷新 SNUID/SUV cookie，降低 antispider 命中率。
+
+    搜狗微信搜索的 antispider 多数由「cookie 里缺有效 SNUID」或「同一 SNUID 请求过频」
+    触发。每次检索前先打一次首页把 cookie jar 刷新鲜，命中反爬时再刷一次后有限重试。
+    """
+    try:
+        curl("https://weixin.sogou.com/", referer="https://www.sogou.com/",
+             save_cookie=cookie, ua=pick_ua(), timeout=20)
+    except Exception:  # noqa: BLE001
+        pass
+    return cookie
+
 
 SOGOU = "https://weixin.sogou.com/weixin"
 
@@ -86,14 +120,23 @@ def curl(url, referer=None, cookie=None, save_cookie=None, ua=UA_PC, timeout=30)
         return f"__ERR__ {e}"
 
 
-def sogou_search(query, cookie="/tmp/.sogou_wx.cookie"):
-    """搜狗微信搜索 → [(标题, 中转链, 公众号名, 日期)]。"""
+def sogou_search(query, cookie="/tmp/.sogou_wx.cookie", _retries=1):
+    """搜狗微信搜索 → [(标题, 中转链, 公众号名, 日期)]。
+
+    反爬绕过：每次检索前先 prime_cookie 刷新 SNUID；命中 antispider 时刷新 cookie
+    并退避后有限重试一次（绝不连环轰炸，否则连 IP 一起封、反而补不齐）。
+    """
     from urllib.parse import quote
+    prime_cookie(cookie)
     html = curl(f"{SOGOU}?type=2&query={quote(query)}",
-                referer="https://weixin.sogou.com/", save_cookie=cookie)
+                referer="https://weixin.sogou.com/", save_cookie=cookie, ua=pick_ua())
     if "__ERR__" in html[:20]:
         return [], html[:200]
     if re.search(r"antispider|请输入验证码|访问过于频繁", html):
+        if _retries > 0:
+            prime_cookie(cookie)
+            time.sleep(random.uniform(10, 18))
+            return sogou_search(query, cookie, _retries - 1)
         return [], "搜狗反爬（antispider/验证码）—— 停一会儿再试，不要重试轰炸"
 
     out = []
@@ -119,6 +162,7 @@ def resolve(relay, cookie="/tmp/.sogou_wx.cookie"):
     两种情形都要处理：① 中转页把目标 URL 拆成若干 `url += '…'` 片段（反爬），
     拼接后需再请求一次；② 中转页直接 302/200 给了文章本体（含 js_content）。
     """
+    prime_cookie(cookie)
     html = curl("https://weixin.sogou.com" + relay,
                 referer="https://weixin.sogou.com/", cookie=cookie)
     if re.search(r'id="js_content"|var msg_title', html):

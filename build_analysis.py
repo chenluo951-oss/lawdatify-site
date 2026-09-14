@@ -71,8 +71,7 @@ def main():
   <div class="navlinks">
     <a href="../index.html">首页</a>
     <a href="../updates/index.html">今日更新</a>
-    <a href="../radar/index.html">监管雷达</a>
-    <a href="../news/index.html">合规资讯</a>
+    <a href="../news/index.html">监管动态</a>
     <a href="../analysis/index.html" class="active">法律分析</a>
     <a href="../kb/index.html">合规知识库</a>
     <a href="../about.html">关于</a>

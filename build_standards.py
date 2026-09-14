@@ -384,9 +384,9 @@ def build_kb_index(items, duties, drafts, soon, stat_html="", board=""):
   </div>
   <div class="lb-bound">
     <div class="lb-bd">
-      <div class="lb-bd-h"><b>监管雷达</b><span class="lb-tag t-future">未来 / 进行中</span></div>
+      <div class="lb-bd-h"><b>监管动态</b><span class="lb-tag t-future">未来 / 进行中</span></div>
       <p>回答「何时生效、何地监管、何种行动」：立法日程与施行倒计时、监管专项行动与执法态势、全球监管地图。</p>
-      <a href="../radar/index.html">进入监管雷达 →</a>
+      <a href="../news/index.html">进入监管动态 →</a>
     </div>
     <div class="lb-bd">
       <div class="lb-bd-h"><b>合规资讯</b><span class="lb-tag t-daily">每日更新</span></div>

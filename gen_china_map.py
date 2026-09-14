@@ -4,7 +4,7 @@
 数据源：DataV.GeoAtlas 100000_full.json（含 34 个省级行政区 + 南海诸岛九段线要素，
 边界符合中国官方标准画法，台湾省、香港、澳门均为独立省级要素）。
 投影：Albers 等积圆锥（标准纬线 25°/47°，中央经线 105°），与常用中国地图观感一致。
-输出为示意性 SVG 路径，供 radar/map.html 点击中国后下钻使用。
+输出为示意性 SVG 路径，供 news/map.html 点击中国后下钻使用。
 """
 import json
 import math

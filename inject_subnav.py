@@ -14,16 +14,12 @@ import sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 
-RADAR_NAV = [
+NEWS_NAV = [
     ("index.html", "总览"),
     ("calendar.html", "立法日历"),
-    ("actions.html", "监管动向"),
-    ("map.html", "全球监管地图"),
-]
-NEWS_NAV = [
-    ("index.html", "领域动态"),
-    ("briefs.html", "简报归档"),
     ("actions.html", "应对建议"),
+    ("map.html", "全球监管地图"),
+    ("briefs.html", "简报归档"),
 ]
 KB_NAV = [
     ("index.html", "总览"),
@@ -35,22 +31,18 @@ KB_NAV = [
 ]
 
 BOUNDARY = {
-    "radar": "本模块回答<b>何时生效、何地监管、何种行动</b>——按时间与地域重排监管信息。"
-             "已发生的事件与应对建议见 <a href=\"../news/index.html\">合规资讯</a>；"
-             "规则条文本身见 <a href=\"../kb/index.html\">合规知识库</a>。",
-    "news": "本模块回答<b>已经发生了什么、我们该做什么</b>——监管动态逐条附官方深链，"
-            "并从简报沉淀应对建议。未来的生效节点见 <a href=\"../radar/index.html\">监管雷达</a>；"
-            "规则条文本身见 <a href=\"../kb/index.html\">合规知识库</a>。",
+    "news": "本模块回答<b>监管动态全貌</b>——即将生效的法规（立法日历）、正在推进的监管行动、"
+            "已发生的事件与应对建议、全球监管态势，一屏纵览。规则条文本身见 "
+            "<a href=\"../kb/index.html\">合规知识库</a>。",
     "kb": None,  # 知识库总览已有「三个模块怎么分」区块，不再重复
 }
 
 GROUPS = [
-    ("radar", RADAR_NAV),
     ("news", NEWS_NAV),
     ("kb", KB_NAV),
 ]
 
-MODULE_NAMES = {"radar": "监管雷达", "news": "合规资讯", "kb": "合规知识库"}
+MODULE_NAMES = {"news": "监管动态", "kb": "合规知识库"}
 
 BLOCK_RE = re.compile(r"<!-- SUBNAV:START -->.*?<!-- SUBNAV:END -->", re.S)
 
