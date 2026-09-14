@@ -48,6 +48,10 @@ REPL = {
     # ⑭ 最高法 2026 年反垄断典型案例 → 最高人民法院官网
     "https://www.toutiao.com/article/7683735523189326346/":
         "https://www.court.gov.cn/zixun/xiangqing/511451.html",
+    # ⑮ 发改委+市监总局《关于重要工业品低价无序竞争成本核算有关事项的通知》
+    #    （2026-09-03 印发，9/10 公开）→ 国家发展改革委官网原文
+    "https://m.weibo.cn/status/5341696061867363":
+        "https://gbdy.ndrc.gov.cn/gbdyzcjd/202609/t20260910_1407526.html",
 }
 
 # 新 URL 对应的分级（用于刷新 news/index.html 的来源标签）

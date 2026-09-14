@@ -613,6 +613,16 @@ def main():
     tal = tier_tally(verified)
     print("    层级分布：" + " / ".join(f"{TIER_LABEL[k]} {v}" for k, v in tal.items() if v))
     # 待替换清单落盘，供后续逐条回溯官方原文
+    #   人工维护的「原因/已试路径」从 source_pending_notes.json 合并进来（该文件为生成物，
+    #   每次重建都会覆盖，所以备注必须写在 notes 文件里，不能直接改 source_pending.json）
+    notes_path = os.path.join(HERE, "sources", "edits", "source_pending_notes.json")
+    try:
+        _notes = json.load(open(notes_path, encoding="utf-8")).get("reasons", {})
+    except (OSError, ValueError):
+        _notes = {}
+    for _p in pend:
+        if _p.get("url") in _notes:
+            _p["backtrack"] = _notes[_p["url"]]
     pend_path = os.path.join(HERE, "sources", "edits", "source_pending.json")
     os.makedirs(os.path.dirname(pend_path), exist_ok=True)
     json.dump({"generated": datetime.now().strftime("%Y-%m-%d %H:%M"),
@@ -620,7 +630,9 @@ def main():
                "pending": pend},
               open(pend_path, "w", encoding="utf-8"), ensure_ascii=False, indent=1)
     if pend:
-        print(f"    待替换清单 → sources/edits/source_pending.json（{len(pend)} 条）")
+        _n = sum(1 for p in pend if p.get("backtrack"))
+        print(f"    待替换清单 → sources/edits/source_pending.json（{len(pend)} 条，"
+              f"其中 {_n} 条带回溯备注）")
 
     # 生成各页面
     print("写入页面…")
