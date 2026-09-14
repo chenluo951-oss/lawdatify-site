@@ -156,15 +156,16 @@ def sogou_search(query, cookie="/tmp/.sogou_wx.cookie", _retries=1):
     return out, None
 
 
-def resolve(relay, cookie="/tmp/.sogou_wx.cookie"):
+def resolve(relay, cookie="/tmp/.sogou_wx.cookie", _retries=1):
     """中转链 → 文章 HTML。返回 (html, 链接, 错误)。
 
     两种情形都要处理：① 中转页把目标 URL 拆成若干 `url += '…'` 片段（反爬），
     拼接后需再请求一次；② 中转页直接 302/200 给了文章本体（含 js_content）。
+    反爬绕过：命中 antispider 时刷新 SNUID cookie 并退避后有限重试一次（绝不连环轰炸）。
     """
     prime_cookie(cookie)
     html = curl("https://weixin.sogou.com" + relay,
-                referer="https://weixin.sogou.com/", cookie=cookie)
+                referer="https://weixin.sogou.com/", cookie=cookie, ua=pick_ua())
     if re.search(r'id="js_content"|var msg_title', html):
         return html, "", None
     frags = re.findall(r"url \+= '([^']*)'", html) or \
@@ -176,7 +177,11 @@ def resolve(relay, cookie="/tmp/.sogou_wx.cookie"):
             return art, url, None
         return "", url, "拼接出的链接未返回正文（临时链可能已过期）"
     if re.search(r"antispider|请输入验证码|访问过于频繁", html):
-        return "", "", "中转页命中反爬"
+        if _retries > 0:
+            prime_cookie(cookie)
+            time.sleep(random.uniform(8, 15))
+            return resolve(relay, cookie, _retries - 1)
+        return "", "", "中转页命中反爬（已重试仍被挡，稍后再跑此条）"
     return "", "", f"未能拼出目标链（片段数 {len(frags)}）"
 
 
