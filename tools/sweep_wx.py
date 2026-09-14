@@ -167,18 +167,18 @@ def last_published():
         return 0
 
 
-def maybe_publish(new_total, do_publish):
-    """攒够 PUBLISH_EVERY 篇 → 重建全站并推送。"""
+def maybe_publish(new_total, do_publish, force=False):
+    """攒够 PUBLISH_EVERY 篇 → 重建全站并推送；force=True 时无视阈值（超 2h 兜底发布）。"""
     base = last_published()
     if not do_publish:
         print(f"\n[发布] 跳过（--no-publish）。当前存档 {new_total} 篇，上次发布基线 {base}。")
         return
-    if new_total - base < PUBLISH_EVERY:
+    if not force and new_total - base < PUBLISH_EVERY:
         print(f"\n[发布] 距下次自动发布还差 {PUBLISH_EVERY - (new_total - base)} 篇"
               f"（当前 {new_total}，基线 {base}）。")
         return
-    print(f"\n[发布] 已达 {new_total} 篇（基线 {base}，新增 {new_total - base} ≥ {PUBLISH_EVERY}），"
-          f"重建全站并推送…")
+    why = "超 2 小时兜底" if force else f"达阈值（基线 {base}，新增 {new_total - base} ≥ {PUBLISH_EVERY}）"
+    print(f"\n[发布] {why}，已达 {new_total} 篇，重建全站并推送…")
     py = "/Users/luochen/.workbuddy/binaries/python/envs/default/bin/python"
     # 1) 新存档补进资讯流条目库（去重）
     subprocess.run([py, "tools/wx_to_feed.py"], cwd=HERE)
@@ -210,6 +210,8 @@ def main():
         return
 
     archived, skipped, antispider = 0, 0, 0
+    START = time.time()
+    LAST_FORCE = START
     for qi, (query, org) in enumerate(QUERIES, 1):
         print(f"[{qi}/{len(QUERIES)}] 检索「{query}」…", flush=True)
         rows, err = fw.sogou_search(query)
@@ -234,6 +236,15 @@ def main():
                 print(f"    · 跳过：{msg}")
             time.sleep(random.uniform(*SLEEP_BETWEEN_GRAB))
         time.sleep(random.uniform(*SLEEP_BETWEEN_SEARCH))
+
+        # 超 2 小时兜底：即便还没攒到 PUBLISH_EVERY 篇，也先把已抓到的推送上线、继续爬。
+        # 每 2 小时至多强制发布一次；且只有本轮确有新增存档时才发布（避免空推）。
+        now = time.time()
+        if now - START >= 7200 and now - LAST_FORCE >= 7200:
+            tot = count_archives()
+            if tot > last_published():
+                maybe_publish(tot, do_publish, force=True)
+                LAST_FORCE = now
 
     total = count_archives()
     print(f"\n本轮检索完成：存档 {archived} 篇 / 无近三月候选 {skipped} 个来源 / 命中反爬 {antispider} 次")

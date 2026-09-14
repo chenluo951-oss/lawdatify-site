@@ -159,6 +159,22 @@ def render_body(body):
     return "\n".join(htmls)
 
 
+def render_html_body(html_body):
+    """结构化正文（含原文排版与图片）→ HTML，仅对文本节点做法条/条款上色，不破坏标签。
+
+    仅对「标签之外」的文本段上色：避免误改属性值；各文本段独立处理，跨段不会错位。
+    """
+    out = []
+    for seg in re.split(r"(<[^>]+>)", html_body):
+        if seg.startswith("<"):
+            out.append(seg)
+            continue
+        s = RE_LAW.sub(lambda m: f'<span class="wx-law">{m.group(0)}</span>', seg)
+        s = RE_ART.sub(lambda m: f'<span class="wx-art">{m.group(0)}</span>', s)
+        out.append(s)
+    return "".join(out)
+
+
 # ---------------------------------------------------------------- 页面模板
 
 CSS = """
@@ -206,6 +222,24 @@ CSS = """
 .wx-p{font-size:16px;line-height:2;color:var(--ink-2);margin:0 0 14px;text-indent:2em;text-align:justify}
 .wx-law{color:var(--brand);font-weight:600}
 .wx-art{color:#b45309;font-weight:600}
+/* 结构化正文（含原文排版/图片）渲染样式 */
+#wx-body{font-size:16px;line-height:2;color:var(--ink-2)}
+#wx-body section{margin:0}
+#wx-body p{margin:0 0 14px;text-indent:2em;text-align:justify}
+#wx-body h1,#wx-body h2,#wx-body h3,#wx-body h4{font-size:17px;font-weight:700;
+  color:var(--ink);margin:22px 0 10px;line-height:1.7}
+#wx-body blockquote{margin:0 0 14px;padding:10px 16px;background:#f6f8fb;
+  border-left:3px solid var(--brand);border-radius:8px;color:var(--muted)}
+#wx-body ul,#wx-body ol{margin:0 0 14px;padding-left:1.6em}
+#wx-body li{margin:4px 0}
+#wx-body img{max-width:100%;height:auto;border-radius:10px;margin:16px auto;
+  display:block;box-shadow:0 1px 3px rgba(0,0,0,.08);background:#f3f4f6}
+#wx-body table{border-collapse:collapse;width:100%;margin:14px 0;font-size:14px}
+#wx-body th,#wx-body td{border:1px solid var(--line);padding:7px 10px;text-align:left}
+#wx-body hr{border:0;border-top:1px solid var(--line);margin:18px 0}
+#wx-body a{color:var(--brand)}
+#wx-body .wx-law{color:var(--brand);font-weight:600}
+#wx-body .wx-art{color:#b45309;font-weight:600}
 .wx-badge{display:inline-block;font-size:11.5px;padding:2px 8px;border-radius:999px;
   background:#eaf6f3;color:#0f7b6c;border:1px solid #cfe8e2;margin-left:8px;vertical-align:middle;
   font-family:var(--sans)}
@@ -457,12 +491,34 @@ def main():
     for f in os.listdir(mdir):
         if f.endswith(".json") and f[:-5] not in {d["id"] for d in arts}:
             os.remove(os.path.join(mdir, f))
+    used_imgs = set()
     for d in arts:
-        body = strip_tail(d.get("body") or "")
-        json.dump({"html": render_body(body),
-                   "text": re.sub(r"[ \t\u00a0]+", " ", body)},
+        html_body = (d.get("html_body") or "").strip()
+        if html_body:
+            # 结构化正文：先剥模板尾巴，再上色渲染；图片已是本地相对地址
+            html_body = strip_tail(html_body)
+            html = render_html_body(html_body)
+            text = re.sub(r"[ \t\u00a0]+", " ", re.sub(r"<[^>]+>", "", html_body))
+        else:
+            # 旧版纯文本存档兜底（无 html_body 字段）
+            body = strip_tail(d.get("body") or "")
+            html = render_body(body)
+            text = re.sub(r"[ \t\u00a0]+", " ", body)
+        for im in re.findall(r'src="(img/[^"]+)"', html):
+            used_imgs.add(os.path.basename(im))
+        json.dump({"html": html, "text": text},
                   open(os.path.join(mdir, f"{d['id']}.json"), "w", encoding="utf-8"),
                   ensure_ascii=False)
+
+    # 清理无正文引用的孤儿图片，避免站点体积无谓膨胀
+    img_dir = os.path.join(OUT, "img")
+    if os.path.isdir(img_dir):
+        for fn in os.listdir(img_dir):
+            if fn not in used_imgs:
+                try:
+                    os.remove(os.path.join(img_dir, fn))
+                except OSError:
+                    pass
 
     # 清掉早期分片方案留下的 p-NN.json（已改为单篇懒加载）
     for old in os.listdir(OUT):

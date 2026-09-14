@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>公众号原文存档 · 合规无终点</title>
 <meta name="description" content="发布机关官方微信公众号发布的执法通报与典型案例全文存档：地方监管机构只在公众号发布、官网无对应页的内容，在此逐篇存档、可检索、可下载，不会因外链失效而失联。">
-<link rel="stylesheet" href="../assets/style.css?v=1789381149">
+<link rel="stylesheet" href="../assets/style.css">
 <style>
 .rd{display:grid;grid-template-columns:332px 1fr;gap:26px;align-items:start}
 @media(max-width:960px){.rd{grid-template-columns:1fr}}
@@ -51,6 +51,24 @@
 .wx-p{font-size:16px;line-height:2;color:var(--ink-2);margin:0 0 14px;text-indent:2em;text-align:justify}
 .wx-law{color:var(--brand);font-weight:600}
 .wx-art{color:#b45309;font-weight:600}
+/* 结构化正文（含原文排版/图片）渲染样式 */
+#wx-body{font-size:16px;line-height:2;color:var(--ink-2)}
+#wx-body section{margin:0}
+#wx-body p{margin:0 0 14px;text-indent:2em;text-align:justify}
+#wx-body h1,#wx-body h2,#wx-body h3,#wx-body h4{font-size:17px;font-weight:700;
+  color:var(--ink);margin:22px 0 10px;line-height:1.7}
+#wx-body blockquote{margin:0 0 14px;padding:10px 16px;background:#f6f8fb;
+  border-left:3px solid var(--brand);border-radius:8px;color:var(--muted)}
+#wx-body ul,#wx-body ol{margin:0 0 14px;padding-left:1.6em}
+#wx-body li{margin:4px 0}
+#wx-body img{max-width:100%;height:auto;border-radius:10px;margin:16px auto;
+  display:block;box-shadow:0 1px 3px rgba(0,0,0,.08);background:#f3f4f6}
+#wx-body table{border-collapse:collapse;width:100%;margin:14px 0;font-size:14px}
+#wx-body th,#wx-body td{border:1px solid var(--line);padding:7px 10px;text-align:left}
+#wx-body hr{border:0;border-top:1px solid var(--line);margin:18px 0}
+#wx-body a{color:var(--brand)}
+#wx-body .wx-law{color:var(--brand);font-weight:600}
+#wx-body .wx-art{color:#b45309;font-weight:600}
 .wx-badge{display:inline-block;font-size:11.5px;padding:2px 8px;border-radius:999px;
   background:#eaf6f3;color:#0f7b6c;border:1px solid #cfe8e2;margin-left:8px;vertical-align:middle;
   font-family:var(--sans)}
@@ -59,21 +77,6 @@
   .rd{grid-template-columns:1fr}.paper{border:0;box-shadow:none;padding:0}}
 </style>
 <!-- SOCIAL:START -->
-<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
-<link rel="apple-touch-icon" href="../assets/favicon.svg">
-<meta property="og:type" content="website">
-<meta property="og:site_name" content="合规无终点">
-<meta property="og:locale" content="zh_CN">
-<meta property="og:title" content="公众号原文存档 · 合规无终点">
-<meta property="og:description" content="六大领域合规动态、法律分析与合规知识库，逐条附官方深链，由个人独立维护。">
-<meta property="og:url" content="https://chenluo951-oss.github.io/lawdatify-site/kb/wx.html/">
-<meta property="og:image" content="https://chenluo951-oss.github.io/lawdatify-site/assets/og-cover.png">
-<meta property="og:image:width" content="1200">
-<meta property="og:image:height" content="630">
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="公众号原文存档 · 合规无终点">
-<meta name="twitter:description" content="六大领域合规动态、法律分析与合规知识库，逐条附官方深链，由个人独立维护。">
-<meta name="twitter:image" content="https://chenluo951-oss.github.io/lawdatify-site/assets/og-cover.png">
 <!-- SOCIAL:END -->
 </head>
 <body>
@@ -84,6 +87,7 @@
     <a href="../index.html">首页</a>
     <a href="../updates/index.html">今日更新</a>
     <a href="../news/index.html">合规动态</a>
+    <a href="../news/index.html">合规资讯</a>
     <a href="../analysis/index.html">法律分析</a>
     <a href="../kb/index.html">合规知识库</a>
     <a href="../about.html">关于</a>
@@ -117,20 +121,7 @@
   </div>
 </main>
 
-<footer><div class="inner">
-  <div class="foot-brand">合规<span>无终点</span> · 法规标准与合规动态库</div>
-  <div class="foot-desc">由个人独立维护 · 内容基于监管机构官网公开信息整理，逐条附原文深链</div>
-  <div class="foot-links">
-    <a href="../updates/index.html">今日更新</a>·
-    <a href="../news/index.html">合规动态</a>·
-    <a href="../kb/index.html">知识库</a>·
-    <a href="../analysis/index.html">法律分析</a>·
-    <a href="../news/briefs.html">简报归档</a>·
-    <a href="../search.html">搜索</a>·
-    <a href="../about.html">关于本站</a>
-  </div>
-  <div class="foot-meta">数据更新至 <span class="upd"><!-- UPDATED:START -->2026-09-14<!-- UPDATED:END --></span> · 本站内容不构成法律意见 · © 2026 合规无终点</div>
-</div></footer>
+<footer><div class="inner"></div></footer>
 <script>
 (function(){
   var IX=[], CUR=null, ORG='', Q='', CACHE={}, TEXT='';

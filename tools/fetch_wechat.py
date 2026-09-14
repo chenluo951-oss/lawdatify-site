@@ -55,6 +55,10 @@ from datetime import datetime, timezone, timedelta
 HERE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 WX_DIR = os.path.join(HERE, "sources", "wx")
 ACCOUNTS = os.path.join(WX_DIR, "accounts.json")
+# 公众号正文图片落盘目录（相对 kb/wx.html 引用为 img/<hash>.<ext>）。
+# 微信图床 mmbiz.qpic.cn 有防盗链/临时链风险，本地化后站内存档才真正「不随外链失效而失联」。
+IMG_DIR = os.path.join(HERE, "kb", "wx", "img")
+IMG_CAP = 2 * 1024 * 1024   # 单图硬上限 2MB：超过则只保留远程图（加 no-referrer），避免站点体积失控
 
 CST = timezone(timedelta(hours=8))
 UA_PC = ("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 "
@@ -199,8 +203,119 @@ def _slice_div(html, start):
     return html[start:start + 60000]
 
 
+# ---------------------------------------------------------------- 正文图文处理
+# 公众号原文存档的初衷是「不让外链失效导致失联」。正文里的图床 mmbiz.qpic.cn 同样有
+# 防盗链/临时链风险，因此图片也要本地化：能下载就存到 kb/wx/img/ 并改写 src；下载失败
+# （沙箱代理拦截、图已删、超限）则退化为保留远程地址 + referrerpolicy="no-referrer"，
+# 由用户浏览器直连微信图床兜底（至少大概率还能显示）。
+
+def _ext_of(url):
+    m = re.search(r"[?&]wx_fmt=(jpe?g|png|gif|webp)", url, re.I)
+    if m:
+        return m.group(1).lower().replace("jpeg", "jpg")
+    m = re.search(r"\.(jpe?g|png|gif|webp|bmp)(?:[?#]|$)", url, re.I)
+    return (m.group(1).lower().replace("jpeg", "jpg") if m else "jpg")
+
+
+def _download_img(url):
+    """下载单张图（失败返回 None）。加微信 referer 提高命中率，--fail 让 4xx/5xx 直接失败。"""
+    cmd = ["curl", "-g", "-sSL", "--compressed", "--fail", "--max-time", "30",
+           "-A", UA_WX, "-e", "https://mp.weixin.qq.com/", "-o", "-", url]
+    try:
+        p = subprocess.run(cmd, capture_output=True, timeout=40)
+    except Exception:                                          # noqa: BLE001
+        return None
+    if p.returncode != 0 or not p.stdout:
+        return None
+    return p.stdout
+
+
+# 白名单标签：保留原文排版结构（段落/小标题/加粗/列表/引用/表格/图）；其余标签剥掉只留文本。
+_ALLOW = {"p", "section", "span", "strong", "b", "em", "i", "u", "img", "br",
+          "blockquote", "ul", "ol", "li", "h1", "h2", "h3", "h4",
+          "table", "thead", "tbody", "tr", "td", "th", "hr", "a"}
+
+
+def _clean_tag(m):
+    """白名单内标签只保留 style（img 额外保留 src/loading/referrerpolicy/alt）。"""
+    tag, attrs = m.group(1).lower(), m.group(2)
+    if tag == "img":
+        src = re.search(r'src="([^"]*)"', attrs, re.I)
+        lp = re.search(r'loading="([^"]*)"', attrs, re.I)
+        rp = re.search(r'referrerpolicy="([^"]*)"', attrs, re.I)
+        st = re.search(r'style="([^"]*)"', attrs, re.I)
+        parts = [f'src="{src.group(1)}"'] if src else []
+        if lp:
+            parts.append(f'loading="{lp.group(1)}"')
+        if rp:
+            parts.append(f'referrerpolicy="{rp.group(1)}"')
+        if st:
+            parts.append(f'style="{st.group(1)}"')
+        return f"<img {' '.join(p for p in parts if p)}>"
+    st = re.search(r'style="([^"]*)"', attrs, re.I)
+    return f"<{tag}{(' style=\"' + st.group(1) + '\"') if st else ''}>"
+
+
+def clean_html(seg):
+    """剥脚本/样式，按白名单保留排版标签与 style，输出干净的可渲染 HTML。"""
+    seg = re.sub(r"<script.*?</script>", "", seg, flags=re.S)
+    seg = re.sub(r"<style.*?</style>", "", seg, flags=re.S)
+    # 非白名单标签整体剥除（连同其首尾标签），只留内部文本
+    seg = re.sub(r"</?([a-zA-Z][a-zA-Z0-9]*)\b[^>]*>",
+                 lambda m: m.group(0) if m.group(1).lower() in _ALLOW else "", seg)
+    # 白名单标签精简属性
+    seg = re.sub(r"<(p|section|span|strong|b|em|i|u|img|br|blockquote|ul|ol|li|"
+                 r"h1|h2|h3|h4|table|thead|tbody|tr|td|th|hr|a)\b([^>]*)>",
+                 _clean_tag, seg)
+    return seg.strip()
+
+
+def process_images(seg):
+    """把正文里的 <img> 本地化：下载到 kb/wx/img 并改写 src；失败则保留远程 + no-referrer。
+
+    微信图片真实地址在 data-src（懒加载），src 常为占位；优先取 data-src。
+    """
+    os.makedirs(IMG_DIR, exist_ok=True)
+    out, last = [], 0
+    for m in re.finditer(r"<img\b[^>]*>", seg, re.S):
+        out.append(seg[last:m.start()])
+        last = m.end()
+        tag = m.group(0)
+        ds = re.search(r'data-src="([^"]+)"', tag, re.I)
+        src = ds.group(1) if ds else None
+        if not src:
+            s2 = re.search(r'src="([^"]+)"', tag, re.I)
+            src = s2.group(1) if s2 else None
+        # 占位图 / 非 http（如 base64 / 表情占位）原样保留
+        if not src or src.startswith("data:") or not src.startswith("http"):
+            out.append(tag)
+            continue
+        h = hashlib.sha1(src.encode("utf-8")).hexdigest()[:10]
+        fname = f"{h}.{_ext_of(src)}"
+        new_src = f"img/{fname}"
+        local = os.path.join(IMG_DIR, fname)
+        st = re.search(r'style="([^"]*)"', tag, re.I)
+        style_attr = f' style="{st.group(1)}"' if st else ""
+        if os.path.exists(local):
+            out.append(f'<img src="{new_src}" loading="lazy" referrerpolicy="no-referrer"{style_attr} alt="">')
+            continue
+        data = _download_img(src)
+        if data and len(data) <= IMG_CAP:
+            open(local, "wb").write(data)
+            out.append(f'<img src="{new_src}" loading="lazy" referrerpolicy="no-referrer"{style_attr} alt="">')
+        else:
+            # 远程兜底：用户浏览器直连微信图床，no-referrer 规避防盗链
+            out.append(f'<img src="{src}" loading="lazy" referrerpolicy="no-referrer"{style_attr} alt="">')
+    out.append(seg[last:])
+    return "".join(out)
+
+
 def parse_article(html):
-    """解析公众号文章：标题 / gh 号 / 作者 / 时间 / 正文。"""
+    """解析公众号文章：标题 / gh 号 / 作者 / 时间 / 正文（纯文本 + 结构化 HTML 双份）。
+
+    html_body 保留原文排版结构（段落/加粗/列表/引用/表格/图片），用于站内存档阅读器；
+    body 为同源纯文本，供字数统计、TXT 下载与旧版渲染兜底。
+    """
     def one(p, n=1):
         m = re.search(p, html, re.S)
         return m.group(n).strip() if m else ""
@@ -213,18 +328,24 @@ def parse_article(html):
     author = one(r'var author = "([^"]*)"') or one(r'var author = \'([^\']*)\'')
     ts = one(r'var ct = "(\d+)"') or one(r'var create_time = "(\d+)"')
 
-    body = ""
+    html_body = ""
     m = re.search(r'<div[^>]*id="js_content"', html)
     if m:
         seg = _slice_div(html, m.start())
         seg = re.sub(r"<script.*?</script>", "", seg, flags=re.S)
         seg = re.sub(r"<style.*?</style>", "", seg, flags=re.S)
-        seg = re.sub(r"<br\s*/?>", "\n", seg)
-        seg = re.sub(r"</p>|</section>|</li>", "\n", seg)
-        seg = re.sub(r"<[^>]+>", "", seg)
-        body = clean(seg)
+        seg = process_images(seg)     # 图片本地化（失败退远程）
+        seg = clean_html(seg)         # 按白名单保留排版结构
+        html_body = seg
+    # 纯文本同源：块级标签转换行再剥标签，保证 TXT 下载与字数统计仍具可读性
+    plain = html_body or ""
+    plain = re.sub(r"<(p|/p|br|section|/section|li|/li|div|/div|h[1-4]|/h[1-4]"
+                   r"|tr|/tr|blockquote)\b[^>]*>", "\n", plain, flags=re.I)
+    plain = re.sub(r"<[^>]+>", "", plain)
+    body = clean(plain)
     return {"title": title, "gh": gh, "author": author,
-            "ts": int(ts) if ts.isdigit() else 0, "body": body}
+            "ts": int(ts) if ts.isdigit() else 0,
+            "body": body, "html_body": html_body}
 
 
 def clean(s):
@@ -292,6 +413,7 @@ def save_article(art, url, query="", account_hint=""):
         "pub": pub,
         "chars": len(art["body"]),
         "body": art["body"],
+        "html_body": art.get("html_body", "") or "",
         "origin_url": url,
         "origin_kind": "mp.weixin.qq.com（搜狗微信搜索中转取得）",
         "query": query,
