@@ -56,6 +56,10 @@ STEPS = [
     ("语料合并",        [PY, "merge_corpus.py"],                    False),
     ("义务逐字抽取",    [PY, "enrich_duties.py"],                   False),
     # ---------- 2. 页面生成（顺序敏感）----------
+    # ⚠️ 站内原文页必须排在「知识库」之前：build_texts 产出 sources/standards/text_ids.json
+    # （条目 → 原文 id 映射），build_standards 靠它给条目挂「读原文」按钮。
+    # 排在后面的话按钮永远指向上一版索引——表现为「刚补的原文，库上看不到入口」。
+    ("站内原文页",      [PY, "build_texts.py"],                     False),
     ("知识库·义务矩阵", [PY, "build_standards.py"],                 True),
     ("知识库·案例库",   [PY, "tools/build_cases_page.py"],          False),
     ("专项合规页",      [PY, "tools/build_special_topics.py"],      False),
@@ -85,7 +89,6 @@ STEPS = [
 TEXT_STEPS = [
     ("标准正文库",      [PY, "build_std_texts.py"]),
     ("标准原版 PDF",    [PY, "build_std_pdf.py"]),
-    ("站内原文页",      [PY, "build_texts.py"]),
 ]
 
 

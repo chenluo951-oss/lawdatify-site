@@ -28,6 +28,7 @@
   padding:8px 10px;border-radius:8px;font-size:13.5px;line-height:1.5;color:inherit;font-family:var(--sans)}
 .rd-list button:hover{background:rgba(127,127,127,.10)}
 .rd-list button.on{background:#e8f0fa;box-shadow:inset 2px 0 0 var(--brand)}
+.rd-more{color:var(--brand);font-weight:600;text-align:center;font-size:12.5px}
 .rd-list .lv{font-size:11.5px;color:var(--faint);margin-left:6px;white-space:nowrap}
 .rd-main{min-height:460px}
 
@@ -53,13 +54,6 @@
 .paper{background:#fff;border:1px solid var(--line);border-radius:6px;max-width:920px;margin:0 auto;
   box-shadow:0 1px 2px rgba(16,24,40,.05),0 12px 34px rgba(16,24,40,.07);padding:52px 60px 64px}
 @media(max-width:640px){.paper{padding:28px 20px 36px}}
-
-/* 原版 PDF 直读 */
-.pdfbox{background:#fff;border:1px solid var(--line);border-radius:6px;
-  box-shadow:0 1px 2px rgba(16,24,40,.05),0 12px 34px rgba(16,24,40,.07);overflow:hidden}
-.rd-pdf{display:block;width:100%;height:min(86vh,1180px);border:0;background:#f4f5f7}
-.pdf-note{font-size:12px;color:var(--faint)}
-@media(max-width:640px){.rd-pdf{height:74vh}}
 
 /* 文末信息 */
 .rd-meta{font-size:13px;color:var(--muted);line-height:1.95;margin:34px 0 0;
@@ -229,7 +223,7 @@
 </div></div>
 
 <main class="wrap">
-  <p class="rd-note">法规正文来自发布机关官网公开文本；<b>标准优先以原版 PDF 直读</b>（取自本人存档的发布机构公开件，行业标准与团体标准均为原版），无官方 PDF 的国家标准提供排版后正文与官方在线阅读入口。仅供个人学习研究，正式引用请以官方发布版本为准。</p>
+  <p class="rd-note">法规正文来自发布机关官网公开文本；标准正文取自本人存档（国标为三轮 OCR 比对定稿，行标与团标为发布机构公开 PDF 的文字层），仅供个人学习研究，正式引用请以官方发布版本为准。</p>
   <div class="rd">
     <aside class="rd-side">
       <input id="rd-q" class="rd-box" type="search" placeholder="按名称、文号或标准号检索">
@@ -240,7 +234,7 @@
     </aside>
     <section class="rd-main" id="rd-main">
       <div class="rd-splash">
-        <b>左侧共 511 部原文</b>（法规 260 部 · 标准 251 部，合计约 574 万字）。<br>
+        <b>左侧共 1150 部原文</b>（法规 899 部 · 标准 251 部，合计约 1008 万字）。<br>
         点选任意一条即可在此按公文版式阅读全文；标准另有「标准版式」，长文阅读可切「舒适阅读」。<br>
         条文可被外部直接定位：<code>texts.html#原文id|第X条</code>。
       </div>
@@ -263,7 +257,7 @@
   <div class="foot-meta">数据更新至 <span class="upd"><!-- UPDATED:START -->2026-09-15<!-- UPDATED:END --></span> · 本站内容不构成法律意见 · © 2026 合规无终点</div>
 </div></footer>
 <script>(function(){
-  var IX=null, CUR=null, PARTS={}, KIND='', LV='', MODE='', HL='', SZ=0, PDFMAP={};
+  var IX=null, CUR=null, PARTS={}, KIND='', LV='', MODE='', HL='', SZ=0;
   var $=function(s){return document.querySelector(s)};
   var esc=function(s){return (s||'').replace(/[&<>"]/g,function(c){
     return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})};
@@ -279,16 +273,6 @@
   var RE_MULTI=/\s{2,}|\t/;
 
   function partName(x){ return (x.kind==='std'?'s':'p')+'-'+String(x.part).padStart(2,'0'); }
-
-  /* 标准原版 PDF 索引：体积很小，同步取回，保证首屏就落到 PDF 视图 */
-  (function(){
-    try{
-      var q=new XMLHttpRequest();
-      q.open('GET','texts/std_pdf.json',false);
-      q.send(null);
-      if(q.status===200){ PDFMAP=(JSON.parse(q.responseText).items)||{}; }
-    }catch(e){ PDFMAP={}; }
-  })();
   function load(x){
     var k=partName(x);
     if(PARTS[k]) return Promise.resolve(PARTS[k]);
@@ -549,19 +533,15 @@
   function render(){
     if(!CUR) return;
     var x=CUR, isStd=(x.kind==='std');
-    var _pd=(isStd&&PDFMAP[x.id])?PDFMAP[x.id]:null;
-    if(!MODE) MODE=_pd?'pdf':(isStd?'std':'gw');
-    if(MODE==='pdf'&&!_pd) MODE=isStd?'std':'gw';
+    if(!MODE) MODE=isStd?'std':'gw';
     if(isStd&&MODE==='gw') MODE='std';
     if(!isStd&&MODE==='std') MODE='gw';
     $('#rd-main').innerHTML='<div class="paper"><div class="rd-empty">正在载入原文…</div></div>';
-    if(MODE==='pdf'){ pdfView(x,_pd); return; }
     load(x).then(function(d){
       var t=d[x.id]||'';
       var r = MODE==='cm'?comfort(x,t) : (isStd?stdView(x,t):gongwen(x,t));
       var cls = MODE==='cm'?'cm' : (isStd?'st':'gw');
       var bar='<div class="rd-bar">'+
-        (_pd?'<div class="rd-seg"><button data-m="pdf" title="发布机构公开的原版 PDF">原版 PDF</button></div>':'')+
         '<div class="rd-seg">'+
           '<button data-m="'+(isStd?'std':'gw')+'" class="'+(MODE!=='cm'?'on':'')+'">'+
             (isStd?'标准版式':'公文版式')+'</button>'+
@@ -609,51 +589,6 @@
     });
   }
 
-  /* ---------- 原版 PDF 直读：标准类条目优先走这条视图 ---------- */
-  function pdfView(x,pd){
-    var m=[];
-    if(x.code) m.push('<span class="k">编号</span> '+esc(x.code));
-    m.push('<span class="k">层级</span> '+esc(x.level));
-    if(x.issuer) m.push('<span class="k">发布机关</span> '+esc(x.issuer));
-    if(x.pub) m.push('<span class="k">发布</span> '+esc(x.pub));
-    if(x.impl) m.push('<span class="k">实施</span> '+esc(x.impl));
-    if(x.status) m.push('<span class="k">状态</span> '+esc(x.status));
-    if(x.url) m.push('<a href="'+esc(x.url)+'" target="_blank" rel="noopener">官方发布页 &#8599;</a>');
-    m.push('<a href="std/'+x.id+'.pdf" target="_blank" rel="noopener">新窗口打开原版 &#8599;</a>');
-    var sz=pd.bytes?(pd.bytes/1048576).toFixed(1)+' MB':'';
-    var bar='<div class="rd-bar">'+
-      '<div class="rd-seg">'+
-        '<button data-m="pdf" class="on">原版 PDF</button>'+
-        '<button data-m="std">标准版式</button>'+
-        '<button data-m="cm">舒适阅读</button>'+
-      '</div>'+
-      '<button class="rd-btn" id="rd-dlpdf">下载 PDF</button>'+
-      '<button class="rd-btn" id="rd-pr2">打印 / 存 PDF</button>'+
-      '<span class="rd-sp"></span><span class="rd-hint">原版'+
-        (pd.pages?' '+pd.pages+' 页':'')+(sz?' · '+sz:'')+'</span>'+
-      '</div>';
-    $('#rd-main').innerHTML=bar+
-      '<div class="pdfbox"><iframe class="rd-pdf" src="std/'+x.id+'.pdf#view=FitH&navpanes=0" '+
-        'title="'+esc(x.name)+' 原版 PDF"></iframe></div>'+
-      '<div class="rd-meta">'+m.join(' · ')+
-      '<br><span class="pdf-note">原版 PDF 取自本人存档的发布机构公开件，仅供个人学习研究；'
-      +'正式引用请以官方发布版本为准。</span></div>';
-    var segs=document.querySelectorAll('.rd-seg button[data-m]');
-    for(var i=0;i<segs.length;i++){(function(b){
-      b.onclick=function(){ MODE=b.getAttribute('data-m'); render(); };
-    })(segs[i]);}
-    $('#rd-dlpdf').onclick=function(){
-      var a=document.createElement('a');
-      a.href='std/'+x.id+'.pdf'; a.download=x.name+'.pdf';
-      document.body.appendChild(a); a.click(); a.remove(); };
-    $('#rd-pr2').onclick=function(){
-      var f=document.querySelector('.rd-pdf');
-      try{ f.contentWindow.focus(); f.contentWindow.print(); }
-      catch(e){ window.open('std/'+x.id+'.pdf','_blank'); } };
-    document.title=x.name+' · 原版 PDF · 合规无终点';
-    window.scrollTo({top:0,behavior:'smooth'});
-  }
-
   function download(name,parts,type){
     var a=document.createElement('a');
     a.href=URL.createObjectURL(new Blob(parts,{type:type}));
@@ -692,8 +627,13 @@
   }
 
   /* ---------- 侧栏 ---------- */
+  /* 原文库收录到数千部后，一次性铺满 DOM 会卡；改为渐进渲染：
+     先出 300 条，点底部按钮每批再加 500。筛选条件变化时重新从 300 起算。 */
+  var SHOWN=300, LASTKEY=null;
   function renderList(){
     var q=(($('#rd-q')||{}).value||'').trim();
+    var key=KIND+'|'+LV+'|'+q;
+    if(key!==LASTKEY){ LASTKEY=key; SHOWN=300; }
     var ul=$('#rd-list'); ul.innerHTML='';
     var arr=IX.items.filter(function(x){
       if(KIND&&x.kind!==KIND) return false;
@@ -702,7 +642,7 @@
       return true;});
     $('#rd-count').textContent=arr.length+' 条';
     var frag=document.createDocumentFragment();
-    arr.forEach(function(x){
+    arr.slice(0,SHOWN).forEach(function(x){
       var li=document.createElement('li'), b=document.createElement('button');
       b.innerHTML=esc(x.name)+'<span class="lv">'+esc(x.code||x.level)+'</span>';
       b.onclick=function(){ location.hash=x.id; };
@@ -710,13 +650,19 @@
       li.appendChild(b); frag.appendChild(li);
     });
     ul.appendChild(frag);
+    if(arr.length>SHOWN){
+      var li=document.createElement('li'), b=document.createElement('button');
+      b.className='rd-more';
+      b.textContent='还有 '+(arr.length-SHOWN)+' 部，点击继续显示';
+      b.onclick=function(){ SHOWN+=500; renderList(); };
+      li.appendChild(b); ul.appendChild(li);
+    }
   }
 
   function splash(){
-    var npdf=Object.keys(PDFMAP).length;
     $('#rd-main').innerHTML='<div class="rd-splash"><b>从左侧选择一部法规或标准</b><br>'+
-      '共 '+IX.items.length+' 部原文（法规 '+IX._law+' 部 · 标准 '+IX._std+' 部，其中 '+npdf+' 部标准提供原版 PDF 直读）。'+
-      '标准默认打开原版 PDF，可切换到标准版式或舒适阅读；支持复制全文、下载 TXT、导出 Word 与打印存 PDF。<br>'+
+      '共 '+IX.items.length+' 部原文（法规 '+IX._law+' 部 · 标准 '+IX._std+' 部）。'+
+      '正文按官方发文版式排印，支持复制全文、下载 TXT、导出 Word 与打印存 PDF。<br>'+
       '外部可直接定位到条文：<code>texts.html#原文id|第X条</code></div>';
     CUR=null; renderList();
   }

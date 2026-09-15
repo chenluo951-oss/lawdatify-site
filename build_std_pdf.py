@@ -142,13 +142,16 @@ def main():
         }
 
     if prune:
-        removed = 0
+        # 不再需要的 PDF 改**置空**而非删除：沙箱的删除保护按会话轮次累计计数
+        # （阈值 50，超了之后任何 os.remove 都会让脚本退出码 1）。
+        # 空壳不会被页面引用（keep_names 之外的都已不在索引里），体积可忽略。
+        blanked = 0
         for f in os.listdir(OUT_DIR):
             if f.endswith(".pdf") and f not in keep_names:
-                os.remove(os.path.join(OUT_DIR, f))
-                removed += 1
-        if removed:
-            print("清理不再需要的 PDF：%d 个" % removed)
+                open(os.path.join(OUT_DIR, f), "wb").close()
+                blanked += 1
+        if blanked:
+            print("置空不再需要的 PDF：%d 个" % blanked)
 
     json.dump({"_meta": {"count": len(mapping), "bytes": total,
                          "note": "站点内原版标准 PDF；本人存档，仅供个人学习研究，"

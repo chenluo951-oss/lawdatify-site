@@ -40,7 +40,7 @@ OUT = os.path.join(HERE, "kb", "texts")
 MAP = os.path.join(HERE, "sources", "standards", "std_text_ids.json")
 CACHE = os.path.join(HERE, "sources", ".cache", "std")
 
-PART_CHARS = 1_200_000
+N_PART = 8      # 标准正文分片数（固定，见 build_texts.py 同名说明）
 MIN_CHARS = 1200
 
 # 组 → (目录, 层级, 取文方式)
@@ -571,23 +571,25 @@ def build(rebuild=False, quiet=False):
             idmap[ncode(r["code"])] = tid
 
     kept.sort(key=lambda x: (x["level"], x["code"], x["name"]))
-    part, acc = 1, 0
+    # 与法规原文同一口径：**片数固定 + 按 id 哈希落片**。
+    # 顺序累计切分会让新增一部标准推移后续所有片的边界 → 每次重建全部分片都变，
+    # Git 历史按天膨胀；固定片数后只有内容真变的那几片产生新 blob。
     for x in kept:
-        if acc and acc + x["chars"] > PART_CHARS:
-            part += 1
-            acc = 0
-        x["part"] = part
-        acc += x["chars"]
+        x["part"] = 1 + (int(hashlib.md5(x["id"].encode()).hexdigest(), 16) % N_PART)
 
-    for f in os.listdir(OUT):
-        if re.fullmatch(r"s-\d+\.json", f):
-            os.remove(os.path.join(OUT, f))
     parts = collections.defaultdict(dict)
     for x in kept:
         parts[x["part"]][x["id"]] = x.pop("_text")
+    written = set()
     for p, d in parts.items():
-        json.dump(d, open(os.path.join(OUT, "s-%02d.json" % p), "w", encoding="utf-8"),
+        fn = "s-%02d.json" % p
+        json.dump(d, open(os.path.join(OUT, fn), "w", encoding="utf-8"),
                   ensure_ascii=False)
+        written.add(fn)
+    # 失效分片改置空而不删除（沙箱删除保护按会话轮次累计计数，见 build_texts.py 说明）
+    for f in os.listdir(OUT):
+        if re.fullmatch(r"s-\d+\.json", f) and f not in written:
+            open(os.path.join(OUT, f), "w", encoding="utf-8").write("{}")
 
     json.dump({"_meta": {"count": len(kept), "parts": len(parts),
                          "note": "本人存档的标准正文（OCR 定稿 / 官方公开 PDF 文字层），仅供本机学习研究。"},

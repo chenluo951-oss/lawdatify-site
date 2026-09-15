@@ -202,6 +202,11 @@ def read_affordance(it):
     ou = online_reader_url(it)
     if ou:
         return f'<a class="lb-read" href="{esc(ou)}" target="_blank" rel="noopener">官方在线阅读</a>'
+    # 国家法律法规数据库的深链本身就是官方全文阅读页（正文由该站自己的阅读器渲染）。
+    # 站内原文库还没抓到全文的条目，至少让读者一步直达官方原文——不能只留个空档。
+    if "flk.npc.gov.cn/detail2.html" in (it.get("url") or ""):
+        return (f'<a class="lb-read" href="{esc(it["url"])}" target="_blank" '
+                f'rel="noopener" title="国家法律法规数据库·官方全文">官方原文</a>')
     return ""
 
 
