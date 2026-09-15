@@ -151,6 +151,12 @@ RE_STD_NUM = re.compile(r"(?:^|\n)\s*(\d{1,2}(?:\.\d{1,2}){0,3})[\s　]+[^\n]{2,
 RE_STD_CHAP = re.compile(
     r"(?m)^[ \t]*(\d{1,2}(?:\.\d{1,2}){0,2})[ \t　]{1,4}(\S[^\n]{1,38})[ \t　]*$")
 
+# 2026-09-15：部门「指导意见 / 建设指南」类文件不用「第X条」，而是「一、」「（一）」分条。
+# 不给这类文件补一条切分规则，引用它们的义务就永远抽不到条款原文
+# （骑手权益 5 项、未成年人模式 2 项等实测全空）。
+RE_OPIN = re.compile(r"(?m)^[ \t　]*([一二三四五六七八九十]{1,2})、[ \t　]*(\S[^\n]{1,38})[ \t　]*$")
+RE_SUB = re.compile(r"(?m)^[ \t　]*（([一二三四五六七八九十]{1,2})）[ \t　]*(\S[^\n]{1,38})[ \t　]*$")
+
 STOP = re.compile(r"^(目次|前言|引言|参考文献|附录|索引|ICS|CCS)")
 
 
@@ -161,7 +167,6 @@ def split_clauses(text):
         kind = "law"
         marks = art_marks
     else:
-        kind = "std"
         marks = []
         seen = {}
         for m in RE_STD_CHAP.finditer(text):
@@ -179,6 +184,24 @@ def split_clauses(text):
             # 正文中的章节保留最后一次出现（目次在前、正文在后）
             seen[no] = (m.start(), no)
         marks = sorted(seen.values(), key=lambda x: x[0])
+        if len(marks) < 3:
+            # ③ 兜底：指导意见 / 建设指南类（一、二、… 与 （一）（二）…）
+            marks = []
+            seen = {}
+            parent = ""
+            for m in re.finditer(r"(?m)^[ \t　]*(?:([一二三四五六七八九十]{1,2})、|"
+                                 r"（([一二三四五六七八九十]{1,2})）)[ \t　]*"
+                                 r"(\S[^\n]{1,38})[ \t　]*$", text):
+                top, sub, title = m.group(1), m.group(2), m.group(3).strip()
+                if top:
+                    parent = top
+                    no = f"{top}、{title}"
+                else:
+                    no = f"{parent}（{sub}）{title}"
+                seen[no] = (m.start(), no)
+            marks = sorted(seen.values(), key=lambda x: x[0])
+            if len(marks) >= 3:
+                kind = "opin"
     if len(marks) < 3:
         return []
     out = []
@@ -293,8 +316,12 @@ def main():
                     else:
                         arts.append({"src": ref, "doc": doc.get("name") or "",
                                      "art": art_no, "quote": "", "score": "missing"})
-                # ② 未指定条款号的，用锚点自动匹配兜底
-                if not arts:
+                # ② 未指定条款号、或指定了但一条都没落到原文的，用锚点自动匹配兜底。
+                # ⚠️ 原判据是 `if not arts`：arts_map 里写了个对不上的条款号时会留下
+                #    一条 quote 为空的占位，非空 → 兜底被跳过，义务就白白空着（实测
+                #    《食品安全法》9 项、《个人信息保护法》4 项都是这么丢的）。
+                if not any(x.get("quote") for x in arts):
+                    arts = [x for x in arts if x.get("quote")]
                     for ref in du.get("refs", []):
                         doc = res.resolve(ref)
                         if not doc:

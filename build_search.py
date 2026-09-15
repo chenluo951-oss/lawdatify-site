@@ -50,6 +50,16 @@ def clean(s, n=170):
     return s[:n]
 
 
+def _duty_scale(du):
+    """义务清单规模表述。**禁止写死数字** —— 一律从 duties.json 动态统计。"""
+    cats = du.get("categories", [])
+    scenes = sum(len(c.get("scenes", [])) for c in cats)
+    duties = sum(len(s.get("duties", [])) for c in cats for s in c.get("scenes", []))
+    if not duties:
+        return "合规义务清单"
+    return f"{len(cats)} 大类 {scenes} 场景 {duties} 项义务"
+
+
 def main():
     items = []
 
@@ -189,7 +199,8 @@ def main():
         ("全球监管地图", "news/map.html", "按地域查看合规动态分布"),
         ("简报归档", "news/briefs.html", "日报 / 周报 / 月报全期次归档"),
         ("合规知识库", "kb/index.html", "资料库、义务清单与草案跟踪"),
-        ("合规义务清单", "kb/standards.html", "17 大类 77 场景 220 项义务，矩阵总览 + 逐条明细，配条款原文与标杆做法"),
+        ("合规义务清单", "kb/standards.html",
+         f"{_duty_scale(du)}，矩阵总览 + 逐条明细，配条款原文、标杆做法与参考文案"),
         ("法规原文库", "kb/texts.html", "法律、行政法规、部门规章与规范性文件正文，按官方发文版式排印"),
         ("高频引用法条", "kb/citations.html", "执法与司法高频援引条款，含法条竞合与抗辩思路"),
         ("合规审计", "kb/audit.html", "按义务清单逐项自评的合规审计模板与评分口径"),

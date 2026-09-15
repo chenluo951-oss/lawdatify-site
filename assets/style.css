@@ -97,11 +97,49 @@ h1,h2,h3,h4{line-height:1.45;letter-spacing:.2px}
 .fb-stats{display:flex;gap:38px;flex-wrap:wrap;padding-bottom:16px;border-bottom:1px solid var(--line-2)}
 .st .n{font-size:24px;font-weight:800;color:var(--brand);letter-spacing:.5px;line-height:1.2}
 .st .l{font-size:12px;color:var(--muted);margin-top:2px}
-.fb-tools{display:flex;gap:14px;align-items:center;margin-top:16px;flex-wrap:wrap}
-#q{flex:1;min-width:200px;max-width:320px;border:1px solid var(--line);border-radius:9px;
+/* 筛选工具条（合规动态总览）
+   两个维度必须一眼分清，否则就是两排一模一样的药丸：领域＝描边芯片 + 领域色点
+   （点色与下方分区标题一致，选了哪个色就跳到哪一段）；内容类型＝分段控件（灰底轨 + 浮起白片）。 */
+.fbar{margin-top:16px;padding-top:15px;border-top:1px solid var(--line-2)}
+.fbar-q{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+#q{flex:1 1 240px;min-width:190px;max-width:340px;border:1px solid var(--line);border-radius:9px;
   padding:9px 13px;font-size:14px;outline:none;font-family:var(--sans);color:var(--ink);
   background:#fbfcfe;transition:.18s}
 #q:focus{border-color:var(--brand);background:#fff;box-shadow:0 0 0 3px rgba(27,79,138,.09)}
+.fbar-sum{font-size:12.5px;color:var(--muted);margin-left:auto;
+  font-variant-numeric:tabular-nums}
+.fbar-sum b{color:var(--brand);font-weight:800}
+.fclear{border:1px solid var(--line);background:#fff;color:var(--muted);border-radius:7px;
+  padding:6px 11px;font-size:12.5px;cursor:pointer;font-family:var(--sans);transition:.16s}
+.fclear:hover{border-color:var(--brand);color:var(--brand)}
+.frow{display:grid;grid-template-columns:42px 1fr;gap:14px;align-items:start;margin-top:13px}
+.frow-l{font-size:12.5px;font-weight:800;color:var(--muted);letter-spacing:.4px;
+  padding-top:7px;white-space:nowrap}
+.fchips{display:flex;gap:6px;flex-wrap:wrap}
+.fseg{display:flex;gap:2px;flex-wrap:wrap;background:#f1f5f9;border:1px solid var(--line);
+  border-radius:10px;padding:3px}
+.fchip{border:1px solid var(--line);background:#fff;color:var(--ink-2);border-radius:999px;
+  padding:5px 11px;font-size:12.5px;cursor:pointer;font-family:var(--sans);transition:.16s;
+  display:inline-flex;align-items:center;gap:5px;line-height:1.4}
+.fchip .fdot{width:6px;height:6px;border-radius:50%;flex:none;opacity:.9}
+.fchip em{font-style:normal;font-size:11px;color:var(--faint);font-weight:700;
+  font-variant-numeric:tabular-nums}
+.fchip:hover{border-color:var(--brand);color:var(--brand);background:#f8fbff}
+.fchip.is-on{background:var(--brand);border-color:var(--brand);color:#fff}
+.fchip.is-on em{color:rgba(255,255,255,.72)}
+.fchip.is-on .fdot{box-shadow:0 0 0 2px rgba(255,255,255,.5)}
+.fseg-i{border:0;background:transparent;color:var(--ink-2);border-radius:7px;padding:6px 12px;
+  font-size:13px;cursor:pointer;font-family:var(--sans);transition:.16s;
+  display:inline-flex;align-items:center;gap:6px;line-height:1.35}
+.fseg-i em{font-style:normal;font-size:11.5px;color:var(--faint);font-weight:700;
+  font-variant-numeric:tabular-nums}
+.fseg-i:hover{color:var(--brand)}
+.fseg-i.is-on{background:#fff;color:var(--brand);font-weight:700;
+  box-shadow:0 1px 2px rgba(16,32,52,.10),0 0 0 1px var(--line)}
+.fseg-i.is-on em{color:var(--brand);opacity:.72}
+
+/* 应对建议页的单一风险筛选仍用旧药丸样式 */
+.fb-tools{display:flex;gap:14px;align-items:center;margin-top:16px;flex-wrap:wrap}
 .ftabs{display:flex;gap:8px;flex-wrap:wrap;margin-left:auto}
 .ftab{border:1px solid var(--line);background:#fff;color:var(--ink-2);border-radius:999px;
   padding:7px 15px;font-size:13.5px;cursor:pointer;font-family:var(--sans);transition:.16s;
@@ -110,9 +148,6 @@ h1,h2,h3,h4{line-height:1.45;letter-spacing:.2px}
 .ftab:hover{border-color:var(--brand);color:var(--brand)}
 .ftab.active{background:var(--brand);border-color:var(--brand);color:#fff}
 .ftab.active em{color:rgba(255,255,255,.75)}
-/* 第二筛选维度（内容类型）：与领域筛选叠加，故单独一行并加淡分隔 */
-.fb-tools2{margin-top:12px;padding-top:13px;border-top:1px dashed var(--line-2)}
-.fb-lab{font-size:12.5px;font-weight:700;color:var(--muted);flex:none;letter-spacing:.3px}
 
 .fgroup{margin-top:34px;scroll-margin-top:80px}
 .fgroup-h{display:flex;align-items:center;gap:10px;margin-bottom:14px;
@@ -266,6 +301,9 @@ footer a{color:var(--muted)}
   .navlinks{margin-left:0;width:100%;overflow-x:auto}
   .fb-stats{gap:24px}
   .ni-body{padding:14px 16px}
+  .frow{grid-template-columns:1fr;gap:5px}
+  .frow-l{padding-top:0}
+  .fbar-sum{margin-left:0}
 }
 
 /* ---------------- 页脚 v2（对外版）：品牌 + 来源说明 + 工具入口 + 更新时间 ---------------- */

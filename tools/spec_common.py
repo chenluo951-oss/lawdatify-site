@@ -196,7 +196,7 @@ def registry_table(group):
             f'<td>{esc(it.get("kind",""))}</td>'
             f'<td><span class="sp-src">{esc(it.get("carrier",""))}</span></td>'
             f'<td><span class="sp-src">{esc(it.get("range",""))}</span></td>'
-            f'<td>{link(it.get("entry"), "查看栏目")}</td>'
+            f'<td>{link(it.get("entry"), it.get("entry_label") or "查看原文")}</td>'
             "</tr>")
         if it.get("note"):
             rows.append(

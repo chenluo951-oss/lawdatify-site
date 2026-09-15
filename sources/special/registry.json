@@ -17,8 +17,9 @@
       "carrier": "附件 PDF（正文无表，经 pdfjs viewer iframe 内嵌）",
       "range": "2019-12 起，连续编号「总第 1 批」→ 当前",
       "status": "已接入",
-      "entry": "https://www.miit.gov.cn/jgsj/xgj/APPqhyhqyzxzzxd/tzgg/index.html",
-      "note": "该领域最完整的国家序列；出「责令整改 → 复检未通过 → 下架」完整处置链。"
+      "entry": "https://www.miit.gov.cn/jgsj/xgj/APPqhyhqyzxzzxd/tzgg/art/2026/art_0d4f79b29eac4727b6b403a74b0d41fa.html",
+      "note": "该领域最完整的国家序列；出「责令整改 → 复检未通过 → 下架」完整处置链。",
+      "entry_label": "查看最新一期"
      },
      {
       "org": "国家网信办",
@@ -141,8 +142,9 @@
       "carrier": "页面内 HTML 表格（免 OCR，明细质量最高）",
       "range": "各省起始不一，2019—2026 年均有",
       "status": "已接入",
-      "entry": "https://gdca.miit.gov.cn/zwgk/wlaqgl/index.html",
-      "note": "栏目路径不统一（网络安全管理/互联网管理/电信和互联网管理 三种叫法），已按 jpaas build/unit 接口通用化枚举。吉林、上海、新疆、西藏四地未检出属地通报序列。"
+      "entry": "https://gdca.miit.gov.cn/zwgk/tzgg/art/2026/art_079142f46292476599c9bc5d74b307b5.html",
+      "note": "栏目路径不统一（网络安全管理/互联网管理/电信和互联网管理 三种叫法），已按 jpaas build/unit 接口通用化枚举。吉林、上海、新疆、西藏四地未检出属地通报序列。",
+      "entry_label": "查看最新一期"
      },
      {
       "org": "省级互联网信息办公室",

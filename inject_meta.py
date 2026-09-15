@@ -33,6 +33,26 @@ OG_IMAGE = f"{SITE_URL}/assets/og-cover.png"
 SITE_NAME = "合规无终点"
 LOCALE = "zh_CN"
 
+
+def _duty_scale():
+    """义务清单规模表述。**禁止写死数字** —— 一律从 duties.json 动态统计。"""
+    import json
+    p = os.path.join(HERE, "sources", "standards", "duties.json")
+    try:
+        du = json.load(open(p, encoding="utf-8"))
+        cats = du.get("categories", [])
+        scenes = sum(len(c.get("scenes", [])) for c in cats)
+        duties = sum(len(s.get("duties", [])) for c in cats
+                     for s in c.get("scenes", []))
+        if duties:
+            return f"{len(cats)} 大类 {scenes} 场景 {duties} 项义务"
+    except Exception:
+        pass
+    return "全部合规义务"
+
+
+DUTY_SCALE = _duty_scale()
+
 # 需要处理的页面（相对仓库根）。_quarantine/ 与 news/reports/ 下不入列。
 PAGES = [
     "index.html",
@@ -46,6 +66,9 @@ PAGES = [
     "analysis/pi-audit.html",
     "analysis/ai-label.html",
     "analysis/food-label.html",
+    "analysis/app-violation-pattern.html",
+    "analysis/algo-filing-guide.html",
+    "analysis/dark-store-license.html",
     "kb/index.html",
     "kb/standards.html",
     "kb/texts.html",
@@ -60,7 +83,7 @@ PAGES = [
 
 # 每页的分享描述。社交卡片上显示的就是这段文字，因此按受众重写而非沿用页面 description。
 OG_DESC = {
-    "index.html": "面向合规实务的法规标准与合规动态库：220 项义务逐条配条款原文、标杆做法与可套用文案；"
+    "index.html": "面向合规实务的法规标准与合规动态库：" + DUTY_SCALE + "逐条配条款原文、标杆做法与可套用文案；"
                   "今日更新、合规动态、合规知识库逐条附官方深链。",
     "prm.html": "平台规则与协议管理中心（PRM）：面向法务的统一规则资产台账与流程标准化方案。",
     "search.html": "站内全文检索：法规、动态、知识要点一站搜。",
@@ -76,10 +99,13 @@ OG_DESC = {
     "analysis/pi-audit.html": "个保合规审计：1000 万门槛、三档频次、两条触发路径与八项审计重点，含监管要求审计的执行链路图。",
     "analysis/ai-label.html": "AI 生成内容标识：四类主体义务分工、显式与隐式双标识、传播端「属于/可能为/疑似」三档判定流程。",
     "analysis/food-label.html": "食品标签新规与前置仓：拆箱称重被纳入预包装食品监管，含合规标签版面示意图与 6 个月倒计时行动表。",
+    "analysis/app-violation-pattern.html": "基于 651 份 App 侵害用户权益通报的实证分析：30 家发布机关的两层结构、三段处置链条（批次通报 / 整改复核 / 下架处置）、四种名单载体与 35 天的整改窗口，含统计口径说明与行动清单。",
+    "analysis/algo-filing-guide.html": "算法备案与生成式 AI 登记实务：四条并列序列为何不可相加、备案编号怎么读、「备案」与「登记」怎么判断、变更与注销必须主动办理，含备案 1014 条 / 深度合成 7764 条 / 生成式 AI 1846 条的规模对比与编号结构解析。",
+    "analysis/dark-store-license.html": "前置仓的资质边界：把仓内动作拆成仓储分拣、拆箱称重分装、现场加工制售三类，逐一对照许可项目；含网络经营与平台备案的三条一致性红线、分装标签版面示意、食用农产品合格证与六种高频超范围情形。",
     "analysis/polish.html": "报告排版打磨日志：每次打磨的改动文件、前后对比、依据与 QA 验证结果。",
-    "kb/index.html": "合规知识库总览：法规标准原文、220 项合规义务、义务矩阵与公众号原文存档，逐条标注效力状态与实施日期。",
+    "kb/index.html": "合规知识库总览：法规标准原文、" + DUTY_SCALE + "、义务矩阵、标杆做法与参考文案、公众号原文存档，逐条标注效力状态与实施日期。",
     "kb/benchmarks.html": "ESG / 法律 / 券商研报专业样本对标库，提炼可借鉴的排版与结构要点。",
-    "kb/standards.html": "个人信息保护、数据安全、网络安全、算法与 AI、移动应用合规，以及网络交易、餐饮外卖、仓储冷链、即时配送、计量、消费者权益与绿色包装等领域的国家标准、法律法规与指引指南汇总，标注效力状态与实施日期，并以 220 项合规义务为主线组织。",
+    "kb/standards.html": "个人信息保护、数据安全、网络安全、算法与 AI、移动应用合规，以及网络交易、餐饮外卖、仓储冷链、即时配送、计量、消费者权益与绿色包装等领域的国家标准、法律法规与指引指南汇总，标注效力状态与实施日期，并以全部合规义务为主线组织。",
     "kb/texts.html": "法律、行政法规、部门规章与规范性文件的官方正文，可在站内直接阅读、复制与下载；标准正文受著作权保护，改由条目页给出发布机构的官方在线阅读入口。",
     "news/calendar.html": "立法日历：按倒计时排列的法律与标准施行日、征求意见截止与申报节点，覆盖中国与主要海外辖区，逐条附原文深链。",
     "news/actions.html": "合规动态应对建议：正在推进的专项治理、监督检查与安全调查，并给出按领域落地建议。",
@@ -94,6 +120,34 @@ DEFAULT_DESC = "合规动态、法律分析与合规知识库，逐条附官方�
 BLOCK_RE = re.compile(
     r"[ \t]*<!-- SOCIAL:START -->.*?<!-- SOCIAL:END -->\n?", re.S
 )
+
+# 首页正文里的义务规模文案也随数据动态同步（**禁止写死数字**，否则改数据必漏改）。
+DUTY_SCALE_RE = re.compile(r"\d+ 个合规主题 · \d+ 个业务场景 · \d+ 项具体义务")
+DUTY_MORE_RE = re.compile(r"· \d+ 项逐条含条款原文")
+
+
+def _duty_parts():
+    """返回 (主题数, 场景数, 义务数)，从 duties.json 动态统计。"""
+    import json
+    p = os.path.join(HERE, "sources", "standards", "duties.json")
+    try:
+        du = json.load(open(p, encoding="utf-8"))
+        cats = du.get("categories", [])
+        scenes = sum(len(c.get("scenes", [])) for c in cats)
+        duties = sum(len(s.get("duties", [])) for c in cats for s in c.get("scenes", []))
+        return len(cats), scenes, duties
+    except Exception:
+        return 0, 0, 0
+
+
+def sync_duty_scale(html: str) -> str:
+    """把首页正文中的义务规模文案同步为当前统计值。"""
+    nc, ns, nd = _duty_parts()
+    if not nd:
+        return html
+    html = DUTY_SCALE_RE.sub(f"{nc} 个合规主题 · {ns} 个业务场景 · {nd} 项具体义务", html)
+    html = DUTY_MORE_RE.sub(f"· {nd} 项逐条含条款原文", html)
+    return html
 
 
 def page_url(rel: str) -> str:
@@ -159,12 +213,13 @@ def process(rel: str, do_write: bool) -> str:
         new = s[:idx] + block + s[idx:]
         action = "注入"
 
+    new = sync_duty_scale(new)
+
     if new == s:
         return f"  {rel:<24} 无变化"
     if do_write:
         open(path, "w", encoding="utf-8").write(new)
     return f"  {rel:<24} {action} ✓"
-
 
 def all_pages():
     """主导航页 + news/reports/ 下的报告页（动态生成，数量不固定）。"""

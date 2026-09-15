@@ -87,6 +87,13 @@ DOMAINS = [
 ]
 DOMAIN_KEYS = [d[0] for d in DOMAINS]
 DOMAIN_COLOR = dict(DOMAINS)
+# 筛选芯片上用的短名：长名会在工具条里折成孤字（「零售与消费者合规」单独占一行），
+# 短名让 10 个领域芯片排得齐；分区标题仍用全称。
+DOMAIN_SHORT = {
+    "网络交易合规": "网络交易",
+    "配送与用工合规": "配送与用工",
+    "零售与消费者合规": "零售与消费者",
+}
 
 # 领域中常见的别名 → 归一化
 ALIAS = {
@@ -616,20 +623,26 @@ def render_news_feed(items):
     for d in by:
         by[d].sort(key=lambda x: (x["date"], x["issue"]), reverse=True)
 
-    tabs = ['<button class="ftab active" data-f="all">全部 <em>%d</em></button>' % len(items)]
+    # 两个维度必须一眼能分清：领域用「描边芯片 + 领域色点」（点色与下方分区标题一致，
+    # 形成「选了哪个色 → 跳到哪一段」的对应）；内容类型用「分段控件」（灰底轨 + 浮起白片）。
+    # 2026-09-15 用户反馈旧版两排 pill 长得一模一样、都写「全部 95」，分不清维度。
+    dtabs = [f'<button class="fchip is-on" data-f="all">全部<em>{len(items)}</em></button>']
     for d in DOMAIN_KEYS:
         if by.get(d):
-            tabs.append(f'<button class="ftab" data-f="{esc(d)}">{esc(d)} <em>{len(by[d])}</em></button>')
+            dtabs.append(
+                f'<button class="fchip" data-f="{esc(d)}">'
+                f'<i class="fdot" style="background:{DOMAIN_COLOR[d]}"></i>'
+                f'{esc(DOMAIN_SHORT.get(d, d))}<em>{len(by[d])}</em></button>')
 
-    # 内容类型（第二维度）：按「发生了什么」筛，与领域筛选叠加生效
     kcnt = {}
     for it in items:
         g = kind_group(it)
         kcnt[g] = kcnt.get(g, 0) + 1
-    ktabs = ['<button class="ftab active" data-k="all">全部 <em>%d</em></button>' % len(items)]
+    ktabs = [f'<button class="fseg-i is-on" data-k="all">全部类型<em>{len(items)}</em></button>']
     for g in KIND_ORDER:
         if kcnt.get(g):
-            ktabs.append(f'<button class="ftab" data-k="{esc(g)}">{esc(g)} <em>{kcnt[g]}</em></button>')
+            ktabs.append(f'<button class="fseg-i" data-k="{esc(g)}">{esc(g)}'
+                         f'<em>{kcnt[g]}</em></button>')
 
     blocks = []
     idx = 0
@@ -648,7 +661,13 @@ def render_news_feed(items):
             f'<div class="nilist">{"".join(cards)}</div></section>'
         )
 
+    # 「更新至」取「最新条目日」与「构建日」的较小者：条目里含未来生效日
+    # （如《公安机关网络空间安全监督检查办法》2026-10-01 施行），直接用 max 会把
+    # 这个指标顶到未来，读起来像页面穿越了。
     latest = max((it["date"] for it in items), default="")
+    today = datetime.now().strftime("%Y-%m-%d")
+    if not latest or latest > today:
+        latest = today
 
     return f"""<div class="feedbar">
   <div class="fb-stats">
@@ -656,49 +675,75 @@ def render_news_feed(items):
     <div class="st"><div class="n">{len([d for d in DOMAIN_KEYS if by.get(d)])}</div><div class="l">覆盖领域</div></div>
     <div class="st"><div class="n">{esc(latest)}</div><div class="l">更新至</div></div>
   </div>
-  <div class="fb-tools">
-    <input id="q" type="search" placeholder="按关键词 / 机构过滤…" aria-label="过滤">
-    <div class="ftabs">{"".join(tabs)}</div>
-  </div>
-  <div class="fb-tools fb-tools2">
-    <span class="fb-lab">内容类型</span>
-    <div class="ftabs ftabs-k">{"".join(ktabs)}</div>
+  <div class="fbar">
+    <div class="fbar-q">
+      <input id="q" type="search" placeholder="按关键词 / 机构过滤，如 个人信息、市场监管总局"
+             aria-label="过滤动态">
+      <span class="fbar-sum" id="fsum" role="status"></span>
+      <button class="fclear" id="fclear" type="button" hidden>清空筛选</button>
+    </div>
+    <div class="frow">
+      <span class="frow-l">领域</span>
+      <div class="fchips" id="fDomain">{"".join(dtabs)}</div>
+    </div>
+    <div class="frow">
+      <span class="frow-l">内容</span>
+      <div class="fseg" id="fKind">{"".join(ktabs)}</div>
+    </div>
   </div>
 </div>
 <div id="feed">{"".join(blocks)}</div>
-<div id="empty" class="empty" hidden>没有匹配的动态，换个关键词试试。</div>
+<div id="empty" class="empty" hidden>没有匹配的动态，换个关键词或点「清空筛选」试试。</div>
+""" + FEED_FILTER_JS
+
+
+# 筛选脚本单独放普通字符串：JS 里花括号密，塞进 f-string 要逐个双写，极易漏（上一版就漏过）。
+FEED_FILTER_JS = r"""
 <script>
-(function(){{
+(function(){
   var q=document.getElementById('q'), feed=document.getElementById('feed'),
-      empty=document.getElementById('empty'), cur='all', curK='all';
-  function apply(){{
+      empty=document.getElementById('empty'), sum=document.getElementById('fsum'),
+      clr=document.getElementById('fclear'),
+      cur='all', curK='all', total=feed.querySelectorAll('.ni').length;
+  function apply(){
     var kw=(q.value||'').trim().toLowerCase(), shown=0;
     var gs=feed.querySelectorAll('.fgroup');
-    for(var i=0;i<gs.length;i++){{
+    for(var i=0;i<gs.length;i++){
       var g=gs[i], okG=(cur==='all'||g.dataset.g===cur), n=0;
       var ns=g.querySelectorAll('.ni');
-      for(var j=0;j<ns.length;j++){{
+      for(var j=0;j<ns.length;j++){
         var el=ns[j], t=el.innerText.toLowerCase();
         var ok=okG&&(curK==='all'||el.dataset.kind===curK)&&(!kw||t.indexOf(kw)>-1);
-        el.hidden=!ok; if(ok){{n++;shown++;}}
-      }}
+        el.hidden=!ok; if(ok){n++;shown++;}
+      }
       g.hidden=(n===0);
-    }}
+    }
     empty.hidden=(shown>0);
-  }}
-  function bind(sel,attr,cb){{
+    var filtered=(shown!==total);
+    sum.innerHTML=filtered?('已筛出 <b>'+shown+'</b> / '+total+' 条'):'';
+    clr.hidden=!filtered;
+  }
+  function bind(sel,attr,cb){
     var ts=document.querySelectorAll(sel);
-    for(var i=0;i<ts.length;i++){{
-      ts[i].addEventListener('click',function(){{
-        for(var j=0;j<ts.length;j++) ts[j].classList.remove('active');
-        this.classList.add('active'); cb(this.dataset[attr]); apply();
-      }});
-    }}
-  }}
-  bind('.ftabs:not(.ftabs-k) .ftab','f',function(v){{cur=v;}});
-  bind('.ftabs-k .ftab','k',function(v){{curK=v;}});
+    for(var i=0;i<ts.length;i++){
+      ts[i].addEventListener('click',function(){
+        for(var j=0;j<ts.length;j++) ts[j].classList.remove('is-on');
+        this.classList.add('is-on'); cb(this.dataset[attr]); apply();
+      });
+    }
+  }
+  bind('#fDomain .fchip','f',function(v){cur=v;});
+  bind('#fKind .fseg-i','k',function(v){curK=v;});
   if(q) q.addEventListener('input',apply);
-}})();
+  if(clr) clr.addEventListener('click',function(){
+    q.value=''; cur='all'; curK='all';
+    var all=document.querySelectorAll('#fDomain .fchip,#fKind .fseg-i');
+    for(var i=0;i<all.length;i++){
+      all[i].classList.toggle('is-on', all[i].dataset.f==='all'||all[i].dataset.k==='all');
+    }
+    apply(); q.focus();
+  });
+})();
 </script>"""
 
 
