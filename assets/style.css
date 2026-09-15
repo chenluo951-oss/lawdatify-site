@@ -110,6 +110,9 @@ h1,h2,h3,h4{line-height:1.45;letter-spacing:.2px}
 .ftab:hover{border-color:var(--brand);color:var(--brand)}
 .ftab.active{background:var(--brand);border-color:var(--brand);color:#fff}
 .ftab.active em{color:rgba(255,255,255,.75)}
+/* 第二筛选维度（内容类型）：与领域筛选叠加，故单独一行并加淡分隔 */
+.fb-tools2{margin-top:12px;padding-top:13px;border-top:1px dashed var(--line-2)}
+.fb-lab{font-size:12.5px;font-weight:700;color:var(--muted);flex:none;letter-spacing:.3px}
 
 .fgroup{margin-top:34px;scroll-margin-top:80px}
 .fgroup-h{display:flex;align-items:center;gap:10px;margin-bottom:14px;

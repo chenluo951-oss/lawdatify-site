@@ -1,0 +1,1047 @@
+{
+ "_note": "省级网信办官网探测结果（App 违规通报链路）。signed_by 为按正文落款署名（机关名+日期）挖出的**真发布机关**：原创=本省网信办自行组织的检测通报；转载=国家层面通报（工信部/中央网信办/国家网络与信息安全信息通报中心）的地方转载页——转载不得计入机构统计，否则同一份国家通报会被重复计数。",
+ "probed": "2026-09-15 18:01",
+ "sites": [
+  {
+   "province": "北京市",
+   "base": "http://www.bjw.gov.cn",
+   "status": "可达",
+   "n_cols": 2,
+   "cols": [
+    {
+     "url": "http://www.bjw.gov.cn/xw/yw/index.shtml",
+     "name": "要闻"
+    },
+    {
+     "url": "http://www.bjw.gov.cn/xw/jcdt/index.shtml",
+     "name": "基层动态"
+    }
+   ],
+   "docs": []
+  },
+  {
+   "province": "上海市",
+   "base": "https://www.shxc.gov.cn",
+   "status": "可达",
+   "n_cols": 0,
+   "cols": [],
+   "docs": []
+  },
+  {
+   "province": "重庆市",
+   "base": "http://www.cqwx.gov.cn",
+   "status": "可达",
+   "n_cols": 9,
+   "cols": [
+    {
+     "url": "http://www.cqwx.gov.cn/bm/xscjgj/",
+     "name": "县市场监管局"
+    },
+    {
+     "url": "http://www.cqwx.gov.cn/zwxx_224/qxdt/",
+     "name": "巫溪要闻"
+    },
+    {
+     "url": "http://www.cqwx.gov.cn/zwxx_224/gsgg/",
+     "name": "公告公示"
+    },
+    {
+     "url": "http://www.cqwx.gov.cn/zwgk_224/zfgzbg/",
+     "name": "政府工作报告"
+    },
+    {
+     "url": "http://www.moe.gov.cn/jyb_sy/China_Language/",
+     "name": "国家语言文字工作委员会"
+    },
+    {
+     "url": "http://nnsa.mee.gov.cn/",
+     "name": "国家核安全局"
+    },
+    {
+     "url": "http://scjgj.cq.gov.cn/",
+     "name": "市市场监管局"
+    },
+    {
+     "url": "http://jrjgj.cq.gov.cn/",
+     "name": "市金融监管局"
+    },
+    {
+     "url": "http://ggzyjyjgj.cq.gov.cn/",
+     "name": "市公共资源交易监管局"
+    }
+   ],
+   "docs": []
+  },
+  {
+   "province": "内蒙古自治区",
+   "base": "http://www.nmgwx.gov.cn",
+   "status": "可达",
+   "n_cols": 4,
+   "cols": [
+    {
+     "url": "http://www.nmgwx.gov.cn:80/centralSpirit/index.jhtml",
+     "name": "网信动态"
+    },
+    {
+     "url": "http://www.nmgwx.gov.cn:80/officeRelease/index.jhtml",
+     "name": "地方动态"
+    },
+    {
+     "url": "http://www.nmgwx.gov.cn:80/newdfdt/index.jhtml",
+     "name": "地方动态"
+    },
+    {
+     "url": "http://www.nmgwx.gov.cn:80/relevantDepartmentsReleased/index.jhtml",
+     "name": "部门动态"
+    }
+   ],
+   "docs": []
+  },
+  {
+   "province": "辽宁省",
+   "base": "https://www.lnwx.gov.cn",
+   "status": "可达",
+   "n_cols": 3,
+   "cols": [
+    {
+     "url": "https://www.lnwx.gov.cn/sy/zwdt/index.html",
+     "name": "政务要闻"
+    },
+    {
+     "url": "https://www.lnwx.gov.cn/zfxxgk/public/column/32130683?type=4&catId=142201392&action=list",
+     "name": "部门动态"
+    },
+    {
+     "url": "https://www.lnwx.gov.cn/zfxxgk/public/column/32130683?type=4&catId=142201395&action=list",
+     "name": "乡镇动态"
+    }
+   ],
+   "docs": []
+  },
+  {
+   "province": "江苏省",
+   "base": "https://www.jswx.gov.cn",
+   "status": "可达",
+   "n_cols": 9,
+   "cols": [
+    {
+     "url": "https://www.jswx.gov.cn/dongtai/",
+     "name": "网信动态"
+    },
+    {
+     "url": "https://www.jswx.gov.cn/dongtai/yaowen/",
+     "name": "权威要闻"
+    },
+    {
+     "url": "https://www.jswx.gov.cn/dongtai/gongzuo/",
+     "name": "工作之窗"
+    },
+    {
+     "url": "https://www.jswx.gov.cn/zhengce/zhifa/",
+     "name": "执法监督"
+    },
+    {
+     "url": "https://www.jswx.gov.cn/anquan/",
+     "name": "网络安全"
+    },
+    {
+     "url": "https://www.jswx.gov.cn/anquan/zixun/",
+     "name": "安全资讯"
+    },
+    {
+     "url": "https://www.jswx.gov.cn/anquan/guanli/",
+     "name": "安全管理"
+    },
+    {
+     "url": "https://www.jswx.gov.cn/shuju/",
+     "name": "数据安全"
+    },
+    {
+     "url": "https://www.jswx.gov.cn/shuju/zixun/",
+     "name": "安全资讯"
+    }
+   ],
+   "docs": [
+    {
+     "title": "注意！这十七款APP违法、违规！",
+     "url": "https://www.jswx.gov.cn/dongtai/yaowen/202204/t20220425_107174.shtml",
+     "column": "权威要闻",
+     "page": 1,
+     "chars": 1533,
+     "declared": 17,
+     "origin": "未知",
+     "signed_by": "",
+     "signed_at": "",
+     "date_hint": ""
+    },
+    {
+     "title": "工信部通报14款侵害用户权益App",
+     "url": "https://www.jswx.gov.cn/dongtai/yaowen/202203/t20220314_107169.shtml",
+     "column": "权威要闻",
+     "page": 1,
+     "chars": 756,
+     "declared": 14,
+     "origin": "未知",
+     "signed_by": "",
+     "signed_at": "",
+     "date_hint": ""
+    },
+    {
+     "title": "540款App侵害用户权益拒不整改工信部：下架",
+     "url": "https://www.jswx.gov.cn/dongtai/yaowen/202111/t20211117_107157.shtml",
+     "column": "权威要闻",
+     "page": 1,
+     "chars": 1647,
+     "declared": 2049,
+     "origin": "未知",
+     "signed_by": "",
+     "signed_at": "",
+     "date_hint": ""
+    },
+    {
+     "title": "工信部通报43款APP，涉违规调用通信录、弹窗骚扰等",
+     "url": "https://www.jswx.gov.cn/dongtai/yaowen/202108/t20210818_107139.shtml",
+     "column": "权威要闻",
+     "page": 1,
+     "chars": 3088,
+     "declared": 43,
+     "origin": "未知",
+     "signed_by": "",
+     "signed_at": "",
+     "date_hint": ""
+    },
+    {
+     "title": "工信部大力整治APP开屏弹窗信息骚扰用户问题",
+     "url": "https://www.jswx.gov.cn/dongtai/yaowen/202107/t20210708_107130.shtml",
+     "column": "权威要闻",
+     "page": 1,
+     "chars": 853,
+     "declared": null,
+     "origin": "未知",
+     "signed_by": "",
+     "signed_at": "",
+     "date_hint": ""
+    },
+    {
+     "title": "工信部下架这10款侵害用户权益APP！",
+     "url": "https://www.jswx.gov.cn/dongtai/yaowen/202103/t20210304_107097.shtml",
+     "column": "权威要闻",
+     "page": 1,
+     "chars": 1082,
+     "declared": 26,
+     "origin": "未知",
+     "signed_by": "",
+     "signed_at": "",
+     "date_hint": ""
+    },
+    {
+     "title": "侵害用户权益未整改工信部下架“红人直播”等12款APP",
+     "url": "https://www.jswx.gov.cn/dongtai/yaowen/202101/t20210120_107088.shtml",
+     "column": "权威要闻",
+     "page": 1,
+     "chars": 737,
+     "declared": 12,
+     "origin": "未知",
+     "signed_by": "",
+     "signed_at": "",
+     "date_hint": ""
+    },
+    {
+     "title": "工信部通报63款侵害用户权益行为APP",
+     "url": "https://www.jswx.gov.cn/dongtai/yaowen/202012/t20201222_107076.shtml",
+     "column": "权威要闻",
+     "page": 1,
+     "chars": 976,
+     "declared": 63,
+     "origin": "转载",
+     "signed_by": "工业和信息化部信息通信管理局",
+     "signed_at": "2020年12月21日",
+     "date_hint": ""
+    },
+    {
+     "title": "工信部推进App侵害用户权益专项整治40万款APP将被检测",
+     "url": "https://www.jswx.gov.cn/dongtai/yaowen/202007/t20200730_107022.shtml",
+     "column": "权威要闻",
+     "page": 1,
+     "chars": 1813,
+     "declared": 260,
+     "origin": "未知",
+     "signed_by": "",
+     "signed_at": "",
+     "date_hint": ""
+    },
+    {
+     "title": "APP违法违规收集使用个人信息专项治理报告",
+     "url": "https://www.jswx.gov.cn/dongtai/yaowen/202007/t20200727_107017.shtml",
+     "column": "权威要闻",
+     "page": 1,
+     "chars": 1045,
+     "declared": null,
+     "origin": "未知",
+     "signed_by": "",
+     "signed_at": "",
+     "date_hint": ""
+    },
+    {
+     "title": "工信部通报侵害用户权益行为APP58款应用在列",
+     "url": "https://www.jswx.gov.cn/dongtai/yaowen/202007/t20200724_107016.shtml",
+     "column": "权威要闻",
+     "page": 1,
+     "chars": 810,
+     "declared": 58,
+     "origin": "未知",
+     "signed_by": "",
+     "signed_at": "",
+     "date_hint": ""
+    },
+    {
+     "title": "工信部通报15款侵害用户权益APP",
+     "url": "https://www.jswx.gov.cn/dongtai/yaowen/202007/t20200706_106991.shtml",
+     "column": "权威要闻",
+     "page": 1,
+     "chars": 737,
+     "declared": 15,
+     "origin": "未知",
+     "signed_by": "",
+     "signed_at": "",
+     "date_hint": ""
+    },
+    {
+     "title": "江苏开展涉未成年人移动互联网应用程序专项治理",
+     "url": "https://www.jswx.gov.cn/yw/202604/t20260410_1322327.shtml",
+     "column": "工作之窗",
+     "page": 1,
+     "chars": 1688,
+     "declared": null,
+     "origin": "未知",
+     "signed_by": "",
+     "signed_at": "",
+     "date_hint": ""
+    },
+    {
+     "title": "违规收集个人信息、窗口乱跳转……这31款APP及SDK被通报！",
+     "url": "https://www.jswx.gov.cn/zhengce/zhifa/202605/t20260521_1331563.shtml",
+     "column": "执法监督",
+     "page": 1,
+     "chars": 842,
+     "declared": 31,
+     "origin": "转载",
+     "signed_by": "工业和信息化部信息通信管理局",
+     "signed_at": "2026年5月21日",
+     "date_hint": ""
+    },
+    {
+     "title": "网信部门依法查处“剪映”App等生成合成内容标识违法问题网站平台",
+     "url": "https://www.jswx.gov.cn/zhengce/zhifa/202604/t20260428_1326629.shtml",
+     "column": "执法监督",
+     "page": 1,
+     "chars": 797,
+     "declared": null,
+     "origin": "未知",
+     "signed_by": "",
+     "signed_at": "",
+     "date_hint": ""
+    },
+    {
+     "title": "关于33款App个人信息收集使用问题的通报",
+     "url": "https://www.jswx.gov.cn/zhengce/zhifa/202604/t20260427_1326155.shtml",
+     "column": "执法监督",
+     "page": 1,
+     "chars": 1003,
+     "declared": 33,
+     "origin": "转载",
+     "signed_by": "中央网信办秘书局",
+     "signed_at": "2026年4月27日",
+     "date_hint": ""
+    },
+    {
+     "title": "28款学习教育类APP违规收集个人信息被要求整改",
+     "url": "https://www.jswx.gov.cn/zhengce/zhifa/202604/t20260422_1324924.shtml",
+     "column": "执法监督",
+     "page": 1,
+     "chars": 653,
+     "declared": 28,
+     "origin": "未知",
+     "signed_by": "",
+     "signed_at": "",
+     "date_hint": ""
+    },
+    {
+     "title": "严禁未成年人模式“装样子”！江苏开展涉未成年人移动互联网应用程序专项治理",
+     "url": "https://www.jswx.gov.cn/yw/202604/t20260410_1322327.shtml",
+     "column": "执法监督",
+     "page": 1,
+     "chars": 1688,
+     "declared": null,
+     "origin": "未知",
+     "signed_by": "",
+     "signed_at": "",
+     "date_hint": ""
+    },
+    {
+     "title": "涉及违规收集个人信息、窗口乱跳转……这24款APP及SDK被通报！",
+     "url": "https://www.jswx.gov.cn/zhengce/zhifa/202603/t20260313_1315317.shtml",
+     "column": "执法监督",
+     "page": 1,
+     "chars": 805,
+     "declared": 24,
+     "origin": "转载",
+     "signed_by": "工业和信息化部信息通信管理局",
+     "signed_at": "2026年3月13日",
+     "date_hint": ""
+    },
+    {
+     "title": "强制自动续费、过度索取权限22款App及SDK被通报",
+     "url": "https://www.jswx.gov.cn/zhengce/zhifa/202601/t20260106_1183906.shtml",
+     "column": "执法监督",
+     "page": 1,
+     "chars": 667,
+     "declared": 22,
+     "origin": "未知",
+     "signed_by": "",
+     "signed_at": "",
+     "date_hint": ""
+    },
+    {
+     "title": "治理违规收集使用个人信息！工信部通报39款APP及SDK",
+     "url": "https://www.jswx.gov.cn/zhengce/zhifa/202511/t20251110_126046.shtml",
+     "column": "执法监督",
+     "page": 1,
+     "chars": 838,
+     "declared": 39,
+     "origin": "转载",
+     "signed_by": "工业和信息化部信息通信管理局",
+     "signed_at": "2025年11月10日",
+     "date_hint": ""
+    },
+    {
+     "title": "工信部通报：29款App存在侵害用户权益行为",
+     "url": "https://www.jswx.gov.cn/zhengce/zhifa/202509/t20250918_108089.shtml",
+     "column": "执法监督",
+     "page": 1,
+     "chars": 803,
+     "declared": 29,
+     "origin": "转载",
+     "signed_by": "工业和信息化部信息通信管理局",
+     "signed_at": "2025年9月18日",
+     "date_hint": ""
+    },
+    {
+     "title": "违法违规收集使用个人信息38款移动应用被通报",
+     "url": "https://www.jswx.gov.cn/zhengce/zhifa/202508/t20250827_108081.shtml",
+     "column": "执法监督",
+     "page": 1,
+     "chars": 2781,
+     "declared": 38,
+     "origin": "未知",
+     "signed_by": "",
+     "signed_at": "",
+     "date_hint": ""
+    },
+    {
+     "title": "23款APP及SDK侵权被通报！",
+     "url": "https://www.jswx.gov.cn/anquan/zixun/202508/t20250805_3568415.shtml",
+     "column": "执法监督",
+     "page": 1,
+     "chars": 812,
+     "declared": 23,
+     "origin": "转载",
+     "signed_by": "工业和信息化部信息通信管理局",
+     "signed_at": "2025年8月4日",
+     "date_hint": ""
+    },
+    {
+     "title": "通报！这57款APP（SDK）存在侵害用户权益行为",
+     "url": "https://www.jswx.gov.cn/zhengce/zhifa/202506/t20250626_108067.shtml",
+     "column": "执法监督",
+     "page": 1,
+     "chars": 841,
+     "declared": 57,
+     "origin": "转载",
+     "signed_by": "工业和信息化部信息通信管理局",
+     "signed_at": "2025年6月26日",
+     "date_hint": ""
+    },
+    {
+     "title": "关于15款App和16款SDK个人信息收集使用问题的通报",
+     "url": "https://www.jswx.gov.cn/anquan/guanli/202505/t20250506_3562612.shtml",
+     "column": "执法监督",
+     "page": 1,
+     "chars": 1003,
+     "declared": 16,
+     "origin": "转载",
+     "signed_by": "中央网信办秘书局",
+     "signed_at": "2025年5月6日",
+     "date_hint": ""
+    },
+    {
+     "title": "网信部门依法查处花椒直播、天天吉历APP等破坏网络生态案件",
+     "url": "https://www.jswx.gov.cn/zhengce/zhifa/202312/t20231229_108059.shtml",
+     "column": "执法监督",
+     "page": 1,
+     "chars": 1430,
+     "declared": null,
+     "origin": "未知",
+     "signed_by": "",
+     "signed_at": "",
+     "date_hint": ""
+    },
+    {
+     "title": "省通信管理局通报51款“问题APP”，你手机里有没有？",
+     "url": "https://www.jswx.gov.cn/zhengce/zhifa/202104/t20210414_108026.shtml",
+     "column": "执法监督",
+     "page": 1,
+     "chars": 1310,
+     "declared": 700,
+     "origin": "未知",
+     "signed_by": "",
+     "signed_at": "",
+     "date_hint": ""
+    },
+    {
+     "title": "公安机关下架636款教育类APP和网课平台",
+     "url": "https://www.jswx.gov.cn/zhengce/zhifa/202103/t20210326_108025.shtml",
+     "column": "执法监督",
+     "page": 1,
+     "chars": 969,
+     "declared": 1058,
+     "origin": "未知",
+     "signed_by": "",
+     "signed_at": "",
+     "date_hint": ""
+    },
+    {
+     "title": "2020年App违法违规收集使用个人信息治理工作启动重点做好七方面工作",
+     "url": "https://www.jswx.gov.cn/zhengce/zhifa/202007/t20200727_108015.shtml",
+     "column": "执法监督",
+     "page": 1,
+     "chars": 1895,
+     "declared": 260,
+     "origin": "未知",
+     "signed_by": "",
+     "signed_at": "",
+     "date_hint": ""
+    },
+    {
+     "title": "江苏四部门联合开展App违法违规收集使用个人信息专项治理",
+     "url": "https://www.jswx.gov.cn/zhengce/zhifa/202006/t20200621_108011.shtml",
+     "column": "执法监督",
+     "page": 1,
+     "chars": 2378,
+     "declared": null,
+     "origin": "原创",
+     "signed_by": "江苏省通信管理局",
+     "signed_at": "2020年4月7日",
+     "date_hint": ""
+    },
+    {
+     "title": "窗口无法关闭、过度索取权限多款App被通报",
+     "url": "https://www.jswx.gov.cn/anquan/zixun/202607/t20260702_1341889.shtml",
+     "column": "网络安全",
+     "page": 1,
+     "chars": 660,
+     "declared": 32,
+     "origin": "未知",
+     "signed_by": "",
+     "signed_at": "",
+     "date_hint": ""
+    },
+    {
+     "title": "关于30款App个人信息收集使用问题的通报",
+     "url": "https://www.jswx.gov.cn/anquan/zixun/202606/t20260611_1337108.shtml",
+     "column": "网络安全",
+     "page": 1,
+     "chars": 931,
+     "declared": 30,
+     "origin": "转载",
+     "signed_by": "中央网信办秘书局",
+     "signed_at": "2026年6月11日",
+     "date_hint": ""
+    },
+    {
+     "title": "过度索取权限、窗口无法关闭多款App被通报",
+     "url": "https://www.jswx.gov.cn/anquan/zixun/202608/t20260825_1354106.shtml",
+     "column": "安全资讯",
+     "page": 1,
+     "chars": 661,
+     "declared": 26,
+     "origin": "未知",
+     "signed_by": "",
+     "signed_at": "",
+     "date_hint": ""
+    },
+    {
+     "title": "违规收集个人信息、过度索取权限这些APP被通报",
+     "url": "https://www.jswx.gov.cn/anquan/zixun/202512/t20251209_1149220.shtml",
+     "column": "安全资讯",
+     "page": 1,
+     "chars": 667,
+     "declared": 24,
+     "origin": "未知",
+     "signed_by": "",
+     "signed_at": "",
+     "date_hint": ""
+    },
+    {
+     "title": "工信部通报52款侵害用户权益行为的APP（SDK）（附清单）",
+     "url": "https://mp.weixin.qq.com/s/CllyjuOvt4nLRafFqWrKCg",
+     "column": "安全资讯",
+     "page": 1,
+     "chars": 688,
+     "declared": 52,
+     "origin": "转载",
+     "signed_by": "工业和信息化部信息通信管理局",
+     "signed_at": "2025年4月21日",
+     "date_hint": ""
+    },
+    {
+     "title": "浙江省通信管理局通报2款侵害用户权益行为的APP",
+     "url": "https://www.jswx.gov.cn/csj/zj/202502/t20250228_3557843.shtml",
+     "column": "安全资讯",
+     "page": 1,
+     "chars": 875,
+     "declared": 2,
+     "origin": "其他",
+     "signed_by": "浙江省通信管理局",
+     "signed_at": "2025年2月26日",
+     "date_hint": ""
+    },
+    {
+     "title": "规范安装卸载、加强权限管理……APP治理有了“合规操作指南”",
+     "url": "https://www.jswx.gov.cn/anquan/zixun/202303/t20230317_110387.shtml",
+     "column": "安全资讯",
+     "page": 1,
+     "chars": 3024,
+     "declared": null,
+     "origin": "未知",
+     "signed_by": "",
+     "signed_at": "",
+     "date_hint": ""
+    },
+    {
+     "title": "这17款App违法违规，你手机上有吗？",
+     "url": "https://www.jswx.gov.cn/anquan/zixun/202111/t20211129_110336.shtml",
+     "column": "安全资讯",
+     "page": 1,
+     "chars": 1736,
+     "declared": 17,
+     "origin": "未知",
+     "signed_by": "",
+     "signed_at": "",
+     "date_hint": ""
+    },
+    {
+     "title": "手机一晃就被迫看广告？APP强制跳转亟待治理",
+     "url": "https://www.jswx.gov.cn/anquan/guanli/202512/t20251223_1180524.shtml",
+     "column": "安全管理",
+     "page": 1,
+     "chars": 1416,
+     "declared": null,
+     "origin": "未知",
+     "signed_by": "",
+     "signed_at": "",
+     "date_hint": ""
+    },
+    {
+     "title": "关于对“甜聊”“偷星猫”“勇者传说2暗黑崛起”等10款移动应用程序违法违规收集使用个人信息情况的通报",
+     "url": "https://www.jswx.gov.cn/anquan/guanli/202412/t20241231_110644.shtml",
+     "column": "安全管理",
+     "page": 1
+    },
+    {
+     "title": "海南开展互联网移动应用程序违法违规收集使用个人信息专项治理",
+     "url": "https://www.jswx.gov.cn/anquan/guanli/202412/t20241230_110643.shtml",
+     "column": "安全管理",
+     "page": 1
+    },
+    {
+     "title": "关于侵害用户权益行为的APP（SDK）通报",
+     "url": "https://www.jswx.gov.cn/anquan/guanli/202411/t20241121_110622.shtml",
+     "column": "安全管理",
+     "page": 1
+    },
+    {
+     "title": "官方点名！15款App涉嫌违规，抓紧卸载",
+     "url": "https://www.jswx.gov.cn/anquan/guanli/202408/t20240805_110600.shtml",
+     "column": "安全管理",
+     "page": 1
+    },
+    {
+     "title": "48款侵害用户权益App被通报下架",
+     "url": "https://www.jswx.gov.cn/anquan/guanli/202107/t20210713_110540.shtml",
+     "column": "安全管理",
+     "page": 1
+    },
+    {
+     "title": "APP违规收集使用个人信息治理报告",
+     "url": "https://www.jswx.gov.cn/anquan/guanli/202006/t20200622_110517.shtml",
+     "column": "安全管理",
+     "page": 1
+    }
+   ]
+  },
+  {
+   "province": "浙江省",
+   "base": "https://www.zjwx.gov.cn",
+   "status": "可达",
+   "n_cols": 0,
+   "cols": [],
+   "docs": []
+  },
+  {
+   "province": "安徽省",
+   "base": "https://www.ahwx.gov.cn",
+   "status": "可达",
+   "n_cols": 6,
+   "cols": [
+    {
+     "url": "https://www.ahwx.gov.cn/gzzc/qsdt/",
+     "name": "市县动态"
+    },
+    {
+     "url": "https://www.ahwx.gov.cn/gzzc/bbdt/",
+     "name": "本办动态"
+    },
+    {
+     "url": "https://www.ahwx.gov.cn/wlaq/aqgl/",
+     "name": "网络安全管理"
+    },
+    {
+     "url": "https://www.ahwx.gov.cn/wlaq/aqdt/",
+     "name": "网络安全动态"
+    },
+    {
+     "url": "https://www.ahwx.gov.cn/yjdt",
+     "name": "业界动态"
+    },
+    {
+     "url": "http://amr.ah.gov.cn/",
+     "name": "省市场监管局"
+    }
+   ],
+   "docs": []
+  },
+  {
+   "province": "福建省",
+   "base": "https://www.fjwx.gov.cn",
+   "status": "可达",
+   "n_cols": 0,
+   "cols": [],
+   "docs": []
+  },
+  {
+   "province": "山东省",
+   "base": "https://www.sdxc.gov.cn",
+   "status": "可达",
+   "n_cols": 12,
+   "cols": [
+    {
+     "url": "https://www.sdxc.gov.cn/jryw/",
+     "name": "时政要闻"
+    },
+    {
+     "url": "https://www.sdxc.gov.cn/sy/xcdt/",
+     "name": "宣传动态"
+    },
+    {
+     "url": "https://www.sdxc.gov.cn/llwz/lldt/",
+     "name": "理论动态"
+    },
+    {
+     "url": "https://sdsk.sdxc.gov.cn/",
+     "name": "社科工作"
+    },
+    {
+     "url": "https://www.sdxc.gov.cn/llwz/llyj/",
+     "name": "理论动态"
+    },
+    {
+     "url": "https://www.china-language.gov.cn/",
+     "name": "国家语言文字工作委..."
+    },
+    {
+     "url": "https://nnsa.mep.gov.cn/",
+     "name": "国家核安全局"
+    },
+    {
+     "url": "https://www.chinacoal-safety.gov.cn/",
+     "name": "国家煤矿安全监察局"
+    },
+    {
+     "url": "http://www.sdxc.gov.cn/jryw/",
+     "name": "今日要闻"
+    },
+    {
+     "url": "http://www.sdxc.gov.cn/llwz/lldt/",
+     "name": "理论动态"
+    },
+    {
+     "url": "http://www.sdxc.gov.cn/llwz/skgz/",
+     "name": "社科工作"
+    },
+    {
+     "url": "http://www.sdxc.gov.cn/jzyl/jcsxzzgz/",
+     "name": "思想政治工作"
+    }
+   ],
+   "docs": []
+  },
+  {
+   "province": "广西壮族自治区",
+   "base": "http://www.gxxc.gov.cn",
+   "status": "可达",
+   "n_cols": 5,
+   "cols": [
+    {
+     "url": "http://www.gxxc.gov.cn/zhengwudongtai/xcyw/",
+     "name": "忻城要闻"
+    },
+    {
+     "url": "http://www.gxxc.gov.cn/zhengwudongtai/bmdt/",
+     "name": "部门动态"
+    },
+    {
+     "url": "http://www.gxxc.gov.cn/zhengwudongtai/xzdt/",
+     "name": "乡镇动态"
+    },
+    {
+     "url": "http://www.gxxc.gov.cn/zhengwudongtai/gggs/",
+     "name": "公告公示"
+    },
+    {
+     "url": "http://www.gxzf.gov.cn/qgyw/index.shtml",
+     "name": "全国要闻"
+    }
+   ],
+   "docs": []
+  },
+  {
+   "province": "云南省",
+   "base": "https://www.ynxc.gov.cn",
+   "status": "可达",
+   "n_cols": 1,
+   "cols": [
+    {
+     "url": "https://www.ynxc.gov.cn/html/yunnandianying/",
+     "name": "电影工作"
+    }
+   ],
+   "docs": []
+  },
+  {
+   "province": "贵州省",
+   "base": "https://www.gzwxb.gov.cn",
+   "status": "可达",
+   "n_cols": 5,
+   "cols": [
+    {
+     "url": "https://www.gzwxb.gov.cn/name/wxdt",
+     "name": "网信动态"
+    },
+    {
+     "url": "https://www.gzwxb.gov.cn/name/wlaq",
+     "name": "网络安全"
+    },
+    {
+     "url": "https://www.gzwxb.gov.cn/name/jgzl",
+     "name": "监管治理"
+    },
+    {
+     "url": "https://www.gzwxb.gov.cn/url/327",
+     "name": "工作动态"
+    },
+    {
+     "url": "https://www.gzwxb.gov.cn/url/344",
+     "name": "羊城要闻"
+    }
+   ],
+   "docs": [
+    {
+     "title": "这26款APP及SDK存在违规收集个人信息等行为",
+     "url": "https://www.gzwxb.gov.cn/context/contextId/216742",
+     "column": "监管治理",
+     "page": 1,
+     "chars": 689,
+     "declared": 26,
+     "origin": "转载",
+     "signed_by": "工业和信息化部信息通信管理局",
+     "signed_at": "2026年8月25日",
+     "date_hint": ""
+    }
+   ]
+  },
+  {
+   "province": "西藏自治区",
+   "base": "https://wxb.xzdw.gov.cn",
+   "status": "可达",
+   "n_cols": 11,
+   "cols": [
+    {
+     "url": "https://wxb.xzdw.gov.cn/gzzc/",
+     "name": "工作之窗"
+    },
+    {
+     "url": "https://wxb.xzdw.gov.cn/wlaq/",
+     "name": "网络安全"
+    },
+    {
+     "url": "https://wxb.xzdw.gov.cn/wlzl/",
+     "name": "网络治理"
+    },
+    {
+     "url": "https://wxb.xzdw.gov.cn/gzzc/bndt/",
+     "name": "办内动态"
+    },
+    {
+     "url": "https://wxb.xzdw.gov.cn/gzzc/dsdt/",
+     "name": "地市动态"
+    },
+    {
+     "url": "https://wxb.xzdw.gov.cn/wlaq/zljg/",
+     "name": "治理监管"
+    },
+    {
+     "url": "https://wxb.xzdw.gov.cn/wlaq/yjtb/",
+     "name": "预警通报"
+    },
+    {
+     "url": "https://wxb.xzdw.gov.cn/wlaq/aqdt/",
+     "name": "安全动态"
+    },
+    {
+     "url": "https://wxb.xzdw.gov.cn/xxh/xxhgzdt/",
+     "name": "信息化工作动态"
+    },
+    {
+     "url": "https://wxb.xzdw.gov.cn/wlcb/cbgz/",
+     "name": "传播工作"
+    },
+    {
+     "url": "https://wxb.xzdw.gov.cn/gzzt/",
+     "name": "工作专题"
+    }
+   ],
+   "docs": [
+    {
+     "title": "75款移动应用违法违规收集使用个人信息被通报",
+     "url": "https://wxb.xzdw.gov.cn/wlaq/zljg/202608/t20260817_690711.html",
+     "column": "网络安全",
+     "page": 1,
+     "chars": 4825,
+     "declared": 75,
+     "origin": "未知",
+     "signed_by": "",
+     "signed_at": "",
+     "date_hint": ""
+    },
+    {
+     "title": "35款违法违规收集使用个人信息的移动应用被通报",
+     "url": "https://wxb.xzdw.gov.cn/wlaq/zljg/202607/t20260724_686186.html",
+     "column": "网络安全",
+     "page": 1,
+     "chars": 2926,
+     "declared": 40,
+     "origin": "未知",
+     "signed_by": "",
+     "signed_at": "",
+     "date_hint": ""
+    },
+    {
+     "title": "违规收集使用个人信息去年超千款App等被通报",
+     "url": "https://wxb.xzdw.gov.cn/wlaq/zljg/202606/t20260615_678155.html",
+     "column": "网络安全",
+     "page": 1,
+     "chars": 1438,
+     "declared": null,
+     "origin": "未知",
+     "signed_by": "",
+     "signed_at": "",
+     "date_hint": ""
+    },
+    {
+     "title": "71款移动应用违法违规收集使用个人信息被通报",
+     "url": "https://wxb.xzdw.gov.cn/wlaq/zljg/202606/t20260606_676509.html",
+     "column": "网络安全",
+     "page": 1,
+     "chars": 4766,
+     "declared": 71,
+     "origin": "未知",
+     "signed_by": "",
+     "signed_at": "",
+     "date_hint": ""
+    },
+    {
+     "title": "违法违规收集使用个人信息71款移动应用被通报",
+     "url": "https://wxb.xzdw.gov.cn/wlaq/zljg/202601/t20260107_639435.html",
+     "column": "网络安全",
+     "page": 1,
+     "chars": 4956,
+     "declared": 71,
+     "origin": "未知",
+     "signed_by": "",
+     "signed_at": "",
+     "date_hint": ""
+    },
+    {
+     "title": "违规收集信息、窗口乱跳转这些APP侵权被通报",
+     "url": "https://wxb.xzdw.gov.cn/wlaq/zljg/202508/t20250806_593652.html",
+     "column": "网络安全",
+     "page": 1,
+     "chars": 996,
+     "declared": 23,
+     "origin": "未知",
+     "signed_by": "",
+     "signed_at": "",
+     "date_hint": ""
+    },
+    {
+     "title": "64款移动应用违规收集使用个人信息被通报",
+     "url": "https://wxb.xzdw.gov.cn/wlaq/zljg/202506/t20250619_580128.html",
+     "column": "网络安全",
+     "page": 1,
+     "chars": 5471,
+     "declared": 64,
+     "origin": "未知",
+     "signed_by": "",
+     "signed_at": "",
+     "date_hint": ""
+    },
+    {
+     "title": "移动应用违规收集个人信息屡禁不止“隐私困局”如何“破局”？",
+     "url": "https://wxb.xzdw.gov.cn/wlaq/aqdt/202506/t20250617_579551.html",
+     "column": "网络安全",
+     "page": 1,
+     "chars": 2834,
+     "declared": 65,
+     "origin": "未知",
+     "signed_by": "",
+     "signed_at": "",
+     "date_hint": ""
+    }
+   ]
+  }
+ ],
+ "summary": {
+  "probed": 14,
+  "reachable": 14,
+  "candidates": 55,
+  "origin_docs": 1,
+  "reprint_docs": 12,
+  "reachable_list": [
+   "北京市",
+   "上海市",
+   "重庆市",
+   "内蒙古自治区",
+   "辽宁省",
+   "江苏省",
+   "浙江省",
+   "安徽省",
+   "福建省",
+   "山东省",
+   "广西壮族自治区",
+   "云南省",
+   "贵州省",
+   "西藏自治区"
+  ]
+ }
+}

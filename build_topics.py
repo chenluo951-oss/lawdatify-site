@@ -187,6 +187,37 @@ def guess_kind(text):
 # 不发布名单：与 gen_briefs.py 保持一致。含编造链接的期次不解析、不进站点。
 BLOCKED = ("简报_2026-09-06",)
 
+# ---------------------------------------------------------- 内容类型（第二筛选维度）
+# 用户 2026-09-15 要求：合规动态总览除了按「领域」看，还要能按「发生了什么」筛
+# —— 监管专项行动、监管通报处罚等等。
+# ⚠️ 两个来源的 kind 粒度不一样：站点直采（collect_news）会给细类，公众号 / 简报
+#    走 guess_kind 时大量条目只落在兜底的「合规动态」。若直接把「合规动态」当成
+#    一个分组，筛选器会出现 80% 条目挤在一格里、等于没筛（实测 95 条里 77 条）。
+#    所以对兜底类目**再按标题 + 要点细分一次**。
+KIND_GROUPS = [
+    ("监管专项行动", ("专项行动",)),
+    ("监管通报与处罚", ("执法通报", "处罚案例")),
+    ("法规与标准", ("新规发布", "标准动态")),
+    ("政策解读", ("政策问答",)),
+    ("专题与观察", ("专题述评",)),
+    ("其他动态", ("合规动态",)),
+]
+KIND_ORDER = [g for g, _ in KIND_GROUPS]
+KIND_OF_GROUP = {k: g for g, ks in KIND_GROUPS for k in ks}
+KIND_FALLBACK = "其他动态"
+
+# 兜底类目（合规动态）的细分规则：按「监管在做什么」优先，命中即停。
+KIND_REFINE = [
+    ("监管专项行动", r"专项行动|专项整治|整治行动|集中治理|打击整治|清理整治|"
+                     r"清朗|铁拳|护网|净网|网剑|回头看"),
+    ("监管通报与处罚", r"通报|处罚|查处|罚款|罚没|下架|约谈|责令|限期整改|"
+                       r"典型案例|案例|判决|裁定|败诉|判赔"),
+    ("政策解读", r"问答|答记者问|一文读懂|解读|回应|答疑|口径"),
+    ("法规与标准", r"标准|规范|指引|指南|条例|办法|规定|细则|征求意见|"
+                   r"生效|施行|修订|发布|出台|立法|草案|审议"),
+    ("专题与观察", r"述评|评论|观察|评析|研判|报告|白皮书|蓝皮书|调研|盘点"),
+]
+
 TAG_RE = re.compile(r"<[^>]+>")
 
 
@@ -481,6 +512,25 @@ def is_root_url(u):
     return "/" not in p or p.rstrip("/").count("/") == 0
 
 
+def kind_group(it):
+    """把一条资讯归到筛选器用的内容类型分组。
+
+    传字符串时按 kind 直接查表；传条目（dict）时，若 kind 是兜底的「合规动态」，
+    再用标题 + 要点细分——否则筛选器会有一格吃掉绝大多数条目。
+    """
+    if isinstance(it, str):
+        return KIND_OF_GROUP.get(it.strip(), KIND_FALLBACK)
+    kind = (it.get("kind") or "").strip()
+    g = KIND_OF_GROUP.get(kind)
+    if g and g != KIND_FALLBACK:
+        return g
+    text = (it.get("title") or "") + " " + (it.get("points") or "")
+    for g2, pat in KIND_REFINE:
+        if re.search(pat, text):
+            return g2
+    return KIND_FALLBACK
+
+
 def render_item_card(it, idx, rel="../"):
     """单条资讯卡片。`rel` 为回到站点根目录的相对前缀（首页传空串）。"""
     color = DOMAIN_COLOR.get(it["domain"], "#1b4f8a")
@@ -541,7 +591,7 @@ def render_item_card(it, idx, rel="../"):
             f'<div class="ana-b">{esc(it["analysis"])}</div></details>'
         )
 
-    return f"""<article class="ni" data-domain="{esc(it['domain'])}" data-idx="{idx}">
+    return f"""<article class="ni" data-domain="{esc(it['domain'])}" data-kind="{esc(kind_group(it))}" data-idx="{idx}">
   <div class="ni-bar" style="background:{color}"></div>
   <div class="ni-body">
     <div class="ni-top">
@@ -570,6 +620,16 @@ def render_news_feed(items):
     for d in DOMAIN_KEYS:
         if by.get(d):
             tabs.append(f'<button class="ftab" data-f="{esc(d)}">{esc(d)} <em>{len(by[d])}</em></button>')
+
+    # 内容类型（第二维度）：按「发生了什么」筛，与领域筛选叠加生效
+    kcnt = {}
+    for it in items:
+        g = kind_group(it)
+        kcnt[g] = kcnt.get(g, 0) + 1
+    ktabs = ['<button class="ftab active" data-k="all">全部 <em>%d</em></button>' % len(items)]
+    for g in KIND_ORDER:
+        if kcnt.get(g):
+            ktabs.append(f'<button class="ftab" data-k="{esc(g)}">{esc(g)} <em>{kcnt[g]}</em></button>')
 
     blocks = []
     idx = 0
@@ -600,13 +660,17 @@ def render_news_feed(items):
     <input id="q" type="search" placeholder="按关键词 / 机构过滤…" aria-label="过滤">
     <div class="ftabs">{"".join(tabs)}</div>
   </div>
+  <div class="fb-tools fb-tools2">
+    <span class="fb-lab">内容类型</span>
+    <div class="ftabs ftabs-k">{"".join(ktabs)}</div>
+  </div>
 </div>
 <div id="feed">{"".join(blocks)}</div>
 <div id="empty" class="empty" hidden>没有匹配的动态，换个关键词试试。</div>
 <script>
 (function(){{
   var q=document.getElementById('q'), feed=document.getElementById('feed'),
-      empty=document.getElementById('empty'), cur='all';
+      empty=document.getElementById('empty'), cur='all', curK='all';
   function apply(){{
     var kw=(q.value||'').trim().toLowerCase(), shown=0;
     var gs=feed.querySelectorAll('.fgroup');
@@ -615,20 +679,24 @@ def render_news_feed(items):
       var ns=g.querySelectorAll('.ni');
       for(var j=0;j<ns.length;j++){{
         var el=ns[j], t=el.innerText.toLowerCase();
-        var ok=okG&&(!kw||t.indexOf(kw)>-1);
+        var ok=okG&&(curK==='all'||el.dataset.kind===curK)&&(!kw||t.indexOf(kw)>-1);
         el.hidden=!ok; if(ok){{n++;shown++;}}
       }}
       g.hidden=(n===0);
     }}
     empty.hidden=(shown>0);
   }}
-  var ts=document.querySelectorAll('.ftab');
-  for(var i=0;i<ts.length;i++){{
-    ts[i].addEventListener('click',function(){{
-      for(var j=0;j<ts.length;j++) ts[j].classList.remove('active');
-      this.classList.add('active'); cur=this.dataset.f; apply();
-    }});
+  function bind(sel,attr,cb){{
+    var ts=document.querySelectorAll(sel);
+    for(var i=0;i<ts.length;i++){{
+      ts[i].addEventListener('click',function(){{
+        for(var j=0;j<ts.length;j++) ts[j].classList.remove('active');
+        this.classList.add('active'); cb(this.dataset[attr]); apply();
+      }});
+    }}
   }}
+  bind('.ftabs:not(.ftabs-k) .ftab','f',function(v){{cur=v;}});
+  bind('.ftabs-k .ftab','k',function(v){{curK=v;}});
   if(q) q.addEventListener('input',apply);
 }})();
 </script>"""
