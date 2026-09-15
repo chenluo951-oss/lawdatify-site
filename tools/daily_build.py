@@ -48,6 +48,10 @@ STEPS = [
     # 标准门户批量检索（全国标准信息公共服务平台 + 行业标准信息服务平台）
     ("标准门户·检索",   [PY, "tools/harvest_std_portals.py"],       False),
     # 两个专项合规：移动应用违规通报历史库 + 算法/大模型备案库
+    # ⚠️ 省局栏目发现必须排在 App 通报采集之前——它产出 sources/appviol/prov_columns.json
+    # （28 个省通信管理局的通报栏目路径与文书清单）；省局栏目路径不统一且会调整，
+    # 每天重扫一次才能跟上，否则新增省份/改名栏目会静默漏采。
+    ("专项·省局栏目发现", [PY, "tools/prov_ca_discover.py"],           False),
     ("专项·App违规通报", [PY, "tools/harvest_app_violations.py"],    False),
     ("专项·算法备案",   [PY, "tools/harvest_algo_filing.py"],       False),
     ("合规案例库",      [PY, "tools/harvest_cases.py"],             False),
@@ -117,7 +121,8 @@ def main():
     a = ap.parse_args()
 
     net_labels = {"草案跟踪", "原文抓取·每日", "私有库同步", "法规全量·flk",
-                  "标准门户·检索", "专项·App违规通报", "专项·算法备案", "合规案例库"}
+                  "标准门户·检索", "专项·省局栏目发现", "专项·App违规通报",
+                  "专项·算法备案", "合规案例库"}
     steps = [s for s in STEPS if not (a.no_network and s[0] in net_labels)]
     if a.skip_build:
         steps = [s for s in steps if s[0] in

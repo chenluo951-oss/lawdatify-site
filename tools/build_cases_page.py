@@ -91,8 +91,11 @@ def main():
 .cs-bar{display:flex;align-items:center;gap:10px;margin:7px 0}
 .cs-bar .lb{width:200px;font-size:13px;color:var(--ink-2);flex:none;overflow:hidden;
   text-overflow:ellipsis;white-space:nowrap}
-.cs-bar .tr{flex:1;background:#eef2f7;border-radius:6px;height:16px;overflow:hidden}
-.cs-bar .fl{height:100%;background:linear-gradient(90deg,#b3541e,#c98a3c);border-radius:6px}
+.cs-bar .tr{flex:1;background:#eef2f7;border-radius:6px;height:16px;overflow:hidden;display:block}
+/* ⚠️ 必须 display:block：.fl 是 <span>，行内元素忽略 height/width，
+   否则柱条只剩空轨道、无数据填充（与 build_special_topics.py 同坑）。 */
+.cs-bar .fl{display:block;height:100%;min-width:2px;
+  background:linear-gradient(90deg,#b3541e,#c98a3c);border-radius:6px}
 .cs-bar .vv{width:52px;text-align:right;font-size:12.5px;color:var(--muted);flex:none}
 .cs-q{width:100%;padding:11px 14px;border:1px solid var(--line);border-radius:10px;
   font-size:14px;font-family:var(--sans);margin:12px 0;color:var(--ink)}
