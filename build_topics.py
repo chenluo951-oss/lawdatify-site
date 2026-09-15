@@ -637,52 +637,252 @@ def render_news_feed(items):
 RISK_CLASS = {"高": "r-hi", "中高": "r-mh", "中": "r-md", "低": "r-lo"}
 
 
-def render_kb_cards(news_items, actions):
-    """知识库：按领域沉淀「合规行动要点」（来自简报应对建议）+ 动态入口。"""
-    acts = {d: [] for d in DOMAIN_KEYS}
-    for it in actions:
-        if it["analysis"] or it["points"]:
-            acts.setdefault(it["domain"], []).append(it)
-    for d in acts:
-        # 高风险的排前面
-        order = {"高": 0, "中高": 1, "中": 2, "低": 3}
-        acts[d].sort(key=lambda x: (order.get(x.get("risk"), 9), x["date"]), reverse=False)
-        acts[d].sort(key=lambda x: order.get(x.get("risk"), 9))
+# ==================== 应对建议 · 行动清单（news/actions.html） ====================
+# 用户 2026-09-15 反馈：「应对建议」还是写死「六大领域」，形式没用、从来没更新过。
+# 两个根因：① 数据源只吃 internal（无外链条目）→ 站点每天直采、带官方深链的内容永远进不来；
+# ② 渲染是「按领域一张卡 + 把解读截 150 字」，既不可执行也不随日期滚动。
+# 新设计：从每条「朴朴视角 · 合规解读」里**抽出编号行动项**，按紧迫度分组，逐项可派活、可对依据。
+ACTION_MARK_RX = re.compile(r"[①②③④⑤⑥⑦⑧⑨⑩]")
+ORDINAL_RX = re.compile(r"[一二三四五六七八九]是")
 
-    n_news = {d: sum(1 for x in news_items if x["domain"] == d) for d in DOMAIN_KEYS}
 
-    cards = []
-    for d in DOMAIN_KEYS:
-        color = DOMAIN_COLOR[d]
-        lst = acts.get(d) or []
-        if not lst:
-            cards.append(f"""<div class="kb-card empty-c">
-  <div class="kb-h"><span class="dot" style="background:{color}"></span><h3>{esc(d)}</h3></div>
-  <p class="kb-p">暂无行动要点沉淀，后续简报产出应对建议后自动累积。</p>
-</div>""")
+def split_actions(text):
+    """把一条解读拆成 (风险判断, [行动项…])。
+
+    真实数据里行动项有两种写法：①②③…（当前 41 条）与「一是…二是…」；都没有就整段返回。
+    这是「解读」→「可执行清单」的关键一步：不拆分就只是段落，拆开才是能派下去的活。
+    """
+    t = (text or "").strip()
+    if not t:
+        return "", []
+    m = ACTION_MARK_RX.search(t)
+    if m:
+        lead = t[:m.start()].strip()
+        acts = []
+        for seg in ACTION_MARK_RX.split(t[m.start():]):
+            seg = seg.strip(" \u3000；;。")
+            if len(seg) >= 8:
+                acts.append(seg if seg.endswith(("。", "！", "？")) else seg + "。")
+        if acts:
+            return lead, acts
+    pos = [mm.start() for mm in ORDINAL_RX.finditer(t)]
+    if len(pos) >= 2:
+        lead = t[:pos[0]].strip()
+        acts = []
+        for i, p in enumerate(pos):
+            end = pos[i + 1] if i + 1 < len(pos) else len(t)
+            seg = ORDINAL_RX.sub("", t[p:end], count=1).strip(" \u3000；;。")
+            if len(seg) >= 8:
+                acts.append(seg if seg.endswith(("。", "！", "？")) else seg + "。")
+        if acts:
+            return lead, acts
+    return t, []
+
+
+def evidence_html(it, rel="../"):
+    """行动项的「依据」：官方深链 / 站内原文存档 / 具名公众号来源，三者必有其一。"""
+    url = it.get("url") or ""
+    if is_root_url(url):
+        for kw, deep in URL_OVERRIDE:
+            if kw in it.get("title", ""):
+                url = deep
+                break
+    if it.get("wx_id"):
+        org = it.get("wx_org") or it.get("org") or ""
+        return (f'依据：<a href="{esc(rel)}kb/wx.html#w-{esc(it["wx_id"])}">站内原文存档'
+                f' <span class="arw">→</span></a>'
+                f'<span class="rd-src src-wx" title="{esc(org)}官方公众号，已核验账号主体并存档全文">'
+                f'官方公众号</span>')
+    if it.get("src_label"):
+        lb = it["src_label"]
+        t = tier_of("", it.get("src"), lb)
+        return (f'依据：<span class="src src-search" '
+                f'title="原文待抓取；可在微信内搜索该公众号名称找到原文">'
+                f'检索来源 · {esc(lb)}（微信公众号）</span>'
+                f'<span class="rd-src {TIER_CLASS.get(t, "src-oth")}" '
+                f'title="{TIER_DESC.get(t, "")}">{TIER_LABEL.get(t, t)}</span>')
+    if url and not is_root_url(url):
+        host = re.sub(r"^https?://(www\.)?", "", url).split("/")[0]
+        return (f'依据：<a href="{esc(url)}" target="_blank" rel="noopener">{esc(host)}'
+                f' <span class="arw">↗</span></a>' + src_tier_tag(url, it.get("src")))
+    host = re.sub(r"^https?://(www\.)?", "", url).split("/")[0] if url else ""
+    return f'依据：<span class="src src-plain">{esc(host or it.get("org") or "")}</span>'
+
+
+ACT_GROUPS = (
+    ("高", "hi", "#b91c1c", "立即动作 · 高风险"),
+    ("中高", "mh", "#b45309", "近期安排 · 30 天内"),
+    ("中", "md", "#a16207", "持续监控 · 一般关注"),
+    ("低", "lo", "#94a3b4", "持续监控 · 一般关注"),
+    ("", "lo", "#94a3b4", "持续监控 · 一般关注"),
+)
+
+
+def render_action_plan(all_items, feed_items):
+    """行动清单：抽编号行动项 → 按紧迫度分组 → 逐项给依据。
+
+    数据源是**全部可用条目**（verified + internal）。此前只传 internal，导致站点每天
+    直采、带官方深链的条目永远不进这一页 —— 页面因此看起来「从来没更新过」。
+    """
+    latest = max((x["date"] for x in all_items), default="")
+
+    def _d(s):
+        try:
+            return datetime.strptime((s or "")[:10], "%Y-%m-%d").date()
+        except ValueError:
+            return None
+
+    # 「本周新增」以**构建日**为基准。不能用 max(item.date)：条目里含法规生效日之类
+    # 的未来日期（如 2026-10-01），拿它当基准会把所有条目都判成「不新」。
+    today = datetime.now().date()
+
+    def _is_new(it):
+        d = _d(it.get("date"))
+        return bool(d and 0 <= (today - d).days <= 7)
+
+    # 拆行动项；拆不出来的高风险条目至少留一句要点（不带编号），其余进「待评估」
+    act_items, backlog = [], []
+    for it in all_items:
+        lead, acts = split_actions(it.get("analysis") or "")
+        if not acts:
+            if it.get("risk") in ("高", "中高"):
+                act_items.append((it, snippet(lead or it.get("points") or "", 260), [], True))
+            else:
+                backlog.append(it)
             continue
-        lis = []
-        for it in lst[:4]:
-            body = it["analysis"] or it["points"]
-            risk = it.get("risk", "")
-            rb = (f'<span class="rk {RISK_CLASS.get(risk, "r-md")}">{esc(risk)}</span>'
-                  if risk else "")
-            lis.append(
-                f'<li><div class="kb-t">{rb}<b>{esc(it["title"])}</b></div>'
-                f'<div class="kb-a">{esc(snippet(body, 150))}</div>'
-                f'<div class="kb-m">{esc(it["date"])} · 源自{esc(it["kind"])}</div></li>'
-            )
-        more = ""
-        if n_news.get(d):
-            more = (f'<div class="kb-more">'
-                    f'<a href="../news/index.html#g-{esc(d)}">该领域 {n_news[d]} 条合规动态 →</a></div>')
-        cards.append(f"""<div class="kb-card">
-  <div class="kb-h"><span class="dot" style="background:{color}"></span><h3>{esc(d)}</h3>
-    <span class="kb-n">{len(lst)} 项要点</span></div>
-  <ul class="kb-list">{"".join(lis)}</ul>
-  {more}
-</div>""")
-    return f'<div class="kb-grid">{"".join(cards)}</div>'
+        act_items.append((it, lead, acts, False))
+
+    n_actions = sum(len(a) for _, _, a, fb in act_items if not fb)
+    n_new = sum(1 for it, _, _, _ in act_items if _is_new(it))
+
+    # 领域速览（只列真有数据的领域，不写死数量）
+    d_act, d_feed = {}, {}
+    for it, _, _, _ in act_items:
+        d_act[it["domain"]] = d_act.get(it["domain"], 0) + 1
+    for it in feed_items:
+        d_feed[it["domain"]] = d_feed.get(it["domain"], 0) + 1
+    chips = "".join(
+        f'<a class="act-chip" href="index.html#g-{esc(d)}">{esc(d)}'
+        f' <em>{d_act.get(d, 0)} 条落实 · {d_feed.get(d, 0)} 条动态</em></a>'
+        for d in sorted(d_act, key=lambda x: -d_act[x]))
+
+    def _card(it, lead, acts, fb):
+        color = DOMAIN_COLOR.get(it["domain"], "#1b4f8a")
+        risk = it.get("risk") or "中"
+        cls = {"高": "hi", "中高": "mh", "中": "md", "低": "lo"}.get(risk, "lo")
+        rk = f'<span class="rk {RISK_CLASS.get(risk, "r-md")}">{esc(risk)}</span>'
+        new = '<span class="ac-new">本周新增</span>' if _is_new(it) else ""
+        if fb:
+            # 未拆出编号动作：只把判断/要点呈现出来，不装作「行动项」
+            body = f'<p class="ac-why">{esc(lead)}</p>'
+        else:
+            lis = "".join(f"<li>{esc(a)}</li>" for a in acts)
+            body = (f'<p class="ac-why">{esc(lead)}</p>' if lead else "") + \
+                   f'<ol class="ac-list">{lis}</ol>'
+        return f"""<article class="ac {cls}" data-risk="{esc(risk)}" data-domain="{esc(it['domain'])}">
+  <div class="ac-h">{rk}<span class="ac-dom" style="color:{color};background:{color}14">{esc(it['domain'])}</span>{new}<span class="ac-meta">{esc(it['date'])}</span><span class="ac-meta">{esc(it['kind'])}</span><span class="ac-meta">{esc(it['org'])}</span></div>
+  <h4 class="ac-t">{esc(it['title'])}</h4>
+  {body}
+  <div class="ac-foot">{evidence_html(it)}</div>
+</article>"""
+
+    # 按紧迫度分组（中/低/空合并为一组）
+    buckets, seen = [], {}
+    for key, cls, color, label in ACT_GROUPS:
+        if label in seen:
+            continue
+        seen[label] = True
+        buckets.append((key, cls, color, label, []))
+    for row in act_items:
+        risk = row[0].get("risk") or ""
+        idx = {"高": 0, "中高": 1}.get(risk, 2)
+        buckets[idx][4].append(row)
+
+    secs = []
+    for key, cls, color, label, rows in buckets:
+        if not rows:
+            continue
+        rows.sort(key=lambda r: (r[0]["date"], r[0].get("issue", 0)), reverse=True)
+        cards = "".join(_card(it, lead, acts, fb) for it, lead, acts, fb in rows)
+        n_a = sum(len(a) for _, _, a, fb in rows if not fb)
+        cnt = f"{len(rows)} 条动态 · {n_a} 项行动" if n_a else f"{len(rows)} 条动态"
+        secs.append(f"""<section class="actgrp">
+  <div class="actgrp-h"><span class="bar" style="background:{color}"></span><h3>{esc(label)}</h3>
+    <span class="cnt">{cnt}</span></div>
+  {cards}
+</section>""")
+
+    # 待评估：有监管要点、但还没形成落地建议的条目（也随每日入库滚动）
+    wait_html = ""
+    if backlog:
+        backlog.sort(key=lambda x: ({"高": 0, "中高": 1, "中": 2}.get(x.get("risk"), 3), x["date"]),
+                     reverse=False)
+        wait_html = """<section class="actgrp">
+  <div class="actgrp-h"><span class="bar" style="background:#94a3b4"></span><h3>待评估 · 尚未形成落地建议</h3>
+    <span class="cnt">%d 条</span></div>
+  <div class="act-wait">
+    <p>以下条目的监管要点已入库，但暂未沉淀出可执行动作。按风险等级列示，供人工判断是否需要动作；点标题可跳到该领域的合规动态原文与解读。</p>
+    <ul>%s</ul>
+  </div>
+</section>""" % (len(backlog), "".join(
+            f'<li><span class="rk {RISK_CLASS.get(x.get("risk"), "r-md")}">{esc(x.get("risk") or "中")}</span>'
+            f'<a href="index.html#g-{esc(x["domain"])}">{esc(x["title"])}</a>'
+            f' <em class="ac-meta">{esc(x["date"])} · {esc(x["org"])}</em></li>'
+            for x in backlog))
+
+    tabs = (f'<button class="ftab active" data-f="all">全部 <em>{len(act_items)}</em></button>'
+            f'<button class="ftab" data-f="高">高风险 <em>{len(buckets[0][4])}</em></button>'
+            f'<button class="ftab" data-f="中高">中高 <em>{len(buckets[1][4])}</em></button>'
+            f'<button class="ftab" data-f="其他">其他 <em>{len(buckets[2][4])}</em></button>')
+
+    return f"""<div class="feedbar">
+  <div class="fb-stats">
+    <div class="st"><div class="n">{n_actions}</div><div class="l">可执行行动项</div></div>
+    <div class="st"><div class="n">{len(act_items)}</div><div class="l">来源动态</div></div>
+    <div class="st"><div class="n">{len(d_act)}</div><div class="l">覆盖领域</div></div>
+    <div class="st"><div class="n">{n_new}</div><div class="l">本周新增</div></div>
+    <div class="st"><div class="n">{esc(latest)}</div><div class="l">更新至</div></div>
+  </div>
+  <div class="fb-tools">
+    <input id="q" type="search" placeholder="按关键词 / 领域 / 机构过滤…" aria-label="过滤">
+    <div class="ftabs">{tabs}</div>
+  </div>
+</div>
+<p class="act-how"><b>怎么用这一页</b>：按紧迫度从上往下过；每条下方的编号即落地动作，可直接派给责任人；点「依据」核对监管原文——<b>依据类内容只引发布机关官网深链或站内原文存档</b>；标「本周新增」的是近 7 天新沉淀的条目。</p>
+<div class="act-domchips">{chips}</div>
+<div id="feed">{"".join(secs)}{wait_html}</div>
+<div id="empty" class="empty" hidden>没有匹配的条目，换个关键词试试。</div>
+<script>
+(function(){{
+  var q=document.getElementById('q'), feed=document.getElementById('feed'),
+      empty=document.getElementById('empty'), cur='all';
+  function apply(){{
+    var kw=(q.value||'').trim().toLowerCase(), shown=0;
+    var gs=feed.querySelectorAll('.actgrp');
+    for(var i=0;i<gs.length;i++){{
+      var g=gs[i], n=0, cs=g.querySelectorAll('.ac');
+      for(var j=0;j<cs.length;j++){{
+        var el=cs[j], r=el.dataset.risk||'';
+        var okR=(cur==='all')||(cur==='其他'?(r!=='高'&&r!=='中高'):r===cur);
+        var t=el.innerText.toLowerCase();
+        var ok=okR&&(!kw||t.indexOf(kw)>-1);
+        el.hidden=!ok; if(ok){{n++;shown++;}}
+      }}
+      if(g.querySelector('.act-wait')) g.hidden=(cs.length>0&&n===0);
+      else g.hidden=(n===0);
+    }}
+    empty.hidden=(shown>0);
+  }}
+  var ts=document.querySelectorAll('.ftab');
+  for(var i=0;i<ts.length;i++){{
+    ts[i].addEventListener('click',function(){{
+      for(var j=0;j<ts.length;j++) ts[j].classList.remove('active');
+      this.classList.add('active'); cur=this.dataset.f; apply();
+    }});
+  }}
+  if(q) q.addEventListener('input',apply);
+}})();
+</script>"""
 
 
 def render_home_latest(items, n=6):
@@ -860,9 +1060,11 @@ def main():
     if replace_block(os.path.join(HERE, "news", "index.html"), render_news_feed(verified)):
         print("  news/index.html ✓")
     # 应对建议归属「合规资讯」模块（与动态同源，回答「我们该做什么」）；
-    # 知识库改为长效知识总览，由 build_standards.py 生成，不再接收动态内容。
-    if replace_block(os.path.join(HERE, "news", "actions.html"), render_kb_cards(verified, internal)):
-        print("  news/actions.html ✓")
+    # 数据源必须是**全部可用条目**（verified + internal）——只传 internal 会让站点每天直采、
+    # 带官方深链的条目永远进不来，页面就「从来没更新过」（用户 2026-09-15 反馈的真因）。
+    if replace_block(os.path.join(HERE, "news", "actions.html"),
+                     render_action_plan(verified + internal, verified)):
+        print("  news/actions.html ✓（行动清单：抽编号行动项 + 按紧迫度分组）")
     # 首页 RADAR/FEED/GEOMETA 三块由 build_home.py 统一生成
     # （在 daily_build 编排中晚于本步执行，避免被重复写入覆盖）
 

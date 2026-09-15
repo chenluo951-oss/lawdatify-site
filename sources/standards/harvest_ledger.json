@@ -10826,5 +10826,455 @@
   "checked": "2026-09-15",
   "official_url": "https://hbba.sacinfo.org.cn/stdDetail/57b311c7b94c70bb13ff30bf0f6736da47409f9eaa2296c6c908616c299cf68c",
   "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "YD/T 3474-2019 移动互联网应用程序安全加固能力评估要求与测试方法": {
+  "code": "YD/T 3474-2019",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/71cd3cf612f7c0d0ccb1b6839887b27c03371addd6d6e96a3aa45ebf125f63cc",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "YD/T 2912-2015 移动互联网应用编程接口的授权技术要求": {
+  "code": "YD/T 2912-2015",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/9a39645f96f3c8a0927c1b3fd157dfbd",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "YD/T 2588-2013 移动互联网应用商店安全防护检测要求": {
+  "code": "YD/T 2588-2013",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/635bb88fbecb10c7c0fa1907f24caebc",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "YD/T 2587-2013 移动互联网应用商店安全防护要求": {
+  "code": "YD/T 2587-2013",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/1a2d117a8e3a293b3d05b042ed1d5076",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "YD/T 7143—2026 车路协同 车联网平台与路侧设备数据接口通信协议测试方法": {
+  "code": "YD/T 7143—2026",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/3789ea133e94e208af5d66e94da0546fde767c07a643ae7601395669296500a3",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "SJ/T 12081-2025 车联网数据共享安全要求": {
+  "code": "SJ/T 12081-2025",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/3f7ec9b465d9801cd0856bfd0f889126304ecfa709febe0fe35fe22c703f254e",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "YD/T 6935.3-2026 电信业务实名登记系统技术要求 第3部分：车联网卡": {
+  "code": "YD/T 6935.3-2026",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/052e8aff19991695c2331854a2dafeb8412d03612769d38e7074e4744461c75f",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "YD/T 6817-2026 车联网密码应用通用要求": {
+  "code": "YD/T 6817-2026",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/8f82119ceac59e0408814794edd17b9d1a8b8d9d79fcf8141ad4c833f8d9e207",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "YD/T 6816-2026 车联网供应链网络安全风险管理准则": {
+  "code": "YD/T 6816-2026",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/8f82119ceac59e0408814794edd17b9d6451ed7e230aecdf2a2b53889af11be5",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "YS/T 1817-2025 有色金属矿山矿用车联网管控平台技术规范": {
+  "code": "YS/T 1817-2025",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/868458a1b5b68b88e9995d8c564cfce4ffbedd0a4fbac8c9b47eb8a3e6169e7e",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "YD/T 3752-2020 车联网信息服务平台安全防护技术要求": {
+  "code": "YD/T 3752-2020",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/3d11cb523e29e574b6190366232d04f68b296c7cf6242c6e6c120ff65d39dd6a",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "YD/T 7412—2026 工业互联网标识解析 密码应用技术要求": {
+  "code": "YD/T 7412—2026",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/9c97c5f582dc5d35de5ad0bb4e9feb2b2a01352afccb0c5dd13035c75f9816ee",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "YD/T 7249—2026 工业互联网标识解析系统安全能力评价方法": {
+  "code": "YD/T 7249—2026",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/c7a5b60a1af6b0f010180f17c3cb25cfdab27d69a984cb6f151e2444fc0ae5a4",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "YD/T 7248—2026 工业互联网数据采集终端设备安全要求": {
+  "code": "YD/T 7248—2026",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/c7a5b60a1af6b0f010180f17c3cb25cf5d69238b303a7724a6b0fc4efe8a5b2d",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "YD/T 7247—2026 工业互联网平台企业的网络安全防护能力评价方法": {
+  "code": "YD/T 7247—2026",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/c7a5b60a1af6b0f010180f17c3cb25cfe23d3bd09d0cefb4a334eb7ecb03a0fe",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "YD/T 7246—2026 工业互联网平台企业的网络安全评估指南": {
+  "code": "YD/T 7246—2026",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/c7a5b60a1af6b0f010180f17c3cb25cfae0fe4cce70507d252bf7cd755b05761",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "YD/T 7244—2026 应用工业互联网的工业企业网络安全评估指南": {
+  "code": "YD/T 7244—2026",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/b9e276472d89cd7d950d4619d567da69b08fc8e06032ba9a25c69568b578698f",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "YD/T 6826-2026 应用工业互联网的工业企业网络安全防护能力评价方法": {
+  "code": "YD/T 6826-2026",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/e348d148e7bfb7ed897ad34d330ab07079682b3308dbc7a99b0e9015a82542fe",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "YD/T 6825.3-2026 工业互联网企业网络安全定级方法 第3部分：标识解析企业": {
+  "code": "YD/T 6825.3-2026",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/e348d148e7bfb7ed897ad34d330ab0706f5cd02a18f51ed779d3f566db323fc7",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "YD/T 6825.2-2026 工业互联网企业网络安全定级方法 第2部分：平台企业": {
+  "code": "YD/T 6825.2-2026",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/e348d148e7bfb7ed897ad34d330ab070f818d7f0f0a65c5f6a389ae956ddc2c2",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "YD/T 6825.1-2026 工业互联网企业网络安全定级方法 第1部分：应用工业互联网的工业企业": {
+  "code": "YD/T 6825.1-2026",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/8f82119ceac59e0408814794edd17b9ded33e89e1a3bfad223c7c3fbfa6e3457",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "YD/T 6670-2026 工业互联网联网用技术 无源光网络（PON）自服务平台北向接口测试方法": {
+  "code": "YD/T 6670-2026",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/87b93ea770abb4c075ad18c894c7acb6b7a79b4df403fe1ef4e8284bef6d4c51",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "YD/T 6669-2026 工业互联网联网用技术 无源光网络（PON）自服务平台北向接口技术要求": {
+  "code": "YD/T 6669-2026",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/9b99c66aad4e4ba7b8589a586902f860275b62b1e5d01984ea0c137d47d2a084",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "SJ/T 11925.14-2025 工业互联网平台 工业设备上云通用管理要求 第14部分：工业机器人": {
+  "code": "SJ/T 11925.14-2025",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/f283635ab45ed7621395fb93b993a54538d21e19930017c6540195eaf591c569",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "SJ/T 11925.13-2025 工业互联网平台 工业设备上云通用管理要求 第13部分：火力发电设备": {
+  "code": "SJ/T 11925.13-2025",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/f283635ab45ed7621395fb93b993a54532972af07721814889e606087c346101",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "SJ/T 11925.12-2025 工业互联网平台 工业设备上云通用管理要求 第12部分：近海船舶设备": {
+  "code": "SJ/T 11925.12-2025",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/09a2c7d9b374c63c92e0afb2346dd1abf6b6797ef41be9207b7fd16fd0fa6c1f",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "SJ/T 11925.11-2025 工业互联网平台 工业设备上云通用管理要求 第11部分：风电设备": {
+  "code": "SJ/T 11925.11-2025",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/09a2c7d9b374c63c92e0afb2346dd1ab6459f6dcba451e57443d8a2f0e12aa5a",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "YD/T 6572-2025 工业互联网平台 工业知识图谱构建技术要求": {
+  "code": "YD/T 6572-2025",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/dcc70da2febbfe0dd99a3aa22b205fbcdf9ca7e1b6d177b9a7e71ba5390bf573",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "SJ/T 11945—2024 工业互联网平台  模型分类": {
+  "code": "SJ/T 11945—2024",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/7a3e6962eb07181db8731daf1bb961f9a0cf683b30c25cbefe4f0f96ce91ffd5",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "YD/T 6871-2026 基于隐私计算的联合反诈技术服务指南": {
+  "code": "YD/T 6871-2026",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/3d2bda16ec600035949a7cf4020b7d0bc7de9e604a3d55ad639febc40853fe8c",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "YD/T 6420-2025 隐私计算 技术应用合规指南": {
+  "code": "YD/T 6420-2025",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/bea3359e216430b60998c24d1fd113b202c936c90a06c8c7080788fb1599e010",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "YD/T 3438-2019 移动智能终端隐私窃取恶意行为判定技术要求": {
+  "code": "YD/T 3438-2019",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/e2029812dc21b5bcecfeb0c938746ed71d031f6ded8596e3a616df7fa417d45d",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "YD/T 7297—2026 公有区块链网络安全监测与分析 仿真验证技术要求": {
+  "code": "YD/T 7297—2026",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/26470fa058d8643d9b8ba93decc2db7c46ee5928af2c866d1fbfa5e3987c9a06",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "YD/T 7296—2026 公有区块链网络安全监测与分析 链上链下交易数据协同分析技术要求": {
+  "code": "YD/T 7296—2026",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/26470fa058d8643d9b8ba93decc2db7cda6d3d317ebb1485a186d3d3792552d0",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "YD/T 7295—2026 公有区块链网络安全监测与分析 网络行为数据处理要求": {
+  "code": "YD/T 7295—2026",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/26470fa058d8643d9b8ba93decc2db7c85261c7714f6a0060ce1c7467868eae2",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "YD/T 7266—2026 公有区块链网络安全监测与分析 数据格式要求": {
+  "code": "YD/T 7266—2026",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/d2b58cc39f3a985b2b1608490346b456302290a41c85c700921b699af362c86d",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "YD/T 7265—2026 公有区块链网络安全监测与分析 系统总体要求": {
+  "code": "YD/T 7265—2026",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/d2b58cc39f3a985b2b1608490346b456275b62b1e5d01984ea0c137d47d2a084",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "YD/T 7264—2026 公有区块链网络安全监测与分析 知识库要求": {
+  "code": "YD/T 7264—2026",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/d2b58cc39f3a985b2b1608490346b456223ecc1ced3222d6566dbd5b168a9ca6",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "YD/T 7263—2026 公有区块链网络安全监测与分析 网络行为检测与测量技术要求": {
+  "code": "YD/T 7263—2026",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/d2b58cc39f3a985b2b1608490346b45679682b3308dbc7a99b0e9015a82542fe",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "YD/T 7262—2026 公有区块链网络安全监测与分析 网络痕迹留存与溯源技术要求": {
+  "code": "YD/T 7262—2026",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/d2b58cc39f3a985b2b1608490346b4566f5cd02a18f51ed779d3f566db323fc7",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "YD/T 6969-2026 公有区块链网络安全监测与分析 区块信息处理要求": {
+  "code": "YD/T 6969-2026",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/169c8f73cb885cfb35afc12e3e056455669ae98b0fcec0cadef56446f92b76ef",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "YD/T 6968-2026 公有区块链网络安全监测与分析 智能合约信息处理要求": {
+  "code": "YD/T 6968-2026",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/169c8f73cb885cfb35afc12e3e056455e9fb05bca18867d6bcdf16111810e633",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "YD/T 6967-2026 公有区块链网络安全监测与分析 网络拓扑探测技术要求": {
+  "code": "YD/T 6967-2026",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/169c8f73cb885cfb35afc12e3e05645595474109d4a7cd99c851e7614a49c402",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "YD/T 6966-2026 公有区块链网络安全监测与分析 交易信息处理要求": {
+  "code": "YD/T 6966-2026",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/fb4c6d34cadcfa72278a2b21f03c194c4eb8171ccaaeb37590fe10f40db33e17",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "YD/T 6017.7-2026 网络安全产品能力评价体系 第7部分：零信任业务安全产品评价方法": {
+  "code": "YD/T 6017.7-2026",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/b6f1f8cc3eb121cc508c78a771696a6cab333a29a255aa8209e973d9c9c66910",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "YD/T 6017.6-2026 网络安全产品能力评价体系 第6部分：欺骗防御（蜜罐）产品评价方法": {
+  "code": "YD/T 6017.6-2026",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/b6f1f8cc3eb121cc508c78a771696a6cbb1de3bbb42ce67baef2ffb5f6bf55a9",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "YD/T 6017.4-2026 网络安全产品能力评价体系 第4部分：基于部署方式的安全产品测试方法": {
+  "code": "YD/T 6017.4-2026",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/2a13ac0a0549a2ad0fd3bf68edc847801385cea3464c54fbc14e1b4fce121100",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "YD/T 6840-2026 网络安全信息报送和通报接口要求": {
+  "code": "YD/T 6840-2026",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/1d5dc0928a84bc885c769ccc2d00a0e9b783d71979acc22d9d24113f1a3560ad",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "YD/T 6839-2026 物联网网络安全监测与管理系统技术要求": {
+  "code": "YD/T 6839-2026",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/1d5dc0928a84bc885c769ccc2d00a0e930d587f397d37f700d1200255a34b637",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "YD/T 6836-2026 基础电信企业网络安全态势感知平台效能评估指标体系和评估方法": {
+  "code": "YD/T 6836-2026",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/3f78a2d30f4043d0f524995b41fac911a8625cd76db617ada7f29485135a51ca",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
  }
 }
