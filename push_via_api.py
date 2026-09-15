@@ -102,12 +102,17 @@ def check():
     if not head:
         return 1
     rt = remote_tree(head)
-    lt = git("rev-parse", "HEAD^{tree}").strip()
     if not rt:
         print("取远端 tree 失败")
         return 1
     git("update-ref", f"refs/remotes/origin/{BRANCH}", head)
-    print(f"远端 {head[:8]} tree {rt[:8]} ｜ 本地 HEAD tree {lt[:8]}")
+    # ⚠️ 必须用「索引树」而不是 `HEAD^{tree}` 来比对。
+    # 本脚本发布的是**当前工作区内容**（走 API 建 blob，不产生本地 commit），
+    # 所以本地 HEAD 永远落后于远端、`HEAD^{tree}` 恒不相等 → 用它会得到「永远误报不一致」。
+    # 索引树才是本次推送真正对齐的那棵树；先 `git add -A` 让索引 == 工作区。
+    git("add", "-A")
+    lt = git("write-tree").strip()
+    print(f"远端 {head[:8]} tree {rt[:8]} ｜ 本地索引 tree {lt[:8]}")
     if rt == lt:
         print("✓ 内容一致：线上 == 本地（commit sha 不同是 API 推送的已知副作用，不影响上线）")
         return 0
@@ -118,6 +123,9 @@ def check():
 def main():
     status = git("status", "-sb").splitlines()[0]
     print("当前分支状态:", status)
+    # 先把工作区同步进索引：脚本按「索引里的路径 + 工作区的内容」建 blob，
+    # 索引落后会让索引 sha 与实际上传内容不一致，进而让 --check 误报。
+    git("add", "-A")
     # 不做 "ahead" 提前返回：本脚本按「远端树 vs 本地文件」做快照同步，幂等。
     # 本地 commit 与否都能发布 —— 发布的是当前工作区的实际内容。
 
