@@ -39,23 +39,54 @@ WX_DIR = os.path.join(HERE, "sources", "wx")
 PUBLISH_STATE = os.path.join(WX_DIR, ".publish_count")
 PUBLISH_EVERY = int(os.environ.get("WX_PUBLISH_EVERY", "100"))
 
-# 合规来源池 = 工具/wx_sources.py 的「单一事实来源」全量注册表（约 600+ 条）：
+# 合规来源池 = 工具/wx_sources.py 的「单一事实来源」全量注册表：
 #   八类监管主体（网信办 / 公安 / 市场监管 / 工信 / 法院 / 检察 / 发改 / 人大司法）
 #   的国家级 + 31 省 + 重点城市账号（含多账号如公安部网安局 / 网安通报 / 网警），
 #   加行业协会 / 标准组织 / 学术机构 / 同行专业号。
 #
-# 单日跑全量（600+ 检索）必触发搜狗反爬封 IP，故改为「按星期几取 1/7 切片轮转」：
-#   每日约 1/7 来源，一周内覆盖全部；手动补跑加 --all 强制全量。
-#   env WX_SHARD 可调切片数（默认 7）；--dry 打印当日切片。
+# 【为什么不收敛来源 · 用户 2026-09-15 明确要求】
+#   上一版为迁就单日抓取量，做了「按星期几取 1/7 硬切片」，并在来源层砍掉了
+#   大量省份与词组合 —— 那是**错误决策**。限流只能在**调度层**解决：
+#
+#   改为「每日预算制」——每天固定跑 WX_DAILY_BUDGET 条，指针按「年内天数 × 预算」
+#   连续推进，**轮转周期 = ceil(池子总数 ÷ 日预算)**，随来源池扩容自动延长。
+#   于是：来源层只增不减（新增省份 / 城市 / 账号自动进入池子），单日负载恒定。
+#
+#   env WX_DAILY_BUDGET 调日预算（默认 500）；WX_ALL=1 或 --all 强制全量；
+#   --dry 只打印当日切片与周期。
 FULL_QUERIES = _build_wx_queries()
 
 
+def _daily_budget():
+    try:
+        return int(os.environ.get("WX_DAILY_BUDGET", "500"))
+    except ValueError:
+        return 500
+
+
 def _daily_queries():
-    if "--all" in sys.argv:
+    if "--all" in sys.argv or os.environ.get("WX_ALL"):
         return FULL_QUERIES
-    n = int(os.environ.get("WX_SHARD", "7"))
-    wd = datetime.now().weekday()  # 0=周一 … 6=周日，每日切不同 1/n
-    return [q for i, q in enumerate(FULL_QUERIES) if i % n == wd]
+    total = len(FULL_QUERIES)
+    budget = _daily_budget()
+    if budget <= 0 or budget >= total:
+        return FULL_QUERIES
+    # 用「年内天数 × 预算」连续推进，保证每天不重不漏地往后走；
+    # 周期 = ceil(total / budget)，跨轮后指针自然回到起点。
+    day = datetime.now(CST).timetuple().tm_yday
+    start = (day * budget) % total
+    out = FULL_QUERIES[start:start + budget]
+    if len(out) < budget:                     # 收尾跨尾回头，保证每日条数恒定
+        out += FULL_QUERIES[:budget - len(out)]
+    return out
+
+
+def _cycle_days():
+    """轮转周期（天）：池子越大周期越长，来源层无需收敛。"""
+    total, budget = len(FULL_QUERIES), _daily_budget()
+    if budget <= 0 or budget >= total:
+        return 1
+    return -(-total // budget)
 
 
 QUERIES = _daily_queries()
@@ -156,10 +187,11 @@ def main():
         global MAX_PER_QUERY
         MAX_PER_QUERY = max(1, int(sys.argv[i + 1]))
 
-    mode = "全量(--all)" if "--all" in sys.argv else f"当日切片 1/{os.environ.get('WX_SHARD','7')}"
+    mode = ("全量(--all)" if ("--all" in sys.argv or os.environ.get("WX_ALL"))
+            else f"当日预算 {_daily_budget()}/天")
     print(f"公众号来源检索（限流+反爬绕过）  CUTOFF={datetime.fromtimestamp(CUTOFF,CST):%Y-%m-%d} 起算  "
           f"全量来源={len(FULL_QUERIES)}  本次{mode}={len(QUERIES)}  "
-          f"每来源最多 {MAX_PER_QUERY} 篇  发布阈值={PUBLISH_EVERY}\n")
+          f"轮转周期={_cycle_days()} 天  每来源最多 {MAX_PER_QUERY} 篇  发布阈值={PUBLISH_EVERY}\n")
     if dry:
         for q, o in QUERIES:
             print(f"  · {o or '（账号名推断）':<14}  {q}")

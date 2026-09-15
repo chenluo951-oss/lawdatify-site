@@ -1,7 +1,7 @@
 {
   "_meta": {
-    "updated": "2026-09-14",
-    "note": "本站每日检索的官方集中发布源注册表。由本地内容编辑器（检索来源标签）人工增删；每日自动化读取 enabled 来源的 host 作为 WebSearch allowed_domains。新增来源请填真实可溯源的具体栏目/深链页，而非机构官网首页。"
+    "updated": "2026-09-15",
+    "note": "本站每日检索的官方集中发布源注册表（国家 + 31 省 + 重点城市）。由本地内容编辑器（检索来源标签）人工增删；每日自动化读取 enabled 来源的 host 作为 WebSearch allowed_domains。**不准填机构官网首页根域名**：能给出具体栏目/深链页才填 url，否则留空、只填 host 作检索域白名单。"
   },
   "items": [
     {
@@ -53,7 +53,7 @@
       "id": "creditchina",
       "name": "信用中国",
       "agency": "国家公共信用和地理空间信息中心（国家发展改革委）",
-      "url": "https://www.creditchina.gov.cn/",
+      "url": "",
       "host": "www.creditchina.gov.cn",
       "category": "信用公示",
       "domains": [
@@ -67,7 +67,7 @@
         "radar"
       ],
       "tier": "official",
-      "note": "失信惩戒、重大税收违法、行政处罚等联合惩戒信息的集中发布。",
+      "note": "失信惩戒、重大税收违法、行政处罚等联合惩戒信息的集中发布。 检索域白名单（WebSearch allowed_domains）；具体栏目页由每日检索结果给出深链。",
       "added": "2026-09-14",
       "enabled": true
     },
@@ -217,7 +217,7 @@
       "id": "cac-app",
       "name": "国家网信办 违法违规收集使用个人信息 App 通报",
       "agency": "国家互联网信息办公室",
-      "url": "https://www.cac.gov.cn/",
+      "url": "",
       "host": "www.cac.gov.cn",
       "category": "通报",
       "domains": [
@@ -231,7 +231,7 @@
         "radar"
       ],
       "tier": "official",
-      "note": "中央网信办组织的 App（含小程序）违法违规收集使用个人信息通报；具体深链形如 /2026-06/11/c_xxxx.htm。",
+      "note": "中央网信办组织的 App（含小程序）违法违规收集使用个人信息通报；具体深链形如 /2026-06/11/c_xxxx.htm。 检索域白名单（WebSearch allowed_domains）；具体栏目页由每日检索结果给出深链。",
       "added": "2026-09-14",
       "enabled": true
     },
@@ -260,7 +260,7 @@
       "id": "mps-netsafe",
       "name": "公安部 网络安全通报 / 网安局",
       "agency": "公安部",
-      "url": "https://www.mps.gov.cn/",
+      "url": "",
       "host": "www.mps.gov.cn",
       "category": "通报",
       "domains": [
@@ -272,7 +272,7 @@
         "radar"
       ],
       "tier": "official",
-      "note": "App 违法违规收集个人信息通报常由「国家网络与信息安全信息通报中心」发布，多经 cac.gov.cn 转载；可一并监控。",
+      "note": "App 违法违规收集个人信息通报常由「国家网络与信息安全信息通报中心」发布，多经 cac.gov.cn 转载；可一并监控。 检索域白名单（WebSearch allowed_domains）；具体栏目页由每日检索结果给出深链。",
       "added": "2026-09-14",
       "enabled": true
     },
@@ -320,7 +320,7 @@
       "id": "mee-penalty",
       "name": "生态环境部 行政处罚与通报",
       "agency": "生态环境部",
-      "url": "https://www.mee.gov.cn/",
+      "url": "",
       "host": "www.mee.gov.cn",
       "category": "行政处罚",
       "domains": [
@@ -332,7 +332,7 @@
         "radar"
       ],
       "tier": "official",
-      "note": "生态环境违法处罚、排污许可等通报（政务公开栏目）。",
+      "note": "生态环境违法处罚、排污许可等通报（政务公开栏目）。 检索域白名单（WebSearch allowed_domains）；具体栏目页由每日检索结果给出深链。",
       "added": "2026-09-14",
       "enabled": true
     },
@@ -340,7 +340,7 @@
       "id": "customs",
       "name": "海关总署",
       "agency": "海关总署",
-      "url": "http://www.customs.gov.cn/",
+      "url": "",
       "host": "www.customs.gov.cn",
       "category": "综合",
       "domains": [
@@ -353,7 +353,7 @@
         "radar"
       ],
       "tier": "official",
-      "note": "进出口合规、跨境电商监管、走私与侵权通报。",
+      "note": "进出口合规、跨境电商监管、走私与侵权通报。 检索域白名单（WebSearch allowed_domains）；具体栏目页由每日检索结果给出深链。",
       "added": "2026-09-14",
       "enabled": true
     },
@@ -361,7 +361,7 @@
       "id": "mot",
       "name": "交通运输部",
       "agency": "交通运输部",
-      "url": "https://www.mot.gov.cn/",
+      "url": "",
       "host": "www.mot.gov.cn",
       "category": "综合",
       "domains": [
@@ -373,7 +373,7 @@
         "radar"
       ],
       "tier": "official",
-      "note": "网络货运、物流配送、出行平台监管与专项整治。",
+      "note": "网络货运、物流配送、出行平台监管与专项整治。 检索域白名单（WebSearch allowed_domains）；具体栏目页由每日检索结果给出深链。",
       "added": "2026-09-14",
       "enabled": true
     },
@@ -381,7 +381,7 @@
       "id": "mct",
       "name": "文化和旅游部 文化市场综合执法",
       "agency": "文化和旅游部",
-      "url": "https://www.mct.gov.cn/",
+      "url": "",
       "host": "www.mct.gov.cn",
       "category": "综合",
       "domains": [
@@ -393,7 +393,7 @@
         "radar"
       ],
       "tier": "official",
-      "note": "在线旅游、演出票务、文娱内容合规与执法信息。",
+      "note": "在线旅游、演出票务、文娱内容合规与执法信息。 检索域白名单（WebSearch allowed_domains）；具体栏目页由每日检索结果给出深链。",
       "added": "2026-09-14",
       "enabled": true
     },
@@ -401,7 +401,7 @@
       "id": "nrta",
       "name": "国家广播电视总局",
       "agency": "国家广播电视总局",
-      "url": "http://www.nrta.gov.cn/",
+      "url": "",
       "host": "www.nrta.gov.cn",
       "category": "综合",
       "domains": [
@@ -415,7 +415,7 @@
         "radar"
       ],
       "tier": "official",
-      "note": "网络视听、短视频/直播内容合规与算法推荐治理。",
+      "note": "网络视听、短视频/直播内容合规与算法推荐治理。 检索域白名单（WebSearch allowed_domains）；具体栏目页由每日检索结果给出深链。",
       "added": "2026-09-14",
       "enabled": true
     },
@@ -423,7 +423,7 @@
       "id": "nia",
       "name": "国家移民管理局",
       "agency": "国家移民管理局",
-      "url": "https://www.nia.gov.cn/",
+      "url": "",
       "host": "www.nia.gov.cn",
       "category": "综合",
       "domains": [
@@ -435,7 +435,7 @@
         "radar"
       ],
       "tier": "official",
-      "note": "出入境、外籍人员服务等政策发布（综合参考）。",
+      "note": "出入境、外籍人员服务等政策发布（综合参考）。 检索域白名单（WebSearch allowed_domains）；具体栏目页由每日检索结果给出深链。",
       "added": "2026-09-14",
       "enabled": true
     },
@@ -498,6 +498,1795 @@
       "note": "省级通信管理局侵害用户权益 App（小程序）通报。",
       "added": "2026-09-14",
       "enabled": true
+    },
+    {
+      "name": "黑龙江通信管理局",
+      "agency": "黑龙江省通信管理局",
+      "url": "",
+      "host": "hljca.miit.gov.cn",
+      "category": "通报",
+      "domains": [
+        "平台合规",
+        "数据合规"
+      ],
+      "region": "省-黑龙江",
+      "feed": [
+        "news",
+        "radar"
+      ],
+      "tier": "official",
+      "note": "每日检索的官方来源域（WebSearch allowed_domains）；具体页面由检索结果给出深链。",
+      "added": "2026-09-15",
+      "enabled": true,
+      "id": "hljca-miit-gov-cn"
+    },
+    {
+      "name": "河南通信管理局",
+      "agency": "河南省通信管理局",
+      "url": "",
+      "host": "hnca.miit.gov.cn",
+      "category": "通报",
+      "domains": [
+        "平台合规",
+        "数据合规"
+      ],
+      "region": "省-河南",
+      "feed": [
+        "news",
+        "radar"
+      ],
+      "tier": "official",
+      "note": "每日检索的官方来源域（WebSearch allowed_domains）；具体页面由检索结果给出深链。",
+      "added": "2026-09-15",
+      "enabled": true,
+      "id": "hnca-miit-gov-cn"
+    },
+    {
+      "name": "陕西通信管理局",
+      "agency": "陕西省通信管理局",
+      "url": "",
+      "host": "shxca.miit.gov.cn",
+      "category": "通报",
+      "domains": [
+        "平台合规",
+        "数据合规"
+      ],
+      "region": "省-陕西",
+      "feed": [
+        "news",
+        "radar"
+      ],
+      "tier": "official",
+      "note": "每日检索的官方来源域（WebSearch allowed_domains）；具体页面由检索结果给出深链。",
+      "added": "2026-09-15",
+      "enabled": true,
+      "id": "shxca-miit-gov-cn"
+    },
+    {
+      "name": "山东省人民政府门户",
+      "agency": "山东省人民政府",
+      "url": "",
+      "host": "www.shandong.gov.cn",
+      "category": "综合",
+      "domains": [
+        "平台合规",
+        "数据合规"
+      ],
+      "region": "省-山东",
+      "feed": [
+        "news",
+        "radar"
+      ],
+      "tier": "official",
+      "note": "每日检索的官方来源域（WebSearch allowed_domains）；具体页面由检索结果给出深链。",
+      "added": "2026-09-15",
+      "enabled": true,
+      "id": "www-shandong-gov-cn"
+    },
+    {
+      "name": "海南省人民政府门户",
+      "agency": "海南省人民政府",
+      "url": "",
+      "host": "www.hainan.gov.cn",
+      "category": "综合",
+      "domains": [
+        "平台合规",
+        "数据合规"
+      ],
+      "region": "省-海南",
+      "feed": [
+        "news",
+        "radar"
+      ],
+      "tier": "official",
+      "note": "每日检索的官方来源域（WebSearch allowed_domains）；具体页面由检索结果给出深链。",
+      "added": "2026-09-15",
+      "enabled": true,
+      "id": "www-hainan-gov-cn"
+    },
+    {
+      "name": "青海省人民政府门户",
+      "agency": "青海省人民政府",
+      "url": "",
+      "host": "www.qinghai.gov.cn",
+      "category": "综合",
+      "domains": [
+        "平台合规",
+        "数据合规"
+      ],
+      "region": "省-青海",
+      "feed": [
+        "news",
+        "radar"
+      ],
+      "tier": "official",
+      "note": "每日检索的官方来源域（WebSearch allowed_domains）；具体页面由检索结果给出深链。",
+      "added": "2026-09-15",
+      "enabled": true,
+      "id": "www-qinghai-gov-cn"
+    },
+    {
+      "name": "广西壮族自治区人民政府门户",
+      "agency": "广西壮族自治区人民政府",
+      "url": "",
+      "host": "www.gxzf.gov.cn",
+      "category": "综合",
+      "domains": [
+        "平台合规",
+        "数据合规"
+      ],
+      "region": "省-广西",
+      "feed": [
+        "news",
+        "radar"
+      ],
+      "tier": "official",
+      "note": "每日检索的官方来源域（WebSearch allowed_domains）；具体页面由检索结果给出深链。",
+      "added": "2026-09-15",
+      "enabled": true,
+      "id": "www-gxzf-gov-cn"
+    },
+    {
+      "name": "国家食品安全风险评估中心",
+      "agency": "国家食品安全风险评估中心",
+      "url": "",
+      "host": "www.cfsa.net.cn",
+      "category": "通报",
+      "domains": [
+        "产品合规",
+        "价格合规"
+      ],
+      "region": "全国",
+      "feed": [
+        "news",
+        "radar"
+      ],
+      "tier": "official",
+      "note": "每日检索的官方来源域（WebSearch allowed_domains）；具体页面由检索结果给出深链。",
+      "added": "2026-09-15",
+      "enabled": true,
+      "id": "www-cfsa-net-cn"
+    },
+    {
+      "name": "国家市场监督管理总局",
+      "agency": "国家市场监督管理总局",
+      "url": "",
+      "host": "www.samr.gov.cn",
+      "category": "综合",
+      "domains": [
+        "平台合规",
+        "数据合规"
+      ],
+      "region": "全国",
+      "feed": [
+        "news",
+        "radar"
+      ],
+      "tier": "official",
+      "note": "每日检索的官方来源域（WebSearch allowed_domains）；具体页面由检索结果给出深链。",
+      "added": "2026-09-15",
+      "enabled": true,
+      "id": "www-samr-gov-cn"
+    },
+    {
+      "name": "国家标准全文公开系统",
+      "agency": "国家市场监督管理总局",
+      "url": "",
+      "host": "openstd.samr.gov.cn",
+      "category": "标准",
+      "domains": [
+        "平台合规",
+        "数据合规"
+      ],
+      "region": "全国",
+      "feed": [
+        "news",
+        "radar"
+      ],
+      "tier": "official",
+      "note": "每日检索的官方来源域（WebSearch allowed_domains）；具体页面由检索结果给出深链。",
+      "added": "2026-09-15",
+      "enabled": true,
+      "id": "openstd-samr-gov-cn"
+    },
+    {
+      "name": "全国标准信息公共服务平台",
+      "agency": "国家市场监督管理总局",
+      "url": "",
+      "host": "std.samr.gov.cn",
+      "category": "标准",
+      "domains": [
+        "平台合规",
+        "数据合规"
+      ],
+      "region": "全国",
+      "feed": [
+        "news",
+        "radar"
+      ],
+      "tier": "official",
+      "note": "每日检索的官方来源域（WebSearch allowed_domains）；具体页面由检索结果给出深链。",
+      "added": "2026-09-15",
+      "enabled": true,
+      "id": "std-samr-gov-cn"
+    },
+    {
+      "name": "最高人民法院",
+      "agency": "最高人民法院",
+      "url": "",
+      "host": "www.court.gov.cn",
+      "category": "司法",
+      "domains": [
+        "平台合规",
+        "数据合规"
+      ],
+      "region": "全国",
+      "feed": [
+        "news",
+        "radar"
+      ],
+      "tier": "official",
+      "note": "每日检索的官方来源域（WebSearch allowed_domains）；具体页面由检索结果给出深链。",
+      "added": "2026-09-15",
+      "enabled": true,
+      "id": "www-court-gov-cn"
+    },
+    {
+      "name": "中国裁判文书网",
+      "agency": "最高人民法院",
+      "url": "",
+      "host": "wenshu.court.gov.cn",
+      "category": "司法",
+      "domains": [
+        "平台合规",
+        "数据合规"
+      ],
+      "region": "全国",
+      "feed": [
+        "news",
+        "radar"
+      ],
+      "tier": "official",
+      "note": "每日检索的官方来源域（WebSearch allowed_domains）；具体页面由检索结果给出深链。",
+      "added": "2026-09-15",
+      "enabled": true,
+      "id": "wenshu-court-gov-cn"
+    },
+    {
+      "name": "最高人民检察院",
+      "agency": "最高人民检察院",
+      "url": "",
+      "host": "www.spp.gov.cn",
+      "category": "司法",
+      "domains": [
+        "平台合规",
+        "数据合规"
+      ],
+      "region": "全国",
+      "feed": [
+        "news",
+        "radar"
+      ],
+      "tier": "official",
+      "note": "每日检索的官方来源域（WebSearch allowed_domains）；具体页面由检索结果给出深链。",
+      "added": "2026-09-15",
+      "enabled": true,
+      "id": "www-spp-gov-cn"
+    },
+    {
+      "name": "国家发展和改革委员会",
+      "agency": "国家发展和改革委员会",
+      "url": "",
+      "host": "www.ndrc.gov.cn",
+      "category": "综合",
+      "domains": [
+        "平台合规",
+        "数据合规"
+      ],
+      "region": "全国",
+      "feed": [
+        "news",
+        "radar"
+      ],
+      "tier": "official",
+      "note": "每日检索的官方来源域（WebSearch allowed_domains）；具体页面由检索结果给出深链。",
+      "added": "2026-09-15",
+      "enabled": true,
+      "id": "www-ndrc-gov-cn"
+    },
+    {
+      "name": "司法部",
+      "agency": "司法部",
+      "url": "",
+      "host": "www.moj.gov.cn",
+      "category": "立法发布",
+      "domains": [
+        "平台合规",
+        "数据合规"
+      ],
+      "region": "全国",
+      "feed": [
+        "news",
+        "radar"
+      ],
+      "tier": "official",
+      "note": "每日检索的官方来源域（WebSearch allowed_domains）；具体页面由检索结果给出深链。",
+      "added": "2026-09-15",
+      "enabled": true,
+      "id": "www-moj-gov-cn"
+    },
+    {
+      "name": "中国人大网",
+      "agency": "全国人民代表大会常务委员会",
+      "url": "",
+      "host": "www.npc.gov.cn",
+      "category": "立法发布",
+      "domains": [
+        "平台合规",
+        "数据合规"
+      ],
+      "region": "全国",
+      "feed": [
+        "news",
+        "radar"
+      ],
+      "tier": "official",
+      "note": "每日检索的官方来源域（WebSearch allowed_domains）；具体页面由检索结果给出深链。",
+      "added": "2026-09-15",
+      "enabled": true,
+      "id": "www-npc-gov-cn"
+    },
+    {
+      "name": "国家法律法规数据库",
+      "agency": "全国人民代表大会常务委员会",
+      "url": "",
+      "host": "flk.npc.gov.cn",
+      "category": "立法发布",
+      "domains": [
+        "平台合规",
+        "数据合规"
+      ],
+      "region": "全国",
+      "feed": [
+        "news",
+        "radar"
+      ],
+      "tier": "official",
+      "note": "每日检索的官方来源域（WebSearch allowed_domains）；具体页面由检索结果给出深链。",
+      "added": "2026-09-15",
+      "enabled": true,
+      "id": "flk-npc-gov-cn"
+    },
+    {
+      "name": "中国政府网",
+      "agency": "国务院",
+      "url": "",
+      "host": "www.gov.cn",
+      "category": "综合",
+      "domains": [
+        "平台合规",
+        "数据合规"
+      ],
+      "region": "全国",
+      "feed": [
+        "news",
+        "radar"
+      ],
+      "tier": "official",
+      "note": "每日检索的官方来源域（WebSearch allowed_domains）；具体页面由检索结果给出深链。",
+      "added": "2026-09-15",
+      "enabled": true,
+      "id": "www-gov-cn"
+    },
+    {
+      "name": "商务部",
+      "agency": "商务部",
+      "url": "",
+      "host": "www.mofcom.gov.cn",
+      "category": "综合",
+      "domains": [
+        "平台合规"
+      ],
+      "region": "全国",
+      "feed": [
+        "news",
+        "radar"
+      ],
+      "tier": "official",
+      "note": "每日检索的官方来源域（WebSearch allowed_domains）；具体页面由检索结果给出深链。",
+      "added": "2026-09-15",
+      "enabled": true,
+      "id": "www-mofcom-gov-cn"
+    },
+    {
+      "name": "农业农村部",
+      "agency": "农业农村部",
+      "url": "",
+      "host": "www.moa.gov.cn",
+      "category": "综合",
+      "domains": [
+        "产品合规",
+        "价格合规"
+      ],
+      "region": "全国",
+      "feed": [
+        "news",
+        "radar"
+      ],
+      "tier": "official",
+      "note": "每日检索的官方来源域（WebSearch allowed_domains）；具体页面由检索结果给出深链。",
+      "added": "2026-09-15",
+      "enabled": true,
+      "id": "www-moa-gov-cn"
+    },
+    {
+      "name": "人力资源和社会保障部",
+      "agency": "人力资源和社会保障部",
+      "url": "",
+      "host": "www.mohrss.gov.cn",
+      "category": "综合",
+      "domains": [
+        "平台合规",
+        "数据合规"
+      ],
+      "region": "全国",
+      "feed": [
+        "news",
+        "radar"
+      ],
+      "tier": "official",
+      "note": "每日检索的官方来源域（WebSearch allowed_domains）；具体页面由检索结果给出深链。",
+      "added": "2026-09-15",
+      "enabled": true,
+      "id": "www-mohrss-gov-cn"
+    },
+    {
+      "name": "住房和城乡建设部",
+      "agency": "住房和城乡建设部",
+      "url": "",
+      "host": "www.mohurd.gov.cn",
+      "category": "综合",
+      "domains": [
+        "平台合规",
+        "数据合规"
+      ],
+      "region": "全国",
+      "feed": [
+        "news",
+        "radar"
+      ],
+      "tier": "official",
+      "note": "每日检索的官方来源域（WebSearch allowed_domains）；具体页面由检索结果给出深链。",
+      "added": "2026-09-15",
+      "enabled": true,
+      "id": "www-mohurd-gov-cn"
+    },
+    {
+      "name": "教育部",
+      "agency": "教育部",
+      "url": "",
+      "host": "www.moe.gov.cn",
+      "category": "综合",
+      "domains": [
+        "平台合规",
+        "数据合规"
+      ],
+      "region": "全国",
+      "feed": [
+        "news",
+        "radar"
+      ],
+      "tier": "official",
+      "note": "每日检索的官方来源域（WebSearch allowed_domains）；具体页面由检索结果给出深链。",
+      "added": "2026-09-15",
+      "enabled": true,
+      "id": "www-moe-gov-cn"
+    },
+    {
+      "name": "应急管理部",
+      "agency": "应急管理部",
+      "url": "",
+      "host": "www.mem.gov.cn",
+      "category": "综合",
+      "domains": [
+        "AI合规",
+        "数据合规",
+        "算法合规"
+      ],
+      "region": "全国",
+      "feed": [
+        "news",
+        "radar"
+      ],
+      "tier": "official",
+      "note": "每日检索的官方来源域（WebSearch allowed_domains）；具体页面由检索结果给出深链。",
+      "added": "2026-09-15",
+      "enabled": true,
+      "id": "www-mem-gov-cn"
+    },
+    {
+      "name": "国家体育总局",
+      "agency": "国家体育总局",
+      "url": "",
+      "host": "www.sport.gov.cn",
+      "category": "综合",
+      "domains": [
+        "平台合规",
+        "数据合规"
+      ],
+      "region": "全国",
+      "feed": [
+        "news",
+        "radar"
+      ],
+      "tier": "official",
+      "note": "每日检索的官方来源域（WebSearch allowed_domains）；具体页面由检索结果给出深链。",
+      "added": "2026-09-15",
+      "enabled": true,
+      "id": "www-sport-gov-cn"
+    },
+    {
+      "name": "中国民用航空局",
+      "agency": "中国民用航空局",
+      "url": "",
+      "host": "www.caac.gov.cn",
+      "category": "综合",
+      "domains": [
+        "平台合规",
+        "数据合规"
+      ],
+      "region": "全国",
+      "feed": [
+        "news",
+        "radar"
+      ],
+      "tier": "official",
+      "note": "每日检索的官方来源域（WebSearch allowed_domains）；具体页面由检索结果给出深链。",
+      "added": "2026-09-15",
+      "enabled": true,
+      "id": "www-caac-gov-cn"
+    },
+    {
+      "name": "国家邮政局",
+      "agency": "国家邮政局",
+      "url": "",
+      "host": "www.spb.gov.cn",
+      "category": "综合",
+      "domains": [
+        "平台合规"
+      ],
+      "region": "全国",
+      "feed": [
+        "news",
+        "radar"
+      ],
+      "tier": "official",
+      "note": "每日检索的官方来源域（WebSearch allowed_domains）；具体页面由检索结果给出深链。",
+      "added": "2026-09-15",
+      "enabled": true,
+      "id": "www-spb-gov-cn"
+    },
+    {
+      "name": "国家能源局",
+      "agency": "国家能源局",
+      "url": "",
+      "host": "www.nea.gov.cn",
+      "category": "综合",
+      "domains": [
+        "平台合规",
+        "数据合规"
+      ],
+      "region": "全国",
+      "feed": [
+        "news",
+        "radar"
+      ],
+      "tier": "official",
+      "note": "每日检索的官方来源域（WebSearch allowed_domains）；具体页面由检索结果给出深链。",
+      "added": "2026-09-15",
+      "enabled": true,
+      "id": "www-nea-gov-cn"
+    },
+    {
+      "name": "国家林业和草原局",
+      "agency": "国家林业和草原局",
+      "url": "",
+      "host": "www.forestry.gov.cn",
+      "category": "综合",
+      "domains": [
+        "平台合规",
+        "数据合规"
+      ],
+      "region": "全国",
+      "feed": [
+        "news",
+        "radar"
+      ],
+      "tier": "official",
+      "note": "每日检索的官方来源域（WebSearch allowed_domains）；具体页面由检索结果给出深链。",
+      "added": "2026-09-15",
+      "enabled": true,
+      "id": "www-forestry-gov-cn"
+    },
+    {
+      "name": "国家统计局",
+      "agency": "国家统计局",
+      "url": "",
+      "host": "www.stats.gov.cn",
+      "category": "综合",
+      "domains": [
+        "平台合规",
+        "数据合规"
+      ],
+      "region": "全国",
+      "feed": [
+        "news",
+        "radar"
+      ],
+      "tier": "official",
+      "note": "每日检索的官方来源域（WebSearch allowed_domains）；具体页面由检索结果给出深链。",
+      "added": "2026-09-15",
+      "enabled": true,
+      "id": "www-stats-gov-cn"
+    },
+    {
+      "name": "国家知识产权局",
+      "agency": "国家知识产权局",
+      "url": "",
+      "host": "www.cnipa.gov.cn",
+      "category": "综合",
+      "domains": [
+        "平台合规",
+        "数据合规"
+      ],
+      "region": "全国",
+      "feed": [
+        "news",
+        "radar"
+      ],
+      "tier": "official",
+      "note": "每日检索的官方来源域（WebSearch allowed_domains）；具体页面由检索结果给出深链。",
+      "added": "2026-09-15",
+      "enabled": true,
+      "id": "www-cnipa-gov-cn"
+    },
+    {
+      "name": "12315 消费者投诉举报平台",
+      "agency": "国家市场监督管理总局",
+      "url": "",
+      "host": "www.12315.cn",
+      "category": "综合",
+      "domains": [
+        "产品合规",
+        "价格合规"
+      ],
+      "region": "全国",
+      "feed": [
+        "news",
+        "radar"
+      ],
+      "tier": "official",
+      "note": "每日检索的官方来源域（WebSearch allowed_domains）；具体页面由检索结果给出深链。",
+      "added": "2026-09-15",
+      "enabled": true,
+      "id": "www-12315-cn"
+    },
+    {
+      "name": "中央网信办违法和不良信息举报中心",
+      "agency": "国家互联网信息办公室",
+      "url": "",
+      "host": "www.12377.cn",
+      "category": "通报",
+      "domains": [
+        "AI合规",
+        "数据合规",
+        "算法合规"
+      ],
+      "region": "全国",
+      "feed": [
+        "news",
+        "radar"
+      ],
+      "tier": "official",
+      "note": "每日检索的官方来源域（WebSearch allowed_domains）；具体页面由检索结果给出深链。",
+      "added": "2026-09-15",
+      "enabled": true,
+      "id": "www-12377-cn"
+    },
+    {
+      "name": "中国消费者协会",
+      "agency": "中国消费者协会",
+      "url": "",
+      "host": "www.cca.org.cn",
+      "category": "综合",
+      "domains": [
+        "产品合规",
+        "价格合规"
+      ],
+      "region": "全国",
+      "feed": [
+        "news",
+        "radar"
+      ],
+      "tier": "official",
+      "note": "每日检索的官方来源域（WebSearch allowed_domains）；具体页面由检索结果给出深链。",
+      "added": "2026-09-15",
+      "enabled": true,
+      "id": "www-cca-org-cn"
+    },
+    {
+      "name": "中国互联网协会",
+      "agency": "中国互联网协会",
+      "url": "",
+      "host": "www.isc.org.cn",
+      "category": "综合",
+      "domains": [
+        "AI合规",
+        "数据合规",
+        "算法合规"
+      ],
+      "region": "全国",
+      "feed": [
+        "news",
+        "radar"
+      ],
+      "tier": "official",
+      "note": "每日检索的官方来源域（WebSearch allowed_domains）；具体页面由检索结果给出深链。",
+      "added": "2026-09-15",
+      "enabled": true,
+      "id": "www-isc-org-cn"
+    },
+    {
+      "name": "全国信息安全标准化技术委员会（TC260）",
+      "agency": "全国信息安全标准化技术委员会",
+      "url": "",
+      "host": "www.tc260.org.cn",
+      "category": "标准",
+      "domains": [
+        "AI合规",
+        "数据合规",
+        "算法合规"
+      ],
+      "region": "全国",
+      "feed": [
+        "news",
+        "radar"
+      ],
+      "tier": "official",
+      "note": "每日检索的官方来源域（WebSearch allowed_domains）；具体页面由检索结果给出深链。",
+      "added": "2026-09-15",
+      "enabled": true,
+      "id": "www-tc260-org-cn"
+    },
+    {
+      "name": "中国标准化研究院",
+      "agency": "中国标准化研究院",
+      "url": "",
+      "host": "www.cnis.ac.cn",
+      "category": "标准",
+      "domains": [
+        "AI合规",
+        "数据合规",
+        "算法合规"
+      ],
+      "region": "全国",
+      "feed": [
+        "news",
+        "radar"
+      ],
+      "tier": "official",
+      "note": "每日检索的官方来源域（WebSearch allowed_domains）；具体页面由检索结果给出深链。",
+      "added": "2026-09-15",
+      "enabled": true,
+      "id": "www-cnis-ac-cn"
+    },
+    {
+      "name": "国家计算机网络应急技术处理协调中心（CNCERT）",
+      "agency": "国家互联网应急中心",
+      "url": "",
+      "host": "www.cert.org.cn",
+      "category": "通报",
+      "domains": [
+        "AI合规",
+        "数据合规",
+        "算法合规"
+      ],
+      "region": "全国",
+      "feed": [
+        "news",
+        "radar"
+      ],
+      "tier": "official",
+      "note": "每日检索的官方来源域（WebSearch allowed_domains）；具体页面由检索结果给出深链。",
+      "added": "2026-09-15",
+      "enabled": true,
+      "id": "www-cert-org-cn"
+    },
+    {
+      "name": "天津通信管理局",
+      "agency": "天津通信管理局",
+      "url": "",
+      "host": "tjca.miit.gov.cn",
+      "category": "通报",
+      "domains": [
+        "平台合规",
+        "数据合规"
+      ],
+      "region": "省-天津",
+      "feed": [
+        "news",
+        "radar"
+      ],
+      "tier": "official",
+      "note": "每日检索的官方来源域（WebSearch allowed_domains）；具体页面由检索结果给出深链。",
+      "added": "2026-09-15",
+      "enabled": true,
+      "id": "tjca-miit-gov-cn"
+    },
+    {
+      "name": "上海通信管理局",
+      "agency": "上海通信管理局",
+      "url": "",
+      "host": "shca.miit.gov.cn",
+      "category": "通报",
+      "domains": [
+        "平台合规",
+        "数据合规"
+      ],
+      "region": "省-上海",
+      "feed": [
+        "news",
+        "radar"
+      ],
+      "tier": "official",
+      "note": "每日检索的官方来源域（WebSearch allowed_domains）；具体页面由检索结果给出深链。",
+      "added": "2026-09-15",
+      "enabled": true,
+      "id": "shca-miit-gov-cn"
+    },
+    {
+      "name": "重庆通信管理局",
+      "agency": "重庆通信管理局",
+      "url": "",
+      "host": "cqca.miit.gov.cn",
+      "category": "通报",
+      "domains": [
+        "平台合规",
+        "数据合规"
+      ],
+      "region": "省-重庆",
+      "feed": [
+        "news",
+        "radar"
+      ],
+      "tier": "official",
+      "note": "每日检索的官方来源域（WebSearch allowed_domains）；具体页面由检索结果给出深链。",
+      "added": "2026-09-15",
+      "enabled": true,
+      "id": "cqca-miit-gov-cn"
+    },
+    {
+      "name": "山西通信管理局",
+      "agency": "山西通信管理局",
+      "url": "",
+      "host": "sxca.miit.gov.cn",
+      "category": "通报",
+      "domains": [
+        "平台合规",
+        "数据合规"
+      ],
+      "region": "省-山西",
+      "feed": [
+        "news",
+        "radar"
+      ],
+      "tier": "official",
+      "note": "每日检索的官方来源域（WebSearch allowed_domains）；具体页面由检索结果给出深链。",
+      "added": "2026-09-15",
+      "enabled": true,
+      "id": "sxca-miit-gov-cn"
+    },
+    {
+      "name": "辽宁通信管理局",
+      "agency": "辽宁通信管理局",
+      "url": "",
+      "host": "lnca.miit.gov.cn",
+      "category": "通报",
+      "domains": [
+        "平台合规",
+        "数据合规"
+      ],
+      "region": "省-辽宁",
+      "feed": [
+        "news",
+        "radar"
+      ],
+      "tier": "official",
+      "note": "每日检索的官方来源域（WebSearch allowed_domains）；具体页面由检索结果给出深链。",
+      "added": "2026-09-15",
+      "enabled": true,
+      "id": "lnca-miit-gov-cn"
+    },
+    {
+      "name": "吉林通信管理局",
+      "agency": "吉林通信管理局",
+      "url": "",
+      "host": "jlca.miit.gov.cn",
+      "category": "通报",
+      "domains": [
+        "平台合规",
+        "数据合规"
+      ],
+      "region": "省-吉林",
+      "feed": [
+        "news",
+        "radar"
+      ],
+      "tier": "official",
+      "note": "每日检索的官方来源域（WebSearch allowed_domains）；具体页面由检索结果给出深链。",
+      "added": "2026-09-15",
+      "enabled": true,
+      "id": "jlca-miit-gov-cn"
+    },
+    {
+      "name": "江苏通信管理局",
+      "agency": "江苏通信管理局",
+      "url": "",
+      "host": "jsca.miit.gov.cn",
+      "category": "通报",
+      "domains": [
+        "平台合规",
+        "数据合规"
+      ],
+      "region": "省-江苏",
+      "feed": [
+        "news",
+        "radar"
+      ],
+      "tier": "official",
+      "note": "每日检索的官方来源域（WebSearch allowed_domains）；具体页面由检索结果给出深链。",
+      "added": "2026-09-15",
+      "enabled": true,
+      "id": "jsca-miit-gov-cn"
+    },
+    {
+      "name": "浙江通信管理局",
+      "agency": "浙江通信管理局",
+      "url": "",
+      "host": "zjca.miit.gov.cn",
+      "category": "通报",
+      "domains": [
+        "平台合规",
+        "数据合规"
+      ],
+      "region": "省-浙江",
+      "feed": [
+        "news",
+        "radar"
+      ],
+      "tier": "official",
+      "note": "每日检索的官方来源域（WebSearch allowed_domains）；具体页面由检索结果给出深链。",
+      "added": "2026-09-15",
+      "enabled": true,
+      "id": "zjca-miit-gov-cn"
+    },
+    {
+      "name": "安徽通信管理局",
+      "agency": "安徽通信管理局",
+      "url": "",
+      "host": "ahca.miit.gov.cn",
+      "category": "通报",
+      "domains": [
+        "平台合规",
+        "数据合规"
+      ],
+      "region": "省-安徽",
+      "feed": [
+        "news",
+        "radar"
+      ],
+      "tier": "official",
+      "note": "每日检索的官方来源域（WebSearch allowed_domains）；具体页面由检索结果给出深链。",
+      "added": "2026-09-15",
+      "enabled": true,
+      "id": "ahca-miit-gov-cn"
+    },
+    {
+      "name": "福建通信管理局",
+      "agency": "福建通信管理局",
+      "url": "",
+      "host": "fjca.miit.gov.cn",
+      "category": "通报",
+      "domains": [
+        "平台合规",
+        "数据合规"
+      ],
+      "region": "省-福建",
+      "feed": [
+        "news",
+        "radar"
+      ],
+      "tier": "official",
+      "note": "每日检索的官方来源域（WebSearch allowed_domains）；具体页面由检索结果给出深链。",
+      "added": "2026-09-15",
+      "enabled": true,
+      "id": "fjca-miit-gov-cn"
+    },
+    {
+      "name": "江西通信管理局",
+      "agency": "江西通信管理局",
+      "url": "",
+      "host": "jxca.miit.gov.cn",
+      "category": "通报",
+      "domains": [
+        "平台合规",
+        "数据合规"
+      ],
+      "region": "省-江西",
+      "feed": [
+        "news",
+        "radar"
+      ],
+      "tier": "official",
+      "note": "每日检索的官方来源域（WebSearch allowed_domains）；具体页面由检索结果给出深链。",
+      "added": "2026-09-15",
+      "enabled": true,
+      "id": "jxca-miit-gov-cn"
+    },
+    {
+      "name": "山东通信管理局",
+      "agency": "山东通信管理局",
+      "url": "",
+      "host": "sdca.miit.gov.cn",
+      "category": "通报",
+      "domains": [
+        "平台合规",
+        "数据合规"
+      ],
+      "region": "省-山东",
+      "feed": [
+        "news",
+        "radar"
+      ],
+      "tier": "official",
+      "note": "每日检索的官方来源域（WebSearch allowed_domains）；具体页面由检索结果给出深链。",
+      "added": "2026-09-15",
+      "enabled": true,
+      "id": "sdca-miit-gov-cn"
+    },
+    {
+      "name": "湖北通信管理局",
+      "agency": "湖北通信管理局",
+      "url": "",
+      "host": "hbca.miit.gov.cn",
+      "category": "通报",
+      "domains": [
+        "平台合规",
+        "数据合规"
+      ],
+      "region": "省-湖北",
+      "feed": [
+        "news",
+        "radar"
+      ],
+      "tier": "official",
+      "note": "每日检索的官方来源域（WebSearch allowed_domains）；具体页面由检索结果给出深链。",
+      "added": "2026-09-15",
+      "enabled": true,
+      "id": "hbca-miit-gov-cn"
+    },
+    {
+      "name": "广东通信管理局",
+      "agency": "广东通信管理局",
+      "url": "",
+      "host": "gdca.miit.gov.cn",
+      "category": "通报",
+      "domains": [
+        "平台合规",
+        "数据合规"
+      ],
+      "region": "省-广东",
+      "feed": [
+        "news",
+        "radar"
+      ],
+      "tier": "official",
+      "note": "每日检索的官方来源域（WebSearch allowed_domains）；具体页面由检索结果给出深链。",
+      "added": "2026-09-15",
+      "enabled": true,
+      "id": "gdca-miit-gov-cn"
+    },
+    {
+      "name": "四川通信管理局",
+      "agency": "四川通信管理局",
+      "url": "",
+      "host": "scca.miit.gov.cn",
+      "category": "通报",
+      "domains": [
+        "平台合规",
+        "数据合规"
+      ],
+      "region": "省-四川",
+      "feed": [
+        "news",
+        "radar"
+      ],
+      "tier": "official",
+      "note": "每日检索的官方来源域（WebSearch allowed_domains）；具体页面由检索结果给出深链。",
+      "added": "2026-09-15",
+      "enabled": true,
+      "id": "scca-miit-gov-cn"
+    },
+    {
+      "name": "贵州通信管理局",
+      "agency": "贵州通信管理局",
+      "url": "",
+      "host": "gzca.miit.gov.cn",
+      "category": "通报",
+      "domains": [
+        "平台合规",
+        "数据合规"
+      ],
+      "region": "省-贵州",
+      "feed": [
+        "news",
+        "radar"
+      ],
+      "tier": "official",
+      "note": "每日检索的官方来源域（WebSearch allowed_domains）；具体页面由检索结果给出深链。",
+      "added": "2026-09-15",
+      "enabled": true,
+      "id": "gzca-miit-gov-cn"
+    },
+    {
+      "name": "云南通信管理局",
+      "agency": "云南通信管理局",
+      "url": "",
+      "host": "ynca.miit.gov.cn",
+      "category": "通报",
+      "domains": [
+        "平台合规",
+        "数据合规"
+      ],
+      "region": "省-云南",
+      "feed": [
+        "news",
+        "radar"
+      ],
+      "tier": "official",
+      "note": "每日检索的官方来源域（WebSearch allowed_domains）；具体页面由检索结果给出深链。",
+      "added": "2026-09-15",
+      "enabled": true,
+      "id": "ynca-miit-gov-cn"
+    },
+    {
+      "name": "甘肃通信管理局",
+      "agency": "甘肃通信管理局",
+      "url": "",
+      "host": "gsca.miit.gov.cn",
+      "category": "通报",
+      "domains": [
+        "平台合规",
+        "数据合规"
+      ],
+      "region": "省-甘肃",
+      "feed": [
+        "news",
+        "radar"
+      ],
+      "tier": "official",
+      "note": "每日检索的官方来源域（WebSearch allowed_domains）；具体页面由检索结果给出深链。",
+      "added": "2026-09-15",
+      "enabled": true,
+      "id": "gsca-miit-gov-cn"
+    },
+    {
+      "name": "青海通信管理局",
+      "agency": "青海通信管理局",
+      "url": "",
+      "host": "qhca.miit.gov.cn",
+      "category": "通报",
+      "domains": [
+        "平台合规",
+        "数据合规"
+      ],
+      "region": "省-青海",
+      "feed": [
+        "news",
+        "radar"
+      ],
+      "tier": "official",
+      "note": "每日检索的官方来源域（WebSearch allowed_domains）；具体页面由检索结果给出深链。",
+      "added": "2026-09-15",
+      "enabled": true,
+      "id": "qhca-miit-gov-cn"
+    },
+    {
+      "name": "内蒙古通信管理局",
+      "agency": "内蒙古通信管理局",
+      "url": "",
+      "host": "nmca.miit.gov.cn",
+      "category": "通报",
+      "domains": [
+        "平台合规",
+        "数据合规"
+      ],
+      "region": "省-内蒙古",
+      "feed": [
+        "news",
+        "radar"
+      ],
+      "tier": "official",
+      "note": "每日检索的官方来源域（WebSearch allowed_domains）；具体页面由检索结果给出深链。",
+      "added": "2026-09-15",
+      "enabled": true,
+      "id": "nmca-miit-gov-cn"
+    },
+    {
+      "name": "广西通信管理局",
+      "agency": "广西通信管理局",
+      "url": "",
+      "host": "gxca.miit.gov.cn",
+      "category": "通报",
+      "domains": [
+        "平台合规",
+        "数据合规"
+      ],
+      "region": "省-广西",
+      "feed": [
+        "news",
+        "radar"
+      ],
+      "tier": "official",
+      "note": "每日检索的官方来源域（WebSearch allowed_domains）；具体页面由检索结果给出深链。",
+      "added": "2026-09-15",
+      "enabled": true,
+      "id": "gxca-miit-gov-cn"
+    },
+    {
+      "name": "西藏通信管理局",
+      "agency": "西藏通信管理局",
+      "url": "",
+      "host": "xzca.miit.gov.cn",
+      "category": "通报",
+      "domains": [
+        "平台合规",
+        "数据合规"
+      ],
+      "region": "省-西藏",
+      "feed": [
+        "news",
+        "radar"
+      ],
+      "tier": "official",
+      "note": "每日检索的官方来源域（WebSearch allowed_domains）；具体页面由检索结果给出深链。",
+      "added": "2026-09-15",
+      "enabled": true,
+      "id": "xzca-miit-gov-cn"
+    },
+    {
+      "name": "新疆通信管理局",
+      "agency": "新疆通信管理局",
+      "url": "",
+      "host": "xjca.miit.gov.cn",
+      "category": "通报",
+      "domains": [
+        "平台合规",
+        "数据合规"
+      ],
+      "region": "省-新疆",
+      "feed": [
+        "news",
+        "radar"
+      ],
+      "tier": "official",
+      "note": "每日检索的官方来源域（WebSearch allowed_domains）；具体页面由检索结果给出深链。",
+      "added": "2026-09-15",
+      "enabled": true,
+      "id": "xjca-miit-gov-cn"
+    },
+    {
+      "name": "北京省人民政府门户",
+      "agency": "北京省人民政府",
+      "url": "",
+      "host": "www.beijing.gov.cn",
+      "category": "综合",
+      "domains": [
+        "平台合规",
+        "数据合规"
+      ],
+      "region": "省-北京",
+      "feed": [
+        "news",
+        "radar"
+      ],
+      "tier": "official",
+      "note": "每日检索的官方来源域（WebSearch allowed_domains）；具体页面由检索结果给出深链。",
+      "added": "2026-09-15",
+      "enabled": true,
+      "id": "www-beijing-gov-cn"
+    },
+    {
+      "name": "天津省人民政府门户",
+      "agency": "天津省人民政府",
+      "url": "",
+      "host": "www.tj.gov.cn",
+      "category": "综合",
+      "domains": [
+        "平台合规",
+        "数据合规"
+      ],
+      "region": "省-天津",
+      "feed": [
+        "news",
+        "radar"
+      ],
+      "tier": "official",
+      "note": "每日检索的官方来源域（WebSearch allowed_domains）；具体页面由检索结果给出深链。",
+      "added": "2026-09-15",
+      "enabled": true,
+      "id": "www-tj-gov-cn"
+    },
+    {
+      "name": "上海省人民政府门户",
+      "agency": "上海省人民政府",
+      "url": "",
+      "host": "www.sh.gov.cn",
+      "category": "综合",
+      "domains": [
+        "平台合规",
+        "数据合规"
+      ],
+      "region": "省-上海",
+      "feed": [
+        "news",
+        "radar"
+      ],
+      "tier": "official",
+      "note": "每日检索的官方来源域（WebSearch allowed_domains）；具体页面由检索结果给出深链。",
+      "added": "2026-09-15",
+      "enabled": true,
+      "id": "www-sh-gov-cn"
+    },
+    {
+      "name": "重庆省人民政府门户",
+      "agency": "重庆省人民政府",
+      "url": "",
+      "host": "www.cq.gov.cn",
+      "category": "综合",
+      "domains": [
+        "平台合规",
+        "数据合规"
+      ],
+      "region": "省-重庆",
+      "feed": [
+        "news",
+        "radar"
+      ],
+      "tier": "official",
+      "note": "每日检索的官方来源域（WebSearch allowed_domains）；具体页面由检索结果给出深链。",
+      "added": "2026-09-15",
+      "enabled": true,
+      "id": "www-cq-gov-cn"
+    },
+    {
+      "name": "河北省人民政府门户",
+      "agency": "河北省人民政府",
+      "url": "",
+      "host": "www.hebei.gov.cn",
+      "category": "综合",
+      "domains": [
+        "平台合规",
+        "数据合规"
+      ],
+      "region": "省-河北",
+      "feed": [
+        "news",
+        "radar"
+      ],
+      "tier": "official",
+      "note": "每日检索的官方来源域（WebSearch allowed_domains）；具体页面由检索结果给出深链。",
+      "added": "2026-09-15",
+      "enabled": true,
+      "id": "www-hebei-gov-cn"
+    },
+    {
+      "name": "山西省人民政府门户",
+      "agency": "山西省人民政府",
+      "url": "",
+      "host": "www.shanxi.gov.cn",
+      "category": "综合",
+      "domains": [
+        "平台合规",
+        "数据合规"
+      ],
+      "region": "省-山西",
+      "feed": [
+        "news",
+        "radar"
+      ],
+      "tier": "official",
+      "note": "每日检索的官方来源域（WebSearch allowed_domains）；具体页面由检索结果给出深链。",
+      "added": "2026-09-15",
+      "enabled": true,
+      "id": "www-shanxi-gov-cn"
+    },
+    {
+      "name": "辽宁省人民政府门户",
+      "agency": "辽宁省人民政府",
+      "url": "",
+      "host": "www.ln.gov.cn",
+      "category": "综合",
+      "domains": [
+        "平台合规",
+        "数据合规"
+      ],
+      "region": "省-辽宁",
+      "feed": [
+        "news",
+        "radar"
+      ],
+      "tier": "official",
+      "note": "每日检索的官方来源域（WebSearch allowed_domains）；具体页面由检索结果给出深链。",
+      "added": "2026-09-15",
+      "enabled": true,
+      "id": "www-ln-gov-cn"
+    },
+    {
+      "name": "吉林省人民政府门户",
+      "agency": "吉林省人民政府",
+      "url": "",
+      "host": "www.jl.gov.cn",
+      "category": "综合",
+      "domains": [
+        "平台合规",
+        "数据合规"
+      ],
+      "region": "省-吉林",
+      "feed": [
+        "news",
+        "radar"
+      ],
+      "tier": "official",
+      "note": "每日检索的官方来源域（WebSearch allowed_domains）；具体页面由检索结果给出深链。",
+      "added": "2026-09-15",
+      "enabled": true,
+      "id": "www-jl-gov-cn"
+    },
+    {
+      "name": "黑龙江省人民政府门户",
+      "agency": "黑龙江省人民政府",
+      "url": "",
+      "host": "www.hlj.gov.cn",
+      "category": "综合",
+      "domains": [
+        "平台合规",
+        "数据合规"
+      ],
+      "region": "省-黑龙江",
+      "feed": [
+        "news",
+        "radar"
+      ],
+      "tier": "official",
+      "note": "每日检索的官方来源域（WebSearch allowed_domains）；具体页面由检索结果给出深链。",
+      "added": "2026-09-15",
+      "enabled": true,
+      "id": "www-hlj-gov-cn"
+    },
+    {
+      "name": "江苏省人民政府门户",
+      "agency": "江苏省人民政府",
+      "url": "",
+      "host": "www.jiangsu.gov.cn",
+      "category": "综合",
+      "domains": [
+        "平台合规",
+        "数据合规"
+      ],
+      "region": "省-江苏",
+      "feed": [
+        "news",
+        "radar"
+      ],
+      "tier": "official",
+      "note": "每日检索的官方来源域（WebSearch allowed_domains）；具体页面由检索结果给出深链。",
+      "added": "2026-09-15",
+      "enabled": true,
+      "id": "www-jiangsu-gov-cn"
+    },
+    {
+      "name": "浙江省人民政府门户",
+      "agency": "浙江省人民政府",
+      "url": "",
+      "host": "www.zj.gov.cn",
+      "category": "综合",
+      "domains": [
+        "平台合规",
+        "数据合规"
+      ],
+      "region": "省-浙江",
+      "feed": [
+        "news",
+        "radar"
+      ],
+      "tier": "official",
+      "note": "每日检索的官方来源域（WebSearch allowed_domains）；具体页面由检索结果给出深链。",
+      "added": "2026-09-15",
+      "enabled": true,
+      "id": "www-zj-gov-cn"
+    },
+    {
+      "name": "福建省人民政府门户",
+      "agency": "福建省人民政府",
+      "url": "",
+      "host": "www.fujian.gov.cn",
+      "category": "综合",
+      "domains": [
+        "平台合规",
+        "数据合规"
+      ],
+      "region": "省-福建",
+      "feed": [
+        "news",
+        "radar"
+      ],
+      "tier": "official",
+      "note": "每日检索的官方来源域（WebSearch allowed_domains）；具体页面由检索结果给出深链。",
+      "added": "2026-09-15",
+      "enabled": true,
+      "id": "www-fujian-gov-cn"
+    },
+    {
+      "name": "江西省人民政府门户",
+      "agency": "江西省人民政府",
+      "url": "",
+      "host": "www.jiangxi.gov.cn",
+      "category": "综合",
+      "domains": [
+        "平台合规",
+        "数据合规"
+      ],
+      "region": "省-江西",
+      "feed": [
+        "news",
+        "radar"
+      ],
+      "tier": "official",
+      "note": "每日检索的官方来源域（WebSearch allowed_domains）；具体页面由检索结果给出深链。",
+      "added": "2026-09-15",
+      "enabled": true,
+      "id": "www-jiangxi-gov-cn"
+    },
+    {
+      "name": "河南省人民政府门户",
+      "agency": "河南省人民政府",
+      "url": "",
+      "host": "www.henan.gov.cn",
+      "category": "综合",
+      "domains": [
+        "平台合规",
+        "数据合规"
+      ],
+      "region": "省-河南",
+      "feed": [
+        "news",
+        "radar"
+      ],
+      "tier": "official",
+      "note": "每日检索的官方来源域（WebSearch allowed_domains）；具体页面由检索结果给出深链。",
+      "added": "2026-09-15",
+      "enabled": true,
+      "id": "www-henan-gov-cn"
+    },
+    {
+      "name": "湖南省人民政府门户",
+      "agency": "湖南省人民政府",
+      "url": "",
+      "host": "www.hunan.gov.cn",
+      "category": "综合",
+      "domains": [
+        "平台合规",
+        "数据合规"
+      ],
+      "region": "省-湖南",
+      "feed": [
+        "news",
+        "radar"
+      ],
+      "tier": "official",
+      "note": "每日检索的官方来源域（WebSearch allowed_domains）；具体页面由检索结果给出深链。",
+      "added": "2026-09-15",
+      "enabled": true,
+      "id": "www-hunan-gov-cn"
+    },
+    {
+      "name": "广东省人民政府门户",
+      "agency": "广东省人民政府",
+      "url": "",
+      "host": "www.gd.gov.cn",
+      "category": "综合",
+      "domains": [
+        "平台合规",
+        "数据合规"
+      ],
+      "region": "省-广东",
+      "feed": [
+        "news",
+        "radar"
+      ],
+      "tier": "official",
+      "note": "每日检索的官方来源域（WebSearch allowed_domains）；具体页面由检索结果给出深链。",
+      "added": "2026-09-15",
+      "enabled": true,
+      "id": "www-gd-gov-cn"
+    },
+    {
+      "name": "四川省人民政府门户",
+      "agency": "四川省人民政府",
+      "url": "",
+      "host": "www.sc.gov.cn",
+      "category": "综合",
+      "domains": [
+        "平台合规",
+        "数据合规"
+      ],
+      "region": "省-四川",
+      "feed": [
+        "news",
+        "radar"
+      ],
+      "tier": "official",
+      "note": "每日检索的官方来源域（WebSearch allowed_domains）；具体页面由检索结果给出深链。",
+      "added": "2026-09-15",
+      "enabled": true,
+      "id": "www-sc-gov-cn"
+    },
+    {
+      "name": "贵州省人民政府门户",
+      "agency": "贵州省人民政府",
+      "url": "",
+      "host": "www.guizhou.gov.cn",
+      "category": "综合",
+      "domains": [
+        "平台合规",
+        "数据合规"
+      ],
+      "region": "省-贵州",
+      "feed": [
+        "news",
+        "radar"
+      ],
+      "tier": "official",
+      "note": "每日检索的官方来源域（WebSearch allowed_domains）；具体页面由检索结果给出深链。",
+      "added": "2026-09-15",
+      "enabled": true,
+      "id": "www-guizhou-gov-cn"
+    },
+    {
+      "name": "云南省人民政府门户",
+      "agency": "云南省人民政府",
+      "url": "",
+      "host": "www.yn.gov.cn",
+      "category": "综合",
+      "domains": [
+        "平台合规",
+        "数据合规"
+      ],
+      "region": "省-云南",
+      "feed": [
+        "news",
+        "radar"
+      ],
+      "tier": "official",
+      "note": "每日检索的官方来源域（WebSearch allowed_domains）；具体页面由检索结果给出深链。",
+      "added": "2026-09-15",
+      "enabled": true,
+      "id": "www-yn-gov-cn"
+    },
+    {
+      "name": "内蒙古省人民政府门户",
+      "agency": "内蒙古省人民政府",
+      "url": "",
+      "host": "www.nmg.gov.cn",
+      "category": "综合",
+      "domains": [
+        "平台合规",
+        "数据合规"
+      ],
+      "region": "省-内蒙古",
+      "feed": [
+        "news",
+        "radar"
+      ],
+      "tier": "official",
+      "note": "每日检索的官方来源域（WebSearch allowed_domains）；具体页面由检索结果给出深链。",
+      "added": "2026-09-15",
+      "enabled": true,
+      "id": "www-nmg-gov-cn"
+    },
+    {
+      "name": "西藏省人民政府门户",
+      "agency": "西藏省人民政府",
+      "url": "",
+      "host": "www.xizang.gov.cn",
+      "category": "综合",
+      "domains": [
+        "平台合规",
+        "数据合规"
+      ],
+      "region": "省-西藏",
+      "feed": [
+        "news",
+        "radar"
+      ],
+      "tier": "official",
+      "note": "每日检索的官方来源域（WebSearch allowed_domains）；具体页面由检索结果给出深链。",
+      "added": "2026-09-15",
+      "enabled": true,
+      "id": "www-xizang-gov-cn"
+    },
+    {
+      "name": "宁夏省人民政府门户",
+      "agency": "宁夏省人民政府",
+      "url": "",
+      "host": "www.nx.gov.cn",
+      "category": "综合",
+      "domains": [
+        "平台合规",
+        "数据合规"
+      ],
+      "region": "省-宁夏",
+      "feed": [
+        "news",
+        "radar"
+      ],
+      "tier": "official",
+      "note": "每日检索的官方来源域（WebSearch allowed_domains）；具体页面由检索结果给出深链。",
+      "added": "2026-09-15",
+      "enabled": true,
+      "id": "www-nx-gov-cn"
+    },
+    {
+      "name": "新疆省人民政府门户",
+      "agency": "新疆省人民政府",
+      "url": "",
+      "host": "www.xinjiang.gov.cn",
+      "category": "综合",
+      "domains": [
+        "平台合规",
+        "数据合规"
+      ],
+      "region": "省-新疆",
+      "feed": [
+        "news",
+        "radar"
+      ],
+      "tier": "official",
+      "note": "每日检索的官方来源域（WebSearch allowed_domains）；具体页面由检索结果给出深链。",
+      "added": "2026-09-15",
+      "enabled": true,
+      "id": "www-xinjiang-gov-cn"
     }
   ]
 }

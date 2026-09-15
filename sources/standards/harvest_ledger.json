@@ -9926,5 +9926,905 @@
   "checked": "2026-09-15",
   "official_url": "https://hbba.sacinfo.org.cn/stdDetail/08b62b6365b972a9764d32cc1279d67a",
   "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "GM/T 0003.2-2012 SM2椭圆曲线公钥密码算法 第2部分：数字签名算法": {
+  "code": "GM/T 0003.2-2012",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/87d25a2691c0b7e1b09e39051c9a7a88",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "GA/T 894.6-2010 安防指纹识别应用系统 第6部分：指纹识别算法评测方法": {
+  "code": "GA/T 894.6-2010",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/e9b5fa0954e33bf3a85bdaed4d67f1fa",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "MT/T 145-1997 评定煤用重选设备工艺性能的计算机算法": {
+  "code": "MT/T 145-1997",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/2114493b68791c7d463cd9901b65d5eb",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "SH/T 0694-2000 中间馏份燃料十六烷指数计算法（四变量公式法）": {
+  "code": "SH/T 0694-2000",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/819d58286d08a1b773521e6a8254b2cc",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "SH/T 0730-2004 石油馏分分子量估算法(粘度测量法)": {
+  "code": "SH/T 0730-2004",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/e898374fd00729c43aadcdfde03947b8",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "SH/T 0679-1999 航空燃料净热值估算法": {
+  "code": "SH/T 0679-1999",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/cb8b1d77e1d5f64e3d8f2580cf8c2643",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "MT/T 766-1998 评定煤用筛分设备工艺性能的计算机算法": {
+  "code": "MT/T 766-1998",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/425cfd3a3340978445903ba8d6426346",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "SN/T 3101-2012 锅炉燃料和柴油机燃料 净热值和总热值的估算法": {
+  "code": "SN/T 3101-2012",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/136abee9ffa9a8ee120a8c16380e6b7b",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "YS/T 437-2000 铝型材截面几何参数算法及计算机程序要求": {
+  "code": "YS/T 437-2000",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/bfaf7e157333631e0f3407ab5892873c",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "YD/T 7174—2026 人工智能 智能产品与服务 生成式人工智能总体技术要求": {
+  "code": "YD/T 7174—2026",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/ff254349150833bdf3a3299d576f1bec5ff92319f037e6bb4e66142523f01f0a",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "YD/T 6931-2026 人工智能 安全治理 生成式人工智能图像检测服务系统能力要求": {
+  "code": "YD/T 6931-2026",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/052e8aff19991695c2331854a2dafeb81385cea3464c54fbc14e1b4fce121100",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "YD/T 6930-2026 人工智能 产品服务 生成式人工智能图片生成平台能力要求": {
+  "code": "YD/T 6930-2026",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/052e8aff19991695c2331854a2dafeb8a22ab5788bb36dffcfecd2297b7fd27c",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "YD/T 6771—2026 人工智能 关键基础技术 具身智能数据集质量要求及评价方法": {
+  "code": "YD/T 6771—2026",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/4ae60948e583684607b95cd4ebf92854ea7eadfbe73b48f83a1a002fec42f3ba",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "YD/T 6767—2026 人工智能 关键基础技术 合成数据生成和管理能力要求": {
+  "code": "YD/T 6767—2026",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/4ae60948e583684607b95cd4ebf92854e81989476234667bb365a726d0182b99",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "YD/T 7173—2026 人工智能 安全治理 系统风险管理能力要求": {
+  "code": "YD/T 7173—2026",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/ff254349150833bdf3a3299d576f1bec2a35bb9981bfbc05ee45ac7a2ad71e6c",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "YD/T 7172—2026 人工智能 关键基础技术 大模型数据集开发管理能力要求及分级评估方法": {
+  "code": "YD/T 7172—2026",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/ff254349150833bdf3a3299d576f1becad6e3af2c431151a6e4ec4d28d6d7855",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "YD/T 7171—2026 人工智能 关键基础技术 大模型推理平台技术要求": {
+  "code": "YD/T 7171—2026",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/ff254349150833bdf3a3299d576f1bec08ac8e025e16ca892612efb80729db0c",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "YD/T 7170—2026 人工智能 关键基础技术 大模型训练平台技术要求": {
+  "code": "YD/T 7170—2026",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/ff254349150833bdf3a3299d576f1bece8006509d6f2400c9dd8fd6d577f77ca",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "YD/T 7169—2026 人工智能 关键基础技术 基于大模型的科研文献助手技术要求": {
+  "code": "YD/T 7169—2026",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/ff254349150833bdf3a3299d576f1bec3ac5804d0dce3d783aa4438da6681be3",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "YD/T 7168—2026 人工智能 基础共性 人工智能企业认定": {
+  "code": "YD/T 7168—2026",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/7cebb02e87f1a7aa1fbedbcb759a3a998ecde0ee59de22244f8f4821902ad546",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "YD/T 7167—2026 人工智能 基础共性 人工智能产业边界界定": {
+  "code": "YD/T 7167—2026",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/7cebb02e87f1a7aa1fbedbcb759a3a996fd54f1716a57a14eb8591f6de2e382d",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "YD/T 7160—2026 人工智能 关键基础技术 大模型计算资源运维平台技术要求": {
+  "code": "YD/T 7160—2026",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/a06ed52fd6c43c1abe67925cd133e3eca3663dfb27754cef13f5e52131e6ec3b",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "YD/T 7117—2026 人工智能 关键基础技术 联邦学习协议及应用的安全技术要求及评测方法": {
+  "code": "YD/T 7117—2026",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/ec4d2d9c2c1e312be7ec06121a297d8a2d98b7e33c5997deb2d0fcccc5ce8a17",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "YD/T 7116—2026 人工智能 关键基础技术 面向边缘网络的端边云协同联邦学习技术要求": {
+  "code": "YD/T 7116—2026",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/ec4d2d9c2c1e312be7ec06121a297d8a0b4c04fdfef0b09c2dbe8b72926b32dc",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "YD/T 7115—2026 人工智能 关键基础技术 人工智能中台应用成熟度评估方法": {
+  "code": "YD/T 7115—2026",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/ec4d2d9c2c1e312be7ec06121a297d8aedbafb890b03b47e4ff845dde0c12e28",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "YD/T 7114—2026 人工智能 关键基础技术 大模型数据处理平台技术要求": {
+  "code": "YD/T 7114—2026",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/ec4d2d9c2c1e312be7ec06121a297d8a09e65da912191b09683b6f9f618ee6f0",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "YD/T 7113—2026 人工智能 关键基础技术 语音数据集质量评估要求": {
+  "code": "YD/T 7113—2026",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/ec4d2d9c2c1e312be7ec06121a297d8a319448ee8993c5f74f99e6b9a9dc0f38",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "YD/T 7112—2026 人工智能 关键基础技术 图像数据集质量评估要求": {
+  "code": "YD/T 7112—2026",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/ec4d2d9c2c1e312be7ec06121a297d8a1534adef74cf06b8d126ea00868da7b6",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "SJ/T-12117-2026 人工智能  关键技术 检索增强生成系统测评规范": {
+  "code": "SJ/T-12117-2026",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/346a4cc7cc673c96f234d99a78672caa5110bb79c2ac171cfacfc80accb94efa",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "SJ/T 12123-2026 人工智能智能产品与服务 模型即服务（MaaS）技术规范": {
+  "code": "SJ/T 12123-2026",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/986a57a0a3969d87f3083d397585004b6ebbc1a3024247287c8cda8f7f725035",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "SJ/T 12122-2026 人工智能智能产品与服务 模型即服务（MaaS）参考架构": {
+  "code": "SJ/T 12122-2026",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/986a57a0a3969d87f3083d397585004be06813b19d95ccb85882c03fda26fd9f",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "SJ/T 12121-2026 人工智能关键技术 智能体 技术规范": {
+  "code": "SJ/T 12121-2026",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/986a57a0a3969d87f3083d397585004b2863f1c7ccba0fddff8806df0bf32577",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "SJ/T 12120-2026 人工智能关键技术 语言大模型对齐能力评估": {
+  "code": "SJ/T 12120-2026",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/986a57a0a3969d87f3083d397585004bc222d2159a8a2c2b907abfb259bc6d27",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "SJ/T 12119-2026 人工智能关键技术 模型管理指南": {
+  "code": "SJ/T 12119-2026",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/c1586e772f609e5766fdeb004870c1519ca19ba4efdb4bc05dccfaa0f7a9e87d",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "SJ/T 12118-2026 人工智能关键技术 具身智能 系统规范": {
+  "code": "SJ/T 12118-2026",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/c1586e772f609e5766fdeb004870c151ec40ec374ca7b6cbc1e6f2361b7667f2",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "SJ/T 12116-2026 人工智能  关键技术 检索增强生成通用技术要求": {
+  "code": "SJ/T 12116-2026",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/c1586e772f609e5766fdeb004870c151547c1426f530b967b1f3ad1330f72182",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "SJ/T 12115-2026 人工智能关键技术 端云设备模型协同系统规范": {
+  "code": "SJ/T 12115-2026",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/c1586e772f609e5766fdeb004870c15116689d855243f0ffe74480788d9a14e5",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "SJ/T 12114-2026 人工智能关键技术 办公大模型系统技术要求": {
+  "code": "SJ/T 12114-2026",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/c1586e772f609e5766fdeb004870c1516fef841c8eb427c089721a18ee2929d8",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "SJ/T 12113-2026 人工智能赋能新型工业化 工业企业智能化升级就绪度评估": {
+  "code": "SJ/T 12113-2026",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/b116ecd29c4a3d7142d257e5fe6f73c13cb609024214ba5c069861803e0ac1b8",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "SJ/T 12112.2-2026 人工智能 自动驾驶系统仿真测试场景要求 第2部分：无人驾驶小型客车": {
+  "code": "SJ/T 12112.2-2026",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/b116ecd29c4a3d7142d257e5fe6f73c1787ad8fe0aab666bb8e8e85f8aa88352",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "SJ/T 12112.1-2026 人工智能 自动驾驶系统仿真测试场景要求 第1部分：无人配送车": {
+  "code": "SJ/T 12112.1-2026",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/b116ecd29c4a3d7142d257e5fe6f73c196548488c57af9111182a1d474b5e117",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "SJ/T 12111-2026 人工智能 智能字符识别技术要求": {
+  "code": "SJ/T 12111-2026",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/b116ecd29c4a3d7142d257e5fe6f73c15e7b300e635bb0fb7b4e5bf7b5f8d474",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "SJ/T 12110-2026 人工智能 视频图像审核系统技术规范": {
+  "code": "SJ/T 12110-2026",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/b116ecd29c4a3d7142d257e5fe6f73c193e9f9bc6c1657fcefac62436fe91d8c",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "SJ/T 12109-2026 人工智能 视觉数据自动标注系统功能要求": {
+  "code": "SJ/T 12109-2026",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/b116ecd29c4a3d7142d257e5fe6f73c19bae41e4d8f75b811f3c222fb97996e5",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "SJ/T 12108-2026 人工智能 深度合成图像系统技术规范": {
+  "code": "SJ/T 12108-2026",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/ddb1810dc12d41482f419625dd952529e33c546b6899f4efa573634dcf9cee71",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "SJ/T 12107-2026 人工智能 面向计算机视觉的自主学习系统技术规范": {
+  "code": "SJ/T 12107-2026",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/ddb1810dc12d41482f419625dd9525294a24913215be68411964005e5b5a9f7e",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "SJ/T 12106-2026 人工智能 跨媒体服务平台系统框架": {
+  "code": "SJ/T 12106-2026",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/ddb1810dc12d41482f419625dd952529f7f85e6f9ff02a62c2dba7b1bc63c669",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "SJ/T 12105-2026 人工智能 计算机视觉系统可信赖技术规范": {
+  "code": "SJ/T 12105-2026",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/ddb1810dc12d41482f419625dd95252997d0380dbe7d4031d4485bb1e0b37ea1",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "SJ/T 12104-2026 人工智能 工业视觉模型训练推理平台技术规范": {
+  "code": "SJ/T 12104-2026",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/ddb1810dc12d41482f419625dd952529280c6c59f188daa1c1e28d20e34a3b73",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "SJ/T 12103-2026 人工智能 高速摄像分析系统技术规范": {
+  "code": "SJ/T 12103-2026",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/142ed1edc5d66ec97ad7ad7a5214b5601e4f27f8081966b0c4564f6e749b74a7",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "SJ/T 12102.2-2026 人工智能 车辆特征识别系统技术规范 第2部分：非机动车": {
+  "code": "SJ/T 12102.2-2026",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/142ed1edc5d66ec97ad7ad7a5214b560ac9192983b30f4fd524c79ffc25af16e",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "SJ/T 12102.1-2026 人工智能 车辆特征识别系统技术规范 第1部分：机动车": {
+  "code": "SJ/T 12102.1-2026",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/142ed1edc5d66ec97ad7ad7a5214b560e3e398552a9baeeae7302529003b90a2",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "YD/T 7073-2026 人工智能 安全治理 术语": {
+  "code": "YD/T 7073-2026",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/afad2a9ddf3c3e6c96fd8314d4fbb1384f04b8eca09b8bf6a695f9dac17910f3",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "YD/T 4405.7-2026 医疗云计算评估方法 第7部分：人工智能医疗云应用": {
+  "code": "YD/T 4405.7-2026",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/46bd85d6a821acf92c64628fc62b30fb359cba60e02e56979acca5576b3f94d0",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "YD/T 6960-2026 人工智能计算数据中心横向扩展（Scale-out）网络技术要求": {
+  "code": "YD/T 6960-2026",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/fb4c6d34cadcfa72278a2b21f03c194cbcac64181c34b651333201fd9dda0323",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "YD/T 6959-2026 人工智能计算数据中心横向扩展（Scale-out）网络测试方法": {
+  "code": "YD/T 6959-2026",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/fb4c6d34cadcfa72278a2b21f03c194c6a0f3269978da7066aaa49116dc68cde",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "YD/T 6948-2026 人工智能 关键基础技术 面向大语言模型的算子能力技术要求": {
+  "code": "YD/T 6948-2026",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/a5a297cadeb5813b4182591505859b4ab35bc072841bc9d22b65a15009060b28",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "YD/T 6947-2026 人工智能 关键基础技术 大模型训练及推理集群系统能力要求": {
+  "code": "YD/T 6947-2026",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/a5a297cadeb5813b4182591505859b4af7c91d3e45f470ee824bd2ab5c7e87d0",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "YD/T 6946-2026 人工智能 关键基础技术 多模态大模型技术要求": {
+  "code": "YD/T 6946-2026",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/a5a297cadeb5813b4182591505859b4a9803a95744263ee1ee110d653ff0f162",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "YD/T 6932-2026 人工智能 基础共性 模型运营成熟度要求": {
+  "code": "YD/T 6932-2026",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/052e8aff19991695c2331854a2dafeb8d3fef4e7801a7e811661676174f57ecf",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "YD/T 6929-2026 人工智能一体机技术要求": {
+  "code": "YD/T 6929-2026",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/052e8aff19991695c2331854a2dafeb80618607f7a4b188ed6fada2d0e76bebc",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "YD/T 6928-2026 面向通信网络运维的人工智能平台技术要求": {
+  "code": "YD/T 6928-2026",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/c2e19110e36adbc0242519e5d0190b375ec2e058bf74b73da60475e4029ee4ad",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "YD/T 6927.1-2026 边缘人工智能平台技术要求和测试方法 第1部分：功能": {
+  "code": "YD/T 6927.1-2026",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/c2e19110e36adbc0242519e5d0190b37c37357fe38273058c518b4fb6d33cc65",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "YD/T 6925-2026 人工智能 关键基础技术 智能体基础技术能力要求": {
+  "code": "YD/T 6925-2026",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/c2e19110e36adbc0242519e5d0190b37f69a0ebf39ffbda7b1dfb7b8bfe0f1ef",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "YD/T 6924-2026 人工智能 关键基础技术 模型即服务（MaaS） 大模型应用开发平台技术要求": {
+  "code": "YD/T 6924-2026",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/c2e19110e36adbc0242519e5d0190b370d33583352cc4b5f7b9cfeb28694fa2b",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "YD/T 6923-2026 人工智能 关键基础技术 模型即服务（MaaS） 大模型服务平台技术要求": {
+  "code": "YD/T 6923-2026",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/c2e19110e36adbc0242519e5d0190b37127244855768ae170ae42f174fb1fcfd",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "YD/T 6922-2026 人工智能 关键基础技术 面向端侧设备的大模型技术要求": {
+  "code": "YD/T 6922-2026",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/c2e19110e36adbc0242519e5d0190b371bda88ca787424fc3da80642b1545869",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "YD/T 6921-2026 人工智能 关键基础技术 大模型基准测试": {
+  "code": "YD/T 6921-2026",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/c2e19110e36adbc0242519e5d0190b37a0ca3a9d1916091b9bd6498509d8cba6",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "YD/T 6919-2026 人工智能 基础共性 企业智能化成熟度评估模型": {
+  "code": "YD/T 6919-2026",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/c2e19110e36adbc0242519e5d0190b374e93e9b313cde6dc60c86b77370677ad",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "YD/T 6918-2026 人工智能 基础共性 模型管理成熟度要求": {
+  "code": "YD/T 6918-2026",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/c2e19110e36adbc0242519e5d0190b37449d79db903875bc4c0d2f5df75d5b9b",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "YD/T 6770-2026 人工智能 关键基础技术 具身智能基准测试方法": {
+  "code": "YD/T 6770-2026",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/41709a554c33138fc0efd2309473da6e2de076132063af6ac21b236db93f51fb",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "YD/T 6766-2026 人工智能 关键基础技术 大模型分类方法和分级技术要求": {
+  "code": "YD/T 6766-2026",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/c7326e583e3c867f0739b9e15275bea4ff06c7537174fb9c463809a3fe2b028c",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "YD/T 6699-2026 边缘计算人工智能服务器及加速卡技术要求": {
+  "code": "YD/T 6699-2026",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/a41c8d4381b9fcdd39761e8eeb32499032527753425b78967f2ff90e6b2aaa84",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "YD/T 4392.3-2026 人工智能开发平台通用能力要求 第3部分：性能要求": {
+  "code": "YD/T 4392.3-2026",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/edf6e55f6e29c359a89459d8ee696f24ad6e3af2c431151a6e4ec4d28d6d7855",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "SJ/T 12037-2025 人工智能芯片 云侧训练用深度学习芯片测试指标与测试方法": {
+  "code": "SJ/T 12037-2025",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/c2e0ffcb9e3536ec1a38bd993645d813eb4dcbe08cb189fad21a9ebaf1fe345e",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "SJ/T 12036-2025 人工智能芯片 云侧推理用深度学习芯片测试指标与测试方法": {
+  "code": "SJ/T 12036-2025",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/c2e0ffcb9e3536ec1a38bd993645d8131abad7a0aa61be01863df747c249019d",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "SJ/T 12035-2025 人工智能芯片 端侧深度学习芯片测试指标与测试方法": {
+  "code": "SJ/T 12035-2025",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/c2e0ffcb9e3536ec1a38bd993645d8138966a743957a1f0bcd8e7b8537181207",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "SJ/T 12034-2025 人工智能芯片 边缘侧深度学习芯片测试指标与测试方法": {
+  "code": "SJ/T 12034-2025",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/c2e0ffcb9e3536ec1a38bd993645d813deca4428d41e38a7dbed69881ab7f738",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "YD/T 4392.4-2025 人工智能开发平台通用能力要求 第4部分：大模型开发应用": {
+  "code": "YD/T 4392.4-2025",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/ad1feb151b8b4d3e3d64c129c5d1f7836580a1feed9ab56bde88156de762bb43",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "YD/T 4392.2-2025 人工智能开发平台通用能力要求 第2部分：安全要求": {
+  "code": "YD/T 4392.2-2025",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/ad1feb151b8b4d3e3d64c129c5d1f78381a5180d19be2f6b1bcedb3d87722491",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "YD/T 6487-2025 面向人工智能的数据生产和标注服务能力通用成熟度模型": {
+  "code": "YD/T 6487-2025",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/1e8ebca67d48a25ff9005b179c3ba0a72e84f439ba11a09175c0e75af82979f5",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "YD/T 6486-2025 面向人工智能的数据集质量通用评估方法 总体要求": {
+  "code": "YD/T 6486-2025",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/1e8ebca67d48a25ff9005b179c3ba0a7bafa89d3c8c663f2fa9198b67813a5f2",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "YD/T 6393-2025 面向互联网的医疗人工智能辅助决策 基于可穿戴设备心电图的智能辅助决策产品性能指标和测试方法": {
+  "code": "YD/T 6393-2025",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/caa43d01121037cca87b6521302bd2c32080202fca4e64bf5a5ebe83f2de97d5",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "YD/T 6618-2025 电信网和互联网未成年人网络保护要求": {
+  "code": "YD/T 6618-2025",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/649b008fc2986f3fe85311391b2620739332f6559d7640b21230f106c9fe2e70",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "GA/T 1537-2018 信息安全技术  未成年人移动终端保护产品测评准则": {
+  "code": "GA/T 1537-2018",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/209feaa9552a230719ca5cd1ac02c316d128f380aa93c7dbe5c58c67d9d2075e",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "MZ/T 086-2017 受监护侵害未成年人保护工作指引": {
+  "code": "MZ/T 086-2017",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/bf0b16d1defd613e30b4f6df023fed1d",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "MZ/T 049-2014 流浪未成年人类家庭服务": {
+  "code": "MZ/T 049-2014",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/15091ae9e6efffec69fb31c15e34cf67",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "MZ/T 045-2013 流浪未成年人家庭寄养服务": {
+  "code": "MZ/T 045-2013",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/e9b38f763f73a3718b9f48e99a03e21d",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "YD/T 7286—2026 虚拟货币“挖矿”移动互联网应用程序通用特征认定指南": {
+  "code": "YD/T 7286—2026",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/d2b58cc39f3a985b2b1608490346b456b8af2224f3fb372da5a6eea1a7ba7692",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "YD/T 6870-2026 基于终端风控服务和移动互联网应用程序（APP）联动的涉诈风险防范实施指南": {
+  "code": "YD/T 6870-2026",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/3d2bda16ec600035949a7cf4020b7d0b903c95e7f764c77f963f68b71cc5b333",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "YD/T 6795-2026 移动互联网应用程序备案 服务类目分类要求": {
+  "code": "YD/T 6795-2026",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/e33818177bac3c1d87d081a0aa29915505ef2cd0da5b64a7974bb388b29aca68",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "YD/T 6794-2026 移动互联网应用程序备案 备案信息展示要求": {
+  "code": "YD/T 6794-2026",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/e33818177bac3c1d87d081a0aa2991550d0f2f790246c6136303cc3a81f1fe75",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "YD/T 6683-2026 移动互联网应用IPv6支持度评测指标与测试方法": {
+  "code": "YD/T 6683-2026",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/16aa0099c1cf0b913d586432dc14c5e586a54b95d072b9a9613e0ec792139a99",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "YD/T 6652-2026 移动互联网应用关联手机号码技术要求": {
+  "code": "YD/T 6652-2026",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/9b99c66aad4e4ba7b8589a586902f86019db63a7bd5c7032acf382a128b2b7ff",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "YD/T 6312-2025 移动互联网应用程序（APP）自动化决策用户权益保护要求": {
+  "code": "YD/T 6312-2025",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/4869b365db811e89652bbe021b2176e71669ca49c136a87445f44c66e2cff252",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "YD/T 2588-2020 移动互联网应用商店安全防护检测要求": {
+  "code": "YD/T 2588-2020",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/c4992fc8801cc4870ea4839ee492745f7c79d62f5b646531c6588499fb4648ba",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "YD/T 2587-2020 移动互联网应用商店安全防护要求": {
+  "code": "YD/T 2587-2020",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/c4992fc8801cc4870ea4839ee492745f2cc26f0d16f6fcfd649c970cfa73466d",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "YD/T 3495-2019 移动互联网应用程序开发者数字证书管理平台接口规范": {
+  "code": "YD/T 3495-2019",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/bb1ed2ba3869220022fb863a62045b0fa3c29ad35d38c5ffec693330e0acc255",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "YD/T 3476-2019 移动互联网应用程序开发者数字证书管理平台技术要求": {
+  "code": "YD/T 3476-2019",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/57b311c7b94c70bb13ff30bf0f6736da10121173f2b639bffc48b8bec844c6fe",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "YD/T 3475-2019 移动互联网应用自律白名单资质评估方法": {
+  "code": "YD/T 3475-2019",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/57b311c7b94c70bb13ff30bf0f6736da47409f9eaa2296c6c908616c299cf68c",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
  }
 }

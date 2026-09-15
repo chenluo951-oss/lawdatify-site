@@ -366,10 +366,15 @@ def govcn_search(title, n=8):
 FLK_API = "https://flk.npc.gov.cn/law-search"
 
 
-def flk_search(title, size=5):
-    """国家法律法规数据库检索（新 REST 接口）。返回 rows。"""
+def flk_search(title, size=5, by_title=False):
+    """国家法律法规数据库检索（新 REST 接口）。返回 rows。
+
+    by_title=True 时按**标题精确**检索（searchType=1）——补法规种子时必用，
+    否则默认的全文检索（searchType=2）噪声极大（搜「食品安全法」会返回宪法）。
+    """
     payload = json.dumps({
-        "searchRange": 1, "sxrq": [], "gbrq": [], "searchType": 2, "sxx": [],
+        "searchRange": 1, "sxrq": [], "gbrq": [], "searchType": 1 if by_title else 2,
+        "sxx": [],
         "gbrqYear": [], "flfgCodeId": [], "zdjgCodeId": [],
         "searchContent": title, "pageNum": 1, "pageSize": size,
         "sortTr": "f_bbrq_s;desc", "sort": True}, ensure_ascii=False)
