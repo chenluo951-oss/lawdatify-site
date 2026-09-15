@@ -43,7 +43,17 @@
 """
 
 import re
+import os
+import sys
 from urllib.parse import urlparse
+
+# 账号定级的「单一事实来源」：国家 + 省市多级监管机关 / 协会 / 学术 / 同行，
+# 全部集中在 tools/wx_sources.py，避免与检索池两边散落导致漏判。
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "tools"))
+try:
+    from wx_sources import authority_tier as _WX_AUTHORITY_TIER
+except Exception:  # 极端情况下回退到本文件内白名单
+    _WX_AUTHORITY_TIER = None
 
 TIER_ORDER = ("official", "wechat-official", "gov-media", "academic", "research", "other")
 
@@ -271,11 +281,19 @@ def _host(url):
 def _account_tier(name):
     """按公众号账号名判定档位：
     研究/学术号 → research（研究观点）；协会学会研究院 → academic（专业机构）；
-    发布机关号 → wechat-official（官方公众号）；其余 → other（不放过营销号）。
+    发布机关号（国家+省市多级）→ wechat-official（官方公众号）；其余 → other。
+
+    优先用 tools/wx_sources.authority_tier（覆盖八类监管主体的国家/省/市多级账号，
+    含「市说新语/网信浙江/广东网警/浙江市场监管」等），其内部正则即单一事实来源；
+    兜底再走本文件的白名单常量，保证即使 wx_sources 不可用时也不退化为全 other。
     """
     a = (name or "").strip().lower()
     if not a:
         return "other"
+    if _WX_AUTHORITY_TIER:
+        t = _WX_AUTHORITY_TIER(name)
+        if t:
+            return t
     for k in RESEARCH_ACCOUNTS:
         if k.lower() in a:
             return "research"

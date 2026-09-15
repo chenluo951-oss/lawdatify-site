@@ -9476,5 +9476,455 @@
   "checked": "2026-09-15",
   "official_url": "https://hbba.sacinfo.org.cn/stdDetail/90fc348830d2e56a218716ebe11bf74920c069d63fc969dbb01fb77cddde6e45",
   "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "YD/T 3458-2019 互联网码号资源公钥基础设施（RPKI）安全运行技术要求 数据安全威胁模型": {
+  "code": "YD/T 3458-2019",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/5cbb0dd8ab8e222f27cdad55c6dabebbc5e1d4fe3b5baca32c5bd15811814518",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "YD/T 7441—2026 互联网域名服务数据分类分级方法": {
+  "code": "YD/T 7441—2026",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/0ebd642940e044d4805d8210ad97e6d0f6b5f90d5a4e0fe2fc358740e19b9191",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "YD/T 3813-2020 基础电信企业数据分类分级方法": {
+  "code": "YD/T 3813-2020",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/0b92201fbdefcd76927faec5d47a137df17c51da5e981772108b22a467559866",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "YD/T 6617-2025 车联网平台重要数据识别指南": {
+  "code": "YD/T 6617-2025",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/649b008fc2986f3fe85311391b26207361179f54b87450a826f58e9482824cbb",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "YD/T 7118—2026 人工智能 关键基础技术 联邦学习算法跨框架互操作的总体技术要求": {
+  "code": "YD/T 7118—2026",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/ec4d2d9c2c1e312be7ec06121a297d8a345f01c461ad5a6ddd03ada562b52ccb",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "YD/T 6805-2026 音频深度合成鉴伪检测算法引擎安全性评测方法": {
+  "code": "YD/T 6805-2026",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/e33818177bac3c1d87d081a0aa299155711c1857ada8afc2b5bbf839ef255828",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "YD/T 6804-2026 图像视频深度合成鉴伪检测算法引擎安全性评测方法": {
+  "code": "YD/T 6804-2026",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/e33818177bac3c1d87d081a0aa2991554a71658ab56fa22d356104c3561fd11b",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "YY/T 1991-2025 人工智能医疗器械 脑卒中CT影像辅助分析软件 算法性能测试方法": {
+  "code": "YY/T 1991-2025",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/026e7cd81a15715378c4d66324173748a9b0ece96bccfc17b9cdc1fd649b6b38",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "YY/T 1990-2025 人工智能医疗器械 细胞病理图像辅助分析软件 算法性能测试方法": {
+  "code": "YY/T 1990-2025",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/026e7cd81a15715378c4d663241737489ccfa6138b6117a4491f513b177d273d",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "YD/T 4544.4-2024 互联网域名滥用治理 第4部分：算法生成域名处置指南": {
+  "code": "YD/T 4544.4-2024",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/d11c4c81ea7e756b0cde58495b2ad822a7a839712e7cc42035b61c8cf7f4ac7a",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "YD/T 6207-2024 视频业务用户体验质差评估算法": {
+  "code": "YD/T 6207-2024",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/d11c4c81ea7e756b0cde58495b2ad822deca4428d41e38a7dbed69881ab7f738",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "GA/T 2153-2024 安全防范 掌静脉识别应用 算法性能评测方法": {
+  "code": "GA/T 2153-2024",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/f23902c9400c81ea79d00aa398fdb0748082c9df8b5d047e636b03e50eb90ce9",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "GM/T 0010-2023 SM2密码算法加密签名消息语法规范": {
+  "code": "GM/T 0010-2023",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/22a394db18c231fa90c6bdb364f0e26422844fd49e8380b7b0a64bf9b56f692a",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "GM/T 0130-2023 基于SM2算法的无证书及隐式证书公钥机制": {
+  "code": "GM/T 0130-2023",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/22a394db18c231fa90c6bdb364f0e2647bed336db3e3baf64de6a6b91ce1f22f",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "YY/T 1907-2023 人工智能医疗器械 冠状动脉CT影像处理软件 算法性能测试方法": {
+  "code": "YY/T 1907-2023",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/db4da93a01fa291227875568d335c8992fe82a78e37a1cd1a09d02284c755f81",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "YY/T 1858-2022 人工智能医疗器械 肺部影像辅助分析软件 算法性能测试方法": {
+  "code": "YY/T 1858-2022",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/f475a4b8f28f54ca649205ac8808a5239cc6afbe009723a075c8e979b1411595",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "GM/T 0086-2020 基于SM9标识密码算法的密钥管理系统技术规范": {
+  "code": "GM/T 0086-2020",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/c32c8844bcf45d8fee4858cf91547c626fef841c8eb427c089721a18ee2929d8",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "GM/T 0085-2020 基于SM9标识密码算法的技术体系框架": {
+  "code": "GM/T 0085-2020",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/c32c8844bcf45d8fee4858cf91547c62d840c938c16e6bc07a1b84fae7b33b6f",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "GM/T 0081-2020 SM9密码算法加密签名消息语法规范": {
+  "code": "GM/T 0081-2020",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/c32c8844bcf45d8fee4858cf91547c6290f8cdb41a4ddba308a5c9519833b985",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "GM/T 0080-2020 SM9密码算法使用规范": {
+  "code": "GM/T 0080-2020",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/c32c8844bcf45d8fee4858cf91547c62ba345ee72cfe3e6feb256fee1f242411",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "YD/T 3779-2020 宽带视频服务用户体验评估 点播算法和参数": {
+  "code": "YD/T 3779-2020",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/2aece5186bf1c46aeb2e377d275c58769332f6559d7640b21230f106c9fe2e70",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "YD/T 3778-2020 宽带视频服务用户体验评估 直播算法和参数": {
+  "code": "YD/T 3778-2020",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/2aece5186bf1c46aeb2e377d275c587661179f54b87450a826f58e9482824cbb",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "GM/T 0044-2016 SM9标识密码算法": {
+  "code": "GM/T 0044-2016",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/3bf644dfcd94cb3c30d5c6dc9f94a9c6d128f380aa93c7dbe5c58c67d9d2075e",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "SH/T 0572-1993 催化剂孔径分布计算法（氮脱附等温线计算法）": {
+  "code": "SH/T 0572-1993",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/6815a654070093ff3c8316be8a2d355f",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "YS/T 437-2018 铝合金型材截面几何参数算法及计算机程序要求": {
+  "code": "YS/T 437-2018",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/65c63638f9247c1b026fd4e2b1e00525",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "YD/T 3207-2016 多应用eID载体商用密码算法接口技术要求": {
+  "code": "YD/T 3207-2016",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/6efe9a1910e515d5f87234b1f12bfcbb",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "GM/T 0044.1-2016 SM9标识密码算法第1部分：总则": {
+  "code": "GM/T 0044.1-2016",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/6fae6a6500d3417faf401902540d8ec1",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "GM/T 0044.5-2016 SM9标识密码算法第5部分：参数定义": {
+  "code": "GM/T 0044.5-2016",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/1bdf3233dae9e17f2e9b6447e7cbcb67",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "GM/T 0044.4-2016 SM9标识密码算法第4部分：密钥封装机制和公钥加密算法": {
+  "code": "GM/T 0044.4-2016",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/71250fb75e575275b9ce06aff2237a47",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "GM/T 0044.3-2016 SM9标识密码算法第3部分：密钥交换协议": {
+  "code": "GM/T 0044.3-2016",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/0e59ca6aae3547de8f8a5e830e21e07f",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "GM/T 0044.2-2016 SM9标识密码算法第2部分：数字签名算法": {
+  "code": "GM/T 0044.2-2016",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/2694521c6c62c2e8eb50bcc8126a0f62",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "GA/T 1179-2014 安防声纹确认应用算法技术要求和测试方法": {
+  "code": "GA/T 1179-2014",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/eb88a0c313a2f1457bea367de2938d9f",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "GA/T 1208-2014 安防虹膜识别应用 算法评测方法": {
+  "code": "GA/T 1208-2014",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/303f817f145b2dc400184a02b2c9273a",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "GM/T 0002-2012 SM4分组密码算法": {
+  "code": "GM/T 0002-2012",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/4242db5fbfd4c868ef4e387d68c25100",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "GM/T 0003.1-2012 SM2椭圆曲线公钥密码算法 第1部分：总则": {
+  "code": "GM/T 0003.1-2012",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/d07752bfa664d77326df6f0308462085",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "GM/T 0003.3-2012 SM2椭圆曲线公钥密码算法 第3部分：密钥交换协议": {
+  "code": "GM/T 0003.3-2012",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/6c5d2cd1a0cdb435c004d738af989c35",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "GY/T 262-2012 节目响度和真峰值音频电平测量算法": {
+  "code": "GY/T 262-2012",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/6d3215d8b9e846e14c8172646b59dbca",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "GM/T 0004-2012 SM3密码杂凑算法": {
+  "code": "GM/T 0004-2012",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/d0e50b477b2cb4590a3528a4b8b595a6",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "YD/T 2558-2013 基于祖冲之算法的LTE终端和网络设备安全技术要求": {
+  "code": "YD/T 2558-2013",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/44c70b5cf4c6eaec15a5c3b345b14782",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "GA/T 939-2012 安防指静脉识别应用系统算法评测方法": {
+  "code": "GA/T 939-2012",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/6f9ddfdb3b53875ee8b21b49d7f9e460",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "YD/T 2559-2013 基于祖冲之算法的LTE终端和网络设备安全测试方法": {
+  "code": "YD/T 2559-2013",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/295479a49cb3e19f4644cd0912ac0635",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "GM/T 0034-2014 基于SM2密码算法的证书认证系统密码及其相关安全技术规范": {
+  "code": "GM/T 0034-2014",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/cb56d3ae7a4991d41afbac96e6081235",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "GM/T 0015-2012 基于SM2密码算法的数字证书格式规范": {
+  "code": "GM/T 0015-2012",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/47dbd808cb3d86e7ad73e07e77b854a1",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "SH/T 0725-2002 石油基绝缘油碳型组成计算法": {
+  "code": "SH/T 0725-2002",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/f49f4c5dde0a280eea86735a5691f915",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "YS/T 437-2009 铝合金型材截面几何参数算法及计算机程序要求": {
+  "code": "YS/T 437-2009",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/e50c32da7e63ea31027c7eb3a64f4123",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "GM/T 0001.2-2012 祖冲之序列密码算法 第2部分：基于祖冲之算法的机密性算法": {
+  "code": "GM/T 0001.2-2012",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/ecdde1d26892eea7be1fdc68d47c821b",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "GM/T 0001.3-2012 祖冲之序列密码算法 第3部分：基于祖冲之算法的完整性算法": {
+  "code": "GM/T 0001.3-2012",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/4d629d60117a1a33aa29fafe15de79ed",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "GM/T 0001.1-2012 祖冲之序列密码算法 第1部分：算法描述": {
+  "code": "GM/T 0001.1-2012",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/b87b18ad61237cb76aa3f50bee7e859f",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "GM/T 0003.4-2012 SM2椭圆曲线公钥密码算法 第4部分：公钥加密算法": {
+  "code": "GM/T 0003.4-2012",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/c631c009da39a4e594dbe0efb75b6c65",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "GM/T 0003.5-2012 SM2椭圆曲线公钥密码算法 第5部分：参数定义": {
+  "code": "GM/T 0003.5-2012",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-15",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/08b62b6365b972a9764d32cc1279d67a",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
  }
 }

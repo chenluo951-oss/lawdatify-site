@@ -505,11 +505,15 @@ def render_item_card(it, idx, rel="../"):
         # 主题摘要条目：公众号是封闭生态，官方协会 / 学术号 / 同行专业号的文章一时
         # 抓不到原文时，先按「来源署名 + 主题要点」上站（绝不伪造微信外链），
         # 原文由每日抓取任务后续补齐并自动回填站内存档。
+        # 用户 2026-09-15 硬性要求：必须显式标注「检索来源」公众号名，
+        # 否则别人无从查找原文与出处——所以这里明确写「检索来源 · XX（微信公众号）」，
+        # 并提示可在微信内搜索该公众号名称定位原文。
         lb = it["src_label"]
         _t = tier_of("", it.get("src"), lb)
         link_html = (
-            f'<span class="src src-plain" title="来源：{esc(lb)}（微信公众号）；'
-            f'原文待抓取，先以主题与主要内容上站">{esc(lb)} 公众号</span>'
+            f'<span class="src src-search" title="本条目原文尚未抓取，检索来源为微信公众号'
+            f'「{esc(lb)}」；可在微信内搜索该公众号名称找到原文。待抓取后自动升级为站内原文存档">'
+            f'检索来源 · {esc(lb)}（微信公众号）</span>'
             f'<span class="rd-src {TIER_CLASS.get(_t, "src-oth")}" '
             f'title="{TIER_DESC.get(_t, "")}；本条原文待抓取，先以主题与主要内容上站">'
             f'{TIER_LABEL.get(_t, _t)}</span>'

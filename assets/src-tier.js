@@ -37,22 +37,15 @@
     'Mzg3MDA1NTQxNw=='   // 网信中国（中央网信办）
   ];
 
+  /* 八类监管主体账号特征（与 tools/wx_sources.py 的 ACCOUNT_TIER_RULES 同口径）：
+   * 网信办 / 公安（网安局·网安通报·网警）/ 市场监管（含总局官号「市说新语」）/
+   * 工信·通管 / 法院 / 检察 / 发改 / 人大·司法 —— 国家 + 省市多级都要认。
+   * 注意：「法治」不进本正则（会把「数字法治」等学术号误判成官方）。 */
+  var OFFICIAL_RX = /网信|网络安全和信息化|互联网信息办公室|网安局|网安通报|网警|国家网络安全通报中心|公安|市说新语|市场监管|市监|监督管理局|质量技术监督|工信|通信管理|通管|通信业|无线电|高级人民法院|中级法院|人民法院|最高法|法庭|检察院|检察|公诉|发展改革|发改|人大|司法|普法/;
   /* 官方协会 / 学会 / 研究院类账号名特征词 → academic */
-  var ASSOCIATION_KEYS = ['协会', '学会', '委员会', '研究院', '研究所', '信通院',
-    '标准化技术', '产业联盟', '联合会', '促进会', '商会', '仲裁委', '认证中心'];
+  var ASSOC_RX = /协会|学会|委员会|研究院|研究所|信通院|信安标委|标准化技术|产业联盟|联合会|促进会|商会|仲裁委|认证中心/;
   /* 研究 / 学术号与行业律所团队 → research */
-  var RESEARCH_ACCOUNTS = ['数据法学', '数字法治', '网络法前哨', '数据合规公社',
-    '个人信息保护合规审计', '数据安全推进计划', '数字经济发展与治理', '数字经济与社会',
-    '网络空间治理', '人工智能治理', '清华大学人工智能国际治理研究院',
-    '中国政法大学数据法治研究院', '中国人民大学未来法治研究院',
-    '北京大学法治与发展研究院', '网数与人工智能法律实务', 'tmt法律论坛',
-    '汉坤', '中伦', '金杜', '数据合规评论', '网络与数据法律实务'];
-  /* 发布机关号 → wechat-official */
-  var WECHAT_ACCOUNTS = ['市说新语', '网信中国', '网安局', '公安部网安局', '市场监管',
-    '市场监督管理局', '市场监管局', '监督管理局', '网信办', '人民政府', '融媒', '发布',
-    '市场监管半月沙龙', '互联网信息办公室', '网络安全和信息化'];
-  /* 省级 / 重点城市网信办官方号：「网信+行政区名」 */
-  var REGION_RX = /网信(中国|北京|天津|上海|重庆|河北|山西|辽宁|吉林|黑龙江|江苏|浙江|安徽|福建|江西|山东|河南|湖北|湖南|广东|海南|四川|贵州|云南|陕西|甘肃|青海|内蒙古|广西|西藏|宁夏|新疆|深圳|青岛|宁波|厦门|大连)/;
+  var RESEARCH_RX = /数据法学|数字法治|网络法前哨|数据合规|人工智能法律|网络与数据法律|TMT法律|汉坤|中伦|金杜|竞天公诚|大成|汇业|法学|法治研究院|未来法治/;
 
   var OFFICIAL_HOSTS = [
     'npc.gov.cn', 'flk.npc.gov.cn', 'cac.gov.cn', 'beian.cac.gov.cn', '12377.cn',
@@ -92,12 +85,12 @@
   }
 
   function accountTier(name) {
-    var a = (name || '').trim().toLowerCase();
+    var a = (name || '').trim();
     if (!a) return 'other';
-    if (containsAny(RESEARCH_ACCOUNTS, a)) return 'research';
-    if (containsAny(ASSOCIATION_KEYS, a)) return 'academic';
-    if (REGION_RX.test(a)) return 'wechat-official';
-    if (containsAny(WECHAT_ACCOUNTS, a)) return 'wechat-official';
+    // 顺序与 sources_tier._account_tier 一致：官方机关 → 协会 → 研究
+    if (OFFICIAL_RX.test(a)) return 'wechat-official';
+    if (ASSOC_RX.test(a)) return 'academic';
+    if (RESEARCH_RX.test(a)) return 'research';
     return 'other';
   }
 
