@@ -45,13 +45,14 @@
 import re
 from urllib.parse import urlparse
 
-TIER_ORDER = ("official", "wechat-official", "gov-media", "academic", "other")
+TIER_ORDER = ("official", "wechat-official", "gov-media", "academic", "research", "other")
 
 TIER_LABEL = {
     "official": "官方原文",
     "wechat-official": "官方公众号",
     "gov-media": "官方媒体",
     "academic": "专业机构",
+    "research": "研究观点",
     "other": "二手转载",
 }
 
@@ -60,6 +61,7 @@ TIER_CLASS = {
     "wechat-official": "src-wx",
     "gov-media": "src-media",
     "academic": "src-aca",
+    "research": "src-res",
     "other": "src-oth",
 }
 
@@ -69,6 +71,8 @@ TIER_DESC = {
                         "微信生态封闭，PC 端无同类官网页时以公众号原文为准"),
     "gov-media": "人民日报、新华社、央视、澎湃等官方媒体",
     "academic": "官方学术机构、标准化组织与行业协会",
+    "research": ("高校研究机构、专业学术号与行业律所团队发布的合规研究与实务解读；"
+                 "属研究观点，可用于资讯与解读，不作为立法 / 标准 / 处罚案例的依据"),
     "other": "商业媒体、机构博客或二手转载",
 }
 
@@ -99,6 +103,46 @@ WECHAT_ACCOUNTS = (
     "市说新语", "网信中国", "网安局", "公安部网安局", "市场监管",
     "市场监督管理局", "市场监管局", "监督管理局", "网信办",
     "人民政府", "融媒", "发布", "市场监管半月沙龙",
+    "互联网信息办公室", "网络安全和信息化",
+)
+
+# 省级 / 重点城市网信办官方号：「网信+行政区名」（网信浙江 / 网信广东 / 浙江网信 …）
+WECHAT_REGION_RX = re.compile(
+    r"网信(中国|北京|天津|上海|重庆|河北|山西|辽宁|吉林|黑龙江|江苏|浙江|安徽|"
+    r"福建|江西|山东|河南|湖北|湖南|广东|海南|四川|贵州|云南|陕西|甘肃|青海|"
+    r"内蒙古|广西|西藏|宁夏|新疆|深圳|青岛|宁波|厦门|大连)")
+
+# ---------------------------------------------------------------- 研究观点
+# 为什么单列一档
+# --------------
+# 用户 2026-09-15 明确要求：合规相关公众号的覆盖范围不能只有监管机关，还要包含
+# **官方协会组织、通报渠道、知名学术机构与同行专业人士**（例：「数据法学」学术号、
+# 「网数与人工智能法律实务」律所团队号）。这类内容是**研究观点**——有专业价值、
+# 值得上站，但不能与监管依据混为一谈，所以单独成档并在页面上明确标出。
+#
+# 与 wechat-official 同样要求「凭据」：公众号 URL 不含账号信息，无凭据会给营销号
+# 开口子。凭据二选一：
+#   ① 存档 / 候选数据里的账号名命中 RESEARCH_ACCOUNTS（人工核实过的主体）；
+#   ② 数据里显式声明 src="research"。
+RESEARCH_ACCOUNTS = (
+    # 学术 / 研究号
+    "数据法学", "数字法治", "网络法前哨", "数据合规公社",
+    "个人信息保护合规审计", "数据安全推进计划", "数字经济发展与治理",
+    "数字经济与社会", "网络空间治理", "人工智能治理",
+    # 高校研究院
+    "清华大学人工智能国际治理研究院", "中国政法大学数据法治研究院",
+    "中国人民大学未来法治研究院", "北京大学法治与发展研究院",
+    # 行业律所 / 专业团队（同行实务解读）
+    "网数与人工智能法律实务", "tmt法律论坛", "汉坤", "中伦", "金杜",
+    "数据合规评论", "网络与数据法律实务",
+)
+RESEARCH_BIZ: dict = {}   # __biz → 账号（有实测值则登记，形如 WECHAT_BIZ）
+
+# 官方协会 / 学会 / 研究院类账号名特征词 → academic 档（用户口径里的「官方协会组织」）。
+# 这类主体是行业组织而非监管机关，但又明显区别于营销号，故按特征词放行。
+ASSOCIATION_KEYS = (
+    "协会", "学会", "委员会", "研究院", "研究所", "信通院", "标准化技术",
+    "产业联盟", "联合会", "促进会", "商会", "仲裁委", "认证中心",
 )
 
 # ---------------------------------------------------------------- 链接性质
@@ -224,29 +268,60 @@ def _host(url):
     return h
 
 
-def _wechat_tier(url, declared=None):
-    """公众号链接的定级：有凭据才算官方公众号，否则仍是二手转载。"""
-    if (declared or "").strip() in ("wechat-official", "official"):
+def _account_tier(name):
+    """按公众号账号名判定档位：
+    研究/学术号 → research（研究观点）；协会学会研究院 → academic（专业机构）；
+    发布机关号 → wechat-official（官方公众号）；其余 → other（不放过营销号）。
+    """
+    a = (name or "").strip().lower()
+    if not a:
+        return "other"
+    for k in RESEARCH_ACCOUNTS:
+        if k.lower() in a:
+            return "research"
+    for k in ASSOCIATION_KEYS:
+        if k.lower() in a:
+            return "academic"
+    if WECHAT_REGION_RX.search(a):
         return "wechat-official"
-    m = re.search(r"[?&]__biz=([^&#]+)", url or "")
-    if m:
-        from urllib.parse import unquote
-        if unquote(m.group(1)) in WECHAT_BIZ:
+    for k in WECHAT_ACCOUNTS:
+        if k.lower() in a:
             return "wechat-official"
     return "other"
 
 
-def tier_of(url, declared=None):
-    """按 URL 主机判定来源层级；`declared` 为数据里已有的 src 字段（兼容旧值）。"""
+def _wechat_tier(url, declared=None, account=None):
+    """公众号链接的定级：有凭据才算官方公众号 / 研究观点，否则仍是二手转载。"""
+    d = (declared or "").strip()
+    if d in ("wechat-official", "official"):
+        return "wechat-official"
+    if d in ("research", "expert"):
+        return "research"
+    m = re.search(r"[?&]__biz=([^&#]+)", url or "")
+    if m:
+        from urllib.parse import unquote
+        biz = unquote(m.group(1))
+        if biz in WECHAT_BIZ:
+            return "wechat-official"
+        if biz in RESEARCH_BIZ:
+            return "research"
+    return _account_tier(account)
+
+
+def tier_of(url, declared=None, account=None):
+    """按 URL 主机判定来源层级；`declared` 为数据里已有的 src 字段（兼容旧值），
+    `account` 为公众号账号名（公众号域名不含机构信息，需靠账号名白名单放行）。"""
     h = _host(url)
     if not h:
         # 无外链时按数据里的显式声明定级（公众号存档：外链已脱掉，凭声明标识来源层级）
-        return {"official": "official", "analysis": "academic",
-                "wechat-official": "wechat-official"}.get(declared or "", "other")
+        t = {"official": "official", "analysis": "academic",
+             "wechat-official": "wechat-official",
+             "research": "research", "academic": "academic"}.get(declared or "", "")
+        return t or _account_tier(account)
 
     # 公众号先于其它规则判定（mp.weixin.qq.com 无机构信息，必须凭据放行）
     if h in WECHAT_HOSTS:
-        return _wechat_tier(url, declared)
+        return _wechat_tier(url, declared, account)
 
     for cand in (h, "www." + h):
         if cand in OFFICIAL_HOSTS:
@@ -271,9 +346,9 @@ def tier_of(url, declared=None):
     return "other"
 
 
-def tier_tag(url, declared=None, with_title=True):
+def tier_tag(url, declared=None, with_title=True, account=None):
     """渲染来源徽章：层级 + 链接性质（栏目页/首页会额外标出）。"""
-    t = tier_of(url, declared)
+    t = tier_of(url, declared, account)
     d = link_depth(url)
     tip = TIER_DESC[t] if d == "deep" else TIER_DESC[t] + "；" + DEPTH_LABEL[d]
     title = f' title="{tip}"' if with_title else ""
@@ -331,7 +406,7 @@ def audit_sources(items, kind_key="type", url_key="url", name_key="title",
         rule = classify_rule(_kind_of(it, kind_key))
         if rule == "soft":
             continue
-        tier = tier_of(url, it.get("src"))
+        tier = tier_of(url, it.get("src"), it.get("src_label") or it.get("account"))
         if tier in ("official", "wechat-official"):
             continue
         if rule == "strict" or tier == "other":
@@ -363,8 +438,9 @@ def audit_sources(items, kind_key="type", url_key="url", name_key="title",
 def tier_tally(items, url_key="url"):
     tally = {t: 0 for t in TIER_ORDER}
     for it in items:
-        if isinstance(it, dict) and it.get(url_key):
-            tally[tier_of(it[url_key], it.get("src"))] += 1
+        if isinstance(it, dict) and (it.get(url_key) or it.get("src_label")):
+            tally[tier_of(it[url_key], it.get("src"),
+                          it.get("src_label") or it.get("account"))] += 1
     return tally
 
 

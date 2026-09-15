@@ -115,6 +115,18 @@ def host_of(url):
     return re.sub(r"^https?://(www\.)?", "", url or "").split("/")[0]
 
 
+def _archive_tier(wx_id):
+    """按公众号存档的账号名给条目定级（官方机关 / 协会组织 / 研究号 各有档位）。"""
+    try:
+        d = json.load(open(os.path.join(ROOT, "sources", "wx", wx_id + ".json"),
+                           encoding="utf-8"))
+    except Exception:
+        return "wechat-official"
+    acct = d.get("account") or d.get("org") or ""
+    t = tier_of("", d.get("src") or "wechat-official", acct)
+    return t if t != "other" else "wechat-official"
+
+
 def probe(url, timeout=12):
     """curl 实测可达性（python urllib 在沙箱会被代理全拦，故用 curl）。"""
     try:
@@ -186,6 +198,10 @@ def main():
         # 不能给外链（微信链接是带签名的临时地址）。候选给 wx_id 指向 sources/wx/<id>.json，
         # 由 tools/fetch_wechat.py 抓取、tools/build_wx_archive.py 渲染为站内存档页。
         wx_id = (c.get("wx_id") or "").strip()
+        # 主题摘要来源（2026-09-15 用户要求）：公众号是封闭生态，官方协会 / 学术号 /
+        # 同行专业号的文章一时抓不到原文时，**先用「来源署名 + 主题与主要内容」上站**，
+        # 原文由每日抓取任务后续补齐（补齐后 tools/wx_backfill_pending.py 回填 wx_id）。
+        src_label = (c.get("src_label") or "").strip()
         domain = normalize_domain(c.get("domain") or "")
         if domain not in DOMAIN_KEYS:
             domain = guess_domain(title + " " + (c.get("points") or ""))
@@ -197,6 +213,9 @@ def main():
         elif wx_id:
             if not os.path.exists(os.path.join(ROOT, "sources", "wx", wx_id + ".json")):
                 why = f"公众号存档 sources/wx/{wx_id}.json 不存在"
+        elif src_label:
+            if tier_of("", (c.get("src") or "").strip(), src_label) == "other":
+                why = f"来源署名「{src_label}」不属放行档位（需官方机关 / 协会组织 / 研究机构）"
         elif not url.startswith("http"):
             why = "缺少 http 链接（或补 wx_id 指向公众号原文存档）"
         elif is_root_url(url):
@@ -210,7 +229,10 @@ def main():
             continue
 
         if wx_id:
-            tier = "wechat-official"
+            # 存档来源可能是官方机关号，也可能是协会 / 研究号 → 按存档账号名定级
+            tier = _archive_tier(wx_id)
+        elif src_label:
+            tier = tier_of("", (c.get("src") or "").strip(), src_label)
         else:
             tier = tier_of(url)
             if tier == "other" and not a.allow_other:
@@ -237,6 +259,10 @@ def main():
             "tier": tier,
             "collected": today,
             **({"wx_id": wx_id} if wx_id else {}),
+            # 主题摘要条目：原文尚未抓取（公众号封闭生态），先署名上站；
+            # pending_raw 供 tools/wx_backfill_pending.py 后续回填 wx_id
+            **({"src_label": src_label, "pending_raw": True}
+               if (src_label and not wx_id) else {}),
         })
 
     # 可达性实测（403/429 视为 WAF 拦脚本 UA，浏览器可正常打开）

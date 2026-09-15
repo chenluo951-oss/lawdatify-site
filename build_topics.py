@@ -31,7 +31,8 @@ import subprocess
 import sys
 from datetime import datetime
 
-from sources_tier import tier_tag as src_tier_tag, audit_sources, tier_tally, TIER_LABEL
+from sources_tier import (tier_tag as src_tier_tag, audit_sources, tier_tally,
+                          TIER_LABEL, TIER_CLASS, TIER_DESC, tier_of)
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 REPORTS = os.path.join(HERE, "news", "reports")
@@ -367,6 +368,10 @@ def load_native(path=NATIVE):
             "file": "sources/news/items.jsonl",
             # 来源为站内公众号原文存档（tools/fetch_wechat.py 抓取）时透传
             **({"wx_id": (r.get("wx_id") or "").strip()} if r.get("wx_id") else {}),
+            # 主题摘要条目（原文待抓取的公众号文章）：透传署名与档位（src 供定级用）
+            **({"src_label": (r.get("src_label") or "").strip(),
+                "src": (r.get("tier") or "").strip()}
+               if r.get("src_label") else {}),
         })
     return out
 
@@ -496,6 +501,19 @@ def render_item_card(it, idx, rel="../"):
         )
         link_html += (f'<span class="rd-src src-wx" title="{note}，已核验账号主体并存档全文">'
                       f'官方公众号</span>')
+    elif it.get("src_label"):
+        # 主题摘要条目：公众号是封闭生态，官方协会 / 学术号 / 同行专业号的文章一时
+        # 抓不到原文时，先按「来源署名 + 主题要点」上站（绝不伪造微信外链），
+        # 原文由每日抓取任务后续补齐并自动回填站内存档。
+        lb = it["src_label"]
+        _t = tier_of("", it.get("src"), lb)
+        link_html = (
+            f'<span class="src src-plain" title="来源：{esc(lb)}（微信公众号）；'
+            f'原文待抓取，先以主题与主要内容上站">{esc(lb)} 公众号</span>'
+            f'<span class="rd-src {TIER_CLASS.get(_t, "src-oth")}" '
+            f'title="{TIER_DESC.get(_t, "")}；本条原文待抓取，先以主题与主要内容上站">'
+            f'{TIER_LABEL.get(_t, _t)}</span>'
+        )
     elif url:
         host = re.sub(r"^https?://(www\.)?", "", url).split("/")[0]
         if is_root_url(url):
@@ -779,6 +797,11 @@ def build_feed(do_verify=True):
         u = it["url"]
         if it.get("wx_id"):
             verified.append(it)          # 站内全文存档已落地，无需再验外链
+        elif it.get("src_label"):
+            # 主题摘要条目：发布机构具名（公众号），原文待抓取。它**不是**「无外链的内部
+            # 素材」——来源可署名、内容已核实，应进资讯流（页面上只署来源，不做假链接）。
+            # 原文抓到后由 tools/wx_backfill_pending.py 回填 wx_id 自动升级。
+            verified.append(it)
         elif not u:
             internal.append(it)
         elif status.get(u, "?") in OK_CODES:
