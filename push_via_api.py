@@ -171,15 +171,23 @@ def main():
         if remote_map.get(path) == sha:
             reused += 1
             continue
-        with open(os.path.join(HERE, path), "rb") as f:
+        full = os.path.join(HERE, path)
+        size = os.path.getsize(full)
+        with open(full, "rb") as f:
             content = base64.b64encode(f.read()).decode()
         blob = api("POST", f"/repos/{REPO}/git/blobs",
                    {"content": content, "encoding": "base64"})
         if "sha" not in blob:
-            print(f"  blob 创建失败 {path}: {blob}")
+            # ⚠️ 这里是**静默损坏**的高发点：GitHub 建 blob 对单文件体积敏感，
+            # 超限时只返回 {'_err': '', '_stderr': ''}，不报错、不带原因。
+            # 若失败路径仍写进新树，就会出现「页面已上线、数据文件 404」。
+            # 处置：① 大声报出来（含体积）② 不计入本次树（远端保留旧版本，不会损坏）
+            # ③ 最后以非 0 退出，让自动化看得见。
             failed += 1
-            if failed > 2:
-                return 1
+            print(f"  ✗ blob 创建失败（{size/1048576:.1f}MB）{path}")
+            print(f"     ↳ 该文件未写入本次提交，远端保留旧版本（不是 404）。"
+                  f"单文件过大时请改用切片（tools/split_big_assets.py）或加入 .gitignore。")
+            print(f"     原始响应：{blob}")
             continue
         tree_entries.append({"path": path, "mode": mode,
                              "type": "blob", "sha": blob["sha"]})
@@ -236,6 +244,10 @@ def main():
         # 让本地也知道远端真实位置（否则 git status 永远显示 ahead，且与远端 sha 不符）
         git("update-ref", f"refs/remotes/origin/{BRANCH}", new_commit["sha"])
         print("已更新 refs/remotes/origin/main；内容对账请跑 --check")
+        if failed:
+            print(f"⚠️ 有 {failed} 个文件因体积超限未推送（远端保留旧版本）。"
+                  f"本次提交成功，但请处置后再跑一次，否则该文件长期停留在旧版本。")
+            return 1
         return 0
     print("更新 ref 失败:", upd)
     return 1

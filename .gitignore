@@ -53,3 +53,13 @@ sources/.cache/
 # 无头渲染自检的临时探针页（每次自检重新生成，不入仓）
 kb/_probe.html
 tools/_diag.py
+
+# 法规全文抓取库（flk）
+# ⚠️ texts.jsonl 是本机累积的原文抓取库，随抓取持续增长（实测已 32MB）。
+# GitHub 建 blob 对单文件体积敏感，超过上限时**只返回 {'_err': ''} 不报错**，
+# 静默失败会留下「远端长期停在旧版本」的隐患（曾表现为 texts.jsonl 一直推不上去）。
+# 站内可用形态是生成物 kb/texts/*.html（照常入仓），故本文件不入仓。
+sources/flk_texts/texts.jsonl
+# WAF 会话 cookie 与抓取中间产物（临时、含凭据，绝不入仓）
+sources/flk_texts/.wzws_*
+sources/flk_texts/.tmp/
