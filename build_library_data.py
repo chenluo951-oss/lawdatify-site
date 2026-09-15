@@ -49,6 +49,46 @@ def hbba_topic(name):
             return topic
     return "个人信息保护"
 
+
+# 法规/标准名称 → 站点专题（按特异性从高到低匹配，命中即止）
+TOPIC_RULES = [
+    ("移动应用合规", r"移动互联网应用程序|移动应用|应用程序|APP|App|应用软件|SDK|小程序|"
+                     r"移动智能终端|应用商店|用户权益"),
+    ("算法与AI合规", r"算法|人工智能|生成式|深度合成|大模型|自动化决策|智能推荐|"
+                     r"机器学习|神经网络|智能体|合成内容"),
+    ("数据跨境", r"数据出境|跨境|安全评估申报"),
+    ("个人信息保护", r"个人信息|个人数据|用户信息|隐私|未成年人|儿童|生物识别|人脸|"
+                     r"敏感个人信息|账号注销"),
+    ("数据安全", r"数据安全|数据分类分级|数据治理|重要数据|核心数据|公共数据|数据要素|"
+                  r"数据交易|数据流通|数据资源"),
+    ("网络安全", r"网络安全|网络数据|关键信息基础设施|等级保护|密码|漏洞|信息安全|"
+                  r"安全评估|风险评估|应急处置|数据恢复"),
+    ("餐饮与外卖", r"餐饮|外卖|封签|明厨亮灶|餐用具|厨房|食品经营|集体用餐|配餐"),
+    ("仓储与冷链", r"冷链|冷库|冷藏|冷冻|贮存|仓储|温控|前置仓|保鲜|运输条件"),
+    ("配送与用工", r"配送|送餐|骑手|新就业形态|劳动|用工|派单|运力|快递|寄递"),
+    ("网络交易与电商", r"电子商务|网络交易|网络销售|直播营销|直播电商|平台经济|"
+                        r"网络直播|即时零售|社区团购|网络预约|在线旅游|微商"),
+    ("计量与净含量", r"计量|净含量|定量包装|电子秤|称重|衡器|商品量"),
+    ("价格与促销", r"价格|明码标价|促销|折扣|原价|收费|标价|价签|政府定价"),
+    ("消费者权益与会员", r"消费者|退货|无理由|预付|会员|自动续费|投诉|有奖销售|"
+                          r"售后|三包|服务承诺"),
+    ("环保与反浪费", r"塑料|包装|浪费|绿色|降解|过度包装|厨余|循环|碳|环保|节能|"
+                      r"清洁生产|废弃物"),
+    ("产品与食安合规", r"食品|食用农产品|农产品|预包装|标签|营养|添加剂|追溯|抽检|"
+                        r"快检|农残|兽药|保质期|农产品质量|质量管理|产品质量|认证|"
+                        r"检验检测|特种设备|缺陷产品|召回|标准化"),
+    ("平台合规", r"平台|广告|治理|信用|合规|反不正当竞争|反垄断|知识产权|商业秘密|"
+                  r"合同|营商环境|市场秩序"),
+]
+
+
+def topic_of(name):
+    """按名称关键词归入站点专题；无命中归「其他」。"""
+    for topic, pat in TOPIC_RULES:
+        if re.search(pat, name or ""):
+            return topic
+    return "其他"
+
 # ---------------------------------------------------------------- 法律法规
 # 字段：code(文号/简称) name level topic status pub impl issuer url point duty
 LAWS = [
@@ -546,6 +586,88 @@ def main():
         print(f"  合并行业标准 {n_hb} 条（其中发布机构公开全文 "
               f"{sum(1 for i in items if i.get('has_pdf'))} 条）")
 
+    # ---- 合并国家法律法规数据库全量（flk.npc.gov.cn，tools/harvest_flk_bulk.py）----
+    # 2026-09-15：法规库此前只有人工录入的 39 部法律 / 9 部行政法规，与 flk 收录量
+    # 差两个数量级。这里把 flk 的宪法·法律·行政法规·监察法规·司法解释全量并入，
+    # 地方法规只保留命中合规主题词的（见 tools/harvest_flk_bulk.py 的 LOCAL_KEEP）。
+    n_flk = 0
+    flk_path = os.path.join(SRC, "flk_bulk.json")
+    if os.path.exists(flk_path):
+        flk = json.load(open(flk_path, encoding="utf-8"))
+        FLK_LEVEL = {
+            "宪法": "法律", "法律": "法律", "行政法规": "行政法规", "监察法规": "行政法规",
+            "司法解释": "司法解释", "法律解释": "司法解释",
+            "修正案": "法律", "修改、废止的决定": "修改决定", "法规性决定": "修改决定",
+            "有关法律问题和重大问题的决定（部分）": "修改决定", "地方法规": "地方法规",
+        }
+        FLK_STATUS = {3: "现行有效", 4: "即将实施", 1: "已废止", 2: "已修改"}
+        have_code = {norm_code(i.get("code")) for i in items}
+        have_name = {re.sub(r"\s+", "", i["name"]) for i in items}
+        import base64 as _b64
+        for x in flk.get("items", []):
+            name = (x.get("t") or "").strip()
+            if not name:
+                continue
+            nn = re.sub(r"\s+", "", name)
+            level = FLK_LEVEL.get(x.get("k", ""), "规范性文件")
+            # 同名多版本（历次修正）保留最新一版即可
+            if nn in have_name and level in ("法律", "行政法规"):
+                continue
+            have_name.add(nn)
+            url = ("https://flk.npc.gov.cn/detail2.html?"
+                   + _b64.b64encode(x["b"].encode()).decode())
+            items.append({
+                "code": level, "name": name, "level": level,
+                "topic": topic_of(name), "status": FLK_STATUS.get(x.get("s"), "现行有效"),
+                "pub": x.get("p") or "", "impl": x.get("i") or "",
+                "issuer": x.get("o") or "", "url": url, "point": "",
+                "duty": [], "note": "", "kind": "法规",
+                "src_flk": 1,
+            })
+            have_code.add(norm_code(level))
+            n_flk += 1
+        print(f"  合并国家法律法规数据库 {n_flk} 条"
+              f"（原始 {flk.get('meta', {}).get('kept', '?')} 条，含地方法规）")
+
+    # ---- 合并标准门户批量检索结果（国标 std.samr + 行标 hbba，tools/harvest_std_portals.py）----
+    n_sp = 0
+    sp_path = os.path.join(SRC, "std_portals.json")
+    if os.path.exists(sp_path):
+        sp = json.load(open(sp_path, encoding="utf-8"))
+        have_code = {norm_code(i.get("code")) for i in items}
+        have_name = {re.sub(r"\s+", "", i["name"]) for i in items}
+        for grp, level, issuer in (("gb", None, "国家市场监督管理总局、国家标准化管理委员会"),
+                                   ("hb", "行业标准", None)):
+            for code, x in (sp.get(grp) or {}).items():
+                code = (x.get("code") or "").strip()
+                name = (x.get("name") or "").strip()
+                if not code or not name:
+                    continue
+                nc = norm_code(code)
+                if nc in have_code:
+                    continue
+                lv = level or ("强制性国家标准" if x.get("nature") == "强制性"
+                               else "推荐性国家标准")
+                st = x.get("status") or ""
+                st = ("即将实施" if "即将" in st else
+                      "已废止" if ("废止" in st or "作废" in st) else "现行有效")
+                full = f"{code} {name}"
+                if re.sub(r"\s+", "", full) in have_name:
+                    continue
+                have_code.add(nc)
+                have_name.add(re.sub(r"\s+", "", full))
+                items.append({
+                    "code": code, "name": name, "level": lv,
+                    "topic": topic_of(name), "status": st,
+                    "pub": x.get("pub") or "", "impl": x.get("impl") or "",
+                    "issuer": issuer or x.get("dept") or x.get("industry") or "",
+                    "url": x.get("url") or "", "point": "", "duty": [],
+                    "note": "", "kind": "标准",
+                })
+                n_sp += 1
+        print(f"  合并标准门户检索结果 {n_sp} 条"
+              f"（平台收录 国标 {sp.get('meta', {}).get('gb')} / 行标 {sp.get('meta', {}).get('hb')}）")
+
     # ---- 恢复下架标记：excluded.json 里的条目重建后仍是 hidden=true ----
     # （否则每次重建 library.json 都会把已下架的 51 条噪声条目重新推回公开页面）
     exc_path = os.path.join(SRC, "excluded.json")
@@ -593,7 +715,8 @@ def main():
                        # 2026-09-11 起按即时零售 / 外卖 / 前置仓 / 线下餐饮 / 零售业态拓宽
                        "网络交易与电商", "餐饮与外卖", "仓储与冷链", "配送与用工",
                        "计量与净含量", "消费者权益与会员", "价格与促销", "环保与反浪费"],
-            "levels": ["法律", "行政法规", "部门规章", "规范性文件", "强制性国家标准",
+            "levels": ["法律", "行政法规", "部门规章", "司法解释", "修改决定", "地方法规",
+                       "规范性文件", "强制性国家标准",
                        "推荐性国家标准", "国家标准化指导性技术文件", "行业标准", "团体标准",
                        "指引/指南"],
             "statuses": ["现行有效", "即将实施", "已废止", "征求意见中"],

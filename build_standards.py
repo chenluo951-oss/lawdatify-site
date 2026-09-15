@@ -357,6 +357,12 @@ def build_kb_index(items, duties, drafts, soon, stat_html="", board=""):
       并附 {n_case} 个真实监管 / 处罚 / 司法案例（全部指向发布机构官网具体页面）。可按合规领域或引用次数排序。</span>
       <span class="more">查看高频法条 →</span>
     </a>
+    <a class="dcard lb-entry" href="cases.html" style="--dc:#a16207">
+      <b>合规案例库</b>
+      <span>监管机关官网公开的处罚决定、通报与典型案例，按违法类型、执法机关、依据法条与罚款幅度结构化索引，
+      逐条附官方原文深链，用于反查同类执法口径与定性尺度。</span>
+      <span class="more">进入案例库 →</span>
+    </a>
     <a class="dcard lb-entry" href="audit.html" style="--dc:#0f766e">
       <b>🗂️ 合规审计</b>
       <span>从义务清单勾选审计范围（{n_cat} 大类 / {n_scene} 场景 / {n_duty} 项义务），生成审计任务后逐项记录进度、
@@ -848,7 +854,30 @@ def main():
               'placeholder="搜索标准号 / 名称 / 发布机构，如 GB/T 35273、个人信息、App" '
               'autocomplete="off"><span id="lbCount" class="lb-count"></span></div>')
 
-    cards = "\n".join(item_card(x, i) for i, x in enumerate(items))
+    # 2026-09-15：法规库 + 标准库补齐后条目从 1419 涨到近 2 万，内联渲染会把
+    # kb/standards.html 顶到 19MB（移动端无法加载）。改为全量数据写入独立文件
+    # kb/library-data.js，浏览器端渲染 —— 条目一条不少，HTML 反而从 19MB 降到几十 KB。
+    lb_rows = []
+    for x in items:
+        lb_rows.append([
+            x.get("level", ""), x.get("topic", ""), x.get("status", ""),
+            x.get("code", ""), x.get("name", ""), x.get("url", ""),
+            x.get("issuer", ""), x.get("pub", ""), x.get("impl", ""),
+            x.get("point", ""), x.get("note", ""), x.get("toc") or [],
+            x.get("duty") or [], read_affordance(x),
+        ])
+    _data_js = ("window.LB_ITEMS=" + json.dumps(lb_rows, ensure_ascii=False,
+                                               separators=(",", ":")) + ";\n"
+                + "window.LB_CLS=" + json.dumps({"status": STATUS_CLS, "level": LEVEL_CLS},
+                                                ensure_ascii=False) + ";\n")
+    _data_js = _data_js.replace("<", "\\u003c")
+    _dp = os.path.join(HERE, "kb", "library-data.js")
+    os.makedirs(os.path.dirname(_dp), exist_ok=True)
+    open(_dp, "w", encoding="utf-8").write(_data_js)
+    print(f"  kb/library-data.js   {len(_data_js) / 1024:.0f} KB  ({len(lb_rows)} 条目，"
+          f"浏览器端渲染)")
+
+    cards = ""
 
     # ---------------- 义务视图（矩阵总览 ⇄ 逐条明细）
     duty_matrix = render_duty_matrix(cats)
@@ -902,6 +931,7 @@ def main():
         '<p class="rd-note">标准数据取自<b>国家标准全文公开系统</b>（发布/实施日期与现行状态以官方为准）；'
         '法律法规与规范性文件均附发布机构官网原文深链。'
         '本页用于合规检索与自查参考，<b>不构成法律意见</b>；引用前请点开原文核对现行有效版本。</p>',
+        LIB_RENDER,
         LIB_JS,
     ])
 
@@ -938,6 +968,52 @@ def main():
         except Exception as e:
             print(f"  {name} 跳过：{e}")
 
+
+LIB_RENDER = """
+<script src="library-data.js"></script>
+<script>
+(function(){
+  var host=document.getElementById('lbList');
+  if(!host||!window.LB_ITEMS) return;
+  var S=(window.LB_CLS||{}).status||{}, L=(window.LB_CLS||{}).level||{};
+  function e(v){return String(v==null?'':v).replace(/&/g,'&amp;').replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+  var out=[];
+  for(var i=0;i<LB_ITEMS.length;i++){
+    var r=LB_ITEMS[i];
+    var lv=r[0],tp=r[1],st=r[2],code=r[3],name=r[4],url=r[5],issuer=r[6],
+        pub=r[7],impl=r[8],point=r[9],note=r[10],toc=r[11],duty=r[12],read=r[13];
+    var title=e(name);
+    if(url) title='<a href="'+e(url)+'" target="_blank" rel="noopener">'+title
+      +'</a><span class="lb-ext" title="打开发布机构官网原文">&#8599;</span>';
+    var meta=[]; if(code) meta.push(code); if(issuer) meta.push(issuer);
+    if(pub) meta.push('发布 '+pub); if(impl) meta.push('实施 '+impl);
+    var tags=''; if(duty){for(var k=0;k<Math.min(duty.length,4);k++)
+      tags+='<span class="rd-tag">'+e(duty[k])+'</span>';}
+    var tocHtml='';
+    if(toc&&toc.length>=3){
+      var lis=''; for(var j=0;j<Math.min(toc.length,40);j++) lis+='<li>'+e(toc[j])+'</li>';
+      tocHtml='<details class="lb-toc"><summary>章节目录<i>'+toc.length
+        +' 节</i></summary><ol class="lb-toclist">'+lis+'</ol></details>';
+    }
+    out.push('<div class="rd-item lb-item" data-topic="'+e(tp)+'" data-level="'+e(lv)
+      +'" data-status="'+e(st)+'" data-code="'+e(code)+'" data-text="'
+      +e((name+' '+code+' '+issuer+' '+((toc||[]).join(' '))).toLowerCase())+'">'
+      +'<div class="rd-body"><div class="rd-row">'
+      +'<span class="rd-badge '+(S[st]||'b-ghost')+'">'+e(st)+'</span>'
+      +'<span class="rd-badge '+(L[lv]||'b-ghost')+'">'+e(lv)+'</span>'
+      +'<span class="rd-tag tg-region">'+e(tp)+'</span>'+(read||'')
+      +'</div><h3>'+title+'</h3>'
+      +'<div class="rd-meta">'+e(meta.join(' · '))+'</div>'
+      +(point?'<div class="rd-prog"><b>要点</b>'+e(point)+'</div>':'')
+      +(note?'<div class="rd-prog"><b>注</b>'+e(note)+'</div>':'')
+      +tocHtml
+      +'<div class="rd-targets">'+tags+'</div></div></div>');
+  }
+  host.innerHTML=out.join('');
+})();
+</script>
+"""
 
 LIB_JS = """
 <script>

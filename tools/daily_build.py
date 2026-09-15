@@ -43,12 +43,22 @@ STEPS = [
     ("草案跟踪",        [PY, "fetch_drafts.py"],                     False),
     ("原文抓取·每日",   [PY, "harvest.py", "--run", "--daily", "--limit", "60"], False),
     ("私有库同步",      [PY, "harvest.py", "--sync"],               False),
+    # 法规库全量（国家法律法规数据库）—— 首次较慢，之后增量很快
+    ("法规全量·flk",    [PY, "tools/harvest_flk_bulk.py"],          False),
+    # 标准门户批量检索（全国标准信息公共服务平台 + 行业标准信息服务平台）
+    ("标准门户·检索",   [PY, "tools/harvest_std_portals.py"],       False),
+    # 两个专项合规：移动应用违规通报历史库 + 算法/大模型备案库
+    ("专项·App违规通报", [PY, "tools/harvest_app_violations.py"],    False),
+    ("专项·算法备案",   [PY, "tools/harvest_algo_filing.py"],       False),
+    ("合规案例库",      [PY, "tools/harvest_cases.py"],             False),
     ("台账并库",        [PY, "merge_ledgers.py"],                   False),
     ("法规标准条目库",  [PY, "build_library_data.py"],              False),
     ("语料合并",        [PY, "merge_corpus.py"],                    False),
     ("义务逐字抽取",    [PY, "enrich_duties.py"],                   False),
     # ---------- 2. 页面生成（顺序敏感）----------
     ("知识库·义务矩阵", [PY, "build_standards.py"],                 True),
+    ("知识库·案例库",   [PY, "tools/build_cases_page.py"],          False),
+    ("专项合规页",      [PY, "tools/build_special_topics.py"],      False),
     ("高频法条",        [PY, "build_citations.py"],                  False),
     ("合规审计",        [PY, "build_audit.py"],                      False),
     ("监管雷达",        [PY, "build_radar.py"],                      True),
@@ -100,12 +110,14 @@ def main():
     ap.add_argument("--skip-build", action="store_true", help="只跑数据同步")
     a = ap.parse_args()
 
-    net_labels = {"草案跟踪", "原文抓取·每日", "私有库同步"}
+    net_labels = {"草案跟踪", "原文抓取·每日", "私有库同步", "法规全量·flk",
+                  "标准门户·检索", "专项·App违规通报", "专项·算法备案", "合规案例库"}
     steps = [s for s in STEPS if not (a.no_network and s[0] in net_labels)]
     if a.skip_build:
         steps = [s for s in steps if s[0] in
-                 {"草案跟踪", "原文抓取·每日", "私有库同步", "台账并库",
-                  "法规标准条目库", "语料合并", "义务逐字抽取"}]
+                 {"草案跟踪", "原文抓取·每日", "私有库同步", "法规全量·flk",
+                  "标准门户·检索", "专项·App违规通报", "专项·算法备案", "合规案例库",
+                  "台账并库", "法规标准条目库", "语料合并", "义务逐字抽取"}]
     if a.with_texts:
         idx = [i for i, s in enumerate(steps) if s[0] == "法规标准条目库"]
         pos = (idx[0] + 1) if idx else 1

@@ -19,12 +19,15 @@ NEWS_NAV = [
     ("calendar.html", "立法日历"),
     ("actions.html", "应对建议"),
     ("map.html", "全球监管地图"),
+    ("app-violations.html", "移动应用违规治理"),
+    ("algo-filing.html", "算法合规治理"),
     ("briefs.html", "简报归档"),
 ]
 KB_NAV = [
     ("index.html", "总览"),
     ("standards.html", "标准与义务"),
     ("texts.html", "法规原文"),
+    ("cases.html", "案例库"),
     ("citations.html", "高频引用法条"),
     ("audit.html", "合规审计"),
 ]

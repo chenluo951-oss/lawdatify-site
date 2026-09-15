@@ -225,6 +225,13 @@ def main():
     else:
         src = snap.get("date", "?")
     added, changed, removed = diff_items(items, snap)
+    # 2026-09-15：法规库（国家法律法规数据库全量）与标准库（标准门户检索）一次性补齐后，
+    # 「本次新增」可达上万条，全量铺进本页会把 HTML 顶到 9MB（移动端打不开）。
+    # 列表只列示最新的 400 条，真实总量在页面顶部另行写明，完整条目去知识库检索。
+    UP_CAP = 400
+    n_added_all, n_changed_all, n_removed_all = len(added), len(changed), len(removed)
+    up_trunc = max(n_added_all, n_changed_all, n_removed_all) > UP_CAP
+    added, changed, removed = added[:UP_CAP], changed[:UP_CAP], removed[:UP_CAP]
 
     # --- 站点直采合规动态（独立于本地简报的每日增量，见 tools/collect_news.py）---
     nat_file = os.path.join(HERE, "sources", "news", "items.jsonl")
@@ -505,6 +512,20 @@ def main():
         p = os.path.join(HERE, s)
         if os.path.exists(p):
             os.system(f'/usr/bin/python3 "{p}" >/dev/null 2>&1')
+    # 截断说明写回页面（否则读者只看到 400 条，会误以为本次只新增这些）
+    if up_trunc:
+        _up = os.path.join(HERE, "updates", "index.html")
+        if os.path.exists(_up):
+            _s = open(_up, encoding="utf-8").read()
+            _n = ('<div class="notice"><b>本次为一次性集中补齐</b>：法规库与标准库新增 %d 条、'
+                  '变更 %d 条、下架 %d 条，本页仅列示最新 %d 条；'
+                  '完整条目请在 <a href="../kb/standards.html">标准与义务</a> 中按专题、层级、'
+                  '时效性筛选或关键词检索。</div>'
+                  % (n_added_all, n_changed_all, n_removed_all, UP_CAP))
+            if "一次性集中补齐" not in _s:
+                _s = _s.replace("</main>", _n + "</main>", 1)
+                open(_up, "w", encoding="utf-8").write(_s)
+                print(f"  更新页已加截断说明（新增总量 {n_added_all} 条）")
     save_snapshot(items)
     print(f"  快照已更新 → sources/updates/snapshot.json（{len(items)} 条）")
 

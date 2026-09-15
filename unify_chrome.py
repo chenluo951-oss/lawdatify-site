@@ -42,6 +42,9 @@ PAGES = [
     "kb/benchmarks.html",
     "news/calendar.html",
     "news/map.html",
+    "news/app-violations.html",
+    "news/algo-filing.html",
+    "kb/cases.html",
 ]
 
 # 导航项：(相对站点根路径, 文案)。PRM 与搜索是工具页，不进主导航。
