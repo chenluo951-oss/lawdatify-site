@@ -61,6 +61,9 @@ from datetime import date
 from html import unescape
 from urllib.parse import quote, urlencode
 
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from appviol_entity import resolve   # noqa: E402  实体消解 + 事件模型（去重口径的唯一实现）
+
 HERE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 OUTDIR = os.path.join(HERE, "sources", "appviol")
 IMGDIR = os.path.join(HERE, "sources", ".cache", "appviol")
@@ -628,33 +631,9 @@ def ocr_entry(cells):
 
 
 # ================================================================ 主流程
-def merge_entries(docs):
-    """按「应用名 + 运营者」归并，计算去重涉及应用数与重复上榜情况。"""
-    apps = {}
-    for d in docs:
-        for e in d["entries"]:
-            key = re.sub(r"[\s（）()《》【】·・\-—_]", "", e["app"]).lower()
-            key = re.sub(r"(app|小程序|安卓版|手机版|极速版)$", "", key)
-            if len(key) < 2:
-                continue
-            a = apps.setdefault(key, {"app": e["app"], "dev": e["dev"], "docs": [],
-                                      "probs": [], "first": d["date"], "last": d["date"],
-                                      "orgs": []})
-            if d["id"] not in a["docs"]:
-                a["docs"].append(d["id"])
-            if e["dev"] and not a["dev"]:
-                a["dev"] = e["dev"]
-            for p in e["probs"]:
-                if p not in a["probs"]:
-                    a["probs"].append(p)
-            if d["org"] not in a["orgs"]:
-                a["orgs"].append(d["org"])
-            if d["date"]:
-                if not a["first"] or d["date"] < a["first"]:
-                    a["first"] = d["date"]
-                if not a["last"] or d["date"] > a["last"]:
-                    a["last"] = d["date"]
-    return apps
+# 去重逻辑已抽到 `appviol_entity.resolve()`（实体消解 + 事件模型），此处不再自持一份：
+# 旧实现只按归一化后的应用名做 key，既会把不同公司的同名产品并成一款，
+# 又会因 PDF 提取插入的空格把同一家公司拆成两个主体。详见 appviol_entity.py 头部注释。
 
 
 def main():
@@ -674,6 +653,23 @@ def main():
                 old[d["url"]] = d
         except Exception:
             old = {}
+
+    # --apps-only：文书库已就绪，只按新的实体消解 / 事件口径重算 apps.json。
+    # 改了去重逻辑但不想重抓全网时用（重抓 652 份要十几分钟）。
+    if "--apps-only" in argv:
+        docs = list(old.values())
+        docs.sort(key=lambda d: (d.get("date") or "", d["title"]), reverse=True)
+        apps_list, est = resolve(docs)
+        apath = os.path.join(OUTDIR, "apps.json")
+        json.dump({"meta": {"updated": date.today().isoformat(), **est},
+                   "apps": apps_list},
+                  open(apath, "w", encoding="utf-8"),
+                  ensure_ascii=False, separators=(",", ":"))
+        print(f"✓ 仅重算应用库：文书 {len(docs)}　明细行 {est['rows_raw']}"
+              f"　事件 {est['incidents']}　去重应用 {est['apps']}"
+              f"　重复出现 {est['apps_repeat']}　跨年度相关 {est.get('apps_multi_org',0)}")
+        print(f"  文件 {os.path.getsize(apath)/1024/1024:.2f} MB")
+        return 0
 
     cand = []
     if only in ("", "miit"):
@@ -724,7 +720,7 @@ def main():
     docs += [v for k, v in old.items() if k not in got]
 
     docs.sort(key=lambda d: (d.get("date") or "", d["title"]), reverse=True)
-    apps = merge_entries(docs)
+    apps_list, est = resolve(docs)
 
     from collections import Counter
     kinds = Counter(d["notice_kind"] for d in docs)
@@ -732,17 +728,29 @@ def main():
     levels = Counter(d["scope"] for d in docs)
     orgs = Counter(d["org"] for d in docs)
     prob = Counter()
-    for a in apps.values():
+    for a in apps_list:
         for p in a["probs"]:
             prob[p] += 1
-    repeat = sum(1 for a in apps.values() if len(a["docs"]) > 1)
 
     meta = {
         "updated": date.today().isoformat(),
         "documents": len(docs),
         "entries": sum(d["n_entries"] for d in docs),
-        "unique_apps": len(apps),
-        "repeat_apps": repeat,
+        # ---- 实体消解结果（对外引用口径）
+        "unique_apps": est["apps"],
+        "repeat_apps": est["apps_repeat"],
+        "apps_repeat_notice": est["apps_repeat_notice"],
+        "apps_multi_org": est["apps_multi_org"],
+        "apps_name_collision": est["apps_name_collision"],
+        "apps_cross_lang": est["apps_cross_lang"],
+        "apps_no_owner": est["apps_no_owner"],
+        "apps_escalated": est["apps_escalated"],
+        "incidents": est["incidents"],
+        "incidents_notice": est["incidents_notice"],
+        "incidents_fix": est["incidents_fix"],
+        "incidents_close": est["incidents_close"],
+        "rows_raw": est["rows_raw"],
+        "relapse_gap_median": est["relapse_gap_median"],
         "docs_with_entries": sum(1 for d in docs if d["entries"]),
         "by_kind": dict(kinds),
         "by_carrier": dict(carriers),
@@ -750,27 +758,32 @@ def main():
         "top_orgs": dict(orgs.most_common(30)),
         "date_range": [min((d["date"] for d in docs if d["date"]), default=""),
                        max((d["date"] for d in docs if d["date"]), default="")],
-        "note": "文书数 ≠ 涉及应用数：批次通报、整改复核、下架处置、年度汇总会重复列出"
-                "同一应用，本库以「应用名 + 运营者」归并后给出 unique_apps。"
-                "明细取自官方原文页（省局为页面表格、工信部为附件 PDF、网信办为名单图 OCR）。",
+        "note": "去重不只看应用名：先按「归一化应用名 + 运营者主干」做实体消解"
+                "（同名不同主体不合并、中英署名不强行合并），再按（机构 · 年份 · 批次）"
+                "做事件去重，最后按文书类型拆开批次通报 / 整改复核 / 下架处置。"
+                "unique_apps 是唯一可对外引用的「涉及应用数」。",
     }
     json.dump({"meta": meta, "docs": docs},
               open(docs_path, "w", encoding="utf-8"),
               ensure_ascii=False, separators=(",", ":"))
-    json.dump({"meta": meta,
-               "apps": sorted(apps.values(), key=lambda a: (-len(a["docs"]),
-                                                            a["app"]))},
-              open(os.path.join(OUTDIR, "apps.json"), "w", encoding="utf-8"),
+    apath = os.path.join(OUTDIR, "apps.json")
+    json.dump({"meta": meta, "apps": apps_list},
+              open(apath, "w", encoding="utf-8"),
               ensure_ascii=False, separators=(",", ":"))
 
-    print(f"\n✓ 文书 {len(docs)}　明细条目 {meta['entries']}　去重应用 {len(apps)}"
-          f"　重复上榜 {repeat}")
+    print(f"\n✓ 文书 {len(docs)}　明细行 {est['rows_raw']}　事件 {est['incidents']}"
+          f"　去重应用 {est['apps']}")
+    print(f"  重复被通报 {est['apps_repeat']}（其中纯通报≥2次 {est['apps_repeat_notice']}、"
+          f"跨机构 {est['apps_multi_org']}）")
+    print(f"  同名不同主体 {est['apps_name_collision']}　中外文并存 {est['apps_cross_lang']}"
+          f"　无运营者署名 {est['apps_no_owner']}")
+    print(f"  事件分层 通报 {est['incidents_notice']} / 复核 {est['incidents_fix']}"
+          f" / 下架 {est['incidents_close']}　再犯间隔中位 {est['relapse_gap_median']} 天")
     print(f"  文书类型 {dict(kinds)}")
     print(f"  明细载体 {dict(carriers)}")
-    print(f"  层级 {dict(levels)}")
-    print(f"  明细覆盖 {meta['docs_with_entries']}/{len(docs)} 份文书")
     print(f"  高频问题 {prob.most_common(8)}")
-    print(f"  文件 {os.path.getsize(docs_path)/1024/1024:.1f} MB")
+    print(f"  文件 apps.json {os.path.getsize(apath)/1024/1024:.2f} MB"
+          f"　docs.json {os.path.getsize(docs_path)/1024/1024:.2f} MB")
     return 0
 
 

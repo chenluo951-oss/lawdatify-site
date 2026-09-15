@@ -1,0 +1,38 @@
+{
+ "updated": "2026-09-15",
+ "documents": 652,
+ "with_date": 640,
+ "exact_day": 533,
+ "year_only": 107,
+ "by_source": {
+  "kept:harvest": 55,
+  "none": 12,
+  "pubdate": 441,
+  "body": 37,
+  "url-path": 98,
+  "title-year": 9
+ },
+ "migrate_days": {
+  "www.miit.gov.cn": "2023-05-12",
+  "shxca.miit.gov.cn": "2024-03-01",
+  "cqca.miit.gov.cn": "2023-11-21",
+  "lnca.miit.gov.cn": "2023-05-13",
+  "fjca.miit.gov.cn": "2023-05-13",
+  "jxca.miit.gov.cn": "2023-12-13",
+  "ynca.miit.gov.cn": "2023-05-13",
+  "sdca.miit.gov.cn": "2026-01-29",
+  "nmca.miit.gov.cn": "2024-02-22"
+ },
+ "year_collapse": [
+  "fjca.miit.gov.cn",
+  "gdca.miit.gov.cn",
+  "jxca.miit.gov.cn",
+  "nmca.miit.gov.cn",
+  "shxca.miit.gov.cn",
+  "sxca.miit.gov.cn",
+  "www.miit.gov.cn",
+  "ynca.miit.gov.cn"
+ ],
+ "conflicts": 107,
+ "note": "省局 jpaas 列表接口不返回发布日期；日期由「标题年份 > 页面 PubDate > URL 归档年」仲裁得到。PubDate 为站点批量迁移日的域名已降级。precision=year 表示只精确到年，年度统计可用、月度统计不可用。"
+}

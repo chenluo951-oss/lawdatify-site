@@ -53,6 +53,9 @@ STEPS = [
     # 每天重扫一次才能跟上，否则新增省份/改名栏目会静默漏采。
     ("专项·省局栏目发现", [PY, "tools/prov_ca_discover.py"],           False),
     ("专项·App违规通报", [PY, "tools/harvest_app_violations.py"],    False),
+    # ⚠️ 必须紧跟 App 通报采集：省局列表接口不返回发布日期，新采的文书 date 为空，
+    # 而「按年统计通报量」是治理分析的地基 → 立刻从页面 PubDate 回填（带缓存，增量很快）。
+    ("专项·发布日期回填", [PY, "tools/backfill_appviol_dates.py"],    False),
     ("专项·算法备案",   [PY, "tools/harvest_algo_filing.py"],       False),
     ("合规案例库",      [PY, "tools/harvest_cases.py"],             False),
     ("台账并库",        [PY, "merge_ledgers.py"],                   False),
@@ -66,6 +69,9 @@ STEPS = [
     ("站内原文页",      [PY, "build_texts.py"],                     False),
     ("知识库·义务矩阵", [PY, "build_standards.py"],                 True),
     ("知识库·案例库",   [PY, "tools/build_cases_page.py"],          False),
+    # ⚠️ 治理分析必须排在专项合规页之前：它产出 sources/appviol/analytics.json
+    # （机构×年度矩阵、治理动作年度构成、再犯分析、执法强度），页面直接消费该文件。
+    ("专项·治理分析",   [PY, "tools/appviol_analytics.py"],         False),
     ("专项合规页",      [PY, "tools/build_special_topics.py"],      False),
     ("高频法条",        [PY, "build_citations.py"],                  False),
     ("合规审计",        [PY, "build_audit.py"],                      False),
@@ -122,7 +128,7 @@ def main():
 
     net_labels = {"草案跟踪", "原文抓取·每日", "私有库同步", "法规全量·flk",
                   "标准门户·检索", "专项·省局栏目发现", "专项·App违规通报",
-                  "专项·算法备案", "合规案例库"}
+                  "专项·发布日期回填", "专项·算法备案", "合规案例库"}
     steps = [s for s in STEPS if not (a.no_network and s[0] in net_labels)]
     if a.skip_build:
         steps = [s for s in steps if s[0] in

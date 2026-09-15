@@ -68,7 +68,27 @@ table.sp-tbl.reg td:nth-child(6) a{white-space:nowrap;word-break:keep-all}
   border:1px solid var(--line);color:var(--muted);margin-left:6px}
 .sp-pill.on{background:#e9f6f1;color:#0f7b6c;border-color:#bfe3d9}
 .sp-pill.off{background:#f6f7f9;color:#8a94a2}
-@media(max-width:640px){.sp-bar .lb{width:110px}.sp-kpi{grid-template-columns:repeat(2,1fr)}}
+/* 机构 × 年份 热力矩阵：底色深浅表示通报量，空值为灰点 */
+.sp-mx{width:100%;border-collapse:collapse;font-size:12.5px;background:var(--card);
+  border:1px solid var(--line);border-radius:var(--radius);overflow:hidden}
+.sp-mx th{background:#f2f6fb;padding:8px 6px;text-align:center;font-weight:700;
+  color:var(--ink-2);white-space:nowrap;border-bottom:1px solid var(--line);font-size:12px}
+.sp-mx th.lft{text-align:left;padding-left:12px}
+.sp-mx td{padding:7px 6px;text-align:center;border-bottom:1px solid var(--line-2);
+  font-variant-numeric:tabular-nums;color:var(--ink-2);white-space:nowrap}
+.sp-mx td.lft{text-align:left;padding-left:12px}
+.sp-mx tr:hover td{background:#fafcff}
+.sp-mx td.z{color:#ccd5df}
+.sp-mx td.tt{font-weight:800;color:var(--brand);background:#f7fafd}
+.sp-mx .sp-tag{margin:0}
+/* 再犯时间线：一次通报一个小方块，色深表示处置升级 */
+.sp-tk{display:flex;align-items:center;gap:5px;flex-wrap:wrap}
+.sp-tk i{display:inline-block;width:11px;height:11px;border-radius:3px;background:#cfe0f2}
+.sp-tk i.f{background:#f0d9a8}
+.sp-tk i.c{background:#e8b1a8}
+.sp-tk em{font-style:normal;font-size:12px;color:var(--faint);margin-left:4px}
+@media(max-width:640px){.sp-bar .lb{width:110px}.sp-kpi{grid-template-columns:repeat(2,1fr)}
+  .sp-mx{font-size:11.5px}.sp-mx td,.sp-mx th{padding:5px 3px}}
 </style>
 <!-- SOCIAL:START -->
 <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">

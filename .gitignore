@@ -63,3 +63,10 @@ sources/flk_texts/texts.jsonl
 # WAF 会话 cookie 与抓取中间产物（临时、含凭据，绝不入仓）
 sources/flk_texts/.wzws_*
 sources/flk_texts/.tmp/
+
+# 日期回填的页面探测缓存（可重建，含全量 URL → PubDate 映射，无需入库）
+sources/appviol/.dateprobe.json
+# apps.json 是 docs.json 的派生产物（实体消解 + 事件模型的结果，~4MB 且随数据增长），
+# 页面实际消费的是 analytics.json；需要时用 `harvest_app_violations.py --apps-only` 秒级重算。
+# ⚠️ Git Data API 建 blob 单文件 >6MB 会静默失败（只报 _err:''），4MB 已逼近红线。
+sources/appviol/apps.json
