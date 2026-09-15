@@ -345,6 +345,10 @@ def load_native(path=NATIVE):
             r = json.loads(line)
         except ValueError:
             continue
+        # 每周清理（tools/prune_low_value.py + prune_policy.py）：行业政策性、与合规关联
+        # 不大的条目已在数据层打 pruned 标记（不删数据、可 --restore-all 回滚），此处不再渲染。
+        if r.get("pruned"):
+            continue
         title = (r.get("title") or "").strip()
         domain = normalize_domain(r.get("domain") or "")
         if domain not in DOMAIN_KEYS:

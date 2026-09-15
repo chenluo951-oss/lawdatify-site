@@ -235,9 +235,13 @@ def main():
             if not line:
                 continue
             try:
-                nat.append(json.loads(line))
+                rec = json.loads(line)
             except ValueError:
                 continue
+            # 每周清理的条目（prune_policy 判定）不再计入「今日更新」
+            if rec.get("pruned"):
+                continue
+            nat.append(rec)
     # 本期新增 = 今天入库的动态；若今天没入库（未联网），回退到最近一次入库批次
     today_nat = [x for x in nat if (x.get("collected") or "") == TODAY_S]
     if not today_nat and nat:

@@ -73,6 +73,7 @@ sys.path.insert(0, ROOT)
 
 from build_topics import DOMAIN_KEYS, normalize_domain, guess_domain, is_root_url  # noqa: E402
 from sources_tier import tier_of, TIER_LABEL  # noqa: E402
+import prune_policy as PRUNE  # noqa: E402
 
 STORE = os.path.join(ROOT, "sources", "news", "items.jsonl")
 OK_CODES = {"200", "403", "429"}
@@ -222,6 +223,15 @@ def main():
             why = "链接是官网首页根域名，不可溯源"
         if why:
             rejected.append((title, why))
+            continue
+
+        # 每周清理黑名单（prune_policy）：被判「行业政策性、与合规关联不大」而清理过的条目
+        # 不再放行，否则次日采集又会把它抓回来、每周白清一次。人工复核后可从
+        # sources/news/pruned_blacklist.json 删掉对应键恢复正常收录。
+        hit = PRUNE.blacklist_hit(title, url)
+        if hit:
+            rejected.append((title, "已在每周清理黑名单（%s：%s）"
+                             % (hit.get("pruned_at", ""), hit.get("reason", ""))))
             continue
 
         if (url and url in seen_url) or norm_title(title) in seen_title:
