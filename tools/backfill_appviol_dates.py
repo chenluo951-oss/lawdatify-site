@@ -115,6 +115,14 @@ def fetch(url, timeout=25):
 RE_PUB = re.compile(r'name="PubDate"\s+content="(\d{4}-\d{2}-\d{2})', re.I)
 RE_BODY = re.compile(r"发布时间[：:]\s*(\d{4}-\d{2}-\d{2})")
 RE_URLY = re.compile(r"/art/(\d{4})/")
+# cac.gov.cn 的文章 URL 自带完整发布日期（/2026-06/11/c_xxx.htm）——比 PubDate 还准，
+# 且无需联网。国家网信办的 12 份文书全站无日期（站点不输出 PubDate），靠这条补齐。
+RE_URLDAY = re.compile(r"/(\d{4})-(\d{2})/(\d{2})/")
+
+
+def url_day(url):
+    m = RE_URLDAY.search(url or "")
+    return f"{m.group(1)}-{m.group(2)}-{m.group(3)}" if m else ""
 
 
 def probe(full_id, url):
@@ -277,10 +285,14 @@ def main():
             body = ""
         t_year = title_year(d)
         uy = p["url_year"]
+        ud = url_day(d["url"])
 
         day = pub or body
         if t_year and day and day[:4] == t_year:
             final, src, prec, conf = day, ("pubdate" if pub else "body"), "day", 0
+        elif t_year and ud and ud[:4] == t_year:
+            # 标题年与 URL 归档日互相印证 → 取精确到日（比只落标题年更有用）
+            final, src, prec, conf = ud, "url-day", "day", 0
         elif t_year and day:
             final, src, prec, conf = t_year + "-01-01", "title-year", "year", 1
         elif t_year:
@@ -293,6 +305,8 @@ def main():
                 final, src, prec, conf = uy + "-01-01", "url-path", "year", 1
         elif day:
             final, src, prec, conf = day, ("pubdate" if pub else "body"), "day", 0
+        elif ud:
+            final, src, prec, conf = ud, "url-day", "day", 0
         elif uy:
             final, src, prec, conf = uy + "-01-01", "url-path", "year", 0
         else:

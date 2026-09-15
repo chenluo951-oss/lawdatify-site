@@ -1,27 +1,27 @@
 {
  "updated": "2026-09-15",
  "documents": 652,
- "with_date": 640,
- "exact_day": 533,
+ "with_date": 652,
+ "exact_day": 545,
  "year_only": 107,
  "by_source": {
-  "kept:harvest": 55,
-  "none": 12,
   "pubdate": 441,
+  "kept:harvest": 55,
   "body": 37,
+  "title-year": 9,
   "url-path": 98,
-  "title-year": 9
+  "url-day": 12
  },
  "migrate_days": {
-  "www.miit.gov.cn": "2023-05-12",
-  "shxca.miit.gov.cn": "2024-03-01",
+  "sdca.miit.gov.cn": "2026-01-29",
   "cqca.miit.gov.cn": "2023-11-21",
   "lnca.miit.gov.cn": "2023-05-13",
-  "fjca.miit.gov.cn": "2023-05-13",
+  "www.miit.gov.cn": "2023-05-12",
+  "shxca.miit.gov.cn": "2024-03-01",
+  "nmca.miit.gov.cn": "2024-02-22",
   "jxca.miit.gov.cn": "2023-12-13",
   "ynca.miit.gov.cn": "2023-05-13",
-  "sdca.miit.gov.cn": "2026-01-29",
-  "nmca.miit.gov.cn": "2024-02-22"
+  "fjca.miit.gov.cn": "2023-05-13"
  },
  "year_collapse": [
   "fjca.miit.gov.cn",

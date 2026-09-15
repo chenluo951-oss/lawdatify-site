@@ -60,6 +60,10 @@ def pct(a, b):
 # 联合通报要拆成两个机构分别计数，否则省局的通报量会被合并项吃掉。
 SPLIT = ["、", "，", ",", "与"]
 
+# 非通报类文书类型：个人署名文章 / 行业观察。挂在通报库里会把「通报量」算多，
+# 统计时剔除（文书仍在 docs.json 里留存，只是不计入通报统计）。
+NON_NOTICE = {"行业观点"}
+
 
 def orgs_of(d):
     """把「四川省通信管理局、重庆市通信管理局」拆成两家，各计 0.5 份文书。"""
@@ -81,11 +85,19 @@ ALIAS = {
     "宁夏通信管理局": "宁夏回族自治区通信管理局",
     "新疆通信管理局": "新疆维吾尔自治区通信管理局",
     "工业和信息化部": "工业和信息化部 · 信息通信管理局",
-    "中央网信办": "中央网信办 · 秘书局",
+    "中央网信办": "国家网信办",
+    "中央网信办 · 秘书局": "国家网信办",
+    "网信办秘书局": "国家网信办",
+    "国家互联网信息办公室": "国家网信办",
+    "国家互联网信息办公室秘书局": "国家网信办",
     "未知主体": "（未能识别发布主体）",
 }
+# ⚠️ 网信办「一个机构两块牌子」：中央网信办 = 国家互联网信息办公室 = 国家网信办，
+#    其秘书局只是发文机构。故上面把这些写法**全部归一到「国家网信办」一个主体** ——
+#    否则同一个机关的通报量会被摊成三家，机构 × 年度矩阵读起来像三个小机构在管
+#    （用户 2026-09-15 指出）。
 # 4 部门联合发布的专项行动公告，归到国家层面的「联合专项」
-JOINT = {"中央网信办 · 秘书局", "工业和信息化部 · 信息通信管理局",
+JOINT = {"国家网信办", "工业和信息化部 · 信息通信管理局",
          "公安部 · 网络安全保卫局", "国家市场监督管理总局"}
 
 
@@ -99,7 +111,13 @@ def main():
     dpath = os.path.join(OUTDIR, "docs.json")
     if "--docs" in argv:
         dpath = argv[argv.index("--docs") + 1]
-    docs = json.load(open(dpath, encoding="utf-8"))["docs"]
+    docs_all = json.load(open(dpath, encoding="utf-8"))["docs"]
+    # 剔除非通报类文书（个人署名文章等）：它们是网信办站上的行业观察，挂在通报库里
+    # 会把「通报量」算多。文书数口径随之对齐，避免矩阵合计与 KPI 对不上。
+    docs = [d for d in docs_all if (d.get("notice_kind") or "") not in NON_NOTICE]
+    excluded = len(docs_all) - len(docs)
+    if excluded:
+        print(f"▸ 剔除非通报类文书 {excluded} 份（{sorted(NON_NOTICE)}）")
     apps, est = resolve(docs)
 
     years = sorted({yr(d) for d in docs if yr(d)})
@@ -361,12 +379,15 @@ def main():
             if os.path.exists(os.path.join(OUTDIR, "date_audit.json"))
             else "",
             "documents": len(docs),
+            "excluded_non_notice": excluded,
             "years": years,
             "orgs": len(org_rows),
             "date_year_only": sum(1 for d in docs if d.get("date_precision") == "year"),
             "date_exact": sum(1 for d in docs if d.get("date_precision") == "day"),
             "note": "机构维度已把联合通报按发布机关拆分并等分计数；"
-                    "文书类型分列，未把「整改复核 / 下架处置」并入「批次通报」。",
+                    "文书类型分列，未把「整改复核 / 下架处置」并入「批次通报」；"
+                    "网信办系统按「一个机关一块牌子」归一为国家网信办，"
+                    "非通报类文书（行业观点）不计入统计。",
         },
         "entity": est,
         "year_summary": year_summary,

@@ -186,6 +186,10 @@ def probs_of(cell):
 # ------------------------------------------------------------ 文书分类
 def notice_kind(title, body):
     s = title + " " + body[:600]
+    # 个人署名文章（「韩煜：移动App…」）不是监管通报 —— 挂在网信办站上，容易混进通报统计
+    if re.match(r"^[\u4e00-\u9fff]{2,4}[：:]", title) and not re.match(
+            r"^(关于|通知|公告|解读|答记者问|一图)", title):
+        return "行业观点"
     if re.search(r"下架|禁搜|关停|予以下架", title):
         return "下架处置"
     if re.search(r"整改情况|复测|复核|回头看|整改完成|完成整改", title):
@@ -198,6 +202,30 @@ def notice_kind(title, body):
         return "测评评议"
     return "批次通报"
 
+
+# ------------------------------------------------------------ 机构命名口径
+# ⚠️ 网信办系统「一个机构两块牌子」：中央网络安全和信息化委员会办公室（中央网信办）
+#    与国家互联网信息办公室（国家网信办）是**同一机构**的两块牌子；对外发布通报表时
+#    常以「中央网信办秘书局」「国家互联网信息办公室秘书局」署名。秘书局只是它的
+#    发文机构，不是另一个发布主体（用户 2026-09-15 明确：「网信办秘书局就是国家网信办」）。
+#    所以本库全国层面**只立「国家网信办」一个主体**，不把中央 / 国家 / 秘书局写成三家，
+#    否则机构 × 年度矩阵会把同一个机关的通报量摊薄成三份，看着像三个小机构。
+CAC_NATIONAL = "国家网信办"
+
+# 省级网信办的全称（用于把国家站转载的地方通报归回属地主体）
+# ⚠️ 不能只取有独立通管局站点的省份：海南、河北等没有通信管理局子站，
+#    但其网信办通报会挂到 cac.gov.cn 上（实测浙江 2 份、海南 2 份）。
+CAC_PROV_SHORT = {
+    "北京": "北京市", "天津": "天津市", "上海": "上海市", "重庆": "重庆市",
+    "河北": "河北省", "山西": "山西省", "辽宁": "辽宁省", "吉林": "吉林省",
+    "黑龙江": "黑龙江省", "江苏": "江苏省", "浙江": "浙江省", "安徽": "安徽省",
+    "福建": "福建省", "江西": "江西省", "山东": "山东省", "河南": "河南省",
+    "湖北": "湖北省", "湖南": "湖南省", "广东": "广东省", "海南": "海南省",
+    "四川": "四川省", "贵州": "贵州省", "云南": "云南省", "陕西": "陕西省",
+    "甘肃": "甘肃省", "青海": "青海省", "台湾": "台湾省",
+    "内蒙古": "内蒙古自治区", "广西": "广西壮族自治区", "西藏": "西藏自治区",
+    "宁夏": "宁夏回族自治区", "新疆": "新疆维吾尔自治区",
+}
 
 PROV_NAMES = {
     "bj": "北京市", "tj": "天津市", "sh": "上海市", "cq": "重庆市", "sx": "山西省",
@@ -237,30 +265,30 @@ def org_scope(title, body, url, fallback=""):
     if "miit.gov.cn" in low:
         return "工业和信息化部 · 信息通信管理局", "国家"
     # 4) 其余（网信办站）看正文落款——落款在末尾
+    #    秘书局三个变体一律归「国家网信办」（同一机构两块牌子，见文件头机构命名口径）
     tail = body[-900:]
     for pat, org in ((r"公安部网安局|公安部网络安全保卫局", "公安部 · 网安局"),
-                     (r"中央网信办秘书局|中央网信办", "中央网信办 · 秘书局"),
-                     (r"国家互联网信息办公室", "国家互联网信息办公室")):
+                     (r"中央网信办秘书局|国家互联网信息办公室秘书局|网信办秘书局"
+                      r"|国家互联网信息办公室|中央网信办|国家网信办", CAC_NATIONAL)):
         if re.search(pat, tail):
             return org, "国家"
     for kw, org in (("计算机病毒", "国家计算机病毒应急处理中心"),
                     ("工业和信息化部", "工业和信息化部 · 信息通信管理局"),
                     ("公安部", "公安部 · 网安局"),
-                    ("中央网信办", "中央网信办 · 秘书局")):
+                    ("中央网信办", CAC_NATIONAL),
+                    ("国家网信办", CAC_NATIONAL)):
         if kw in title:
             return org, "国家"
-    # 5) 省级网信办转载的属地通报（标题以省名开头，如「浙江关于微记账等38款App…」）
-    short = {nm[:2]: nm for nm in PROV_NAMES.values()}
-    short.update({"内蒙古": "内蒙古自治区", "广西": "广西壮族自治区",
-                  "宁夏": "宁夏回族自治区", "新疆": "新疆维吾尔自治区",
-                  "西藏": "西藏自治区", "重庆": "重庆市", "上海": "上海市",
-                  "北京": "北京市", "天津": "天津市"})
-    m = re.match(r"^([\u4e00-\u9fff]{2,4})", title)
-    if m and m.group(1) in short:
-        return short[m.group(1)] + "互联网信息办公室", "地方"
-    # 6) 兜底：cac.gov.cn 上的国家层面通报默认由中央网信办发布
+    # 5) 省级网信办转载的属地通报（标题以省名开头，如「浙江关于微记账等38款App…」
+    #    「海南网信办通报13款APP…」）。
+    #    ⚠️ 必须排在 cac.gov.cn 兜底**之前**，否则国家站上的地方通报会被吞成国家主体
+    #    （实测浙江 2 份、海南 2 份被误记到国家层面，属地统计因此缺失）。
+    for k in (4, 3, 2):
+        if title[:k] in CAC_PROV_SHORT:
+            return CAC_PROV_SHORT[title[:k]] + "互联网信息办公室", "地方"
+    # 6) 兜底：cac.gov.cn 上的国家层面通报 = 国家网信办（含其秘书局发文）
     if "cac.gov.cn" in low:
-        return "中央网信办 · 秘书局", "国家"
+        return CAC_NATIONAL, "国家"
     return (fallback or "未知主体"), "其他"
 
 
@@ -492,7 +520,9 @@ def prov_docs():
 
 # ============================================================== 抓正文
 RE_ATTACH_PDF = re.compile(r'/cms_files/filemanager/[0-9A-Za-z]+/attach/[^"\']*?\.pdf', re.I)
-RE_CAC_IMG = re.compile(r'(?:https?:)?//www\.cac\.gov\.cn/rootimages/uploadimg/[^"\']+\.(?:png|jpg|jpeg)', re.I)
+RE_CAC_IMG = re.compile(
+    r'(?:https?:)?//www\.cac\.gov\.cn/rootimages/(?:uploadimg/)?[^"\']+\.(?:png|jpg|jpeg)',
+    re.I)
 # 公安部/病毒中心式：正文内嵌《应用名》(版本x, 来源)
 RE_INLINE_APP = re.compile(r"《([^》]{2,40})》\s*(?:[（(]([^）)]{0,60})[）)])?")
 
@@ -565,7 +595,16 @@ def parse_doc(url, meta, ocr=True):
                 if e:
                     entries.append(e)
         if entries:
-            carrier = "image-ocr"
+            # ⚠️ 质检门禁：名单图版式差异很大，OCR 偶尔会把整张表聚成**一行**
+            # （probs 里塞进上百个词，app 名变成「序号」）。这种结果必须丢弃，
+            # 否则会给库里塞一个叫「序号」的假应用。判据：条目 ≥3 且单条问题数中位数 ≤8。
+            npm = sorted(len(e.get("probs") or []) for e in entries)
+            med = npm[len(npm) // 2] if npm else 0
+            if len(entries) < 3 or med > 8:
+                print(f"  ! 名单图 OCR 聚类异常已丢弃（{len(entries)} 条 / 中位问题数 {med}）：{url}")
+                entries = []
+            else:
+                carrier = "image-ocr"
     # 4) 正文内嵌《应用名》(版本, 来源)（公安部 / 病毒中心式，以及省局下架通报的正文点名）
     if not entries:
         hits = RE_INLINE_APP.findall(body)
@@ -653,6 +692,41 @@ def main():
                 old[d["url"]] = d
         except Exception:
             old = {}
+
+    # --reorg：机构命名 / 归属口径变更后，离线按「标题 + 域名」重算文书发布主体。
+    # 文书里不存正文，落款分支本就不参与（这些文书都是走域名兜底判定的），故不必重抓全网。
+    # 典型场景：把「中央网信办 · 秘书局」统一为国家网信办、把国家站上的地方通报归回属地。
+    if "--reorg" in argv:
+        from collections import Counter as _C
+        docs = list(old.values())
+        hit = []
+        for d in docs:
+            if "cac.gov.cn" not in (d.get("url") or ""):
+                continue
+            org, scope = org_scope(d.get("title") or "", "", d.get("url") or "",
+                                   d.get("org") or "")
+            kind = notice_kind(d.get("title") or "", "")
+            if (org, scope) != (d.get("org") or "", d.get("scope") or ""):
+                hit.append((d.get("org"), org, d.get("title", "")))
+                d["org"], d["scope"] = org, scope
+            if kind != d.get("notice_kind"):
+                print(f"  ~ 类型 {d.get('notice_kind')} → {kind}　{d.get('title','')[:34]}")
+                d["notice_kind"] = kind
+        docs.sort(key=lambda d: (d.get("date") or "", d["title"]), reverse=True)
+        meta = json.load(open(docs_path, encoding="utf-8")).get("meta") or {}
+        orgs = _C(d["org"] for d in docs)
+        meta["by_scope"] = dict(_C(d["scope"] for d in docs))
+        meta["top_orgs"] = dict(orgs.most_common(30))
+        meta["org_naming"] = (CAC_NATIONAL + " = 中央网信办 = 国家互联网信息办公室"
+                              "（同一机构两块牌子；秘书局为其发文机构，不另立发布主体）")
+        json.dump({"meta": meta, "docs": docs},
+                  open(docs_path, "w", encoding="utf-8"),
+                  ensure_ascii=False, separators=(",", ":"))
+        print(f"✓ 重算发布主体：改动 {len(hit)} 份 / 共 {len(docs)} 份")
+        for a, b, t in hit:
+            print(f"  · {a} → {b}　{t[:36]}")
+        print(f"  机构分布 {dict(orgs.most_common(8))}")
+        return 0
 
     # --apps-only：文书库已就绪，只按新的实体消解 / 事件口径重算 apps.json。
     # 改了去重逻辑但不想重抓全网时用（重抓 652 份要十几分钟）。
@@ -755,6 +829,8 @@ def main():
         "by_kind": dict(kinds),
         "by_carrier": dict(carriers),
         "by_scope": dict(levels),
+        "org_naming": CAC_NATIONAL + " = 中央网信办 = 国家互联网信息办公室"
+                      "（同一机构两块牌子；秘书局为其发文机构，不另立发布主体）",
         "top_orgs": dict(orgs.most_common(30)),
         "date_range": [min((d["date"] for d in docs if d["date"]), default=""),
                        max((d["date"] for d in docs if d["date"]), default="")],
