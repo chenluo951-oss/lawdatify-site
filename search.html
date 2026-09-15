@@ -243,7 +243,15 @@ function render(){
       '</div>';
   }).join('');
 }
-fetch('assets/search-index.json').then(function(r){return r.json();}).then(function(d){
+fetch('assets/search-index.json').then(function(r){return r.json();}).then(function(m){
+  if(!m.parts){ return m; }
+  var ps=[]; for(var i=1;i<=m.parts;i++){ ps.push('assets/search-index-'+('0'+i).slice(-2)+'.json'); }
+  return Promise.all(ps.map(function(u){return fetch(u).then(function(r){return r.json();});}))
+    .then(function(parts){
+      var items=[]; parts.forEach(function(p){ items=items.concat(p.items||p); });
+      m.items=items; return m;
+    });
+}).then(function(d){
   IDX=d;
   (d.cats||[]).forEach(function(c){ CATN[c[0]]=c[1]; });
   var counts={}; d.items.forEach(function(i){ counts[i.c]=(counts[i.c]||0)+1; });

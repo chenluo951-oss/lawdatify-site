@@ -69,6 +69,9 @@ STEPS = [
     ("合规资讯·首页",   [PY, "build_topics.py"],                     True),
     ("今日更新",        [PY, "build_updates.py"],                    True),
     ("搜索索引",        [PY, "build_search.py"],                     False),
+    # 大文件切片：Git Data API 建 blob 对单文件体积敏感（>6MB 会失败），
+    # 必须排在 build_standards（产出 library-data.js）与 build_search（产出索引）之后。
+    ("大文件切片",      [PY, "tools/split_big_assets.py"],          False),
     # ---------- 3. 统一外壳与自检（必须最后）----------
     ("首页（合规动态·可视化）", [PY, "build_home.py"],                True),
     ("模块子导航",      [PY, "inject_subnav.py"],                    False),
