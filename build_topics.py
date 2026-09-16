@@ -705,8 +705,18 @@ FEED_FILTER_JS = r"""
       empty=document.getElementById('empty'), sum=document.getElementById('fsum'),
       clr=document.getElementById('fclear'),
       cur='all', curK='all', total=feed.querySelectorAll('.ni').length;
+  function esc(t){
+    return String(t).replace(/[&<>"]/g,function(c){
+      return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});
+  }
+  function lab(sel){
+    var b=document.querySelector(sel+'.is-on'); if(!b) return '';
+    var c=b.cloneNode(true), e=c.querySelector('em'); if(e) e.parentNode.removeChild(e);
+    return (c.textContent||'').trim();
+  }
   function apply(){
-    var kw=(q.value||'').trim().toLowerCase(), shown=0;
+    var kwv=(q&&q.value||'').trim();
+    var kw=kwv.toLowerCase(), shown=0;
     var gs=feed.querySelectorAll('.fgroup');
     for(var i=0;i<gs.length;i++){
       var g=gs[i], okG=(cur==='all'||g.dataset.g===cur), n=0;
@@ -716,11 +726,26 @@ FEED_FILTER_JS = r"""
         var ok=okG&&(curK==='all'||el.dataset.kind===curK)&&(!kw||t.indexOf(kw)>-1);
         el.hidden=!ok; if(ok){n++;shown++;}
       }
+      // ⚠️ 分区计数必须跟着刷新。写死的「21 条」不改 + 卡片不隐藏 → 用户判定「点了没用」
+      // （2026-09-16 实测反馈）。命中数＜总数时显示「n / M 条」并高亮。
+      var c=g.querySelector('.cnt'), tot=ns.length;
+      if(c){
+        c.textContent=(n===tot)?(tot+' 条'):(n+' / '+tot+' 条');
+        c.classList.toggle('is-hit', n!==tot);
+      }
       g.hidden=(n===0);
     }
     empty.hidden=(shown>0);
     var filtered=(shown!==total);
-    sum.innerHTML=filtered?('已筛出 <b>'+shown+'</b> / '+total+' 条'):'';
+    if(filtered){
+      var lb=[];
+      if(cur!=='all')  lb.push('领域 '+lab('#fDomain .fchip'));
+      if(curK!=='all') lb.push('内容 '+lab('#fKind .fseg-i'));
+      if(kw)           lb.push('关键词「'+esc(kwv)+'」');
+      sum.innerHTML='已筛出 <b>'+shown+'</b> / '+total+' 条'+(lb.length?'（'+lb.join(' · ')+'）':'');
+    } else {
+      sum.innerHTML='';
+    }
     clr.hidden=!filtered;
   }
   function bind(sel,attr,cb){
