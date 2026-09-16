@@ -69,10 +69,121 @@ CASE_TYPES = [
     ("食品安全", r"食品|餐饮|农残|过期|标签|添加剂|餐具|无证经营|保质期"),
     ("计量与质量", r"计量|缺斤短两|电子秤|净含量|质量不合格|抽检|假冒|伪劣"),
     ("广告违法", r"广告|绝对化用语|疗效|代言|虚假广告"),
-    ("消费者权益", r"消费者|预付|退费|会员|格式条款|个人信息"),
-    ("个人信息与数据", r"个人信息|隐私|数据|App|APP|SDK|账号注销|收集使用"),
-    ("网络与平台", r"网络交易|平台|电子商务|直播|外卖|刷单炒信|网络餐饮"),
+    ("移动应用与个人信息", r"app|应用程序|小程序|sdk|权限|摇一摇|开屏|预置|"
+                    r"应用分发|应用商店|个人信息|隐私|账号注销|收集使用|"
+                    r"过度索权|强制授权|用户权益"),
+    ("数据与网络安全", r"数据安全|网络安全|等级保护|漏洞|关键信息基础设施|"
+                  r"数据出境|重要数据|勒索|攻击|泄露"),
+    ("网络与平台", r"网络交易|平台|电子商务|直播|外卖|网络餐饮|即时配送|"
+                r"刷单炒信|平台责任|二选一"),
+    ("消费者权益", r"消费者|预付|退费|会员|格式条款|不公平条款|七日无理由"),
 ]
+
+
+PROVINCES = ["北京", "天津", "上海", "重庆", "河北", "山西", "辽宁", "吉林", "黑龙江",
+             "江苏", "浙江", "安徽", "福建", "江西", "山东", "河南", "湖北", "湖南",
+             "广东", "广西", "海南", "四川", "贵州", "云南", "西藏", "陕西", "甘肃",
+             "青海", "宁夏", "新疆", "内蒙古"]
+
+# 省级区划 + 主要城市。用于校验「XX网信办」里真的抓到了地名 ——
+# 正则挑出的片段必须落在白名单内，否则说明它吃进了机关名
+# （曾把「市场监管总局会同中央网信办」的地名识别成「监管总局会同中央」）。
+PLACES = set(PROVINCES) | {
+    "深圳", "广州", "杭州", "宁波", "南京", "苏州", "无锡", "成都", "武汉", "西安",
+    "青岛", "大连", "厦门", "济南", "郑州", "长沙", "合肥", "福州", "昆明", "南昌",
+    "贵阳", "兰州", "太原", "石家庄", "沈阳", "长春", "哈尔滨", "呼和浩特",
+    "银川", "西宁", "乌鲁木齐", "拉萨", "南宁", "海口", "温州", "佛山", "东莞"}
+
+# 同一机构不同牌子 → 一个名字。中央网信办 / 国家网信办 / 国家互联网信息办公室
+# 是同一套班子的三块牌子，分开列会让「按机关找案例」这件事失效。
+ORG_ALIAS = {
+    "中央网信办": "国家网信办",
+    "国家互联网信息办公室": "国家网信办",
+    "中央网络安全和信息化委员会办公室": "国家网信办",
+}
+
+
+def _org_by_title(title, org):
+    """按标题校正发布机关（未做同机构别名归一，见 fix_org）。
+
+    ⚠️ 2026-09-16 修：案例库的 org 字段有一部分来自站点资讯流的自动解析，实测有
+    **实质错标** —— 浙江 / 海南 / 山东网信办发布的 App 通报被统一标成
+    「国家互联网信息办公室」；地方市场监管局发布的「铁拳」「春雷」典型案例被标成
+    「人民法院」「人民检察院」。机关归属写错会直接误导读者去错的门投诉、找错依据，
+    因此改为**以标题为准**校正：标题里点名了哪家机关就归哪家，判不出才沿用原值。
+    幂等，可反复执行。
+    """
+    t = (title or "").strip()
+    o = (org or "").strip()
+
+    # 0) 市场监管总局牵头的（如「市场监管总局会同中央网信办…约谈平台」）——
+    #    牵头机关才是发布主体，这一步必须排在做网信判断之前，否则会被
+    #    「标题里有『网信办』」抢走，甚至把「监管总局会同中央」当成地名。
+    if re.match(r"^\s*(国家市场监督管理总局|市场监管总局)", t):
+        return "市场监管总局"
+
+    # 1) 标题点名了网信机构 —— 判出地名就归地方网信办，否则归国家网信办
+    if re.search(r"网信办|互联网信息办公室", t):
+        m = re.search(r"([\u4e00-\u9fa5]{2,8}?)(?:省|市|自治区|自治州|区|县)?"
+                      r"(?:委)?(?:互联网信息办公室|网信办)", t)
+        place = re.sub(r"^(关于|据|由|经|通知|通报)", "", (m.group(1) if m else "").strip())
+        place = re.sub(r"(省|市|自治区|自治州)$", "", place)
+        # 地名必须落在白名单里，否则说明正则吃进了机关名（如「监管总局会同中央」）
+        if place in PLACES:
+            return f"{place}网信办"
+        return "国家网信办"
+
+    # 2) 标题以省份 / 直辖市开头且是网信类内容（如「浙江关于微记账等 38 款 App…通报」）
+    for p in PROVINCES:
+        if t.startswith(p) and re.search(r"app|小程序|个人信息|隐私", t, re.I):
+            return f"{p}网信办"
+
+    # 3) 市场监管系统（⚠️ 不要用「专项整治」当关键词：它不专属市监系统，
+    #    曾把工信部的「关于开展APP侵害用户权益专项整治工作的解读」误抢过来）
+    if re.search(r"市场监管总局|国家市场监督管理总局", t):
+        return "市场监管总局"
+    if re.search(r"市场监管局|市场监督管理局|工商局|铁拳|春雷|双随机|守护消费", t):
+        return "地方市场监管局"
+
+    # 4) 司法系统（标题明确点到法院 / 检察院时才归）
+    if re.search(r"人民法院|检察院", t):
+        return "人民法院" if "法院" in t else "人民检察院"
+
+    # 5) 工信系统
+    if re.search(r"工业和信息化部|工信部|通信管理局|通管局", t):
+        return "工业和信息化部"
+
+    # 6) 公安系统
+    if re.search(r"公安", t):
+        return "公安部"
+
+    # 7) 国家 / 中央网信办（标题无地方限定）
+    if re.search(r"国家网信办|中央网信办", t):
+        return "国家网信办"
+
+    return o or "未标注"
+
+
+def fix_org(title, org):
+    """发布机关最终值 = 按标题校正 + 同机构不同牌子归一（幂等）。"""
+    v = _org_by_title(title, org)
+    return ORG_ALIAS.get(v, v)
+
+
+def guess_type(*parts):
+    """按规则表判定案例类型（首个命中即停）。
+
+    ⚠️ 2026-09-16 修：预置来源（App 违规通报批次、站点资讯流）此前用一行
+    硬编码 `"个人信息与数据" if "App" in title else "其他"` —— 只认标题里
+    正好写着「App」，于是「关于侵害用户权益行为的APP通报」（全大写）之类
+    全部掉进兜底，308 条里「其他」一度占 119 条（39%）。现在统一走本规则表，
+    且正则用 re.I（APP / App / app 一视同仁）。
+    """
+    t = " ".join(p for p in parts if p)
+    for name, pat in CASE_TYPES:
+        if re.search(pat, t, re.I):
+            return name
+    return "其他"
 
 
 def curl(url, referer=None, timeout=45, tries=3):
@@ -229,15 +340,20 @@ def main():
     for i, (u, r) in enumerate(todo, 1):
         preset = r.get("_preset")
         if preset:
+            _t = preset.get("title", "")
+            if SKIP.search(_t):
+                # 预置来源（App 通报批次 / 站点资讯流）此前不做噪声过滤，
+                # 把「…工作的解读」「评《…》出台」这类评论文章也当案例收了进来。
+                continue
+            _cats = "、".join(preset.get("categories") or [])
             cases.append({
-                "title": preset.get("title", ""), "url": u,
+                "title": _t, "url": u,
                 "date": preset.get("date", ""), "org": preset.get("org", ""),
-                "type": ("个人信息与数据" if "App" in preset.get("title", "")
-                         else "其他"),
-                "laws": ["App违法违规收集使用个人信息行为认定方法"]
-                if "App" in preset.get("title", "") else [],
+                "type": guess_type(_t, _cats),
+                "laws": (["App违法违规收集使用个人信息行为认定方法"]
+                         if re.search(r"app|个人信息|用户权益", _t, re.I) else []),
                 "fines": [],
-                "fact": "、".join(preset.get("categories") or [])[:260],
+                "fact": _cats[:260],
                 "kind": preset.get("kind", "监管通报"),
             })
             continue
@@ -260,6 +376,41 @@ def main():
             continue
         seen.add(c["url"])
         uniq.append(c)
+
+    # 把此前落到兜底「其他」的条目按现行规则表重新归类。
+    # 只补不覆盖：已有明确分类的条目保持不动，避免用标题回判劣化正文判定的结果。
+    reclassified = 0
+    for c in uniq:
+        if (c.get("type") or "其他") == "其他":
+            nt = guess_type(c.get("title", ""), c.get("fact", ""))
+            if nt != "其他":
+                c["type"] = nt
+                reclassified += 1
+    if reclassified:
+        print(f"  重新归类 {reclassified} 条（原落兜底「其他」）")
+
+    # 历史类别名归并：「个人信息与数据」是旧名，与现行的
+    # 「移动应用与个人信息」语义重叠（案例库中这类内容基本都是 App 通报），
+    # 不归并的话页面上会并排出现两个意思一样的分类。
+    RENAME = {"个人信息与数据": "移动应用与个人信息"}
+    renamed = 0
+    for c in uniq:
+        old = c.get("type")
+        if old in RENAME:
+            c["type"] = RENAME[old]
+            renamed += 1
+    if renamed:
+        print(f"  类别归并 {renamed} 条（{ '、'.join(RENAME) } → { '、'.join(set(RENAME.values())) }）")
+
+    # 发布机关校正（以标题为准，幂等）
+    org_fixed = 0
+    for c in uniq:
+        n = fix_org(c.get("title", ""), c.get("org", ""))
+        if n != (c.get("org") or ""):
+            c["org"] = n
+            org_fixed += 1
+    if org_fixed:
+        print(f"  校正发布机关 {org_fixed} 条")
 
     from collections import Counter
     stat = Counter(c.get("type", "其他") for c in uniq)

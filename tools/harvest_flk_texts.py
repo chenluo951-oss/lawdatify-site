@@ -50,6 +50,10 @@ DEFAULT_KINDS = ["法律", "宪法", "行政法规", "监察法规", "司法解�
                  "法规性决定", "修正案", "修改、废止的决定",
                  "有关法律问题和重大问题的决定（部分）", "部门规章", "规范性文件"]
 
+# docx 的最低字数（默认阈值）。见 fetch_one 注释：docx 必有文字层，
+# 一大批「批准 / 决定」类公文正文只有一两句（100—200 字），阈值 300 会把它们全丢掉。
+MIN_DOCX = 60
+
 PDF_NOISE = [
     re.compile(r"^\s*国家法律法规数据库\s*$"),
     re.compile(r"^\s*[-—\s]*\d{1,4}\s*[-—\s]*$"),          # 页码
@@ -103,8 +107,16 @@ def signed_url(bbbs, fmt="pdf", retry=3, jar=JAR):
     return None
 
 
-def fetch_one(x, jar, slot, min_chars):
+def fetch_one(x, jar, slot, min_chars, min_docx=MIN_DOCX):
     """抓一条：优先 docx（体积小且必有文字层），失败再退 PDF。
+
+    ⚠️ 阈值必须**按格式分开**（2026-09-16 修）：
+      原先两个格式统一用 min_chars=300，把一大批**真实但极短**的公文误判成
+      「无文字层」而丢弃 —— 例如「全国人大常委会关于批准《国务院关于安置老弱病残
+      干部的暂行办法》的决议」正文只有 109 字，「关于对国际条约所规定的罪行行使
+      刑事管辖权的决定」只有 151 字。这些是货真价实的生效法律文件，不该被丢掉。
+      docx 必定带文字层（不存在扫描件），所以短就是真短，阈值放到 60；
+      pdf 仍保留较高阈值 —— 扫描件有文字层但不完整，阈值低了会把噪声收进来。
 
     ⚠️ 临时文件按 slot 固定命名且**不删**：逐条 os.remove 会在第 50 个
     触发沙箱的批量删除保护（SAFE_DELETE_BULK_CONFIRM_REQUIRED）并中断进程。
@@ -121,11 +133,33 @@ def fetch_one(x, jar, slot, min_chars):
             continue
         nbyte = os.path.getsize(p)
         txt = clean_text(fn(p), join_lines=(fmt == "pdf"))
-        if len(txt) >= min_chars:
+        if len(txt) >= (min_docx if fmt == "word" else min_chars):
             return {"b": bbbs, "t": title, "k": kind, "o": x.get("o") or "",
                     "p": x.get("p") or "", "i": x.get("i") or "",
                     "s": sxx_label(x.get("s")), "f": fmt, "n": len(txt), "x": txt}, nbyte
     return None, 0
+
+
+def ole_text(path):
+    """老式 .doc（OLE2 复合文档）的正文提取，用 macOS 自带的 textutil。
+
+    ⚠️ 为什么必须有这条兜底（2026-09-16 补）：
+    flk 下载接口对同一份文件会同时提供 word / pdf 两种格式，但**相当一部分
+    「word」件并不是 docx，而是 Word 97-2003 的 OLE2 复合文档**（文件头
+    `d0cf11e0a1b11ae1`），只是扩展名给了 .docx。zipfile 打不开 → 原来的
+    docx_text 静默返回空 → 整条被当成「无文字层」丢掉。实测成批出现在
+    司法解释与早年行政法规里：《人民检察院刑事诉讼规则》（859KB）、
+    《海关关衔标志式样和佩带办法》（5.1MB）等，全部误判为失败。
+    这些文件的正文是完整的，textutil 能逐条转出（实测 867 字，分条排版正常）。
+    """
+    try:
+        r = subprocess.run(["textutil", "-convert", "txt", "-stdout", path],
+                           capture_output=True, timeout=180)
+    except Exception:
+        return ""
+    if r.returncode != 0:
+        return ""
+    return r.stdout.decode("utf-8", "ignore")
 
 
 def docx_text(path):
@@ -134,7 +168,16 @@ def docx_text(path):
     ⚠️ 关键：flk 的 docx 里，条文之间用的是**软换行 `<w:br/>`**而不是新段落，
     只取 `w:t` 会把整部法挤成一行（"制定本法。第二条 自然人……"）。
     必须把 `w:br`/`w:cr` 也翻成换行，正文才是可读的分条排版。
+
+    ⚠️ 先按文件头判断格式：OLE2 是老式 .doc 伪装成 .docx，交给 ole_text。
     """
+    try:
+        head = open(path, "rb").read(8)
+    except OSError:
+        return ""
+    if head[:4] == b"\xd0\xcf\x11\xe0":
+        return ole_text(path)
+
     import zipfile
     from xml.etree import ElementTree as ET
     W = "{http://schemas.openxmlformats.org/wordprocessingml/2006/main}"
@@ -234,7 +277,10 @@ def main():
     ap.add_argument("--kinds", default="", help="逗号分隔的类别白名单，默认内置重点层级")
     ap.add_argument("--limit", type=int, default=0, help="最多抓多少条（0=不限）")
     ap.add_argument("--min-chars", type=int, default=300,
-                    help="正文短于此字数视为无文字层，不入库")
+                    help="PDF 正文短于此字数视为无文字层，不入库")
+    ap.add_argument("--min-docx", type=int, default=MIN_DOCX,
+                    help="docx 正文短于此字数视为异常，不入库（默认 %d；"
+                         "docx 必有文字层，短公文是真的短）" % MIN_DOCX)
     ap.add_argument("--sleep", type=float, default=0.6, help="每条间隔秒数")
     ap.add_argument("--fresh", action="store_true", help="忽略断点，重头抓")
     ap.add_argument("--workers", type=int, default=1,
@@ -284,7 +330,7 @@ def main():
     def job(pair):
         slot, x = pair
         try:
-            return slot, x, fetch_one(x, jars[slot], slot, a.min_chars)
+            return slot, x, fetch_one(x, jars[slot], slot, a.min_chars, a.min_docx)
         except Exception:
             return slot, x, (None, 0)
 

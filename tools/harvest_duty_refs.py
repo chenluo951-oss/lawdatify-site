@@ -69,9 +69,16 @@ REFS = [
     #   · 国标/食安国标（GB 7718-2025、GB 28050-2025、GB/T 41391-2022、GB 31621、GB 31605、
     #     GB 4806.1、GB 23350）—— 国标走 openstd 图片阅读器，需 OCR 流水线，另行处理
     # 这些义务（共约 18 项）仍保留出处名称与官方深链，只是页面上不展示条款原文。
+    # ⚠️ 这份规范的**全文不在页面上**：市监总局的行政规范性文件页只有发布公告，
+    # 规范正文挂在 .docx 附件里（旧库那条指向的 PDF 是扫描件，正文 0 字）。
+    # 因此给出 attach（正文附件）与 page（官方发布页，用于溯源）。
     dict(name="餐饮服务食品安全操作规范", cat="规范性文件", src="web",
-         url="https://www.samr.gov.cn/cms_files/filemanager/samr/www/samrnew/samrgkml/"
-             "nsjg/spjys/202006/W020200617529299543944.pdf",
+         page="https://www.samr.gov.cn/zw/zfxxgk/zc/xzgfxwj/art/2023/"
+              "art_2f6fadd3be844359be6a0e7fece23bcf.html",
+         attach="https://www.samr.gov.cn/cms_files/filemanager/1647978232/attach/20238/"
+                "24553b8b6e414845afd3fdecc0ca3c02.docx",
+         url="https://www.samr.gov.cn/zw/zfxxgk/zc/xzgfxwj/art/2023/"
+             "art_2f6fadd3be844359be6a0e7fece23bcf.html",
          pub="2018-06-22", impl="2018-10-01"),
     # 国家法律法规数据库全文（法律层级）
     dict(name="中华人民共和国反垄断法", cat="法律", src="flk", flk="中华人民共和国反垄断法"),
@@ -106,6 +113,36 @@ REFS = [
          flk="中华人民共和国消费者权益保护法"),
     dict(name="中华人民共和国产品质量法", cat="法律", src="flk",
          flk="中华人民共和国产品质量法"),
+
+    # 2026-09-16 第三批：duties.json 引用、语料库仍缺的**部门规章与规范性文件**。
+    # 这批文件不在国家法律法规数据库（flk）的收录范围（已用 flk 全量清单 7759 条
+    # 逐名核对过，一条都没有），只能从发布机关官网取原文。链接均为机构官网站内
+    # 具体页（非栏目页、非首页），正文就在页面上。
+    dict(name="关于维护新就业形态劳动者劳动保障权益的指导意见", cat="规范性文件", src="web",
+         url="https://www.gov.cn/zhengce/zhengceku/2021-07/23/content_5626761.htm",
+         pub="2021-07-16", impl="2021-07-16"),
+    dict(name="国家网络安全事件报告管理办法", cat="规范性文件", src="web",
+         url="https://www.cac.gov.cn/2025-09/15/c_1759583017717009.htm",
+         pub="2025-09-11", impl="2025-11-01"),
+    dict(name="关于开展移动互联网应用程序备案工作的通知", cat="规范性文件", src="web",
+         url="https://www.miit.gov.cn/zwgk/zcwj/wjfb/tz/art/2023/"
+             "art_920db564162e4312916a01bed6540ad8.html",
+         pub="2023-07-21", impl="2023-07-21"),
+    dict(name="零售商品称重计量监督管理办法", cat="部门规章", src="web",
+         url="https://www.samr.gov.cn/jls/zcfg/jlfg/art/2023/"
+             "art_22d7717c3499459b97763d11b59c2040.html",
+         pub="2004-08-10", impl="2004-09-01"),
+    dict(name="实施强制管理的计量器具目录", cat="规范性文件", src="web",
+         url="https://www.samr.gov.cn/zw/zfxxgk/fdzdgknr/jjjzs/art/2023/"
+             "art_d095685b12544ed3aa6dbc3aaf7c136e.html",
+         pub="2020-10-26", impl="2020-10-26"),
+    # 商务部、发改委令第 1 号。**现行有效版本** —— 其第三十条明文废止了
+    # 《商务领域一次性塑料制品使用、回收报告办法（试行）》（商务部公告 2020 年第 61 号）。
+    # 义务原来引的是那份已废止的试行办法，属引已废止依据，2026-09-16 连同 refs 一并更正。
+    dict(name="商务领域经营者使用、报告一次性塑料制品管理办法", cat="部门规章", src="web",
+         url="https://www.mofcom.gov.cn/cms_files/filemanager/1077459795/attach/20245/"
+             "b09042228f954319ac45b1db1cbdec0a.pdf",
+         pub="2023-05-10", impl="2023-06-20"),
 ]
 
 SKIP_AFTER = 400  # 纯文本短于此判为抓错页
@@ -131,14 +168,20 @@ def name_hit(name, text):
     return False
 
 
-def curl(url, timeout=40):
-    """官方站点普遍反爬，必须带完整浏览器头。"""
+def curl(url, timeout=40, referer=""):
+    """官方站点普遍反爬，必须带完整浏览器头。
+
+    referer：下载附件（.docx/.pdf）时常需要，缺了会被判为盗链而返回错误页。
+    """
     cmd = ["curl", "-sSL", "--max-time", str(timeout), "-A", UA,
            "-H", "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
            "-H", "Accept-Language: zh-CN,zh;q=0.9",
            "-H", "Sec-Fetch-Dest: document", "-H", "Sec-Fetch-Mode: navigate",
            "-H", "Sec-Fetch-Site: none", "-H", "Sec-Fetch-User: ?1",
-           "-H", "Upgrade-Insecure-Requests: 1", url]
+           "-H", "Upgrade-Insecure-Requests: 1"]
+    if referer:
+        cmd += ["-H", "Referer: " + referer]
+    cmd.append(url)
     p = subprocess.run(cmd, capture_output=True)
     return p.stdout
 
@@ -186,6 +229,40 @@ def from_flk(title):
             if len(x) > len(best[1] if best else ""):
                 best = (d, x)
     return best
+
+
+def doc_bin(raw, referer=""):
+    """按**文件魔数**选择解析器：docx(zip) / 老式 doc(OLE2) / PDF / HTML。
+
+    ⚠️ 为什么需要这个（2026-09-16）：部委官网的「正文」往往不在页面上，
+    而在附件里 —— 例如市监总局的行政规范性文件页，页面只有一纸发布公告，
+    规范全文挂在 .docx 附件上。而附件格式在官网之间、甚至同一站内混用：
+    有真 docx（PK 头）、有 Word 97-2003 的老式 doc（OLE2 头，扩展名却写 .docx）、
+    也有 PDF 扫描件（无文字层）。只看扩展名或只看是否 PK 头都会漏。
+    """
+    if raw[:4] == b"%PDF":
+        return pdf_text(raw)
+    if raw[:4] == b"PK\x03\x04":
+        p = "/tmp/_dutyref.docx"
+        with open(p, "wb") as f:
+            f.write(raw)
+        try:
+            sys.path.insert(0, os.path.join(HERE, "tools"))
+            import harvest_flk_texts as HF
+            return HF.docx_text(p)
+        except Exception:
+            return ""
+    if raw[:4] == b"\xd0\xcf\x11\xe0":
+        p = "/tmp/_dutyref.doc"
+        with open(p, "wb") as f:
+            f.write(raw)
+        try:
+            sys.path.insert(0, os.path.join(HERE, "tools"))
+            import harvest_flk_texts as HF
+            return HF.ole_text(p)
+        except Exception:
+            return ""
+    return html_text(raw)
 
 
 def toc_of(text):
@@ -239,10 +316,16 @@ def main():
             else:
                 note = "flk 库中无此标题（全文尚未抓到）"
         else:
-            raw = curl(r["url"])
-            ctype = raw[:4]
-            text = pdf_text(raw) if ctype == b"%PDF" else html_text(raw)
-            note = r["url"]
+            # 正文在附件里时，附件才是全文（页面只有发布公告，会因过短被判失败）
+            if r.get("attach"):
+                raw = curl(r["attach"], timeout=120, referer=r.get("page") or r.get("url"))
+                text = doc_bin(raw)
+                note = r["attach"]
+            else:
+                raw = curl(r["url"])
+                ctype = raw[:4]
+                text = pdf_text(raw) if ctype == b"%PDF" else html_text(raw)
+                note = r["url"]
 
         text = re.sub(r"\n{3,}", "\n\n", text).strip()
         n_art = len(re.findall(r"第[一二三四五六七八九十百]+条", text))
