@@ -1,0 +1,462 @@
+[
+ {
+  "name": "部-国家外汇管理局",
+  "home": "https://www.safe.gov.cn/",
+  "status": "ok",
+  "pages": 9,
+  "cols": [
+   {
+    "text": "专题",
+    "url": "https://www.safe.gov.cn/safe/zt/index.html",
+    "detail_links": 20,
+    "penalty_titles": 0,
+    "samples": [
+     "国家外汇管理局2025年度部门决算",
+     "国家外汇管理局2026年预算",
+     "国家外汇管理局政府网站工作年度报表（2025年）",
+     "国家外汇管理局政府网站监管年度报表（2025年）",
+     "国家外汇管理局2025年预算"
+    ],
+    "depth": 1
+   },
+   {
+    "text": "政府信息公开制度",
+    "url": "https://www.safe.gov.cn/safe/zfxxgkzd/index.html",
+    "detail_links": 14,
+    "penalty_titles": 1,
+    "samples": [
+     "国务院办公厅政府信息与政务公开办公室关于印发《中华人民共和国政府信息公开工作年度...",
+     "国务院办公厅政府信息与政务公开办公室关于做好规章集中公开并动态更新工作的通知",
+     "国务院办公厅转发司法部关于审理政府信息公开行政复议案件若干问题指导意见的通知",
+     "国务院办公厅政府信息与政务公开办公室关于政府信息公开工作年度报告有关事项的通知",
+     "国务院办公厅政府信息与政务公开办公室关于机构改革后政府信息公开申请办理问题的解释"
+    ],
+    "depth": 2
+   },
+   {
+    "text": "专栏文章",
+    "url": "https://www.safe.gov.cn/safe/zlwz/index.html",
+    "detail_links": 6,
+    "penalty_titles": 0,
+    "samples": [
+     "科技赋能深化跨境金融服务平台建设",
+     "强监管防风险有力有效维护外汇市场健康秩序",
+     "有序推进外汇领域改革开放促进跨境贸易和投融资便利化",
+     "稳步推进外汇领域高水平开放不断提升跨境投融资便利化水平",
+     "持续深化跨境贸易外汇便利化改革"
+    ],
+    "depth": 2
+   },
+   {
+    "text": "外汇监管执法公示平台",
+    "url": "https://www.safe.gov.cn/safe/whjgzfgspt/index.html",
+    "detail_links": 3,
+    "penalty_titles": 1,
+    "samples": [
+     "国家外汇管理局执法证信息表",
+     "外汇管理行政执法流程图（检查处罚）",
+     "国家外汇管理局监管事项目录清单"
+    ],
+    "depth": 1
+   }
+  ]
+ },
+ {
+  "name": "部-国家邮政局",
+  "home": "https://www.spb.gov.cn/",
+  "status": "ok",
+  "pages": 8,
+  "cols": [
+   {
+    "text": "政府信息公开",
+    "url": "https://www.spb.gov.cn/gjyzj/c100009/c100014/xxgk_index.shtml",
+    "detail_links": 1006,
+    "penalty_titles": 0,
+    "samples": [
+     "国务院办公厅关于印发《政府信息公开信息处理费管理办法》的通知",
+     "中华人民共和国政府信息公开条例",
+     "国务院办公厅关于施行《中华人民共和国政府信息公开条例》若干问题的意见",
+     "国家邮政局关于发布《村级寄递物流综合服务站服务规范》邮政行业标准的通告",
+     "关于刘莹职务任免的通知"
+    ],
+    "depth": 1
+   },
+   {
+    "text": "政府信息公开",
+    "url": "https://www.spb.gov.cn/gjyzj/c100009/c100014/xxgk_index.shtml?tab=gkzd",
+    "detail_links": 1006,
+    "penalty_titles": 0,
+    "samples": [
+     "国务院办公厅关于印发《政府信息公开信息处理费管理办法》的通知",
+     "中华人民共和国政府信息公开条例",
+     "国务院办公厅关于施行《中华人民共和国政府信息公开条例》若干问题的意见",
+     "国家邮政局关于发布《村级寄递物流综合服务站服务规范》邮政行业标准的通告",
+     "关于刘莹职务任免的通知"
+    ],
+    "depth": 1
+   },
+   {
+    "text": "政府信息公开",
+    "url": "https://www.spb.gov.cn/gjyzj/c100009/c100014/xxgk_index.shtml?tab=gkndbg",
+    "detail_links": 1006,
+    "penalty_titles": 0,
+    "samples": [
+     "国务院办公厅关于印发《政府信息公开信息处理费管理办法》的通知",
+     "中华人民共和国政府信息公开条例",
+     "国务院办公厅关于施行《中华人民共和国政府信息公开条例》若干问题的意见",
+     "国家邮政局关于发布《村级寄递物流综合服务站服务规范》邮政行业标准的通告",
+     "关于刘莹职务任免的通知"
+    ],
+    "depth": 1
+   },
+   {
+    "text": "政府信息公开",
+    "url": "https://www.spb.gov.cn/gjyzj/c100009/c100014/xxgk_index.shtml?tab=zdgkml",
+    "detail_links": 1006,
+    "penalty_titles": 0,
+    "samples": [
+     "国务院办公厅关于印发《政府信息公开信息处理费管理办法》的通知",
+     "中华人民共和国政府信息公开条例",
+     "国务院办公厅关于施行《中华人民共和国政府信息公开条例》若干问题的意见",
+     "国家邮政局关于发布《村级寄递物流综合服务站服务规范》邮政行业标准的通告",
+     "关于刘莹职务任免的通知"
+    ],
+    "depth": 1
+   }
+  ]
+ },
+ {
+  "name": "部-国家粮食和物资储备局",
+  "home": "https://www.lswz.gov.cn/",
+  "status": "ok",
+  "pages": 11,
+  "cols": [
+   {
+    "text": "通知公告",
+    "url": "https://www.lswz.gov.cn/html/tzgg/index.shtml",
+    "detail_links": 25,
+    "penalty_titles": 0,
+    "samples": [
+     "国家粮食和物资储备局办公室关于印发《粮食质量安全档案样本》和《粮食出库检验报告样...",
+     "国家粮食和物资储备局公告（2026年第5号）",
+     "国家粮食和物资储备局公告（2026年第4号）",
+     "关于2026年“全谷物好营养更健康”和“少吃油吃好油更健康”典型案例的公示",
+     "关于对《国家粮食和物资储备局技术创新中心管理办法（征求意见稿）》和《国家粮食和物..."
+    ],
+    "depth": 1
+   },
+   {
+    "text": "政府信息公开制度",
+    "url": "https://www.lswz.gov.cn/html/zfxxgk/zfxxgkzd.shtml",
+    "detail_links": 16,
+    "penalty_titles": 1,
+    "samples": [
+     "中华人民共和国政府信息公开条例",
+     "国务院办公厅关于印发《政府信息公开信息处理费管理办法》的通知",
+     "国务院办公厅转发司法部关于审理政府信息公开行政复议案件若干问题指导意见的通知",
+     "国务院办公厅政府信息与政务公开办公室关于做好规章集中公开并动态更新工作的通知",
+     "国务院办公厅政府信息与政务公开办公室关于印发《中华人民共和国政府信息公开工作..."
+    ],
+    "depth": 1
+   },
+   {
+    "text": "政府信息公开制度",
+    "url": "https://www.lswz.gov.cn/html/zfxxgk/zfxxgkzd.shtml#lswz",
+    "detail_links": 16,
+    "penalty_titles": 1,
+    "samples": [
+     "中华人民共和国政府信息公开条例",
+     "国务院办公厅关于印发《政府信息公开信息处理费管理办法》的通知",
+     "国务院办公厅转发司法部关于审理政府信息公开行政复议案件若干问题指导意见的通知",
+     "国务院办公厅政府信息与政务公开办公室关于做好规章集中公开并动态更新工作的通知",
+     "国务院办公厅政府信息与政务公开办公室关于印发《中华人民共和国政府信息公开工作..."
+    ],
+    "depth": 2
+   }
+  ]
+ },
+ {
+  "name": "部-国家档案局",
+  "home": "https://www.saac.gov.cn/",
+  "status": "ok",
+  "pages": 5,
+  "cols": [
+   {
+    "text": "通知公告",
+    "url": "https://www.saac.gov.cn/daj/tzgg/list.shtml",
+    "detail_links": 20,
+    "penalty_titles": 0,
+    "samples": [
+     "香港档案学深造证书班培训通知",
+     "国家档案局办公室关于开展2026年度国家档案局优秀科技成果奖申报工作的通知",
+     "国家档案局办公室关于公布人工智能应用试点项目的通知",
+     "国家档案局评选确定人工智能应用试点",
+     "国家档案局关于开展2026年档案系列高级职称评审工作的通知"
+    ],
+    "depth": 1
+   },
+   {
+    "text": "政府信息公开",
+    "url": "https://www.saac.gov.cn/daj/xxgk/list.shtml",
+    "detail_links": 20,
+    "penalty_titles": 0,
+    "samples": [
+     "国家档案局政府信息公开实施办法",
+     "国家档案局政府信息公开指南",
+     "国家档案局本级2025年度决算",
+     "国家档案局2025年度部门决算",
+     "国家档案局本级2026年单位预算"
+    ],
+    "depth": 1
+   }
+  ]
+ },
+ {
+  "name": "部-生态环境部",
+  "home": "https://www.mee.gov.cn/",
+  "status": "ok",
+  "pages": 3,
+  "cols": [
+   {
+    "text": "政府信息公开",
+    "url": "https://www.mee.gov.cn/xxgk/list/index.shtml?id=1",
+    "detail_links": 6,
+    "penalty_titles": 0,
+    "samples": [
+     "《生态环境部政府信息主动公开基本目录》（公告2019年第9号）",
+     "行政规范性文件",
+     "建议提案处理",
+     "国务院研究室"
+    ],
+    "depth": 1
+   },
+   {
+    "text": "政府信息公开",
+    "url": "https://www.mee.gov.cn/xxgk/list/index.shtml?id=2",
+    "detail_links": 6,
+    "penalty_titles": 0,
+    "samples": [
+     "《生态环境部政府信息主动公开基本目录》（公告2019年第9号）",
+     "行政规范性文件",
+     "建议提案处理",
+     "国务院研究室"
+    ],
+    "depth": 1
+   }
+  ]
+ },
+ {
+  "name": "部-住房和城乡建设部",
+  "home": "https://www.mohurd.gov.cn/",
+  "status": "ok",
+  "pages": 7,
+  "cols": [
+   {
+    "text": "政府信息公开制度",
+    "url": "https://www.mohurd.gov.cn/gongkai/gkgd/index.html",
+    "detail_links": 14,
+    "penalty_titles": 1,
+    "samples": [
+     "国务院办公厅转发司法部关于审理政府信息公开行政复议案件若干问题指导意见的通知",
+     "国务院办公厅政府信息与政务公开办公室关于转发《江苏省政府信息公开申请办理答复规范》的函",
+     "国务院办公厅政府信息与政务公开办公室关于印发《中华人民共和国政府信息公开工作年度报告格式》的通知",
+     "国务院办公厅政府信息与政务公开办公室关于做好规章集中公开并动态更新工作的通知",
+     "国务院办公厅关于印发《公共企事业单位信息公开规定制定办法》的通知"
+    ],
+    "depth": 1
+   }
+  ]
+ },
+ {
+  "name": "部-国家统计局",
+  "home": "https://www.stats.gov.cn/",
+  "status": "ok",
+  "pages": 2,
+  "cols": [
+   {
+    "text": "专题",
+    "url": "https://www.stats.gov.cn/zt_18555/",
+    "detail_links": 4,
+    "penalty_titles": 0,
+    "samples": [
+     "国务院研究室",
+     "国际组织网站",
+     "国务院研究室",
+     "国际组织网站"
+    ],
+    "depth": 1
+   }
+  ]
+ },
+ {
+  "name": "部-自然资源部",
+  "home": "https://www.mnr.gov.cn/",
+  "status": "ok",
+  "pages": 2,
+  "cols": [
+   {
+    "text": "自然资源部行政执法公示（执法查处类）",
+    "url": "https://www.mnr.gov.cn/zt/zh/xzzfgs/",
+    "detail_links": 35,
+    "penalty_titles": 0,
+    "samples": [
+     "中华人民共和国矿产资源法",
+     "中华人民共和国黑土地保护法",
+     "中华人民共和国土地管理法",
+     "中华人民共和国矿产资源法（2009年修正）",
+     "中华人民共和国城乡规划法"
+    ],
+    "depth": 1
+   }
+  ]
+ },
+ {
+  "name": "部-中国人民银行",
+  "home": "https://www.pbc.gov.cn/",
+  "status": "no_column",
+  "pages": 11,
+  "cols": []
+ },
+ {
+  "name": "部-中国民航局",
+  "home": "https://www.caac.gov.cn/",
+  "status": "no_column",
+  "pages": 1,
+  "cols": []
+ },
+ {
+  "name": "部-中国证监会",
+  "home": "https://www.csrc.gov.cn/",
+  "status": "no_column",
+  "pages": 11,
+  "cols": []
+ },
+ {
+  "name": "部-交通运输部",
+  "home": "https://www.mot.gov.cn/",
+  "status": "no_column",
+  "pages": 2,
+  "cols": []
+ },
+ {
+  "name": "部-农业农村部",
+  "home": "https://www.moa.gov.cn/",
+  "status": "no_column",
+  "pages": 3,
+  "cols": []
+ },
+ {
+  "name": "部-国家中医药管理局",
+  "home": "https://www.natcm.gov.cn/",
+  "status": "unreachable",
+  "cols": []
+ },
+ {
+  "name": "部-国家体育总局",
+  "home": "https://www.sport.gov.cn/",
+  "status": "no_column",
+  "pages": 2,
+  "cols": []
+ },
+ {
+  "name": "部-国家卫生健康委",
+  "home": "https://www.nhc.gov.cn/",
+  "status": "no_column",
+  "pages": 1,
+  "cols": []
+ },
+ {
+  "name": "部-国家文物局",
+  "home": "https://www.ncha.gov.cn/",
+  "status": "unreachable",
+  "cols": []
+ },
+ {
+  "name": "部-国家林业和草原局",
+  "home": "https://www.forestry.gov.cn/",
+  "status": "no_column",
+  "pages": 2,
+  "cols": []
+ },
+ {
+  "name": "部-国家烟草专卖局",
+  "home": "https://www.tobacco.gov.cn/",
+  "status": "unreachable",
+  "cols": []
+ },
+ {
+  "name": "部-国家疾病预防控制局",
+  "home": "https://www.ndcpa.gov.cn/",
+  "status": "no_column",
+  "pages": 5,
+  "cols": []
+ },
+ {
+  "name": "部-国家矿山安全监察局",
+  "home": "https://www.chinamine-safety.gov.cn/",
+  "status": "no_column",
+  "pages": 1,
+  "cols": []
+ },
+ {
+  "name": "部-国家税务总局",
+  "home": "https://www.chinatax.gov.cn/",
+  "status": "no_column",
+  "pages": 11,
+  "cols": []
+ },
+ {
+  "name": "部-国家能源局",
+  "home": "https://www.nea.gov.cn/",
+  "status": "no_column",
+  "pages": 1,
+  "cols": []
+ },
+ {
+  "name": "部-国家药监局",
+  "home": "https://www.nmpa.gov.cn/",
+  "status": "no_column",
+  "pages": 1,
+  "cols": []
+ },
+ {
+  "name": "部-国家金融监督管理总局",
+  "home": "https://www.nfra.gov.cn/",
+  "status": "no_column",
+  "pages": 1,
+  "cols": []
+ },
+ {
+  "name": "部-国家铁路局",
+  "home": "https://www.nra.gov.cn/",
+  "status": "no_column",
+  "pages": 5,
+  "cols": []
+ },
+ {
+  "name": "部-应急管理部",
+  "home": "https://www.mem.gov.cn/",
+  "status": "no_column",
+  "pages": 2,
+  "cols": []
+ },
+ {
+  "name": "部-文化和旅游部",
+  "home": "https://www.mct.gov.cn/",
+  "status": "no_column",
+  "pages": 2,
+  "cols": []
+ },
+ {
+  "name": "部-水利部",
+  "home": "https://www.mwr.gov.cn/",
+  "status": "unreachable",
+  "cols": []
+ },
+ {
+  "name": "部-海关总署",
+  "home": "https://www.customs.gov.cn/",
+  "status": "unreachable",
+  "cols": []
+ }
+]

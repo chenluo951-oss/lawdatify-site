@@ -26,6 +26,9 @@ import edits as E
 
 HOT = os.path.join(HERE, "sources", "standards", "hot_articles.json")
 COMPETE = os.path.join(HERE, "sources", "standards", "compete_law.json")
+# 机器扩写的法条（tools/extend_hot_articles.py 生成）——与手工文件分开存，
+# 合并时**手工优先**（同一 (法规, 条号) 以手工版为准）
+AUTO = os.path.join(HERE, "sources", "standards", "hot_articles_auto.json")
 COUNTS = os.path.join(HERE, "sources", "standards", "citation_counts.json")
 TEXT_INDEX = os.path.join(HERE, "kb", "texts", "index.json")
 OUT = os.path.join(HERE, "kb", "citations.html")
@@ -313,6 +316,13 @@ def sec(title, body, cls=""):
     return f'<div class="ct-sec {cls}"><h4>{title}</h4>{body}</div>'
 
 
+def sec_if(title, val, cls=""):
+    """纯文本小节：值为空就不渲染（机器扩写的条目部分字段为空，
+    渲染成空盒子会让整页看起来「有内容但没写」）。"""
+    v = (val or "").strip()
+    return sec(title, f"<p>{esc(v)}</p>", cls) if v else ""
+
+
 def load_compete():
     """按法条 id 归集竞合关系（一组竞合关系可同时挂在多条法条上）。"""
     try:
@@ -404,17 +414,19 @@ def render(items, counts, dm_name, law_index, compete=None):
                          f'rel="noopener">法规官方发布页 &#8599;</a>')
         cp_html = render_compete((compete or {}).get(x["id"]))
         body = '<div class="ct-secs">' + \
-               sec("条文原文（摘录）", f'<p>{esc(x["quote"])}</p>', "ct-quote") + \
-               sec("合规场景", f'<p>{esc(x["scene"])}</p>') + \
-               sec("处罚标准", f'<p>{esc(x["penalty"])}</p>') + \
-               sec("法律责任", f'<p>{esc(x["liability"])}</p>') + \
+               sec_if("条文原文（摘录）", x.get("quote"), "ct-quote") + \
+               sec_if("合规场景", x.get("scene")) + \
+               sec_if("处罚标准", x.get("penalty")) + \
+               sec_if("法律责任", x.get("liability")) + \
                (sec("法条竞合与抗辩思路", cp_html, "ct-compete") if cp_html else "") + \
-               sec("正面示例", f'<p>{esc(x["positive"])}</p>') + \
+               sec_if("正面示例", x.get("positive")) + \
                sec("真实案例（%d）" % len(arts), cases_html, "ct-cases") + \
                '</div>' + \
                '<div class="ct-acts"><button class="ct-btn ct-tocopy">复制本条</button>' + src_link + '</div>'
-        search_text = " ".join([x["law"], x.get("law_short", ""), x["art"], x["headline"],
-                                x["scene"], x["penalty"], x["liability"], x["positive"]] +
+        search_text = " ".join([x["law"], x.get("law_short", ""), x["art"],
+                                x.get("headline", ""), x.get("scene", ""),
+                                x.get("penalty", ""), x.get("liability", ""),
+                                x.get("positive", "")] +
                                [(cp.get("title", "") + cp.get("issue", "") + cp.get("guide", ""))
                                 for cp in (compete or {}).get(x["id"], [])] +
                                [c["title"] + c["summary"] for c in arts])
@@ -427,7 +439,7 @@ def render(items, counts, dm_name, law_index, compete=None):
             f'<div class="ct-no">{i:02d}</div>'
             '<div class="ct-main">'
             f'<div class="ct-law">{esc(x["law"])} · <b>{esc(x["art"])}</b></div>'
-            f'<p class="ct-art">{esc(x["headline"])}</p>'
+            f'<p class="ct-art">{esc(x.get("headline") or x["art"])}</p>'
             f'<div class="ct-tags">{"".join(tags)}</div>'
             '</div>'
             f'<div class="ct-heat"><div class="n">{heat}<small>次被引</small></div>'
@@ -452,6 +464,18 @@ def render(items, counts, dm_name, law_index, compete=None):
 def main():
     data = json.load(open(HOT, encoding="utf-8"))
     items = data["items"]
+    # 合并机器扩写条目：同 (法规名归一, 条号) 以手工版为准
+    if os.path.exists(AUTO):
+        try:
+            auto = json.load(open(AUTO, encoding="utf-8")).get("items", [])
+        except Exception:
+            auto = []
+        def _k(z):
+            return (re.sub(r"[《》\s]", "", z.get("law") or ""), z.get("art") or "")
+        have = {_k(z) for z in items}
+        add = [z for z in auto if _k(z) not in have]
+        items = items + add
+        print("高频法条：手工 %d + 自动 %d → 合计 %d" % (len(have), len(add), len(items)))
     # 人工修改覆盖层：字段修正（编辑器写入）
     items = [E.apply_patch("hot", x["id"], x) for x in items]
     dm_name = {d["id"]: d["name"] for d in data["domains"]}

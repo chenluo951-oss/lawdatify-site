@@ -36,6 +36,9 @@ from datetime import date
 from html import unescape
 from urllib.parse import urlencode
 
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from case_text_clean import clean_fact, is_shell  # noqa: E402
+
 HERE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 OUT = os.path.join(HERE, "sources", "cases", "cases.json")
 UA = ("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 "
@@ -296,16 +299,34 @@ def parse_case(html, title, url, org_hint=""):
         if re.search(pat, title) or (len(re.findall(pat, body[:2500])) >= 3):
             ctype = name
             break
-    # 事实摘要 = 正文中去掉机关/版权装饰后的前 220 字
-    fact = re.sub(r"(打印|纠错|来源：|分享到|扫一扫在手机|版权所有).{0,40}", " ", body)
-    fact = re.sub(r"\s+", " ", fact).strip()
-    i = fact.find(title[:8]) if len(title) >= 8 else -1
-    if i > 0:
-        fact = fact[i:]
+    # 事实摘要 = 正文剥掉「面包屑 + 元信息栏 + 页面功能件」后的前 260 字。
+    # ⚠️ 老写法用 `re.sub(r"来源：.{0,40}", " ")` 清「来源」，`.{0,40}` 贪婪且不限字符，
+    # 把「来源：市场监管总局 市场监管部门针对电动自行车生产、销售领域违法违」整段吃掉，
+    # 376 条记录各丢了几十字正文。统一改走 tools/case_text_clean.py（值限长 + 卡词边界）。
+    fact = clean_fact(_dedupe_title(body, title), title)
     return {
         "title": title, "url": url, "date": dt, "org": org, "type": ctype,
         "laws": laws, "fines": money, "fact": fact[:260],
     }
+
+
+def _dedupe_title(body, title):
+    """textify 结果里标题可能出现 1～3 次（`<h1>` / 面包屑 / 正文首行），
+    先按标题把正文切到**最后一次**出现处，减少 clean_fact 的处理量。"""
+    if len(title) < 8:
+        return body
+    key = re.sub(r"\s+", "", title)
+    flat = re.sub(r"\s+", "", body)
+    pos = flat.rfind(key[:12])
+    if pos <= 0:
+        return body
+    cnt = 0
+    for i, ch in enumerate(body):
+        if not ch.isspace():
+            if cnt == pos:
+                return body[i:]
+            cnt += 1
+    return body
 
 
 def main():
@@ -375,11 +396,13 @@ def main():
     # 「出自地市监采集但已不在 jsonl 里」的记录一并删掉，否则标题含「统一社会信用代码」
     # 这类垃圾会永久留在案例库里。
     if local_urls:
+        # 判据用采集器写的 src 标记（旧记录没有该字段时退回按 org 名判断）
         keep = [c for c in cases
-                if not ((c.get("org") or "") == "地方市场监管局"
-                        and c.get("agency") and c.get("url") not in local_urls)]
+                if not ((c.get("src") == "local_amr" or (
+                    not c.get("src") and (c.get("org") or "") == "地方市场监管局"))
+                    and c.get("agency") and c.get("url") not in local_urls)]
         if len(keep) != len(cases):
-            print(f"▸ 地市监采集侧已剔除 {len(cases) - len(keep)} 条，案例库同步移除")
+            print(f"▸ 地方采集侧已剔除 {len(cases) - len(keep)} 条，案例库同步移除")
         cases = keep
     # ⚠️ 还有一层：**已存在的记录也要用本地库的版本覆盖**。
     # cases.json 的增量语义是「有就跳过」，于是改进解析规则后用 `--refresh` 重采出来的
@@ -394,7 +417,7 @@ def main():
             cases.append(c)
             local_n += 1
     have = {c["url"] for c in cases}
-    print(f"▸ 地市监官网处罚公示：并入 {local_n} 条（本地库 {len(local_rows)} 条，"
+    print(f"▸ 地方监管机关官网处罚公示：并入 {local_n} 条（本地库 {len(local_rows)} 条，"
           f"覆盖刷新 {len(local_rows) - local_n} 条）")
 
     todo = [(u, r) for u, r in cand.items() if u and u not in have]

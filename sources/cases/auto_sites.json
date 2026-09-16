@@ -1,0 +1,112 @@
+[
+ {
+  "key": "fsamrfoshangovcnzwdttz",
+  "name": "市-佛山",
+  "agency": "佛山",
+  "kind": "single",
+  "col": "https://fsamr.foshan.gov.cn/zwdt/tzgg/index.html",
+  "page2": "",
+  "maxpage": 8,
+  "link": "https://fsamr\\.foshan\\.gov\\.cn/zwdt/tzgg/content/post_\\d+\\.html",
+  "titlehit": ""
+ },
+ {
+  "key": "fsamrfoshangovcnzwgkzd",
+  "name": "市-佛山",
+  "agency": "佛山",
+  "kind": "single",
+  "col": "https://fsamr.foshan.gov.cn/zwgk/zdlyxxgk/index.html",
+  "page2": "https://fsamr.foshan.gov.cn/zwgk/zdlyxxgk/index_2.html",
+  "maxpage": 8,
+  "link": "https://fsamr\\.foshan\\.gov\\.cn/zwgk/zdlyxxgk/spypaqxxgk/zlxx/spzlxx/content/post_\\d+\\.html",
+  "titlehit": ""
+ },
+ {
+  "key": "scjgjcangzhougovcnscjd",
+  "name": "市-沧州",
+  "agency": "沧州",
+  "kind": "single",
+  "col": "https://scjgj.cangzhou.gov.cn/scjd/c100609/listDisplaySelf.shtml",
+  "page2": "",
+  "maxpage": 8,
+  "link": "https://scjgj\\.cangzhou\\.gov\\.cn/scjd/c\\d+/\\d+/\\d+cefe\\d+e\\d+b\\d+fa\\d+a\\d+\\.shtml",
+  "titlehit": ""
+ },
+ {
+  "key": "scjgjcangzhougovcnscjd",
+  "name": "市-沧州",
+  "agency": "沧州",
+  "kind": "single",
+  "col": "https://scjgj.cangzhou.gov.cn/scjd/c116966/listDisplaySon.shtml",
+  "page2": "",
+  "maxpage": 8,
+  "link": "https://scjgj\\.cangzhou\\.gov\\.cn/scjd/c\\d+/\\d+/b\\d+fda\\d+dad\\d+dda\\d+d\\d+e\\d+ed\\d+c\\.shtml",
+  "titlehit": ""
+ },
+ {
+  "key": "amrahgovcnsjfbindexhtm",
+  "name": "省-安徽",
+  "agency": "安徽",
+  "kind": "single",
+  "col": "https://amr.ah.gov.cn/sjfb/index.html",
+  "page2": "",
+  "maxpage": 8,
+  "link": "https://amr\\.ah\\.gov\\.cn/public/\\d+/\\d+\\.html",
+  "titlehit": ""
+ },
+ {
+  "key": "amrahgovcnpubliccolumn",
+  "name": "省-安徽",
+  "agency": "安徽",
+  "kind": "single",
+  "col": "https://amr.ah.gov.cn/public/column/5248926?type=1&action=list",
+  "page2": "",
+  "maxpage": 8,
+  "link": "https://amr\\.ah\\.gov\\.cn/public/\\d+/\\d+\\.html",
+  "titlehit": ""
+ },
+ {
+  "key": "scjgjnantonggovcnntsgs",
+  "name": "市-南通",
+  "agency": "南通",
+  "kind": "single",
+  "col": "https://scjgj.nantong.gov.cn/ntsgsj/gggs/gggs.html",
+  "page2": "",
+  "maxpage": 8,
+  "link": "https://scjgj\\.nantong\\.gov\\.cn/ntsgsj/gggs/content/\\d+c\\d+c\\-\\d+\\-\\d+fb\\d+\\-\\d+ac\\-e\\d+ee\\d+f\\d+b\\d+\\.html",
+  "titlehit": ""
+ },
+ {
+  "key": "scjgjxinyanggovcngzdtt",
+  "name": "市-信阳",
+  "agency": "信阳",
+  "kind": "single",
+  "col": "https://scjgj.xinyang.gov.cn/gzdt/tzgg",
+  "page2": "",
+  "maxpage": 8,
+  "link": "http://scjgj\\.xinyang\\.gov\\.cn/\\d+/\\d+\\-\\d+/\\d+\\.html",
+  "titlehit": ""
+ },
+ {
+  "key": "scjgjtaiyuangovcnxxgkz",
+  "name": "市-太原",
+  "agency": "太原",
+  "kind": "single",
+  "col": "https://scjgj.taiyuan.gov.cn/xxgkzd.html",
+  "page2": "",
+  "maxpage": 8,
+  "link": "https://scjgj\\.taiyuan\\.gov\\.cn/xxgkzd/\\d+/\\d+\\.html",
+  "titlehit": ""
+ },
+ {
+  "key": "scjgjsuzhougovcnszqtsf",
+  "name": "市-苏州",
+  "agency": "苏州",
+  "kind": "single",
+  "col": "https://scjgj.suzhou.gov.cn/szqts/flfg/nav_list.shtml",
+  "page2": "",
+  "maxpage": 8,
+  "link": "https://scjgj\\.suzhou\\.gov\\.cn/szqts/flfg/\\d+/\\d+aeb\\d+d\\d+b\\d+b\\d+c\\d+d\\d+e\\d+ab\\.shtml",
+  "titlehit": ""
+ }
+]

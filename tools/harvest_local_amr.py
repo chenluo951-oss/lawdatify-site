@@ -51,6 +51,7 @@ import os
 import re
 import sys
 import time
+from urllib.parse import urljoin
 
 HERE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(HERE, "tools"))
@@ -58,6 +59,7 @@ sys.path.insert(0, HERE)
 
 from harvest_cases import (CASE_TYPES, LAW_RE, MONEY_RE, curl,  # noqa: E402
                            guess_type, textify)
+from case_text_clean import clean_fact  # noqa: E402
 
 OUT = os.path.join(HERE, "sources", "cases", "local_amr.jsonl")
 
@@ -134,6 +136,41 @@ SITES = [
         # 该栏目混杂采购公告/抽检通告，只收处罚类。翻页按原始条目判空，
         # 标题筛选放到翻完之后 —— 处罚公示只是零星夹在别的公告之间。
         "titlehit": r"行政处罚.*公开|行政处罚决定书|行政处罚案件",
+    },
+    # ---------------------------------------------------------------- 第二轮扩展
+    # ⚠️ 省级局基本不公开**逐案**处罚决定书（走的是国家企业信用信息公示系统／双公示
+    # 平台），所以第二轮的产出仍集中在**地市局**；非市监部门单列在下面。
+    # ⚠️ 已试跑后移除：沧州市局「行政处罚公示」的详情页**只有标题、没有正文**
+    # （决定书正文不在网页上，只在省双公示系统里），抓进来每条的「违法事实」都是
+    # 页面导航壳（市人民政府网站｜无障碍…市发展和改革委员会…）。宁缺毋滥，撤站。
+    {
+        "key": "fs", "name": "佛山市市场监督管理局",
+        "agency": "佛山市市场监督管理局", "kind": "table",
+        # 知识产权行政处罚公示：逐年一份「专利侵权纠纷处理案件信息公开表」
+        "col": "https://fsamr.foshan.gov.cn/zwgk/zdlyxxgk/zscqxzcfgs/",
+        "page": "index_%d.html", "maxpage": 6,
+        "link": r"zwgk/zdlyxxgk/zscqxzcfgs/content/post_\d+\.html",
+        # 这批是**专利侵权纠纷行政裁决**案件信息（维权裁决，不是行政处罚），如实标注
+        "kind_label": "专利侵权纠纷行政裁决",
+    },
+    {
+        "key": "ah", "name": "安徽省市场监督管理局",
+        "agency": "安徽省市场监督管理局", "kind": "single",
+        # 「铁拳」行动典型案例曝光台：每期一篇通稿，内含若干完整案例
+        "col": "https://amr.ah.gov.cn/xwdt/ztzl/tqxddxalpgt/index.html",
+        "page": "index_%d.html", "maxpage": 6,
+        "link": r"/xwdt/ztzl/tqxddxalpgt/(dxal|gzxx)/\d+\.html",
+        "titlehit": r"典型案例|铁拳|曝光",
+    },
+    {
+        # 非市监领域：自然资源部行政执法公示（执法查处类）里的挂牌督办案件通报
+        "key": "mnr", "name": "自然资源部",
+        "agency": "自然资源部", "org": "自然资源部", "kind": "single",
+        "col": "https://www.mnr.gov.cn/zt/zh/xzzfgs/",
+        "page": "index_%d.html", "maxpage": 5,
+        "link": r"gi\.mnr\.gov\.cn/\d{6}/t\d{8}_\d+\.html",
+        "titlehit": r"挂牌督办|调查处理结果的通报|违法案件通报",
+        "kind_label": "行政执法查处通报",
     },
 ]
 
@@ -220,7 +257,9 @@ def list_page(url, link_re):
         elif a.startswith("/"):
             a = "/".join(url.split("/")[:3]) + a
         elif not a.startswith("http"):
-            continue
+            # ⚠️ 相对链接必须补全：安徽「铁拳」曝光台写成 `./dxal/150590161.html`，
+            # 早期版本直接 `continue` 丢掉 → 整站「列表命中 0 条」。
+            a = urljoin(url, a)
         out.append((t, a))
     return out
 
@@ -246,7 +285,8 @@ def ok_name(s):
     return len(re.sub(r"[^\u4e00-\u9fa5]", "", s)) >= 4
 
 
-def case_from_row(cells, hmap, title, url, date, agency):
+def case_from_row(cells, hmap, title, url, date, agency, org=ORG_CAT,
+                  kind="行政处罚信息公开表"):
     """公开表的一行 → 一条案例；抽不出像样的案件名称则返回 None（该行丢弃）。"""
     def cell(k):
         i = hmap.get(k)
@@ -283,18 +323,22 @@ def case_from_row(cells, hmap, title, url, date, agency):
         "title": name,
         "url": url,
         "date": d or "",
-        "org": ORG_CAT,
+        "org": org,
         "agency": agency,
         "type": guess_type(name, cell("fact"), cell("basis")),
         "laws": laws[:6],
         "fines": fines,
         "fact": re.sub(r"\s+", " ", fact)[:260],
         "caseno": caseno,
-        "kind": "行政处罚信息公开表",
+        "kind": kind,
+        # 来源标记：下游 harvest_cases.py 靠它做镜像删除（比按 org 名判断稳，
+        # 因为非市监领域的站点 org 各不相同）
+        "src": "local_amr",
     }
 
 
-def parse_table(html_text, url, list_title, date, agency):
+def parse_table(html_text, url, list_title, date, agency, org=ORG_CAT,
+                kind="行政处罚信息公开表"):
     """详情页里的公开表 → [case, …]。"""
     tables = re.findall(r"<table[\s\S]*?</table>", html_text)
     best, best_rows = None, 0
@@ -336,7 +380,8 @@ def parse_table(html_text, url, list_title, date, agency):
     for n, cs in enumerate(grid[hdr_i + 1:], 1):
         if not any(cs):
             continue
-        c = case_from_row(cs, hmap, list_title, f"{url}#c{n}", date, agency)
+        c = case_from_row(cs, hmap, list_title, f"{url}#c{n}", date, agency, org,
+                          kind)
         # 没有文号也没有案由的行 = 表尾说明行，丢掉
         if not c or (not c["caseno"] and not c["title"]):
             continue
@@ -357,6 +402,8 @@ def real_title(html_text, fallback):
     if m:
         seg = re.split(r"[>＞]", m.group(1))[-1].strip()
         seg = re.sub(r"^(行政处罚公示|公示公告|通知公告|正文|首页|政务公开|信息公开)\s*", "", seg)
+        # CMS 的 <title> 会拼上站名：「…案_沧州市市场监督管理局」→ 去掉尾缀
+        seg = re.split(r"\s*[_|｜]\s*", seg)[0]
         seg = norm(seg)
         if len(seg) >= 8:
             return seg
@@ -391,6 +438,19 @@ def is_junk(r):
         return True
     # 「…作废公告」是证照作废程序性文书，不是处罚案件（青岛「强制注销公司营业执照作废公告」）
     if re.search(r"作废公告", t):
+        return True
+    # ⚠️ 标题被页面壳污染：政府站的 footer 导航会被 textify 当成正文
+    # （实测沧州：「市人民政府网站｜无障碍…市发展和改革委员会…」）。
+    # ⚠️ 只能查**标题**与事实的**开头**，且要用足够特别的词：首版把「人民政府网站」
+    # 也列进去，结果整批昆明/青岛记录的事实里只要提到「昆明市人民政府网站」就被误杀
+    # （一次 refresh 掉了 50 条）。判据宁可窄。
+    if re.search(r"打印页面|关闭页面|无障碍浏览|政府组成部门|友情链接|网站地图", t):
+        return True
+    f0 = (r.get("fact") or "")[:120]
+    if re.search(r"无障碍|打印页面|政府组成部门|友情链接|网站地图", f0):
+        return True
+    # 规范性文件不是案件：正文以「各省、自治区、直辖市…」开头的是发文，不是处罚
+    if (r.get("fact") or "").lstrip().startswith("各省、自治区"):
         return True
     # ⚠️ 事实长度阈值要按来源分开：公开表的「主要违法事实」列本身就极其精简
     # （泸州实测中位 14 字，如「生产虚假标注生产日期的食品」），用单案文书的
@@ -430,7 +490,7 @@ def trim_chrome(s):
     return re.sub(r"\s+", " ", s).strip()
 
 
-def parse_single(html_text, url, title, date, agency, kind="行政处罚决定书"):
+def parse_single(html_text, url, title, date, agency, kind="行政处罚决定书", org=ORG_CAT):
     """一页一案 → 一条案例。"""
     if re.search(r"\.{3}|…", title):
         title = real_title(html_text, title)
@@ -464,6 +524,8 @@ def parse_single(html_text, url, title, date, agency, kind="行政处罚决定�
         fact = body[i:] if i > 0 else body
     fact = re.sub(r"^(行政处罚信息|正文|信息来源|来源|发布时间|发布日期)[：:][^\s]{0,30}", " ", fact)
     fact = trim_chrome(fact)
+    # 兜底：面包屑 / 元信息栏 / PDF 页码（口径见 tools/case_text_clean.py）
+    fact = clean_fact(fact, title)
     caseno = ""
     mc = re.search(r"([\u4e00-\u9fa5]{1,8}市监[\u4e00-\u9fa5]{0,6}〔20\d{2}〕[\d\-～~、]+号)", body)
     if mc:
@@ -486,9 +548,10 @@ def parse_single(html_text, url, title, date, agency, kind="行政处罚决定�
     shown = f"{cause}案（{caseno}）" if (cause and caseno) else (
         f"{cause}案" if cause else title)
     return {
-        "title": shown, "url": url, "date": d or "", "org": ORG_CAT, "agency": agency,
+        "title": shown, "url": url, "date": d or "", "org": org, "agency": agency,
         "type": guess_type(shown, cause, fact[:400]), "laws": laws[:6], "fines": fines,
         "fact": fact[:260], "caseno": caseno, "kind": kind,
+        "src": "local_amr",
     }
 
 
@@ -569,7 +632,8 @@ def main():
             if not h:
                 continue
             if s["kind"] == "table":
-                cases = parse_table(h, u, t, "", s["agency"])
+                cases = parse_table(h, u, t, "", s["agency"], s.get("org", ORG_CAT),
+                                    s.get("kind_label", "行政处罚信息公开表"))
                 # 同一份公开表可能分多期，文号天然唯一 —— 用它再挡一次重复
                 cases = [c for c in cases if not (c["caseno"] and c["caseno"] in known)]
                 for c in cases:
@@ -578,10 +642,12 @@ def main():
             else:
                 # 同一栏目常混着两种形态（例：无锡「行政处罚案件」既有典型案例通稿，
                 # 也有「行政处罚信息公示表」整表页）——先试按表格拆，拆不出来再当单案文书。
-                cases = parse_table(h, u, t, "", s["agency"])
+                cases = parse_table(h, u, t, "", s["agency"], s.get("org", ORG_CAT),
+                                    s.get("kind_label", "行政处罚信息公开表"))
                 if not cases:
                     cases = [parse_single(h, u, t, "", s["agency"],
-                                          s.get("kind_label", "行政处罚决定书"))]
+                                          s.get("kind_label", "行政处罚决定书"),
+                                          s.get("org", ORG_CAT))]
             for c in cases:
                 new.append(c)
             got += len(cases)
