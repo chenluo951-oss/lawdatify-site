@@ -78,7 +78,7 @@
   "chars": 4740,
   "http_kind": "html",
   "status": "pointer",
-  "checked": "2026-09-15",
+  "checked": "2026-09-16",
   "note": "未检出标准正文特征（范围/规范性引用文件）"
  },
  "食品安全国家标准 预包装食品营养标签通则": {
@@ -89,7 +89,7 @@
   "chars": 4740,
   "http_kind": "html",
   "status": "pointer",
-  "checked": "2026-09-15",
+  "checked": "2026-09-16",
   "note": "未检出标准正文特征（范围/规范性引用文件）"
  },
  "寄递服务用户个人信息安全管理规定（2023 修订）": {
@@ -9045,7 +9045,7 @@
   "chars": 1113,
   "http_kind": "html",
   "status": "pointer",
-  "checked": "2026-09-15",
+  "checked": "2026-09-16",
   "note": "未检出标准正文特征（范围/规范性引用文件）"
  },
  "限制商品过度包装要求 食品和化妆品": {
@@ -9056,7 +9056,7 @@
   "chars": 2876,
   "http_kind": "html",
   "status": "pointer",
-  "checked": "2026-09-15",
+  "checked": "2026-09-16",
   "note": "未检出标准正文特征（范围/规范性引用文件）"
  },
  "限制商品过度包装要求 生鲜食用农产品": {
@@ -9067,7 +9067,7 @@
   "chars": 1905,
   "http_kind": "html",
   "status": "pointer",
-  "checked": "2026-09-15",
+  "checked": "2026-09-16",
   "note": "未检出标准正文特征（范围/规范性引用文件）"
  },
  "电动自行车安全技术规范": {
@@ -9078,7 +9078,7 @@
   "chars": 1957,
   "http_kind": "html",
   "status": "pointer",
-  "checked": "2026-09-15",
+  "checked": "2026-09-16",
   "note": "未检出标准正文特征（范围/规范性引用文件）"
  },
  "YD/T 6793-2026 电信和互联网用户个人信息汇聚融合处理技术要求": {
@@ -11276,5 +11276,205 @@
   "checked": "2026-09-15",
   "official_url": "https://hbba.sacinfo.org.cn/stdDetail/3f78a2d30f4043d0f524995b41fac911a8625cd76db617ada7f29485135a51ca",
   "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "YD/T 6833-2026 网络安全态势感知 资源管理要求": {
+  "code": "YD/T 6833-2026",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-16",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/3f78a2d30f4043d0f524995b41fac91146ee5928af2c866d1fbfa5e3987c9a06",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "YD/T 6832-2026 网络安全态势感知 量化评估要求": {
+  "code": "YD/T 6832-2026",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-16",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/3f78a2d30f4043d0f524995b41fac911da6d3d317ebb1485a186d3d3792552d0",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "YD/T 6831-2026 网络安全态势感知 数据处理要求": {
+  "code": "YD/T 6831-2026",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-16",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/3f78a2d30f4043d0f524995b41fac91185261c7714f6a0060ce1c7467868eae2",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "YD/T 6830-2026 网络安全态势感知 安全事件检测要求": {
+  "code": "YD/T 6830-2026",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-16",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/3f78a2d30f4043d0f524995b41fac91185c825b6df8cfe4a380e8ac520d30633",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "YD/T 6829-2026 网络安全态势感知 总体架构及功能要求": {
+  "code": "YD/T 6829-2026",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-16",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/e348d148e7bfb7ed897ad34d330ab070302290a41c85c700921b699af362c86d",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "YD/T 6827-2026 电信和互联网行业网络安全人员能力认证准则": {
+  "code": "YD/T 6827-2026",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-16",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/e348d148e7bfb7ed897ad34d330ab070223ecc1ced3222d6566dbd5b168a9ca6",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "JT/T 1545-2025 交通运输行业网络安全实战演练工作规程": {
+  "code": "JT/T 1545-2025",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-16",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/b5e9aeba94ec25ef8307c82b3ecacf22356964aa3aa00ae07e286535770ce8f0",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "DL/T 1931—2024 电力LTE无线通信网络安全防护要求": {
+  "code": "DL/T 1931—2024",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-16",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/fcaeeb98753619528a4006c78000ccc2709b75a654c1e094fec914c90859cac0",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "YD/T 6303-2024 网络安全威胁数据报送接口要求": {
+  "code": "YD/T 6303-2024",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-16",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/6f2c34cc2c8dfcb2c07caefcd052ef49ee5359d1ed7df78c308250637647c388",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "YD/T 6284-2024 智能化医疗器械网络安全能力技术要求": {
+  "code": "YD/T 6284-2024",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-16",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/f5068982f0d131ddfa2ab03d9e8dd5714e1b8ef5ab4e92b66dc1ad282fe73ad7",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "JT/T 904-2023 交通运输行业网络安全等级保护定级指南": {
+  "code": "JT/T 904-2023",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-16",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/157d83987b2966be92f066ca81f2c6c1a0b76a25d6355f3b062aa69e3eb2e047",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "JT/T 1418-2022 交通运输网络安全监测预警系统技术规范": {
+  "code": "JT/T 1418-2022",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-16",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/3be8b1ada0f778c7a3bf19ef14e0a397c222d2159a8a2c2b907abfb259bc6d27",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "JT/T 1417-2022 交通运输行业网络安全等级保护基本要求": {
+  "code": "JT/T 1417-2022",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-16",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/c15eb96b59c62e7c72bd0902425c4734d840c938c16e6bc07a1b84fae7b33b6f",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "YY/T 1843-2022 医用电气设备网络安全基本要求": {
+  "code": "YY/T 1843-2022",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-16",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/b8943cf289a5280f1abd8f0cba98aa24f15db9d89bdaa76dd16e900fe4089a60",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "YD/T 3799-2020 电信网和互联网网络安全防护定级备案实施指南": {
+  "code": "YD/T 3799-2020",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-16",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/ae32e5f1e1a5bb5022cdf00135cd5e6f53df73ecac1d9aacd07ec9737d57814a",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "YD/T 3745-2020 网络安全众测服务管理要求": {
+  "code": "YD/T 3745-2020",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-16",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/8d76034e5e096ca04fe35b5068affde1fd48c662fb1122ac86edfc7ae018fd4a",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "YD/T 3744-2020 网络安全众测平台技术要求": {
+  "code": "YD/T 3744-2020",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-16",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/8d76034e5e096ca04fe35b5068affde12cd166af3dc62689d5d431c11b862189",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "YD/T 3734-2020 基础电信企业网络安全态势感知系统技术要求": {
+  "code": "YD/T 3734-2020",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-16",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/391e132ab52868336346df5d5e5a3efbeb4dcbe08cb189fad21a9ebaf1fe345e",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "YD/T 6531-2025 面向人脸识别系统的人脸信息保护基础能力要求": {
+  "code": "YD/T 6531-2025",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-16",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/ad1feb151b8b4d3e3d64c129c5d1f783bafa89d3c8c663f2fa9198b67813a5f2",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "YD/T 6803-2026 基础电信企业网络音视频多媒体深度合成鉴伪检测系统技术要求": {
+  "code": "YD/T 6803-2026",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-16",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/e33818177bac3c1d87d081a0aa2991557cfdfb3e08bbecf52e978e90d114bf33",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "YD/T 6802-2026 信息服务提供者网络音视频深度合成鉴伪检测技术能力评测方法": {
+  "code": "YD/T 6802-2026",
+  "level": "行业标准",
+  "status": "meta",
+  "source": "hbba",
+  "checked": "2026-09-16",
+  "official_url": "https://hbba.sacinfo.org.cn/stdDetail/e33818177bac3c1d87d081a0aa2991552188f3511406ecae90bb1cf32c234a8e",
+  "note": "行标全文一般不公开，仅收录元数据与官方深链"
+ },
+ "电力安全事故应急处置和调查处理条例": {
+  "code": "行政法规",
+  "level": "行政法规",
+  "source": "gov.cn/官网",
+  "official_url": "https://www.gov.cn/zhengce/zhengceku/202609/content_7080190.htm",
+  "chars": 6770,
+  "http_kind": "html",
+  "status": "pointer",
+  "checked": "2026-09-16",
+  "note": "该页是目录/索引页"
  }
 }

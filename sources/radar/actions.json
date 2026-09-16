@@ -1,7 +1,7 @@
 {
  "_meta": {
   "desc": "监管行动数据源：正在推进或近期推进的检查、专项治理、立法草案与安全调查。level=national 国家级 / local 地方级。src 含义同 calendar.json。",
-  "updated": "2026-09-14"
+  "updated": "2026-09-16"
  },
  "items": [
   {
@@ -157,6 +157,46 @@
     "保健食品经营者"
    ],
    "progress": "2026-09-07 发布第一批典型案例，含北京昌平 AI 虚拟人直播带货虚假宣传普通食品案（《直播电商监督管理办法》施行后北京首案）、深圳万丹通虚假宣传普通食品治愈「三高」案（罚款25万元）。",
+   "src": "official",
+   "lang": "zh"
+  },
+  {
+   "name": "清朗·整治AI应用乱象专项行动（第二阶段）",
+   "url": "https://www.cac.gov.cn/2026-09/02/c_1790099041364574.htm",
+   "level": "national",
+   "region": "全国",
+   "series": "清朗系列",
+   "issuer": "中央网信办",
+   "period": "2026年（第二阶段）",
+   "status": "进行中",
+   "domain": "AI合规",
+   "focus": "AI虚假信息、低俗内容、假冒仿冒、侵害未成年人",
+   "targets": [
+    "AI应用平台",
+    "生成式AI服务",
+    "应用商店"
+   ],
+   "progress": "累计清理违规信息561万条、处置应用2400余个",
+   "src": "official",
+   "lang": "zh"
+  },
+  {
+   "name": "个人信息保护系列专项行动",
+   "url": "https://www.cac.gov.cn/2026-08/19/c_1788889479389148.htm",
+   "level": "national",
+   "region": "全国",
+   "series": "系列专项行动",
+   "issuer": "中央网信办、工业和信息化部、公安部",
+   "period": "2026年",
+   "status": "进行中",
+   "domain": "数据合规",
+   "focus": "App/SDK个人信息收集使用、个性化广告关闭选项",
+   "targets": [
+    "App/SDK运营者",
+    "电信企业",
+    "互联网平台"
+   ],
+   "progress": "核查2万余款App/SDK，通报1100余款",
    "src": "official",
    "lang": "zh"
   }

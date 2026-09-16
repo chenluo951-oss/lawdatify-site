@@ -25,6 +25,10 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 SNAP_DIR = os.path.join(HERE, "sources", "updates")
 SNAP = os.path.join(SNAP_DIR, "snapshot.json")
 
+# 快照口径版本。**改动 key_of / fingerprint 必须 +1**，否则新旧基线混用会虚报增量。
+# v1 → v2（2026-09-16）：键由「效力层级::名称」改为「code::name::pub::impl::issuer」。
+SNAP_V = 2
+
 LIB = "sources/standards/library.json"
 CAL = "sources/radar/calendar.json"
 ACT = "sources/radar/actions.json"
@@ -48,23 +52,57 @@ def esc(s):
 
 
 def key_of(it):
-    """条目唯一键。
+    """条目唯一键 —— 必须「一部法规的**一个版本**」对应一个键。
 
-    注意：法规类条目的 code 字段存的是**效力层级**（如「部门规章」「法律」），
-    多部法规共用同一个 code，只按 code 取键会大面积冲突（实测：只按 code 时
-    新增条目会被误判成"变更"）。因此必须用 code + name 复合键。
+    踩过的两个坑（都导致过大规模假变更）：
+      1. 只用 code：法规类条目的 code 存的是**效力层级**（「部门规章」「法律」），
+         多部法规共用同一个 code，只按 code 取键会大面积冲突；
+      2. code + name 仍然不够：法规库里同一部法规存有**多个历史版本**
+         （如《武汉市城市节约用水条例》有 2005 / 2021 / 2022 三个版本的记录，
+         分别对应不同的公布与施行日期），只用 code+name 会让这些版本碰撞成同一个键，
+         快照只记得住其中一个 → 每次列表顺序一变就被误报成「状态 / 内容变更」。
+         2026-09-16 实测：碰撞 1072 条，而页面报的「变更」恰好也是 1072 条 —— 全部为假。
+    因此用「效力层级 + 名称 + 公布日期 + 施行日期 + 发布机关」五项复合键，
+    实测 20003 条中碰撞仅 4 条（为同源重复条目）。
     """
-    return f'{(it.get("code") or "").strip()}::{(it.get("name") or "").strip()}'
-
-
-def fingerprint(it):
-    """用于判断"是否发生变化"的指纹：状态 / 实施日期 / 链接 / 要点。"""
-    return "|".join([
-        (it.get("status") or ""),
-        (it.get("impl") or ""),
-        (it.get("url") or ""),
-        (it.get("point") or "")[:200],
+    name = (it.get("name") or "").strip()
+    if not name:
+        return ""
+    k = "::".join([
+        (it.get("code") or "").strip(),
+        name,
+        (it.get("pub") or "").strip(),
+        (it.get("impl") or "").strip(),
+        (it.get("issuer") or "").strip(),
     ])
+    return k if k.strip(":") else (it.get("url") or "").strip()
+
+
+# 指纹字段分隔符：用 ASCII 0x1f（字段分隔符），不会与任何法名 / 链接冲突。
+SEP = "\x1f"
+
+
+def fp_of(it):
+    """单条目的状态指纹。自带 name，这样**下线条目**也能显示名称，
+    无需再在快照里另存一份 meta（旧格式的 meta 让快照涨到 11MB，每天一个 blob 拖累仓库）。"""
+    return SEP.join([
+        (it.get("name") or "").replace(SEP, ""),
+        (it.get("status") or "").replace(SEP, ""),
+        (it.get("impl") or "").replace(SEP, ""),
+        (it.get("url") or "").replace(SEP, ""),
+        (it.get("point") or "")[:200].replace(SEP, ""),
+    ])
+
+
+def fp_parts(fp):
+    """把指纹还原成字段字典（供「状态 X → Y」「下线条目」展示）。"""
+    p = (fp or "").split(SEP)
+    p += [""] * (5 - len(p))
+    return {"name": p[0], "status": p[1], "impl": p[2], "url": p[3], "point": p[4]}
+
+
+def state_of(items):
+    return {key_of(i): fp_of(i) for i in items if key_of(i)}
 
 
 def parse_date(s):
@@ -93,6 +131,17 @@ def git(*args):
 
 
 # ------------------------------------------------------------------ 快照
+# 快照采用**双槽**结构（base / today），保证增量是「日对比日」而不是「构建对比构建」：
+#
+#   {"v":2, "base":{"date":"09-15","fp":{…}}, "today":{"date":"09-16","fp":{…}}}
+#
+#   · base  = 用来做差分的基线（通常是**前一天**闭市时的状态）
+#   · today = 最近一次构建时的状态，跨天时滚成新的 base
+#
+# 为什么必须有 today 这一槽：旧实现每次构建都把 `items` 覆盖成当前状态，于是
+# 同一天重建第二次时，diff 的基线变成了「几小时前的自己」—— 增量数字会塌成 0
+# （页面数字取决于当天构建了几次，而不是实际变了多少）。双槽后，同一天内反复重建
+# 都对比同一个 base，数字全天稳定；跨天后自动滚动。
 def load_snapshot():
     if os.path.exists(SNAP):
         try:
@@ -103,7 +152,7 @@ def load_snapshot():
 
 
 def seed_from_git():
-    """首次运行：用 git HEAD 里的历史版本建基线，这样第一次就有真实增量。"""
+    """建基线兜底：用 git HEAD 里的历史版本。返回 base 槽（含真实提交日期）。"""
     raw = git("show", f"HEAD:{LIB}")
     if not raw.strip():
         return None
@@ -111,50 +160,41 @@ def seed_from_git():
         old = json.loads(raw)
     except Exception:
         return None
-    return build_snap(old.get("items", []))
+    d = git("log", "-1", "--format=%cs", "--", LIB).strip()
+    return {"date": d or "git HEAD", "fp": state_of(old.get("items", []))}
 
 
-def build_snap(items):
-    return {
-        "date": TODAY_S,
-        "items": {key_of(i): fingerprint(i) for i in items if key_of(i)},
-        "meta": {key_of(i): {
-            "name": i.get("name", ""), "level": i.get("level", ""),
-            "topic": i.get("topic", ""), "status": i.get("status", ""),
-            "impl": i.get("impl", ""), "pub": i.get("pub", ""),
-            "url": i.get("url", ""),
-        } for i in items if key_of(i)},
-    }
-
-
-def save_snapshot(items):
+def save_snapshot(items, base_slot):
     os.makedirs(SNAP_DIR, exist_ok=True)
-    snap = build_snap(items)
+    snap = {
+        "v": SNAP_V,
+        "base": base_slot,
+        "today": {"date": TODAY_S, "fp": state_of(items)},
+    }
+    # 紧凑序列化：indent 版体积大一倍，而这个文件每天都要进一次提交。
     json.dump(snap, open(SNAP, "w", encoding="utf-8"),
-              ensure_ascii=False, indent=1)
+              ensure_ascii=False, separators=(",", ":"))
     return snap
 
 
 # ------------------------------------------------------------------ 增量计算
-def diff_items(cur_items, snap):
-    if not snap:
+def diff_items(cur_items, base_fp):
+    """当前条目 vs 基线指纹表 → (新增条目, [(旧字段, 新条目)], [下线条目的字段])。"""
+    if not base_fp:
         return [], [], []
-    old_fp = snap.get("items", {})
-    old_meta = snap.get("meta", {})
     added, changed, removed = [], [], []
-    cur_keys = set()
+    cur_fp = state_of(cur_items)
     for it in cur_items:
         k = key_of(it)
         if not k:
             continue
-        cur_keys.add(k)
-        if k not in old_fp:
+        if k not in base_fp:
             added.append(it)
-        elif old_fp[k] != fingerprint(it):
-            changed.append((old_meta.get(k, {}), it))
-    for k in old_fp:
-        if k not in cur_keys:
-            removed.append(old_meta.get(k, {"name": k}))
+        elif base_fp[k] != cur_fp[k]:
+            changed.append((fp_parts(base_fp[k]), it))
+    for k, fp in base_fp.items():
+        if k not in cur_fp:
+            removed.append(fp_parts(fp))
     return added, changed, removed
 
 
@@ -218,16 +258,46 @@ def main():
     draft_raw = load(DRAFT) or {}
     drafts = draft_raw.get("items", []) if isinstance(draft_raw, dict) else draft_raw
 
-    snap = load_snapshot()
-    if not snap:
-        snap = seed_from_git()
-        src = "git HEAD"
-    else:
-        src = snap.get("date", "?")
-    added, changed, removed = diff_items(items, snap)
+    # ---- 增量基线：口径版本不一致时必须**重置**，绝不能拿旧基线硬算 ----
+    # ⚠️ 口径不一致时**不能**回退到 git 兜底 —— git 里的库可能是几天前的，
+    # 拿它当基线会报出「一次性集中补齐」式的虚高增量（实测虚报 18876 条），
+    # 在一张叫「今日更新」的页面上等于再骗一次。此时宁可如实置「—」。
+    raw_snap = load_snapshot()
+    snap_reset = ""
+    if raw_snap is not None and (raw_snap.get("v") or 0) != SNAP_V:
+        raw_snap, snap_reset = None, "统计口径修正"
+    base_slot = (raw_snap or {}).get("base")
+    today_slot = (raw_snap or {}).get("today")
+    a_today = (today_slot or {}).get("date") or ""
+    if a_today and a_today < TODAY_S:
+        base_slot = today_slot          # 跨天滚动：昨天最后一次构建的状态成为今天的基线
+    if base_slot is None and raw_snap is None and not snap_reset:
+        base_slot = seed_from_git()     # 快照文件缺失时的兜底
+    base_fp = (base_slot or {}).get("fp") or {}
+    src = (base_slot or {}).get("date") or snap_reset or "新建基线"
+    no_base = not base_fp           # 无基线 → 增量无意义，一律显示「—」
+
+    # 键碰撞自检（两套口径都算，用于说明与日志）：
+    #   · key_collisions     —— 现行复合键下的残留碰撞（同源重复条目）
+    #   · v1_key_collisions  —— 旧口径「效力层级::名称」下的碰撞数，正是此前全部假变更的来源
+    _kc, _kc1 = {}, {}
+    for _i in items:
+        _k = key_of(_i)
+        if _k:
+            _kc[_k] = _kc.get(_k, 0) + 1
+        _k1 = "::".join([(_i.get("code") or "").strip(), (_i.get("name") or "").strip()])
+        if _k1.strip(":"):
+            _kc1[_k1] = _kc1.get(_k1, 0) + 1
+    key_collisions = sum(v - 1 for v in _kc.values() if v > 1)
+    v1_key_collisions = sum(v - 1 for v in _kc1.values() if v > 1)
+
+    added, changed, removed = diff_items(items, base_fp)
     # 2026-09-15：法规库（国家法律法规数据库全量）与标准库（标准门户检索）一次性补齐后，
     # 「本次新增」可达上万条，全量铺进本页会把 HTML 顶到 9MB（移动端打不开）。
-    # 列表只列示最新的 400 条，真实总量在页面顶部另行写明，完整条目去知识库检索。
+    # 列表只列示最新的 400 条。
+    # ⚠️ 2026-09-16：统计卡曾经直接打印**截断后**的长度 —— 真实变更 1072 条、卡片却显示 400
+    # （即列表上限），读者据此以为「只变了 400 条」。凡截断，卡片一律用**真实总量**，
+    # 只在列表区标题里写明「本页列示最新 N 条」。
     UP_CAP = 400
     n_added_all, n_changed_all, n_removed_all = len(added), len(changed), len(removed)
     up_trunc = max(n_added_all, n_changed_all, n_removed_all) > UP_CAP
@@ -249,11 +319,12 @@ def main():
             if rec.get("pruned"):
                 continue
             nat.append(rec)
-    # 本期新增 = 今天入库的动态；若今天没入库（未联网），回退到最近一次入库批次
-    today_nat = [x for x in nat if (x.get("collected") or "") == TODAY_S]
-    if not today_nat and nat:
-        last = max((x.get("collected") or "") for x in nat)
-        today_nat = [x for x in nat if (x.get("collected") or "") == last]
+    # 本期新增 = 今天入库的动态；若今天还没入库（未联网 / 采集未跑），**回退到最近一次批次，
+    # 但必须如实标注批次日期** —— 曾经回退之后仍然挂着「今日新增」的标题，属于误导。
+    nat_batch = TODAY_S if any((x.get("collected") or "") == TODAY_S for x in nat) else \
+        (max((x.get("collected") or "") for x in nat) if nat else "")
+    nat_is_today = bool(nat_batch) and nat_batch == TODAY_S
+    today_nat = [x for x in nat if (x.get("collected") or "") == nat_batch] if nat_batch else []
     nat_new = sorted(today_nat, key=lambda x: (x.get("date") or ""), reverse=True)
 
     # --- 生效时间轴 ---
@@ -299,7 +370,10 @@ def main():
                 if n is not None and n >= 0:
                     dl.append((dt, n, dft))
                 break
-    dl = sorted(dl, key=lambda x: x[0])[:10]
+    dl_all = sorted(dl, key=lambda x: x[0])
+    # 同上：卡片用真实总数，列表才截断
+    DL_CAP = 10
+    dl = dl_all[:DL_CAP]
 
     # --- 进行中的监管行动 ---
     ongoing = [a for a in act if (a.get("status") or "") in ("进行中", "持续推进", "常态化")]
@@ -314,25 +388,68 @@ def main():
 
     # ---------------------------------------------------------- 组装 HTML
     parts = []
+    if snap_reset:
+        _base_line = f"增量基线已重置（{snap_reset}），本次不报增量"
+    elif no_base:
+        _base_line = "增量基线已重建，本次不报增量"
+    else:
+        _base_line = f"增量对比基线：{src}"
     parts.append(f"""<div class="up-hero">
   <div class="up-date">{TODAY_S}</div>
   <div class="up-hero-t">今日更新</div>
   <p class="up-hero-d">汇总当日新增的合规动态，以及法规、标准与监管节点变化：新增与状态变更、生效倒计时、
-  7 日内立法节点、草案征求意见截止与进行中的监管行动，逐条附发布机构原文深链。</p>
+  7 日内立法节点、草案征求意见截止与进行中的监管行动，逐条附发布机构原文深链。<br>
+  <span class="up-base">{_base_line}</span></p>
 </div>""")
 
-    # 统计卡
+    # 统计卡 —— 数量一律取**真实总量**（与下方列表是否截断无关）；
+    # 基线刚重置时如实置「—」，不报 0（那会被读成「今天什么都没变」）也不报假数。
+    nat_label = "今日新增合规动态" if nat_is_today else "最近批次合规动态"
+    nat_sub = ("站点直采 · 官方原文" if nat_is_today
+               else f"{nat_batch} 入库 · 站点直采 · 官方原文")
+    base_sub = f"对比基线 {src}"
     parts.append('<div class="stat-grid">')
-    parts.append(stat_card(len(nat_new), "今日新增合规动态", "站点直采 · 官方原文", "tone-new"))
-    parts.append(stat_card(len(added), "新增法规 / 标准", "较上一期新增", "tone-new"))
-    parts.append(stat_card(len(changed), "状态 / 内容变更", "施行日期或要点变化", "tone-chg"))
+    parts.append(stat_card(len(nat_new), nat_label, nat_sub, "tone-new"))
+    if no_base:
+        parts.append(stat_card("—", "新增法规 / 标准", snap_reset or "新建基线", "tone-new"))
+        parts.append(stat_card("—", "状态 / 内容变更", snap_reset or "新建基线", "tone-chg"))
+    else:
+        parts.append(stat_card(n_added_all, "新增法规 / 标准", base_sub, "tone-new"))
+        parts.append(stat_card(n_changed_all, "状态 / 内容变更", base_sub, "tone-chg"))
     parts.append(stat_card(len(today_eff), "今日生效", f"另有 {len(soon30)} 项 30 日内生效", "tone-eff"))
     parts.append(stat_card(len(cal7), "7 日内立法节点", f"{len(ongoing)} 项监管行动进行中", "tone-cal"))
-    parts.append(stat_card(len(dl), "草案征求意见", "按截止日排序", "tone-drt"))
+    parts.append(stat_card(len(dl_all), "草案征求意见",
+                           (f"按截止日排序 · 本页列示 {len(dl)} 条" if len(dl_all) > len(dl)
+                            else "按截止日排序"), "tone-drt"))
     parts.append("</div>")
 
-    # 0. 今日新增合规动态（站点直采，独立于本地简报）
-    parts.append('<div class="section-title"><span class="bar"></span>今日新增合规动态</div>')
+    # 口径说明。⚠️ 这段原来写成「生成后再去找 </main> 插入」，而本页模板里根本没有 </main>
+    # —— 于是截断说明**从未渲染过**：读者只看到被截断的 400，却没有任何解释。改为直接渲染。
+    notes = []
+    if snap_reset:
+        # 面向读者的口径说明（不放内部键设计、不写工程日志；细节见本文件 key_of 注释与构建日志）
+        notes.append(
+            '<b>数据说明</b>：法规标准条目库中，同一部法规可能存有多个历史版本（公布年份不同）。'
+            '此前的增量统计按「名称」匹配条目，会把「同一部法规的新旧版本」误判成'
+            '「该法规发生了变更」，因此上一版页面列出的「状态 / 内容变更」并不可靠。'
+            f'现已改为按「名称 + 公布日期 + 施行日期 + 发布机关」逐版本匹配（旧口径下受影响条目 '
+            f'{v1_key_collisions} 条）。因匹配口径变更，本次<b>重置了对比基线</b>，'
+            '「新增法规 / 标准」与「状态 / 内容变更」暂不展示，自下一次更新起恢复为真实增量；'
+            '本页其余数据（生效倒计时、立法节点、草案截止、合规动态）均按日期直接计算，不受影响。')
+    if up_trunc:
+        notes.append(
+            f'<b>本次增量较大</b>：法规 / 标准条目新增 {n_added_all} 条、变更 {n_changed_all} 条、'
+            f'下架 {n_removed_all} 条，下方列表仅列示最新 {UP_CAP} 条。'
+            f'完整条目请在 <a href="../kb/standards.html">标准与义务</a> 中按专题、层级、时效性筛选或检索。')
+    # 残留键冲突（同源重复条目，实测 4 条）不上面 —— 属内部数据质量，只在构建日志里提示。
+    if notes:
+        parts.append('<div class="notice">' + "<br>".join(notes) + '</div>')
+
+    # 0. 站点直采合规动态（独立于本地简报）。标题如实反映**实际批次**，今天没采到就不会写「今日」。
+    _nat_title = ("今日新增合规动态" if nat_is_today
+                  else f"最近批次合规动态 · {nat_batch} 入库" if nat_batch else "合规动态")
+    parts.append(f'<div class="section-title"><span class="bar"></span>{_nat_title}'
+                 f'（{len(nat_new)} 条）</div>')
     if nat_new:
         for it in nat_new:
             url = it.get("url") or ""
@@ -351,9 +468,18 @@ def main():
     else:
         parts.append('<p class="lead">本批次无新增动态，可查看下方法规标准增量与监管节点。</p>')
 
-    # 1. 新增
-    parts.append('<div class="section-title"><span class="bar"></span>最新收录条目</div>')
-    if added:
+    # 1. 新增（标题写明真实总量；列表截断时说明本页只列示多少条）
+    if no_base:
+        _t1 = "最新收录条目（无可用基线，本轮不报增量）"
+    else:
+        _t1 = f"最新收录条目（新增 {n_added_all} 条" + \
+              (f"，本页列示最新 {len(added)} 条）" if up_trunc else "）")
+    parts.append(f'<div class="section-title"><span class="bar"></span>{_t1}</div>')
+    if no_base:
+        parts.append('<p class="lead">本轮没有可用的对比基线（'
+                     + (snap_reset or "首次建库") +
+                     '），如实不报增量；新增 / 变更清单自下一次更新起恢复。</p>')
+    elif added:
         for it in added:
             parts.append(item_row(it, '<span class="chip chip-new">NEW</span>'))
     else:
@@ -361,7 +487,9 @@ def main():
 
     # 2. 变更
     if changed:
-        parts.append('<div class="section-title"><span class="bar"></span>状态 / 内容变更</div>')
+        _t2 = f"状态 / 内容变更（{n_changed_all} 条" + \
+              (f"，本页列示最新 {len(changed)} 条）" if n_changed_all > len(changed) else "）")
+        parts.append(f'<div class="section-title"><span class="bar"></span>{_t2}</div>')
         for old, new in changed:
             ob = (old.get("status") or "—")
             nb = (new.get("status") or "—")
@@ -381,13 +509,18 @@ def main():
                          f'<div class="up-chips"><span class="chip chip-chg">{" · ".join(delta)}</span></div></div>')
 
     if removed:
-        parts.append('<div class="section-title"><span class="bar"></span>下线条目</div>')
+        parts.append(f'<div class="section-title"><span class="bar"></span>下线条目'
+                     f'（{n_removed_all} 条' +
+                     (f'，本页列示最新 {len(removed)} 条）' if n_removed_all > len(removed) else '）') +
+                     '</div>')
         for r in removed:
             parts.append(f'<div class="up-item"><div class="up-title">{esc(r.get("name") or "")}</div>'
                          f'<div class="up-chips"><span class="chip chip-dim">已从条目库移除</span></div></div>')
 
-    # 3. 生效倒计时
-    parts.append('<div class="section-title"><span class="bar"></span>生效倒计时</div>')
+    # 3. 生效倒计时（按施行日期计算，与增量基线无关，不受口径修正影响）
+    _n_eff = len(today_eff) + len(soon30) + len(soon180)
+    parts.append(f'<div class="section-title"><span class="bar"></span>生效倒计时'
+                 f'（未来 180 天内共 {_n_eff} 条）</div>')
     if today_eff or soon30 or soon180:
         parts.append('<table class="up-table"><thead><tr>'
                      '<th style="width:110px">实施日期</th><th style="width:88px">倒计时</th>'
@@ -408,7 +541,8 @@ def main():
 
     # 4. 立法日历
     if cal7:
-        parts.append('<div class="section-title"><span class="bar"></span>7 日内立法与监管节点</div>')
+        parts.append(f'<div class="section-title"><span class="bar"></span>'
+                     f'7 日内立法与监管节点（共 {len(cal7)} 项）</div>')
         parts.append('<table class="up-table"><thead><tr><th style="width:110px">日期</th>'
                      '<th style="width:96px">类型</th><th>事项</th><th style="width:150px">发布机构</th>'
                      '</tr></thead><tbody>')
@@ -423,7 +557,9 @@ def main():
 
     # 5. 草案
     if dl:
-        parts.append('<div class="section-title"><span class="bar"></span>征求意见截止倒计时</div>')
+        _t5 = f"征求意见截止倒计时（共 {len(dl_all)} 项" + \
+              (f"，本页列示最近 {len(dl)} 项）" if len(dl_all) > len(dl) else "）")
+        parts.append(f'<div class="section-title"><span class="bar"></span>{_t5}</div>')
         parts.append('<table class="up-table"><thead><tr><th style="width:110px">截止</th>'
                      '<th style="width:88px">剩余</th><th>草案名称</th></tr></thead><tbody>')
         for d, n, dft in dl:
@@ -435,7 +571,8 @@ def main():
 
     # 6. 进行中的监管行动
     if ongoing:
-        parts.append('<div class="section-title"><span class="bar"></span>进行中的监管行动</div>')
+        parts.append(f'<div class="section-title"><span class="bar"></span>'
+                     f'进行中的监管行动（{len(ongoing)} 项）</div>')
         for a in ongoing:
             nm = esc(a.get("name") or "")
             url = a.get("url") or ""
@@ -497,10 +634,12 @@ def main():
     open(out, "w", encoding="utf-8").write(html)
 
     print(f"已生成 updates/index.html")
-    print(f"  基线 {src} | 新增 {len(added)} / 变更 {len(changed)} / 下线 {len(removed)}")
-    print(f"  今日新增合规动态 {len(nat_new)}（站点直采库 {len(nat)} 条）")
+    print(f"  基线 {src} | 真实增量：新增 {n_added_all} / 变更 {n_changed_all} / 下线 {n_removed_all}"
+          f"（页面列表列示 {len(added)}/{len(changed)}/{len(removed)} 条）")
+    print(f"  合规动态批次 {nat_batch or '—'} · {len(nat_new)} 条（站点直采库 {len(nat)} 条）"
+          f"{'' if nat_is_today else '　⚠ 非今日批次，标题已如实标注'}")
     print(f"  今日生效 {len(today_eff)} | 30日内 {len(soon30)} | 180日内 {len(soon180)}")
-    print(f"  7日内立法节点 {len(cal7)} | 草案截止 {len(dl)} | 进行中行动 {len(ongoing)}")
+    print(f"  7日内立法节点 {len(cal7)} | 草案截止 {len(dl_all)}（列示 {len(dl)}）| 进行中行动 {len(ongoing)}")
 
     # 钩子：重建全站检索索引（不跑则搜索结果会过期）
     bs = os.path.join(HERE, "build_search.py")
@@ -512,22 +651,17 @@ def main():
         p = os.path.join(HERE, s)
         if os.path.exists(p):
             os.system(f'/usr/bin/python3 "{p}" >/dev/null 2>&1')
-    # 截断说明写回页面（否则读者只看到 400 条，会误以为本次只新增这些）
-    if up_trunc:
-        _up = os.path.join(HERE, "updates", "index.html")
-        if os.path.exists(_up):
-            _s = open(_up, encoding="utf-8").read()
-            _n = ('<div class="notice"><b>本次为一次性集中补齐</b>：法规库与标准库新增 %d 条、'
-                  '变更 %d 条、下架 %d 条，本页仅列示最新 %d 条；'
-                  '完整条目请在 <a href="../kb/standards.html">标准与义务</a> 中按专题、层级、'
-                  '时效性筛选或关键词检索。</div>'
-                  % (n_added_all, n_changed_all, n_removed_all, UP_CAP))
-            if "一次性集中补齐" not in _s:
-                _s = _s.replace("</main>", _n + "</main>", 1)
-                open(_up, "w", encoding="utf-8").write(_s)
-                print(f"  更新页已加截断说明（新增总量 {n_added_all} 条）")
-    save_snapshot(items)
-    print(f"  快照已更新 → sources/updates/snapshot.json（{len(items)} 条）")
+    # ⚠️ 这里原来有一段「生成后再读回文件、把截断说明插到 </main> 前」的后处理，
+    # 而本页模板用的是 <div class="wrap">，根本不存在 </main> ——
+    # 于是说明从未渲染过（读者只看到被截断的 400，没有任何解释）。
+    # 现已改为在 parts 里直接渲染（见上方 notes），此处不再做文件回写。
+    save_snapshot(items, base_slot)
+    print(f"  快照已更新 → sources/updates/snapshot.json（v{SNAP_V} · {len(items)} 条"
+          f"{' · 基线 ' + src if not no_base else ' · 无基线'}）"
+          f"{'　⚠ 键冲突 %d 条' % key_collisions if key_collisions else ''}")
+    if no_base:
+        print(f"  ⚠ 本轮无可用基线（{snap_reset or '首次建库'}）：不报增量；"
+              f"本次状态已存入 today 槽，下次构建自动滚为基线")
 
 
 if __name__ == "__main__":
