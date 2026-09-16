@@ -29,12 +29,36 @@ import json
 import os
 import subprocess
 import sys
+import time
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 REPO = "chenluo951-oss/lawdatify-site"
 BRANCH = "main"
 TREE_BATCH = 120      # 单次 POST /git/trees 的路径上限（超了会被 GitHub 判超时）
 TREE_RETRY = 3
+BLOB_RETRY = 3        # 建 blob 的重试次数（见 api_retry 注释：沙箱代理会间歇性空响应）
+
+
+def api_retry(method, path, data=None, attempts=BLOB_RETRY, label=""):
+    """带重试的 api() 调用。
+
+    ⚠️ 为什么建 blob 也要重试（2026-09-16 实测）：本机出站代理会**间歇性**返回空响应
+    `{'_err': '', '_stderr': ''}`，与文件体积无关 —— 实测同一批里 0.5MB 甚至 0.0MB 的文件
+    会失败，而 2MB 的正常通过。批量推送动辄上百个 blob，不做重试就会有几十个路径静默落空、
+    整次提交只上线一半（表现为「远端 tree 对不上」）。
+    重试是安全幂等的：POST /git/blobs 重复创建同一内容只会得到同一个 sha。
+    """
+    r = {}
+    for i in range(attempts):
+        r = api(method, path, data)
+        if isinstance(r, dict) and "sha" in r:
+            return r
+        if "_err" not in r:
+            return r          # 是明确的业务错误（如 422），重试无意义，交给调用方处理
+        if i < attempts - 1:
+            print(f"    ↳ {label} 第 {i + 1} 次网络空响应，重试…")
+            time.sleep(1.5 * (i + 1))
+    return r
 
 
 def get_pat():
@@ -183,8 +207,8 @@ def main():
         size = os.path.getsize(full)
         with open(full, "rb") as f:
             content = base64.b64encode(f.read()).decode()
-        blob = api("POST", f"/repos/{REPO}/git/blobs",
-                   {"content": content, "encoding": "base64"})
+        blob = api_retry("POST", f"/repos/{REPO}/git/blobs",
+                         {"content": content, "encoding": "base64"}, label=path)
         if "sha" not in blob:
             # ⚠️ 这里是**静默损坏**的高发点：GitHub 建 blob 对单文件体积敏感，
             # 超限时只返回 {'_err': '', '_stderr': ''}，不报错、不带原因。
@@ -210,7 +234,7 @@ def main():
         return 0
 
     # base_tree = 远端 main 的树；分批提交，每批以上一批的结果为新的 base_tree
-    commit_obj = api("GET", f"/repos/{REPO}/git/commits/{base_sha}")
+    commit_obj = api_retry("GET", f"/repos/{REPO}/git/commits/{base_sha}", label="取远端 commit")
     cur_tree = (commit_obj.get("tree") or {}).get("sha")
     if not cur_tree:
         print("无法取得远端 tree:", str(commit_obj)[:200])

@@ -46,6 +46,19 @@ MIN_CHARS = 600
 # 「地方法规」亦为公开公文，但数量大，抓取端分批（见 tools/harvest_flk_texts.py）。
 LAW_LEVELS = {"法律", "宪法", "行政法规", "监察法规", "司法解释",
               "修改决定", "地方法规", "部门规章", "规范性文件"}
+
+# 列表排序用的效力层级次序。⚠️ 不能直接按「level 字符串」排：
+# Python 比的是 Unicode 码位，「修改」的 U+4FEE 小于「司」「行」「地」「法」等，
+# 于是 2000+ 件「XX市人民代表大会常务委员会关于修改《…》的决定」会全部顶到列表最前，
+# 原文库一打开就是一屏修改决定（2026-09-16 全量抓取后实测到的展示回归）。
+RANK = {"宪法": 0, "法律": 1, "行政法规": 2, "监察法规": 3, "司法解释": 4,
+        "部门规章": 5, "规范性文件": 6, "地方法规": 7,
+        "国家标准": 8, "行业标准": 9, "团体标准": 10, "修改决定": 11}
+RANK_OTHER = 12
+
+
+def level_rank(lv):
+    return RANK.get(lv or "", RANK_OTHER)
 # 名称排除：第三方法律汇编、研究报告、境外文件、书稿、节选本 —— 不是某一份公文的正文
 BAD_NAME = re.compile(
     r"汇编|指引|指南|报告|清单|判例|教材|ISO|IEC|HKEX|尽调|尽职调查|税收|白皮书|"
@@ -535,7 +548,7 @@ def main():
             if score_new > score_old:
                 kept[kept.index(old)] = rec
         idmap[key] = tid
-    kept.sort(key=lambda x: (x["level"], x["name"]))
+    kept.sort(key=lambda x: (level_rank(x["level"]), x["name"]))
     for x in kept:
         x["part"] = 1 + (int(hashlib.md5(x["id"].encode()).hexdigest(), 16) % N_PART)
 
@@ -1196,7 +1209,7 @@ PAGE_JS = r"""
     var tb=$('#rd-tabs'), chipBox=$('#rd-chips');
     function buildChips(){
       chipBox.innerHTML='';
-      var order=['法律','行政法规','部门规章','规范性文件','国家标准','行业标准','团体标准'];
+      var order=['法律','行政法规','司法解释','部门规章','规范性文件','地方法规','国家标准','行业标准','团体标准','修改决定'];
       var ks=order.filter(function(k){return lvs[k]});
       Object.keys(lvs).forEach(function(k){ if(ks.indexOf(k)<0) ks.push(k); });
       var all=document.createElement('button');
@@ -1205,7 +1218,7 @@ PAGE_JS = r"""
       chipBox.appendChild(all);
       ks.forEach(function(k){
         if(KIND==='law'&&['国家标准','行业标准','团体标准'].indexOf(k)>=0) return;
-        if(KIND==='std'&&['法律','行政法规','部门规章','规范性文件'].indexOf(k)>=0) return;
+        if(KIND==='std'&&['法律','行政法规','司法解释','部门规章','规范性文件','地方法规','修改决定'].indexOf(k)>=0) return;
         var c=document.createElement('button');
         c.className='rd-chip'+(LV===k?' on':''); c.textContent=k+' '+lvs[k];
         c.onclick=function(){ LV=(LV===k?'':k); buildChips(); renderList(); };
