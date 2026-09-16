@@ -217,8 +217,11 @@ KIND_FALLBACK = "其他动态"
 KIND_REFINE = [
     ("监管专项行动", r"专项行动|专项整治|整治行动|集中治理|打击整治|清理整治|"
                      r"清朗|铁拳|护网|净网|网剑|回头看"),
-    ("监管通报与处罚", r"通报|处罚|查处|罚款|罚没|下架|约谈|责令|限期整改|"
-                       r"典型案例|案例|判决|裁定|败诉|判赔"),
+    # 「公告 / 通告 / 名单 / 公示」是**监管动作**（发布批次名单、公示备案信息、抽检通告），
+    # 不是规则本身。缺了这几个词，「关于发布…App 名单的公告」会被下一个规则里的
+    # 「发布」抢走、误标成「法规与标准」（2026-09-16 用户换徽章后暴露出来）。
+    ("监管通报与处罚", r"通报|公告|通告|名单|公示|处罚|查处|罚款|罚没|下架|约谈|责令|"
+                       r"限期整改|典型案例|案例|判决|裁定|败诉|判赔"),
     ("政策解读", r"问答|答记者问|一文读懂|解读|回应|答疑|口径"),
     ("法规与标准", r"标准|规范|指引|指南|条例|办法|规定|细则|征求意见|"
                    r"生效|施行|修订|发布|出台|立法|草案|审议"),
@@ -267,7 +270,10 @@ def parse_report(path):
     except Exception:
         return []
 
-    kind, date, ver = parse_issue(path)
+    # 期次类型（日报/周报/月报）**故意丢弃**：站点资讯与本地简报是相互独立的数据来源，
+    # 站内条目不挂来源期次标签（用户 2026-09-16）。期次类型只用于 news/briefs.html 归档页。
+    _issue_kind, date, ver = parse_issue(path)
+
     fname = os.path.basename(path)
     items = []
 
@@ -358,7 +364,14 @@ def parse_report(path):
                 "points": points,
                 "analysis": analysis,
                 "issue": date,
-                "kind": kind,
+                # ⚠️ 这里**不能**放 parse_issue 的期次类型（日报/周报/月报）。
+                # 用户 2026-09-16 明确：站点资讯与本地日报/周报是**相互独立的数据来源**，
+                # 站内条目不该挂「日报」「周报」这种来源标签。哪一期来的看 file 字段即可。
+                # 这里统一给中性的「合规动态」，让简报条目与公众号条目走**同一条**
+                # kind_group() 细分链路（专项行动 → 通报处罚 → 政策解读 → 法规标准 → 观察）。
+                # 不要在这里另做关键词推测：那会与 KIND_REFINE 的优先级打架，
+                # 把「通报+专项行动」类条目归错组（实测会把 8 条专项行动挪进通报处罚）。
+                "kind": "合规动态",
                 "ver": ver,
                 "file": fname,
             }
@@ -605,7 +618,7 @@ def render_item_card(it, idx, rel="../"):
       <span class="ni-dom" style="color:{color};background:{color}14">{esc(it['domain'])}</span>
       <span class="ni-date">{esc(it['date'])}</span>
       <span class="ni-org">{esc(it['org'])}</span>
-      <span class="ni-kind">{esc(it['kind'])}</span>
+      <span class="ni-kind">{esc(kind_group(it))}</span>
     </div>
     <h4 class="ni-title">{esc(it['title'])}</h4>
     <p class="ni-pt">{esc(snippet(it['points'], 200))}</p>
