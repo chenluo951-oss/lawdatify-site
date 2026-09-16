@@ -57,6 +57,10 @@ STEPS = [
     # 而「按年统计通报量」是治理分析的地基 → 立刻从页面 PubDate 回填（带缓存，增量很快）。
     ("专项·发布日期回填", [PY, "tools/backfill_appviol_dates.py"],    False),
     ("专项·算法备案",   [PY, "tools/harvest_algo_filing.py"],       False),
+    # 地市监局官网「行政处罚公示」—— 案例库的一手来源。
+    # ⚠️ 必须排在「合规案例库」之前：它产出 sources/cases/local_amr.jsonl，
+    # harvest_cases.py 会把它并入 cases.json（含「一条公开表 = N 个案件」的拆分结果）。
+    ("地市监处罚公示",  [PY, "tools/harvest_local_amr.py"],          False),
     ("合规案例库",      [PY, "tools/harvest_cases.py"],             False),
     ("台账并库",        [PY, "merge_ledgers.py"],                   False),
     ("法规标准条目库",  [PY, "build_library_data.py"],              False),
@@ -128,12 +132,13 @@ def main():
 
     net_labels = {"草案跟踪", "原文抓取·每日", "私有库同步", "法规全量·flk",
                   "标准门户·检索", "专项·省局栏目发现", "专项·App违规通报",
-                  "专项·发布日期回填", "专项·算法备案", "合规案例库"}
+                  "专项·发布日期回填", "专项·算法备案", "地市监处罚公示", "合规案例库"}
     steps = [s for s in STEPS if not (a.no_network and s[0] in net_labels)]
     if a.skip_build:
         steps = [s for s in steps if s[0] in
                  {"草案跟踪", "原文抓取·每日", "私有库同步", "法规全量·flk",
-                  "标准门户·检索", "专项·App违规通报", "专项·算法备案", "合规案例库",
+                  "标准门户·检索", "专项·App违规通报", "专项·算法备案",
+                  "地市监处罚公示", "合规案例库",
                   "台账并库", "法规标准条目库", "语料合并", "义务逐字抽取"}]
     if a.with_texts:
         idx = [i for i, s in enumerate(steps) if s[0] == "法规标准条目库"]

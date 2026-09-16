@@ -44,6 +44,10 @@ UA = ("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 "
 COLS = [
     ("市场监管总局·曝光台", "https://www.samr.gov.cn/zt/pgt/"),
     ("市场监管总局·总局要闻", "https://www.samr.gov.cn/xw/zj/"),
+    # 「通知公告 > 行政处罚案件」——总局本级作出的行政处罚决定书（反垄断、经营者集中
+    # 为主）。2026-09-16 补：此前案例库只覆盖了曝光台与要闻，这条最权威的本级决定书
+    # 来源一直没接上。
+    ("市场监管总局·行政处罚案件", "https://www.samr.gov.cn/fldes/tzgg/xzcf/index.html"),
 ]
 # 只收「处罚 / 通报 / 案例」类内容
 HIT = re.compile(r"处罚|罚款|罚没|没收|查处|通报|典型案例|案例|约谈|曝光|违法|不合格|"
@@ -65,9 +69,18 @@ MONEY_RE = re.compile(r"(?:罚款|罚没款|没收违法所得|处罚款)[^\d]{0
                       r"([\d,，.]+\s*(?:万)?元)")
 CASE_TYPES = [
     ("反不正当竞争", r"不正当竞争|虚假宣传|混淆行为|商业贿赂|有奖销售|刷单|好评返现"),
+    # 《反垄断法》与《反不正当竞争法》是两部法、两套执法，混成一类会让
+    # 「垄断协议 / 经营者集中」这类总局本级案子被归到错误的法律体系下。
+    ("反垄断", r"垄断|经营者集中|滥用市场支配地位|排除、限制竞争"),
+    # 「知识产权」必须排在「计量与质量」之前：后者的「假冒」会抢走
+    # 「销售假冒注册商标的商品案」这类本属商标法的案子。
+    ("知识产权", r"商标|专利|著作权|知识产权|地理标志|非正常专利申请|注册商标|"
+              r"侵犯商业秘密|版权|盗版"),
     ("价格违法", r"价格|明码标价|哄抬|囤积|低价倾销|虚构原价|标价之外"),
-    ("食品安全", r"食品|餐饮|农残|过期|标签|添加剂|餐具|无证经营|保质期"),
-    ("计量与质量", r"计量|缺斤短两|电子秤|净含量|质量不合格|抽检|假冒|伪劣"),
+    ("食品安全", r"食品|餐饮|农残|过期|标签|添加剂|餐具|无证经营|保质期|"
+              r"食用农产品|肉制品|水产品|糕点|茶叶|蔬菜|水果|生鲜|预包装"),
+    ("计量与质量", r"计量|缺斤短两|电子秤|净含量|质量不合格|抽检|假冒|伪劣|"
+                r"特种设备|产品质量|伪造产地|冒用|工业产品|强制性认证"),
     ("广告违法", r"广告|绝对化用语|疗效|代言|虚假广告"),
     ("移动应用与个人信息", r"app|应用程序|小程序|sdk|权限|摇一摇|开屏|预置|"
                     r"应用分发|应用商店|个人信息|隐私|账号注销|收集使用|"
@@ -76,6 +89,10 @@ CASE_TYPES = [
                   r"数据出境|重要数据|勒索|攻击|泄露"),
     ("网络与平台", r"网络交易|平台|电子商务|直播|外卖|网络餐饮|即时配送|"
                 r"刷单炒信|平台责任|二选一"),
+    # 地市市监公示里占比很高的一类：年报/经营异常名录/吊销营业执照（《公司法》第 260 条、
+    # 《企业信息公示暂行条例》），既不属食品也不属价格，此前全部落到兜底「其他」。
+    ("登记与信用监管", r"年度报告|年报|经营异常名录|吊销营业执照|注销登记|"
+                  r"企业登记|市场主体登记|长期停业|未开业"),
     ("消费者权益", r"消费者|预付|退费|会员|格式条款|不公平条款|七日无理由"),
 ]
 
@@ -232,7 +249,8 @@ def jpaas_list(col_url, maxpages=8):
             break
         before = len(out)
         for u, t in items:
-            t = re.sub(r"\s+", " ", unescape(t)).strip()
+            t = re.sub(r"<[^>]+>", "", unescape(t))   # 标题里常带 <br/> 换行标签
+            t = re.sub(r"\s+", " ", t).strip()
             if not t or not u.startswith("/"):
                 continue
             full = "https://" + col_url.split("/")[2] + u
@@ -334,6 +352,50 @@ def main():
                     "_preset": {"title": it.get("title", ""), "url": it.get("url", ""),
                                 "date": it.get("date", ""), "org": it.get("org", ""),
                                 "categories": [], "kind": it.get("kind", "")}})
+
+    # 地市监局官网的行政处罚公示（tools/harvest_local_amr.py 采集）
+    # 一条「案件信息公开表」会被拆成 N 条案例，url 带 #c<序号> 锚点，仍然直达官网原文。
+    lp = os.path.join(HERE, "sources", "cases", "local_amr.jsonl")
+    local_n, local_urls, local_rows = 0, set(), []
+    if os.path.exists(lp):
+        for line in open(lp, encoding="utf-8"):
+            line = line.strip()
+            if not line:
+                continue
+            try:
+                c = json.loads(line)
+            except Exception:
+                continue
+            if not c.get("url"):
+                continue
+            local_urls.add(c["url"])
+            local_rows.append(c)
+    # ⚠️ cases.json 是**增量累积**的（以现有文件为底）。地市采集侧的质量闸门把某条记录
+    # 剔除后，案例库里那份副本不会自动消失 —— 必须按 local_amr.jsonl 做一次镜像同步：
+    # 「出自地市监采集但已不在 jsonl 里」的记录一并删掉，否则标题含「统一社会信用代码」
+    # 这类垃圾会永久留在案例库里。
+    if local_urls:
+        keep = [c for c in cases
+                if not ((c.get("org") or "") == "地方市场监管局"
+                        and c.get("agency") and c.get("url") not in local_urls)]
+        if len(keep) != len(cases):
+            print(f"▸ 地市监采集侧已剔除 {len(cases) - len(keep)} 条，案例库同步移除")
+        cases = keep
+    # ⚠️ 还有一层：**已存在的记录也要用本地库的版本覆盖**。
+    # cases.json 的增量语义是「有就跳过」，于是改进解析规则后用 `--refresh` 重采出来的
+    # 新标题永远进不了案例库（本地 jsonl 已经是新标题，案例库里还是旧的半截案由）。
+    idx = {c["url"]: i for i, c in enumerate(cases) if c.get("url")}
+    for c in local_rows:
+        j = idx.get(c["url"])
+        if j is not None:
+            cases[j] = c
+        else:
+            idx[c["url"]] = len(cases)
+            cases.append(c)
+            local_n += 1
+    have = {c["url"] for c in cases}
+    print(f"▸ 地市监官网处罚公示：并入 {local_n} 条（本地库 {len(local_rows)} 条，"
+          f"覆盖刷新 {len(local_rows) - local_n} 条）")
 
     todo = [(u, r) for u, r in cand.items() if u and u not in have]
     print(f"\n▸ 待解析 {len(todo)} 条（已有 {len(cases)} 条）")

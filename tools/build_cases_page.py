@@ -46,6 +46,9 @@ def main():
 
     orgs = Counter(c.get("org") or "未标注" for c in cases)
     types = Counter(c.get("type") or "其他" for c in cases)
+    # 表格里显示的是**具体机关名**（如「广东省市场监督管理局」），筛选也用同一口径，
+    # 否则会出现「表里写具体局名、下拉只有分类桶」的对不上。
+    agys = Counter(c.get("agency") or c.get("org") or "未标注" for c in cases)
     years = Counter((c.get("date") or "")[:4] for c in cases if c.get("date"))
     with_fine = sum(1 for c in cases if c.get("fines"))
     laws = Counter()
@@ -60,7 +63,7 @@ def main():
         rows.append(
             "<tr class=\"cr\">"
             f'<td>{esc(c.get("date") or "—")}</td>'
-            f'<td>{esc(c.get("org") or "—")}</td>'
+            f'<td>{esc(c.get("agency") or c.get("org") or "—")}</td>'
             f'<td><span class="cs-tag">{esc(c.get("type") or "其他")}</span></td>'
             f'<td class="tt">{esc(c.get("title") or "")}</td>'
             f'<td>{esc(law) or "—"}</td>'
@@ -85,6 +88,8 @@ def main():
 .cs-tbl tr:last-child td{border-bottom:0}
 .cs-tbl tr:hover td{background:#fafcff}
 .cs-tbl td.tt{max-width:340px}
+/* 日期与「原文」列必须 nowrap：列宽被挤时中文会逐字拆行（「原」/「文」两行）。 */
+.cs-tbl td:first-child,.cs-tbl td:last-child{white-space:nowrap}
 .cs-wrap{overflow:auto;border-radius:var(--radius);max-height:620px}
 .cs-tag{display:inline-block;background:#eef4fb;color:#1b4f8a;border-radius:6px;
   padding:2px 8px;font-size:12px;white-space:nowrap}
@@ -102,6 +107,10 @@ def main():
 .cs-note{background:#f7fafd;border:1px solid var(--line);border-left:4px solid var(--accent);
   border-radius:10px;padding:14px 18px;color:var(--ink-2);font-size:13.5px;margin-top:18px}
 .cs-cnt{color:var(--muted);font-size:13px;margin:8px 0 0}
+.cs-fl{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin:0 0 6px}
+.cs-fl label{color:var(--muted);font-size:13px}
+.cs-fl select{padding:8px 10px;border:1px solid var(--line);border-radius:9px;background:var(--card);
+  color:var(--ink);font-size:13px;font-family:var(--sans);max-width:260px}
 @media(max-width:640px){.cs-bar .lb{width:110px}.cs-kpi{grid-template-columns:repeat(2,1fr)}}
 """
 
@@ -136,6 +145,15 @@ def main():
                 '「依据」与「罚款」为正文解析结果，最终以官方原文为准。</p>'
                 '<input class="cs-q" id="cq" type="search" '
                 'placeholder="搜索关键词，例如：虚假宣传、明码标价、过期食品、个人信息">'
+                '<div class="cs-fl"><label for="ca">机关</label>'
+                '<select id="ca"><option value="">全部机关</option>'
+                + "".join(f'<option value="{esc(a)}">{esc(a)}（{n}）</option>'
+                          for a, n in agys.most_common() if a != "未标注")
+                + '</select><label for="cty">类型</label><select id="cty">'
+                '<option value="">全部类型</option>'
+                + "".join(f'<option value="{esc(t)}">{esc(t)}（{n}）</option>'
+                          for t, n in types.most_common())
+                + '</select></div>'
                 f'<p class="cs-cnt" id="cc">共 {len(cases)} 条</p>'
                 '<div class="cs-wrap"><table class="cs-tbl" id="ct"><thead><tr>'
                 "<th>日期</th><th>机关</th><th>类型</th><th>案件</th>"
@@ -144,7 +162,9 @@ def main():
 
     body.append('<div class="cs-note"><b>数据说明</b>　'
                 '案例全部取自监管机关官方网站（市场监管总局曝光台与总局要闻、'
-                '中央网信办与工业和信息化部通报等）的公开页面，链接直达原文。'
+                '中央网信办与工业和信息化部通报、省市市场监督管理局官网的'
+                '「行政处罚公示 / 案件信息公开表」等）公开页面，链接直达原文；'
+                '一条公示内含多案的，按案件拆分并定位到该案所在的页面。'
                 '类型、依据、罚款幅度由正文自动解析，可能存在遗漏，'
                 '<b>个案的事实认定与处罚幅度以官方发布的处罚决定书/通报原文为准</b>。'
                 '本库随每日构建增量补入。</div>')
@@ -152,16 +172,21 @@ def main():
     body.append("""<script>
 (function(){
   var q=document.getElementById('cq'),t=document.getElementById('ct'),c=document.getElementById('cc');
+  var fa=document.getElementById('ca'),fy=document.getElementById('cty');
   if(!q||!t) return;
   var rows=[].slice.call(t.tBodies[0].rows);
-  q.addEventListener('input',function(){
-    var s=q.value.trim().toLowerCase(),n=0;
+  function apply(){
+    var s=q.value.trim().toLowerCase(),a=fa?fa.value:'',y=fy?fy.value:'',n=0;
     rows.forEach(function(r){
-      var hit=!s||r.textContent.toLowerCase().indexOf(s)>-1;
-      r.style.display=hit?'':'none'; if(hit) n++;
+      var cells=r.cells,txt=r.textContent.toLowerCase();
+      var ok=(!s||txt.indexOf(s)>-1)&&(!a||cells[1].textContent.trim()===a)&&(!y||cells[2].textContent.trim()===y);
+      r.style.display=ok?'':'none'; if(ok) n++;
     });
     c.textContent='命中 '+n+' 条 / 共 '+rows.length+' 条';
-  });
+  }
+  q.addEventListener('input',apply);
+  if(fa) fa.addEventListener('change',apply);
+  if(fy) fy.addEventListener('change',apply);
 })();
 </script>""")
 
