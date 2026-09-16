@@ -263,18 +263,20 @@ def main():
     # 拿它当基线会报出「一次性集中补齐」式的虚高增量（实测虚报 18876 条），
     # 在一张叫「今日更新」的页面上等于再骗一次。此时宁可如实置「—」。
     raw_snap = load_snapshot()
-    snap_reset = ""
+    base_note = ""
     if raw_snap is not None and (raw_snap.get("v") or 0) != SNAP_V:
-        raw_snap, snap_reset = None, "统计口径修正"
+        raw_snap, base_note = None, "统计口径修正"
     base_slot = (raw_snap or {}).get("base")
     today_slot = (raw_snap or {}).get("today")
     a_today = (today_slot or {}).get("date") or ""
     if a_today and a_today < TODAY_S:
         base_slot = today_slot          # 跨天滚动：昨天最后一次构建的状态成为今天的基线
-    if base_slot is None and raw_snap is None and not snap_reset:
+    if base_slot is None and raw_snap is None and not base_note:
         base_slot = seed_from_git()     # 快照文件缺失时的兜底
+    # base 槽上的 note 是一次性的「口径修正」说明：跨天滚动后（today 槽没有 note）自动消失
+    base_note = base_note or ((base_slot or {}).get("note") or "")
     base_fp = (base_slot or {}).get("fp") or {}
-    src = (base_slot or {}).get("date") or snap_reset or "新建基线"
+    src = (base_slot or {}).get("date") or (base_note or "新建基线")
     no_base = not base_fp           # 无基线 → 增量无意义，一律显示「—」
 
     # 键碰撞自检（两套口径都算，用于说明与日志）：
@@ -388,12 +390,10 @@ def main():
 
     # ---------------------------------------------------------- 组装 HTML
     parts = []
-    if snap_reset:
-        _base_line = f"增量基线已重置（{snap_reset}），本次不报增量"
-    elif no_base:
-        _base_line = "增量基线已重建，本次不报增量"
+    if no_base:
+        _base_line = f"增量基线已重置（{base_note or '首次建库'}），本次不报增量"
     else:
-        _base_line = f"增量对比基线：{src}"
+        _base_line = f"增量对比基线：{src}" + (f"（{base_note}）" if base_note else "")
     parts.append(f"""<div class="up-hero">
   <div class="up-date">{TODAY_S}</div>
   <div class="up-hero-t">今日更新</div>
@@ -411,8 +411,8 @@ def main():
     parts.append('<div class="stat-grid">')
     parts.append(stat_card(len(nat_new), nat_label, nat_sub, "tone-new"))
     if no_base:
-        parts.append(stat_card("—", "新增法规 / 标准", snap_reset or "新建基线", "tone-new"))
-        parts.append(stat_card("—", "状态 / 内容变更", snap_reset or "新建基线", "tone-chg"))
+        parts.append(stat_card("—", "新增法规 / 标准", base_note or "新建基线", "tone-new"))
+        parts.append(stat_card("—", "状态 / 内容变更", base_note or "新建基线", "tone-chg"))
     else:
         parts.append(stat_card(n_added_all, "新增法规 / 标准", base_sub, "tone-new"))
         parts.append(stat_card(n_changed_all, "状态 / 内容变更", base_sub, "tone-chg"))
@@ -426,15 +426,17 @@ def main():
     # 口径说明。⚠️ 这段原来写成「生成后再去找 </main> 插入」，而本页模板里根本没有 </main>
     # —— 于是截断说明**从未渲染过**：读者只看到被截断的 400，却没有任何解释。改为直接渲染。
     notes = []
-    if snap_reset:
+    if base_note:
         # 面向读者的口径说明（不放内部键设计、不写工程日志；细节见本文件 key_of 注释与构建日志）
+        _tail = ('因匹配口径变更，本次<b>重置了对比基线</b>，「新增法规 / 标准」与「状态 / 内容变更」'
+                 '暂不展示，自下一次更新起恢复为真实增量。' if no_base else
+                 f'本次已按新口径重算，对比基线为上一版发布状态（{src}），结果见上方统计卡。')
         notes.append(
             '<b>数据说明</b>：法规标准条目库中，同一部法规可能存有多个历史版本（公布年份不同）。'
             '此前的增量统计按「名称」匹配条目，会把「同一部法规的新旧版本」误判成'
             '「该法规发生了变更」，因此上一版页面列出的「状态 / 内容变更」并不可靠。'
-            f'现已改为按「名称 + 公布日期 + 施行日期 + 发布机关」逐版本匹配（旧口径下受影响条目 '
-            f'{v1_key_collisions} 条）。因匹配口径变更，本次<b>重置了对比基线</b>，'
-            '「新增法规 / 标准」与「状态 / 内容变更」暂不展示，自下一次更新起恢复为真实增量；'
+            f'现已改为按「名称 + 公布日期 + 施行日期 + 发布机关」逐版本匹配（旧口径下误判条目 '
+            f'{v1_key_collisions} 条）。' + _tail +
             '本页其余数据（生效倒计时、立法节点、草案截止、合规动态）均按日期直接计算，不受影响。')
     if up_trunc:
         notes.append(
@@ -477,7 +479,7 @@ def main():
     parts.append(f'<div class="section-title"><span class="bar"></span>{_t1}</div>')
     if no_base:
         parts.append('<p class="lead">本轮没有可用的对比基线（'
-                     + (snap_reset or "首次建库") +
+                     + (base_note or "首次建库") +
                      '），如实不报增量；新增 / 变更清单自下一次更新起恢复。</p>')
     elif added:
         for it in added:
@@ -660,7 +662,7 @@ def main():
           f"{' · 基线 ' + src if not no_base else ' · 无基线'}）"
           f"{'　⚠ 键冲突 %d 条' % key_collisions if key_collisions else ''}")
     if no_base:
-        print(f"  ⚠ 本轮无可用基线（{snap_reset or '首次建库'}）：不报增量；"
+        print(f"  ⚠ 本轮无可用基线（{base_note or '首次建库'}）：不报增量；"
               f"本次状态已存入 today 槽，下次构建自动滚为基线")
 
 
