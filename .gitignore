@@ -71,9 +71,6 @@ sources/appviol/.dateprobe.json
 # ⚠️ Git Data API 建 blob 单文件 >6MB 会静默失败（只报 _err:''），4MB 已逼近红线。
 sources/appviol/apps.json
 
-# 案例库全文缓存（仅本机用于重算「处罚事由 / 处罚」，体积大、不入仓、不上线）
-_qa/case_full.jsonl
-_qa/amr_backlog.log
-_qa/refresh_text.log
-_qa/backlog_finish.log
-_qa/backlog_harvest.log
+# 案例库质检工作区（_qa/）——全部只留本机：全文缓存体积大、日志/截图/探针页无发布价值。
+# ⚠️ push_via_api 用 `git ls-files` 取文件清单，忽略即不会上线。
+_qa/

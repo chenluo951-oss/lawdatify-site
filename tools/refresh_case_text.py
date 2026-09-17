@@ -69,6 +69,8 @@ def suspects(cases):
     from case_subject import extract_subject
     out = []
     for c in cases:
+        if c.get("reason_done"):
+            continue
         f = c.get("fact") or ""
         if SCARRED.search(f):
             out.append(c)
@@ -214,6 +216,9 @@ def main():
             cache[url] = full[:12000]
             _derive(c, full, c.get("fines"))
             done_rows += 1
+        else:
+            # 页面本身没正文（App 通报等）→ 也要打「已办」标，否则每轮都来重取一次
+            c["reason_done"] = 1
 
         if i % 25 == 0:
             print(f"  … {i}/{len(todo)}  修文本 {fixed}  重算 {done_rows}  失败 {failed}",

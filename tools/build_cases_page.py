@@ -187,7 +187,7 @@ def main():
             "<tr class=\"cr\">"
             f'<td class="dt">{esc(c.get("date") or "—")}</td>'
             f'<td class="ag">{esc(c.get("agency") or c.get("org") or "—")}</td>'
-            f'<td><span class="cs-tag {tag_cls(c.get("type"))}">{esc(c.get("type") or "其他")}</span></td>'
+            f'<td class="ty"><span class="cs-tag {tag_cls(c.get("type"))}">{esc(c.get("type") or "其他")}</span></td>'
             f'<td class="tt"><div class="tt-t" title="{esc(c.get("title") or "")}">{esc(c.get("title") or "")}</div></td>'
             f'<td class="sbj">{sbj_html}</td>'
             f'<td class="fx">{fx_html}</td>'
@@ -252,9 +252,9 @@ def main():
 .cs-tbl tr:hover td:first-child{background:#f7fbff}
 
 .cs-tbl td.dt{white-space:nowrap;color:var(--muted);font-size:12.5px;
-  font-variant-numeric:tabular-nums;width:96px}
-.cs-tbl td.ag{min-width:150px;max-width:170px;color:var(--ink-2)}
-.cs-tbl td.tt{min-width:238px;max-width:280px;color:var(--ink);font-weight:600}
+  font-variant-numeric:tabular-nums;width:88px;min-width:88px}
+.cs-tbl td.ag{min-width:118px;max-width:134px;color:var(--ink-2)}
+.cs-tbl td.tt{min-width:212px;max-width:236px;color:var(--ink);font-weight:600}
 /* 标题也夹到 3 行：决定书标题常 30+ 字（「…行政处罚文书送达公告（青黄市监罚送告
    〔2026〕4437-4461号）」），不夹会把行高推到 150px+。完整标题在 title 属性里。 */
 .tt-t{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;
@@ -265,7 +265,7 @@ def main():
    表格出现大片空白 —— 实测就是这个原因。 */
 .lw-t{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;
   overflow:hidden;max-height:4.86em}
-.cs-tbl td.fn{min-width:126px;max-width:172px;color:var(--ink-2);font-size:12.5px}
+.cs-tbl td.fn{min-width:120px;max-width:156px;color:var(--ink-2);font-size:12.5px}
 .cs-tbl td.lk{white-space:nowrap;width:92px;min-width:92px}
 /* 「原文」列固定在右侧：9 列合计 1300px+ 超出 1120px 容器，中部要横向滚动，
    但**原文深链必须永远可点**（这一页存在的意义就是能直达官方原文）→ 右吸附。 */
@@ -297,7 +297,10 @@ def main():
 .cs-tag.t5{background:#e9f4f6;color:#145e69}
 
 /* 被处罚主体 */
-.cs-tbl td.sbj{min-width:156px;max-width:210px}
+.cs-tbl td.sbj{min-width:138px;max-width:158px}
+/* 类型列（色块）宽度收窄：省下的横向空间全给「处罚事由 / 处罚」两列，
+   否则最右吸附的「原文/文书」列在默认滚动位会把处罚事由压成 60px 宽的一条。 */
+.cs-tbl td.ty{min-width:104px;max-width:118px}
 .sbj-n{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;
   max-height:3.24em;color:var(--ink);font-weight:600;word-break:break-word;line-height:1.62}
 .sbj-n em{font-style:normal;color:var(--muted);font-weight:400;font-size:12px;margin-left:4px;
@@ -305,7 +308,7 @@ def main():
 .sbj-no{color:var(--faint)}
 
 /* 处罚事由：默认 2 行截断，点「展开」看全文（长文不把表格撑散） */
-.cs-tbl td.fx{min-width:268px;max-width:368px;color:var(--ink-2);font-size:13px}
+.cs-tbl td.fx{min-width:260px;max-width:330px;color:var(--ink-2);font-size:13px}
 /* ⚠️ 只写 -webkit-line-clamp 不够：在 table-cell 里行高仍按**完整内容**计算，
    折叠后每行下方会留一大片空白（实测行高被撑到 200px+）。必须再给一个
    显式 max-height（2 行 × 行高）兜住盒子高度。 */
@@ -345,8 +348,11 @@ def main():
 
 @media(max-width:900px){
   .cs-tbl{min-width:840px}
+  /* ⚠️ 这里**只能收「类型 / 依据」**，绝不能收「处罚」：罚款 → 处罚 这一列改造之后
+     「处罚」是用户要看的主列（罚款/吊销/停业整顿/通报都在这），窄屏隐藏它等于把改动藏起来。
+     旧写法收的是第 7 列（依据）**和第 8 列（处罚）**，正是踩了这个坑。 */
   .cs-tbl td.lw,.cs-tbl th:nth-child(7),
-  .cs-tbl td.fn,.cs-tbl th:nth-child(8){display:none}
+  .cs-tbl td.ty,.cs-tbl th:nth-child(3){display:none}
 }
 @media(max-width:640px){
   .cs-bar .lb{width:110px}.cs-kpi{grid-template-columns:repeat(2,1fr)}
