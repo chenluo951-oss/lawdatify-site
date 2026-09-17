@@ -473,13 +473,13 @@ PAGE_TPL = """<!DOCTYPE html>
 <body>
 
 <nav class="topnav"></nav>
-<!-- SUBNAV:START --><!-- SUBNAV:END -->
 
 <div class="pagehead"><div class="inner">
   <div class="crumb"><a href="../index.html">首页</a> / <a href="index.html">合规管理</a> / 合规审计</div>
   <h1>合规审计</h1>
   <p>审计范围直接取自合规义务清单：勾选义务 → 生成审计任务 → 记录审计进度、审计素材与审计结论 → 输出审计报告与整改任务清单。</p>
 </div></div>
+<!-- SUBNAV:START --><!-- SUBNAV:END -->
 
 <main class="wrap">
   <p class="aud-lead">共 __NCAT__ 个主题大类、__NSCENE__ 个业务场景、__NDUTY__ 项具体义务可供勾选。

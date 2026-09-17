@@ -259,6 +259,16 @@ def main():
 
     lib["items"] = items
     lib["updated"] = datetime.date.today().isoformat()
+    # ⚠️ merge_corpus 跑在 build_library_data 之后，追加进来的条目没有 rel 字段
+    # （kind=标准 的必须重新判合规相关性，否则在页面上默认就被当成「相关」放行）。
+    # 复用同一份判据，保证两个脚本口径一致。
+    try:
+        from build_library_data import mark_relevance
+        n_irr = mark_relevance(items)
+        print(f"合规相关性标注：无关 {n_irr} 条（rel=0，页面默认不展示）")
+    except Exception as e:  # noqa: BLE001
+        print(f"⚠️ 合规相关性标注失败（不阻塞合并）：{e}")
+
     if "meta" in lib and "topics" in lib["meta"]:
         for t in {x["topic"] for x in items}:
             if t not in lib["meta"]["topics"]:

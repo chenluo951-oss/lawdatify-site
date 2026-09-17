@@ -84,6 +84,9 @@ STEPS = [
     ("专项合规页",      [PY, "tools/build_special_topics.py"],      False),
     ("高频法条",        [PY, "build_citations.py"],                  False),
     ("合规审计",        [PY, "build_audit.py"],                      False),
+    # ⚠️ 「合规管理」总览必须在 build_audit 之后：审计页坐标已被 build_audit 改到
+    # manage/audit.html（老地址 kb/audit.html 变跳转页），总览页链接指向它。
+    ("合规管理总览",    [PY, "build_manage.py"],                     False),
     ("监管雷达",        [PY, "build_radar.py"],                      True),
     ("法律分析",        [PY, "build_analysis.py"],                   False),
     # 公众号原文存档 → kb/wx.html + sources/wx/replaces.json

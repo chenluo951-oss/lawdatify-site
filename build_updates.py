@@ -390,9 +390,6 @@ def main():
 
     # ---------------------------------------------------------- 组装 HTML
     parts = []
-    # 「今日新增合规动态」的卡片 HTML 单独留一份：合规动态首页只内嵌前几条做摘要，
-    # 完整清单留在 news/today.html（避免把 24 条动态全塞进首页把正文压到屏幕外）。
-    nat_cards = []
     if no_base:
         _base_line = f"增量基线已重置（{base_note or '首次建库'}），本次不报增量"
     else:
@@ -662,13 +659,48 @@ def main():
     print(f"  updates/index.html 已改为跳转页")
 
     # ---- 内嵌到「合规动态」首页（幂等：替换 TODAY 标记块；模板无标记时插在子导航之后）----
-    # ⚠️ 只内嵌**摘要**（前 6 条 + 一行计数），全量留在 today.html：
+    # ⚠️ 只内嵌**增量摘要**（即将生效 / 立法节点 / 草案截止 三块），全量留在 today.html：
     # 用户 2026-09-17 抱怨过首页「图表太大、正文在最下面」，把整页增量灌进动态首页会重演。
+    # 2026-09-17 二次修正：原先复用 nat_cards（动态卡片）→ 与下方 FEED 列表**逐条重复**，
+    # 改为只放 today.html 独有的增量信息，正文列表里看不到的内容才有资格占首屏。
     idx = os.path.join(HERE, "news", "index.html")
     if os.path.exists(idx):
+        def _sum_box(title, note, rows):
+            """rows: [(右列文字, 名称, 链接)]；无内容返回空串（不占位）"""
+            if not rows:
+                return ""
+            lis = "".join(
+                f'<li><a href="{esc(u)}" target="_blank" rel="noopener">{nm}</a>'
+                f'<em>{esc(t)}</em></li>' if u else f'<li><span>{nm}</span><em>{esc(t)}</em></li>'
+                for t, nm, u in rows)
+            return (f'<div class="up-sum-b"><h4>{title}<i>{esc(note)}</i></h4>'
+                    f'<ul>{lis}</ul></div>')
+
+        boxes = []
+        # ① 即将生效（未来 180 天内最早到期的 4 条）
+        rows = []
+        for d, n, it in (today_eff + soon30 + soon180)[:4]:
+            rows.append((d.isoformat(), it.get("name") or "", it.get("url") or ""))
+        boxes.append(_sum_box("即将生效", f"未来 180 天共 {_n_eff} 条", rows))
+        # ② 7 日内立法与监管节点
+        rows = []
+        for d, n, e in cal7[:3]:
+            rows.append((d.isoformat(), e.get("title") or "", e.get("url") or ""))
+        boxes.append(_sum_box("7 日内立法与监管节点", f"共 {len(cal7)} 项", rows))
+        # ③ 进行中的监管行动
+        rows = []
+        for a in ongoing[:3]:
+            rows.append((a.get("status") or "进行中", a.get("name") or "", a.get("url") or ""))
+        boxes.append(_sum_box("进行中的监管行动", f"共 {len(ongoing)} 项", rows))
+        # ④ 征求意见截止（本页只列示最近 3 项，全量在 today.html）
+        rows = []
+        for d, n, dft in dl[:3]:
+            rows.append((d.isoformat(), dft.get("name") or dft.get("title") or "",
+                         dft.get("url") or ""))
+        boxes.append(_sum_box("征求意见截止", f"共 {len(dl_all)} 项", rows))
+
         teaser = []
-        teaser.append('<div class="section-title"><span class="bar"></span>今日更新'
-                      f'<span class="upd-stamp"> {TODAY_S}</span></div>')
+        teaser.append('<div class="section-title"><span class="bar"></span>今日更新</div>')
         bits = []
         if nat_new:
             bits.append(f'新增合规动态 <b>{len(nat_new)}</b> 条')
@@ -680,7 +712,7 @@ def main():
         bits.append(f'进行中的监管行动 <b>{len(ongoing)}</b> 项')
         teaser.append(f'<p class="lead">截至 {TODAY_S}：' + " · ".join(bits)
                       + '。<a href="today.html">查看完整今日更新 →</a></p>')
-        teaser.append('<div class="up-list">' + "".join(nat_cards[:6]) + '</div>')
+        teaser.append('<div class="up-sum">' + "".join(b for b in boxes if b) + '</div>')
         block = ("<!-- TODAY:START -->\n" + "\n".join(teaser) + "\n<!-- TODAY:END -->")
         s = open(idx, encoding="utf-8").read()
         pat = re.compile(r"<!-- TODAY:START -->.*?<!-- TODAY:END -->", re.S)
@@ -691,7 +723,10 @@ def main():
             s2 = s.replace(anchor, anchor + "\n" + block, 1) if anchor in s else s
         if s2 != s:
             open(idx, "w", encoding="utf-8").write(s2)
-            print(f"  news/index.html 今日更新摘要已同步（{len(nat_cards[:6])} 条）")
+            print(f"  news/index.html 今日更新摘要已同步（增量块："
+                  f"生效 {min(len(today_eff) + len(soon30) + len(soon180), 4)} / "
+                  f"节点 {min(len(cal7), 3)} / 行动 {min(len(ongoing), 3)} / "
+                  f"草案 {min(len(dl), 3)} 条）")
     print(f"  基线 {src} | 真实增量：新增 {n_added_all} / 变更 {n_changed_all} / 下线 {n_removed_all}"
           f"（页面列表列示 {len(added)}/{len(changed)}/{len(removed)} 条）")
     print(f"  合规动态批次 {nat_batch or '—'} · {len(nat_new)} 条（站点直采库 {len(nat)} 条）"

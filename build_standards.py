@@ -328,6 +328,11 @@ def build_kb_index(items, duties, drafts, soon, stat_html="", board=""):
     n_law = len(items) - n_std
     n_local = sum(1 for x in items if x.get("local"))
     n_sooner = len(soon)
+    # 合规相关性口径（与 build_library_data.mark_relevance 一致）：rel=1 才计入展示口径
+    n_rel_all = sum(1 for x in items if x.get("rel"))
+    n_std_rel = sum(1 for x in items if x.get("rel") and x.get("kind") == "标准")
+    n_law_rel = n_rel_all - n_std_rel
+    n_irrelevant = len(items) - n_rel_all
 
     # 草案按截止日排序，取最近 5 条
     dl = sorted([d for d in drafts if (d.get("days_left") or 9999) >= 0],
@@ -371,10 +376,11 @@ def build_kb_index(items, duties, drafts, soon, stat_html="", board=""):
   {stat_html}
   <div class="lb-split">
     <a class="dcard lb-entry" href="standards.html" style="--dc:#0f7b6c">
-      <b>📚 合规标准知识库</b>
-      <span>{len(items)} 条目：法律 {n_law} 件 / 标准 {n_std} 项，含国家标准、行业与团体标准、指引指南。
-      标注效力状态（现行有效 / 即将实施 / 已废止）与发布实施日期。</span>
-      <span class="more">进入标准知识库 →</span>
+      <b>&#128218; 法规库</b>
+      <span>{n_rel_all} 条目：法律与法规 {n_law_rel} 件 / 标准 {n_std_rel} 项，含国家标准、行业与团体标准、指引指南。
+      标注效力状态（现行有效 / 即将实施 / 已废止）与发布实施日期。
+      已按合规相关性筛除与技术、制造、检验方法有关的 {n_irrelevant} 项标准，可在库内切换为「显示全部」查看。</span>
+      <span class="more">进入法规库 →</span>
     </a>
     <a class="dcard lb-entry" href="standards.html#pane-duty" style="--dc:#1b4f8a">
       <b>🎯 合规义务清单</b>
@@ -400,11 +406,11 @@ def build_kb_index(items, duties, drafts, soon, stat_html="", board=""):
       逐条附官方原文深链，用于反查同类执法口径与定性尺度。</span>
       <span class="more">进入案例库 →</span>
     </a>
-    <a class="dcard lb-entry" href="audit.html" style="--dc:#0f766e">
-      <b>🗂️ 合规审计</b>
-      <span>从义务清单勾选审计范围（{n_cat} 大类 / {n_scene} 场景 / {n_duty} 项义务），生成审计任务后逐项记录进度、
-      审计素材、审计结论与整改安排，完成后一键输出审计报告与整改任务清单（可打印 / 导出 HTML / JSON）。</span>
-      <span class="more">开始审计 →</span>
+    <a class="dcard lb-entry" href="../manage/index.html" style="--dc:#0f766e">
+      <b>&#128451; 合规管理</b>
+      <span>把规则落下去：从义务清单勾选审计范围（{n_cat} 大类 / {n_scene} 场景 / {n_duty} 项义务），
+      生成审计任务、逐项记录进度与结论，输出审计报告与整改任务清单。已独立为一级模块。</span>
+      <span class="more">进入合规管理 →</span>
     </a>
     <a class="dcard lb-entry" href="standards.html#pane-draft" style="--dc:#b45309">
       <b>📌 立法草案跟踪</b>
@@ -811,6 +817,10 @@ def main():
 
     n_std = sum(1 for x in items if x.get("kind") == "标准")
     n_law = len(items) - n_std
+    n_rel_all = sum(1 for x in items if x.get("rel"))
+    n_std_rel = sum(1 for x in items if x.get("rel") and x.get("kind") == "标准")
+    n_law_rel = n_rel_all - n_std_rel
+    n_irrelevant = len(items) - n_rel_all
     n_local = sum(1 for x in items if x.get("local"))
     n_online = law_online_count()
     n_std_online = std_online_count()
@@ -827,9 +837,10 @@ def main():
 
     # ---------------- 统计条
     stats = [(k, v) for k, v in [
-        ("收录条目", len(items)),
-        ("标准", n_std),
-        ("法律法规", n_law),
+        ("合规相关条目", n_rel_all),
+        ("标准", n_std_rel),
+        ("法律法规", n_law_rel),
+        ("已筛除技术类标准", n_irrelevant),
         ("本机原文", n_local),
         ("站内法规原文", n_online),
         ("站内标准正文", n_std_online),
@@ -1001,12 +1012,12 @@ def main():
     ])
 
     out = page(
-        "合规标准知识库",
+        "法规库",
         "个人信息保护、数据安全、网络安全、算法与 AI、移动应用、平台与电商、食品安全、"
-        "计量与冷链等合规领域的法律法规、国家标准与指引指南汇总，按效力级别、时效性、"
+        "计量与冷链等合规领域的法律法规、国家标准与指引指南汇总，按资源类型、效力级别、时效性、"
         "专题、发文机关与地域多维筛选，逐条标注发布与实施日期并附官方原文深链。",
-        '<a href="index.html">合规知识库</a> / 标准知识库',
-        "合规标准知识库",
+        '<a href="index.html">合规知识库</a> / 法规库',
+        "法规库",
         "与合规、安全、法规相关的法律法规与标准收在一处：哪部现行、哪部即将实施、"
         "哪部已废止，以及每一项合规义务该引用哪些依据。左侧按资源类型、效力级别、时效性、"
         "专题、发文机关、地域与发布日期逐层收敛，右侧逐条给出官方原文入口。",

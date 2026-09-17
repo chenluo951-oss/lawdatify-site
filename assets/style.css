@@ -5,7 +5,13 @@
   --radius:14px;--radius-s:10px;
   --shadow:0 1px 2px rgba(16,24,40,.04),0 6px 20px rgba(16,24,40,.055);
   --shadow-h:0 2px 6px rgba(16,24,40,.06),0 14px 34px rgba(16,24,40,.10);
-  --maxw:1120px;
+  /* 版式宽度：2026-09-17 用户要求「所有页面铺满，别留两边那么大留白」。
+     原值 1120px 在 1920 屏上左右各空 400px，表格类页面（案例库 9 列、法规库 2 万条）
+     信息密度被压得很低。现改为「占满视口、超宽屏封顶 2000px」：
+       · 1920 屏 → 内容宽 1872px（仅留 .inner 的 24px 内边距）
+       · 2560 屏 → 封顶 2000px（否则一行正文过长，阅读反而变差）
+     ⚠️ 长文阅读页不受影响：.art / .art-fig 各自有独立的窄栏 max-width。 */
+  --maxw:min(2000px,100%);
   --sans:"PingFang SC","HarmonyOS Sans SC","Microsoft YaHei","Hiragino Sans GB","Source Han Sans SC",system-ui,-apple-system,sans-serif;
 }
 *{box-sizing:border-box}
@@ -1438,3 +1444,24 @@ table.dm tfoot td{background:#f5f8fc;font-size:11.5px;color:var(--ink-2);padding
   .lv-no{display:none}
   .lv-t{font-size:14px}
 }
+
+/* ---- 「今日更新」内嵌摘要区块（news/index.html）--------------------------------
+   2026-09-17：今日更新并入合规动态后，首页只放**增量信息**（即将生效 / 立法节点 /
+   草案截止），不再复用动态卡片，避免与下方动态列表重复。
+   三块并排，窄屏自动折行。 */
+.up-sum{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+  gap:14px;margin:14px 0 4px}
+.up-sum-b{border:1px solid var(--line);border-radius:var(--radius-s);padding:12px 14px;
+  background:#fbfcfe}
+.up-sum-b h4{margin:0 0 8px;font-size:13.5px;font-weight:700;color:var(--ink-2);
+  letter-spacing:.2px;display:flex;align-items:center;justify-content:space-between;gap:8px}
+.up-sum-b h4 i{font-style:normal;font-weight:600;font-size:12px;color:var(--faint)}
+.up-sum-b ul{list-style:none;margin:0;padding:0}
+.up-sum-b li{display:flex;align-items:baseline;gap:8px;padding:5px 0;
+  border-top:1px dashed var(--line-2);font-size:13.5px;line-height:1.5}
+.up-sum-b li:first-child{border-top:0}
+.up-sum-b li a{color:var(--ink);text-decoration:none;flex:1;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.up-sum-b li a:hover{color:var(--brand);text-decoration:underline}
+.up-sum-b li em{font-style:normal;font-size:12px;color:var(--faint);white-space:nowrap}
+.up-sum-b .up-sum-x{margin:8px 0 0;font-size:12.5px;color:var(--faint)}

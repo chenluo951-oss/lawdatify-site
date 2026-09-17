@@ -26,7 +26,7 @@ NEWS_NAV = [
 ]
 KB_NAV = [
     ("index.html", "总览"),
-    ("standards.html", "标准与义务"),
+    ("standards.html", "法规库"),
     ("texts.html", "法规原文"),
     ("cases.html", "案例库"),
     ("citations.html", "高频引用法条"),
