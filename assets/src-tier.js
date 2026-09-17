@@ -56,7 +56,13 @@
     'nea.gov.cn', 'nmpa.gov.cn', 'stats.gov.cn', 'sasac.gov.cn', 'gov.cn',
     'ec.europa.eu', 'digital-strategy.ec.europa.eu', 'eur-lex.europa.eu',
     'edpb.europa.eu', 'europa.eu', 'ftc.gov', 'oag.ca.gov', 'ico.org.uk',
-    'pdpc.gov.sg', 'meity.gov.in', 'gov.br', 'oecd.org', 'un.org', 'unesco.org'
+    'pdpc.gov.sg', 'meity.gov.in', 'gov.br', 'oecd.org', 'un.org', 'unesco.org',
+    // 境外数据保护监管机构与官方公报（不在 .gov/.go.xx 后缀规则覆盖内，
+    // 必须显式登记，否则会被判成「二手转载」；与 sources_tier.py 保持同口径）
+    'cnil.fr', 'legifrance.gouv.fr',
+    'autoriteitpersoonsgegevens.nl', 'officielebekendmakingen.nl',
+    'dataprotection.ie', 'garanteprivacy.it', 'aepd.es', 'dpa.gr',
+    'cnpd.public.lu', 'priv.gc.ca'
   ];
   var MEDIA_HOSTS = [
     'people.com.cn', 'cpc.people.com.cn', 'xinhuanet.com', 'news.cn', 'cctv.com',
@@ -123,8 +129,9 @@
       if (MEDIA_HOSTS.indexOf(h) >= 0) return 'gov-media';
       return 'academic';
     }
-    if (/gov\.cn$/.test(h) || /(^|\.)gov(\.[a-z]{2})?$/.test(h) || /europa\.eu$/.test(h) ||
-        /\.(go\.jp|go\.kr|gouv\.[a-z]{2}|gob\.[a-z]{2}|gov\.uk|gov\.au|gov\.hk|gov\.mo)$/.test(h)) {
+    if (/(^|\.)gov\.cn$/.test(h) || /(^|\.)gov(\.[a-z]{2})?$/.test(h) || /(^|\.)europa\.eu$/.test(h) ||
+        /\.(go\.jp|go\.kr|gouv\.[a-z]{2}|gob\.[a-z]{2}|gov\.uk|gov\.au|gov\.hk|gov\.mo)$/.test(h) ||
+        /\.(gc\.ca|overheid\.nl|admin\.ch|govt\.nz)$/.test(h)) {
       return 'official';
     }
     if (/(people\.com\.cn|xinhuanet\.com|news\.cn|cctv\.com|gmw\.cn|ce\.cn|thepaper\.cn|cnr\.cn|chinanews\.com\.cn|qstheory\.cn|stdaily\.com)$/.test(h)) {

@@ -201,7 +201,15 @@ def link_depth(url):
         return "deep"
     if _LIST_RX.search(path):
         return "list"
+    # 目录式永久链接（以 / 结尾）**不一定是栏目页**：欧美监管机构普遍用
+    # /…/2026/09/<文章标题-slug>/ 这种形态（如 ICO、CNIL），末段是长且多连字符的
+    # 文章 slug，确属具体条目页。只有「末段短而泛」（news/、2026/09/、media-centre/）
+    # 才按栏目页处理 —— 否则这些真·深链会被标成「栏目」，反而误导读者。
     if path.endswith("/") and not p.query:
+        segs = [s for s in path.split("/") if s]
+        last = segs[-1] if segs else ""
+        if len(last) >= 24 or last.count("-") >= 3:
+            return "deep"
         return "list"
     segs = [s for s in path.split("/") if s]
     if len(segs) == 1 and not p.query:
@@ -228,12 +236,30 @@ OFFICIAL_HOSTS = {
     "ftc.gov", "oag.ca.gov", "ico.org.uk", "www.gov.uk",
     "pdpc.gov.sg", "meity.gov.in", "gov.br", "www.gov.br",
     "oecd.org", "un.org", "unesco.org", "europol.europa.eu",
+    # 境外数据保护监管机构与官方公报
+    # ⚠️ 这些机构的官网**不在** .gov / .go.xx 等后缀规则覆盖范围内，
+    #    不显式登记就会被判成 other（二手转载）而拒收 —— 这是全球监管地图
+    #    长期「只增国内、不增境外」的隐性原因之一，不要删。
+    "cnil.fr", "legifrance.gouv.fr",            # 法国 CNIL / 官方法律文本库
+    "autoriteitpersoonsgegevens.nl",             # 荷兰数据保护局 (AP)
+    "officielebekendmakingen.nl",                # 荷兰官方公报（Staatsblad/Staatscourant）
+    "dataprotection.ie",                         # 爱尔兰数据保护委员会 (DPC)
+    "garanteprivacy.it",                         # 意大利数据保护局 (GPDP)
+    "aepd.es",                                   # 西班牙数据保护局 (AEPD)
+    "dpa.gr",                                    # 希腊个人数据保护局 (HDPA)
+    "cnpd.public.lu",                            # 卢森堡国家数据保护委员会 (CNPD)
+    "priv.gc.ca",                                # 加拿大隐私专员办公室 (OPC)
 }
 
 OFFICIAL_SUFFIX = (
-    "gov.cn", ".gov", ".gob.", ".gouv.", ".go.jp", ".go.kr",
+    ".gov.cn", ".gov", ".gob.es", ".gouv.fr", ".go.jp", ".go.kr",
     ".gov.uk", ".gov.au", ".gov.sg", ".gov.in", ".gov.br",
     ".gov.za", ".gov.ae", ".gov.hk", ".gov.mo",
+    # 政府专属命名空间（整段保留给政府机关，非政府主体无法注册）
+    ".gc.ca",        # 加拿大联邦政府
+    ".overheid.nl",  # 荷兰政府
+    ".admin.ch",     # 瑞士联邦政府
+    ".govt.nz",      # 新西兰政府
 )
 
 # ---------------------------------------------------------------- 官方媒体
@@ -282,6 +308,19 @@ def _host(url):
     if h.startswith("www."):
         h = h[4:]
     return h
+
+
+def _in_hosts(h, table):
+    """主机是否命中白名单：精确匹配，或该主机是白名单域名的**子域**。
+
+    为什么要管子域
+    --------------
+    不少官方站点把正文挂在子域上：荷兰官方公报是 zoek.officielebekendmakingen.nl、
+    越南通讯社是 en.vnanet.vn。只做精确匹配会把这些真·官方页判成「二手转载」而拒收。
+    子域匹配同时是安全的：判定用 `host.endswith("." + 白名单域名)`，
+    形如 samr.gov.cn.evil.com 的仿冒域名不会命中（它以 .evil.com 结尾）。
+    """
+    return h in table or any(h.endswith("." + d) for d in table)
 
 
 def _account_tier(name):
@@ -348,14 +387,14 @@ def tier_of(url, declared=None, account=None):
         return _wechat_tier(url, declared, account)
 
     for cand in (h, "www." + h):
-        if cand in OFFICIAL_HOSTS:
+        if _in_hosts(cand, OFFICIAL_HOSTS):
             return "official"
-        if cand in GOV_MEDIA_HOSTS:
+        if _in_hosts(cand, GOV_MEDIA_HOSTS):
             return "gov-media"
-        if cand in ACADEMIC_HOSTS:
+        if _in_hosts(cand, ACADEMIC_HOSTS):
             return "academic"
 
-    if h.endswith(OFFICIAL_SUFFIX) or any(s in h for s in ("gov.cn", "europa.eu")):
+    if h.endswith(OFFICIAL_SUFFIX) or _in_hosts(h, {"gov.cn", "europa.eu"}):
         return "official"
     # 官方媒体的子域名（m.gmw.cn / wlaq.gmw.cn / m.thepaper.cn / qzswap.stcn.com …）
     # 也要归到同一层级
