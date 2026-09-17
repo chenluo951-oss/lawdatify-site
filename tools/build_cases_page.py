@@ -4,8 +4,16 @@
 
 数据源：sources/cases/cases.json（tools/harvest_cases.py 采集）
 内容：监管处罚与通报案例的结构化索引 —— 机关、类型、日期、**被处罚主体**、
-      **处罚事由**、依据法条、罚款幅度、官方原文深链，并按类型 / 机关 / 年度
+      **处罚事由**、依据法条、**处罚**、官方原文深链，并按类型 / 机关 / 年度
       给出分布，用于合规判断时反查同类执法口径。
+
+⚠️ 两个字段的取数口径（2026-09-17 用户反馈后重做）：
+  · **处罚事由** = 「为什么处罚」的违法事实，等价于裁判文书的「法院认定事实」。
+    不是整页正文，更不是「当事人：XX 主体资格证照名称…」抬头或「近年来，
+    市场监管总局按照…」通稿导语。抽取逻辑在 tools/case_reason.py。
+  · **处罚** = 全部处罚种类与幅度（罚款、吊销营业执照、停业整顿、通报批评、
+    没收违法所得、责令停产停业、列入严重违法失信名单…），不只有罚款。
+    取数在**决定段**里找，见 tools/case_reason.py 的 extract_penalty()。
 """
 import hashlib
 import html
@@ -21,6 +29,7 @@ sys.path.insert(0, os.path.join(HERE, "tools"))
 
 from case_subject import extract_subject, format_subject  # noqa: E402
 from case_gate import classify  # noqa: E402
+from case_reason import extract_penalty, extract_reason  # noqa: E402
 
 SRC = os.path.join(HERE, "sources", "cases", "cases.json")
 
@@ -81,6 +90,8 @@ def main():
     rows = []
     with_subj = 0
     with_attach = 0
+    with_reason = 0
+    with_pen = 0
     with_fact = sum(1 for c in cases if c.get("fact"))
     for c in cases:
         law = "、".join(c.get("laws") or [])
@@ -104,12 +115,62 @@ def main():
             sbj_html = '<span class="sbj-no" title="正文未标注当事人（部分公示作了脱敏）">—</span>'
 
         # ── 处罚事由（长文折叠） ──────────────────────────────────
-        if fact:
+        # 优先用采集/回填时**从全文**抽好的 c["reason"]（决定书末尾的「为什么处罚」常常
+        # 超出 900 字正文窗口，只有全文才抽得到）；没有就现场从 fact 抽。
+        rs = c.get("reason")
+        if rs is None:
+            rs = extract_reason(fact, c.get("title"), c.get("kind"))["text"]
+        rs = (rs or "").strip()
+        rmode = c.get("reason_mode") or ""
+        if rs:
+            with_reason += 1
+            # 汇编类是多起案件的列表（\n 分行），要保留换行 → CSS 用 white-space:pre-line
             btn = ('<button class="fx-b" type="button" aria-label="展开处罚事由"></button>'
-                   if len(fact) > 76 else "")
-            fx_html = f'<div class="fx-t">{esc(fact)}</div>{btn}'
+                   if (len(rs) > 76 or "\n" in rs) else "")
+            if rmode == "compilation" and c.get("reason_n"):
+                head = (f'<span class="fx-n">共 {c["reason_n"]} 起案件 · 逐起违法事实</span>')
+            else:
+                head = ""
+            fx_html = f'{head}<div class="fx-t">{esc(rs)}</div>{btn}'
         else:
             fx_html = '<span class="sbj-no">见原文</span>'
+
+        # ── 处罚（种类 + 幅度） ────────────────────────────────────
+        # 「罚款」只是处罚的一种。吊销营业执照 / 停业整顿 / 通报批评 / 没收违法所得
+        # 一样是处罚结果，用户 2026-09-17 明确要求合并到一列。
+        pen = c.get("pen")
+        pkinds = c.get("pen_kinds") or []
+        if pen is None:
+            _p = extract_penalty(fact, c.get("fines"), c.get("title"), c.get("kind"))
+            pen, pkinds = _p["text"], _p["kinds"]
+        pen = (pen or "").strip()
+        # 汇编类：一条公示装了 N 起案件，处罚金额也来自不同案件 → 鼠标悬停说明清楚，
+        # 避免被读成「这一个主体被罚了这么多」。
+        ptitle = (f' title="本条为 {c.get("reason_n")} 起案件的汇编，'
+                  f'处罚种类与金额按各起案件合列，逐起对应关系见左侧「处罚事由」"'
+                  if (rmode == "compilation" and c.get("reason_n", 0) >= 2) else "")
+        if pen:
+            with_pen += 1
+            chunks = [x for x in pen.split("、") if x]
+            pill, amts = [], []
+            for x in chunks:
+                if x.startswith("罚款") and len(x) > 2:
+                    pill.append('<span class="pn-k pn-k-f">罚款</span>')
+                    for v in x[2:].strip().split("／"):
+                        if v:
+                            amts.append(f'<span class="pn-a">{esc(v)}</span>')
+                else:
+                    tone = {"吊销营业执照": "s", "吊销许可证": "s", "责令停产停业": "s",
+                            "没收违法所得": "m", "没收非法财物": "m",
+                            "公开通报": "t", "通报批评": "t"}.get(x, "")
+                    pill.append(f'<span class="pn-k{" pn-k-" + tone if tone else ""}">{esc(x)}</span>')
+            pen_html = ('<div class="pn-w">' + "".join(pill)
+                        + ("".join(amts) if amts else "") + "</div>")
+        elif c.get("fines"):
+            pen_html = ('<div class="pn-w">' + "".join(
+                f'<span class="pn-a">{esc(v)}</span>' for v in c["fines"][:3]) + "</div>")
+        else:
+            pen_html = '<span class="sbj-no" title="公示正文未写处罚结果（部分通报只公布违法情形）">—</span>'
 
         # ── 原文 / 文书附件 ────────────────────────────────────────
         # 相当多的公示页正文是空壳，处罚内容只在 .docx/.pdf 里（见 tools/case_attach.py）。
@@ -131,7 +192,7 @@ def main():
             f'<td class="sbj">{sbj_html}</td>'
             f'<td class="fx">{fx_html}</td>'
             f'<td class="lw"><div class="lw-t" title="{esc(law)}">{esc(law) or "—"}</div></td>'
-            f'<td class="fn">{esc(fine) or "—"}</td>'
+            f'<td class="fn"{ptitle}>{pen_html}</td>'
             f'<td class="lk"><a href="{esc(c.get("url"))}" target="_blank" rel="noopener">原文</a>'
             f'{att_html}</td>'
             "</tr>")
@@ -174,7 +235,7 @@ def main():
    硬挤进 1072px 容器：机关名「地方市场监督管理局」被折成竖排一个字一行，
    单元格上的 min-width 在 table-layout:auto 下不足以撑开列。给表格定宽后
    由 .cs-wrap 横向滚动，列宽才按设计生效。 */
-.cs-tbl{width:100%;border-collapse:collapse;font-size:13.5px;min-width:1280px}
+.cs-tbl{width:100%;border-collapse:collapse;font-size:13.5px;min-width:1300px}
 .cs-tbl th{position:sticky;top:0;z-index:3;background:#f2f6fb;color:#42536b;font-weight:700;
   text-align:left;padding:11px 12px;border-bottom:1px solid var(--line);white-space:nowrap;
   font-size:12.5px;letter-spacing:.3px}
@@ -204,7 +265,7 @@ def main():
    表格出现大片空白 —— 实测就是这个原因。 */
 .lw-t{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;
   overflow:hidden;max-height:4.86em}
-.cs-tbl td.fn{min-width:112px;max-width:150px;color:var(--warn);font-weight:600;font-size:12.5px}
+.cs-tbl td.fn{min-width:126px;max-width:172px;color:var(--ink-2);font-size:12.5px}
 .cs-tbl td.lk{white-space:nowrap;width:92px;min-width:92px}
 /* 「原文」列固定在右侧：9 列合计 1300px+ 超出 1120px 容器，中部要横向滚动，
    但**原文深链必须永远可点**（这一页存在的意义就是能直达官方原文）→ 右吸附。 */
@@ -244,15 +305,19 @@ def main():
 .sbj-no{color:var(--faint)}
 
 /* 处罚事由：默认 2 行截断，点「展开」看全文（长文不把表格撑散） */
-.cs-tbl td.fx{min-width:262px;max-width:360px;color:var(--ink-2);font-size:13px}
+.cs-tbl td.fx{min-width:268px;max-width:368px;color:var(--ink-2);font-size:13px}
 /* ⚠️ 只写 -webkit-line-clamp 不够：在 table-cell 里行高仍按**完整内容**计算，
    折叠后每行下方会留一大片空白（实测行高被撑到 200px+）。必须再给一个
    显式 max-height（2 行 × 行高）兜住盒子高度。 */
+/* white-space:pre-line —— 典型案例汇编的事由是「逐起案件」的多行列表，
+   不加这句换行会被折成一行，一屏只能看一条。 */
 .fx-t{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;
-  overflow:hidden;line-height:1.62;max-height:3.24em}
+  overflow:hidden;line-height:1.62;max-height:3.24em;white-space:pre-line}
+.fx-n{display:block;margin-bottom:3px;font-size:11.6px;font-weight:700;color:var(--accent);
+  letter-spacing:.3px}
 .cs-tbl td.fx.open{max-width:none}
 .cs-tbl td.fx.open .fx-t{display:block;overflow:visible;-webkit-line-clamp:unset;
-  max-height:none}
+  max-height:none;white-space:pre-line}
 .fx-b{border:0;background:none;padding:0;margin-top:5px;cursor:pointer;
   font-family:var(--sans);font-size:12.5px;font-weight:600;color:var(--brand)}
 /* 按钮文字用伪元素：不进 DOM 文本，避免被关键词搜索误命中 */
@@ -261,6 +326,22 @@ def main():
 .fx-b::after{content:" ▾";font-weight:400;color:var(--muted)}
 .cs-tbl td.fx.open .fx-b::after{content:" ▴"}
 .fx-b:hover{text-decoration:underline}
+
+/* 处罚（种类 + 幅度）：罚款只是其中一种，吊销 / 停业 / 没收 / 通报都是处罚结果，
+   用不同底色区分「严厉程度」，扫一眼就能看出这条是「罚钱」还是「吊照」。 */
+.pn-w{display:flex;flex-wrap:wrap;gap:4px 5px;align-items:flex-start}
+/* ⚠️ 标签**不能**加 `white-space:nowrap`：table-layout:auto 下不可断行的行内盒
+   会把列撑到 min-content 宽度，「列入严重违法失信名单」这种长标签直接把处罚列
+   顶到 150px+，表格整体溢出容器、最右侧的「原文 / 文书」吸附列盖住处罚列。
+   中文天然可按字断行，去掉 nowrap 后列宽才由 max-width 说了算。 */
+.pn-k{display:inline-block;border-radius:6px;padding:1px 7px;font-size:11.8px;
+  font-weight:600;background:#eef4fb;color:#1b4f8a;line-height:1.4;word-break:break-word}
+.pn-k-s{background:#fdeaea;color:#a01d1d}
+.pn-k-m{background:#fdf3e7;color:#8f5312}
+.pn-k-t{background:#eef7f1;color:#1c6349}
+.pn-k-f{background:#fff4e5;color:#9a5b06}
+.pn-a{display:block;width:100%;font-size:12.6px;font-weight:700;color:#8a3b0a;
+  line-height:1.5;font-variant-numeric:tabular-nums}
 
 @media(max-width:900px){
   .cs-tbl{min-width:840px}
@@ -278,18 +359,18 @@ def main():
     body.append('<div class="cs-kpi">'
                 f'<div class="cs-k"><b>{len(cases)}</b><span>处罚案例条数</span></div>'
                 f'<div class="cs-k"><b>{with_subj}</b><span>已定位被处罚主体</span></div>'
-                f'<div class="cs-k"><b>{with_fact}</b><span>含处罚事由正文</span></div>'
+                f'<div class="cs-k"><b>{with_reason}</b><span>已提炼处罚事由</span></div>'
                 f'<div class="cs-k"><b>{with_attach}</b><span>取自文书附件</span></div>'
                 f'<div class="cs-k"><b>{len([o for o in orgs if o != "未标注"])}</b><span>覆盖监管机关</span></div>'
                 f'<div class="cs-k"><b>{len(types)}</b><span>违法类型</span></div>'
-                f'<div class="cs-k"><b>{with_fine}</b><span>标明罚款幅度</span></div>'
+                f'<div class="cs-k"><b>{with_pen}</b><span>已解析处罚结果</span></div>'
                 '</div>')
 
     body.append('<section class="cs-sec"><h2>案例库怎么用</h2>'
                 '<p class="lead">合规判断最容易出错的地方不是「有没有这条规定」，'
                 '而是「同类行为在实践中怎么定性、按哪条罚、罚到什么程度」。'
                 '这一页把监管机关官网公开的处罚决定、通报与典型案例，'
-                '按违法类型、执法机关、依据法条和罚款幅度做了结构化索引——'
+                '按违法类型、执法机关、依据法条和实际处罚结果做了结构化索引——'
                 '写内部风险提示、做业务评审、回应监管问询时，可直接反查同类先例。</p></section>')
 
     body.append('<section class="cs-sec"><h2>违法类型分布</h2>' + bars(types.most_common(14))
@@ -304,9 +385,10 @@ def main():
                     + bars(laws.most_common(16)) + "</section>")
 
     body.append('<section class="cs-sec"><h2>案例明细</h2>'
-                '<p class="lead">可按被处罚主体、处罚事由、机关、法条或类型检索；'
-                '「处罚事由」默认收起，点「展开事由」看正文全文；'
-                '「依据」与「罚款」为正文解析结果，最终以官方原文为准。</p>'
+                '<p class="lead">可按被处罚主体、处罚事由、机关、法条或类型检索。'
+                '<b>处罚事由</b>取自决定书／通报里认定违法事实的段落（为什么处罚），'
+                '汇编类通报按起数逐条列出；<b>处罚</b>含罚款、吊销营业执照、停业整顿、'
+                '没收、通报等全部处罚种类。两者均为正文解析结果，最终以官方原文为准。</p>'
                 '<input class="cs-q" id="cq" type="search" '
                 'placeholder="搜索关键词，例如：虚假宣传、明码标价、过期食品、个人信息">'
                 '<div class="cs-fl"><label for="ca">机关</label>'
@@ -322,7 +404,7 @@ def main():
                 '<div class="cs-wrap"><table class="cs-tbl" id="ct"><thead><tr>'
                 "<th>日期</th><th>机关</th><th>类型</th><th>案件</th>"
                 "<th>被处罚主体</th><th>处罚事由</th>"
-                "<th>依据</th><th>罚款</th><th>原文 / 文书</th></tr></thead><tbody>"
+                "<th>依据</th><th>处罚</th><th>原文 / 文书</th></tr></thead><tbody>"
                 + "".join(rows) + "</tbody></table></div></section>")
 
     body.append('<div class="cs-note"><b>数据说明</b>　'
@@ -337,7 +419,10 @@ def main():
                 '一条公示打包多起案件的显示「等 N 家」；'
                 '部分公示对当事人作了脱敏（决定书里写作 `***`）、'
                 '或正文未标注当事人（部分 App 通报），该字段留空，可在原文中核对。'
-                '<b>处罚事由、被处罚主体、依据、罚款幅度由正文自动解析</b>，'
+                '<b>处罚事由、被处罚主体、依据、处罚结果由正文自动解析</b>：'
+                '「处罚事由」只取认定违法事实的段落，不取当事人身份抬头与通稿导语；'
+                '「处罚」收录罚款金额与吊销营业执照、责令停产停业、'
+                '没收违法所得、通报批评等全部处罚种类，'
                 '公示页正文为空、内容只在附件里的（不少地市局的送达公告、'
                 '决定书就是这种形态），已<b>下载并解析其 Word / PDF / Excel 文书</b>后并入本行，'
                 '并在「原文」列旁给出<b>文书</b>入口直达原件；'
@@ -382,7 +467,7 @@ def main():
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>合规案例库 · 合规无终点</title>
-<meta name="description" content="监管处罚与通报案例的结构化索引：按被处罚主体、处罚事由、违法类型、执法机关、依据法条与罚款幅度归类，逐条附发布机关官网原文深链，用于反查同类执法口径。">
+<meta name="description" content="监管处罚与通报案例的结构化索引：按被处罚主体、处罚事由、违法类型、执法机关、依据法条与实际处罚结果归类，逐条附发布机关官网原文深链，用于反查同类执法口径。">
 <link rel="stylesheet" href="../assets/style.css">
 <style>{css}</style>
 </head>
@@ -393,7 +478,7 @@ def main():
 <div class="pagehead"><div class="inner">
   <div class="crumb"><a href="../index.html">首页</a> / <a href="index.html">合规知识库</a> / 案例库</div>
   <h1>合规案例库</h1>
-  <p>把监管机关公开的处罚决定、通报与典型案例结构化：同类行为怎么定性、按哪条罚、罚到什么程度，一屏可查。</p>
+  <p>把监管机关公开的处罚决定、通报与典型案例结构化：同类行为怎么定性、按哪条罚、罚到什么程度，一屏可查。每条的「处罚事由」是认定违法事实的段落，「处罚」含罚款与吊销营业执照、停业整顿、通报等全部处罚种类。</p>
 </div></div>
 
 <main class="wrap">

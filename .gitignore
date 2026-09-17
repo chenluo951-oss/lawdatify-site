@@ -70,3 +70,10 @@ sources/appviol/.dateprobe.json
 # 页面实际消费的是 analytics.json；需要时用 `harvest_app_violations.py --apps-only` 秒级重算。
 # ⚠️ Git Data API 建 blob 单文件 >6MB 会静默失败（只报 _err:''），4MB 已逼近红线。
 sources/appviol/apps.json
+
+# 案例库全文缓存（仅本机用于重算「处罚事由 / 处罚」，体积大、不入仓、不上线）
+_qa/case_full.jsonl
+_qa/amr_backlog.log
+_qa/refresh_text.log
+_qa/backlog_finish.log
+_qa/backlog_harvest.log

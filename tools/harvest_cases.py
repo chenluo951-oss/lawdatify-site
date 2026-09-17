@@ -38,6 +38,7 @@ from urllib.parse import urlencode
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from case_text_clean import clean_fact, is_shell  # noqa: E402
+from case_reason import derive_fields  # noqa: E402
 from case_gate import classify  # noqa: E402
 
 HERE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -309,10 +310,13 @@ def parse_case(html, title, url, org_hint=""):
     # 把「来源：市场监管总局 市场监管部门针对电动自行车生产、销售领域违法违」整段吃掉，
     # 376 条记录各丢了几十字正文。统一改走 tools/case_text_clean.py（值限长 + 卡词边界）。
     fact = clean_fact(_dedupe_title(body, title), title)
-    return {
+    d = {
         "title": title, "url": url, "date": dt, "org": org, "type": ctype,
         "laws": laws, "fines": money, "fact": fact[:900],
     }
+    # 「处罚事由 / 处罚」用**未截断**正文算：决定段（罚款、吊销…）常写在决定书末尾，
+    # 900 字窗口到不了那儿（2026-09-17 用户反馈后补的口径）。
+    return derive_fields(d, fact)
 
 
 def _dedupe_title(body, title):

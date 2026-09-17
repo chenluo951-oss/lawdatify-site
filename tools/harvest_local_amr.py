@@ -61,6 +61,7 @@ from harvest_cases import (CASE_TYPES, LAW_RE, MONEY_RE, curl,  # noqa: E402
                            guess_type, textify)
 from case_text_clean import clean_fact  # noqa: E402
 from case_attach import attach_text, clean_attach_text  # noqa: E402
+from case_reason import derive_fields  # noqa: E402
 
 OUT = os.path.join(HERE, "sources", "cases", "local_amr.jsonl")
 
@@ -599,7 +600,7 @@ def parse_single(html_text, url, title, date, agency, kind="行政处罚决定�
     cause = re.sub(r"^[《〈「【“‘\"'、，,。；;：:]+", "", cause).strip()
     shown = f"{cause}案（{caseno}）" if (cause and caseno) else (
         f"{cause}案" if cause else title)
-    return {
+    rec = {
         "title": shown, "url": url, "date": d or "", "org": org, "agency": agency,
         "type": guess_type(shown, cause, fact[:400]), "laws": laws[:6], "fines": fines,
         "fact": fact[:900], "caseno": caseno, "kind": kind,
@@ -608,6 +609,8 @@ def parse_single(html_text, url, title, date, agency, kind="行政处罚决定�
         # 「文书附件」入口，用户能直接下到决定书原件。
         "attach": att.get("links") or [],
     }
+    # 事由/处罚按**未截断**正文抽（口径同 harvest_cases.parse_case）
+    return derive_fields(rec, fact)
 
 
 def load_existing():

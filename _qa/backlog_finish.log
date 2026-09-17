@@ -1,0 +1,109 @@
+11:58:32  ============================================================
+11:58:32  存量采集收尾开始
+11:58:32  ⏳ 等待 harvest_local_amr.py 退出（同一出口 IP，必须串行）…
+12:03:32  ✓ 采集已退出（等了 5.0 分钟）
+12:03:32  ▶ 案例·文书附件回填　$ tools/attach_backfill.py --limit 900
+12:36:32        … 20/306  回填 4  无附件 13  失败 2
+12:36:32        … 40/306  回填 5  无附件 24  失败 8
+12:36:32        … 60/306  回填 5  无附件 32  失败 18
+12:36:32        … 80/306  回填 5  无附件 45  失败 23
+12:36:32        … 120/306  回填 5  无附件 63  失败 37
+12:36:32        … 140/306  回填 5  无附件 69  失败 45
+12:36:32        … 160/306  回填 5  无附件 77  失败 45
+12:36:32        … 180/306  回填 5  无附件 80  失败 45
+12:36:32        … 200/306  回填 5  无附件 82  失败 45
+12:36:32        … 220/306  回填 5  无附件 83  失败 45
+12:36:32        … 240/306  回填 5  无附件 84  失败 45
+12:36:32        … 260/306  回填 5  无附件 87  失败 45
+12:36:32      ✓ 附件回填：更新 5 条 / 无附件 90 条 / 失败 85 条
+12:36:32      ✓ 全库仍无正文：94 条
+12:36:32      [WARNING] Metadata key "Pages" could not be parsed due to exception: maximum recursion depth exceeded
+12:36:32      [WARNING] Metadata key "Pages" could not be parsed due to exception: maximum recursion depth exceeded
+12:36:32      [WARNING] Metadata key "Pages" could not be parsed due to exception: maximum recursion depth exceeded
+12:36:32      [WARNING] Metadata key "Pages" could not be parsed due to exception: maximum recursion depth exceeded
+12:36:32  ✓ 案例·文书附件回填　退出码 0　1979.7s
+12:36:32  ▶ 重建案例库页面　$ tools/build_cases_page.py
+12:36:32      · 闸门过滤：733 → 637 条（滤除 96 条非处罚案例）
+12:36:32      ✓ kb/cases.html　637 条案例　669 KB（2026-09-17）
+12:36:32  ✓ 重建案例库页面　退出码 0　0.3s
+12:36:32  ▶ 刷新元数据　$ inject_meta.py
+12:36:32        kb/benchmarks.html       无变化
+12:36:32        news/calendar.html       无变化
+12:36:32        news/map.html            无变化
+12:36:32        news/app-violations.html 无变化
+12:36:32        news/algo-filing.html    无变化
+12:36:32        kb/cases.html            注入 ✓
+12:36:32        news/reports/合规资讯周报_2026-09-06.html 无变化
+12:36:32        news/reports/合规资讯周报_2026-09-06_深度分析版.html 无变化
+12:36:32        news/reports/合规资讯日报_2026-08-31.html 无变化
+12:36:32        news/reports/合规资讯日报_2026-08-31_深度分析版.html 无变化
+12:36:32        news/reports/合规资讯简报_2026-09-01.html 无变化
+12:36:32        news/reports/合规资讯简报_2026-09-01_深度分析版.html 无变化
+12:36:32        news/reports/合规资讯简报_2026-09-02.html 无变化
+12:36:32        news/reports/合规资讯简报_2026-09-02_深度分析版.html 无变化
+12:36:32        news/reports/合规资讯简报_2026-09-09.html 无变化
+12:36:32        news/reports/合规资讯简报_2026-09-09_深度分析版.html 无变化
+12:36:32        news/reports/合规资讯简报_2026-09-10.html 无变化
+12:36:32        news/reports/合规资讯简报_2026-09-10_深度分析版.html 无变化
+12:36:32  ✓ 刷新元数据　退出码 0　0.1s
+12:36:32  ▶ 刷新子导航　$ inject_subnav.py
+12:36:32      news/index.html ✓
+12:36:32        news/calendar.html ✓
+12:36:32        news/actions.html ✓
+12:36:32        news/map.html ✓
+12:36:32        news/app-violations.html ✓
+12:36:32        news/algo-filing.html ✓
+12:36:32        news/briefs.html ✓
+12:36:32        kb/index.html ✓
+12:36:32        kb/standards.html ✓
+12:36:32        kb/texts.html ✓
+12:36:32        kb/cases.html ✓
+12:36:32        kb/citations.html ✓
+12:36:32        kb/audit.html ✓
+12:36:32      子导航：13 个页面
+12:36:32  ✓ 刷新子导航　退出码 0　0.1s
+12:36:32  ▶ 统一外壳　$ unify_chrome.py
+12:36:32        kb/benchmarks.html       无变化
+12:36:32        news/calendar.html       无变化
+12:36:32        news/map.html            无变化
+12:36:32        news/app-violations.html 无变化
+12:36:32        news/algo-filing.html    无变化
+12:36:32        kb/cases.html            已统一 ✓
+12:36:32        news/reports/合规资讯周报_2026-09-06.html 无变化
+12:36:32        news/reports/合规资讯周报_2026-09-06_深度分析版.html 无变化
+12:36:32        news/reports/合规资讯日报_2026-08-31.html 无变化
+12:36:32        news/reports/合规资讯日报_2026-08-31_深度分析版.html 无变化
+12:36:32        news/reports/合规资讯简报_2026-09-01.html 无变化
+12:36:32        news/reports/合规资讯简报_2026-09-01_深度分析版.html 无变化
+12:36:32        news/reports/合规资讯简报_2026-09-02.html 无变化
+12:36:32        news/reports/合规资讯简报_2026-09-02_深度分析版.html 无变化
+12:36:32        news/reports/合规资讯简报_2026-09-09.html 无变化
+12:36:32        news/reports/合规资讯简报_2026-09-09_深度分析版.html 无变化
+12:36:32        news/reports/合规资讯简报_2026-09-10.html 无变化
+12:36:32        news/reports/合规资讯简报_2026-09-10_深度分析版.html 无变化
+12:36:32  ✓ 统一外壳　退出码 0　0.1s
+12:36:32  ▶ 上线前门禁　$ preflight.py
+12:36:33         0 ✓（beian.cac.gov.cn 为允许项）
+12:36:33      == C. 外链性质（栏目页 / 首页） ==
+12:36:33         ○ [home] https://beian.cac.gov.cn/
+12:36:33             ← ['analysis/algo-filing-guide.html', 'news/reports/合规资讯周报_2026-09-06.html']
+12:36:33         △ [list] https://www.citics.com/newsite/business/research_sales/research/
+12:36:33             ← ['kb/benchmarks.html']
+12:36:33         △ [list] https://www.meity.gov.in/data-protection-framework
+12:36:33             ← ['news/calendar.html', 'news/map.html']
+12:36:33         △ [list] https://www.samr.gov.cn/jzxts/ajgs/index.html
+12:36:33             ← ['news/actions.html', 'news/index.html']
+12:36:33         △ [list] https://www.shangyu.gov.cn/col/col1229703816/index.html
+12:36:33             ← ['news/index.html', 'news/reports/合规资讯日报_2026-08-31.html']
+12:36:33         △ [list] https://www.tianzhu.gov.cn/xwzx/bmdt/
+12:36:33             ← ['news/index.html', 'news/reports/合规资讯日报_2026-08-31.html']
+12:36:33         合计 6 条非深链（不阻断构建，建议逐条回溯官方具体页）
+12:36:33      == D. SVG 内混入 HTML 内联标签 ==
+12:36:33         0 ✓
+12:36:33      == 完成 ==
+12:36:33  ✓ 上线前门禁　退出码 0　0.3s
+12:36:33  ▶ 推送上线　$ push_via_api.py
+12:36:33      当前分支状态: ## main...origin/main [ahead 7, behind 33]
+12:36:33      无法获取远端 ref: {'_err': '', '_stderr': ''}
+12:36:33  ✗ 推送上线　退出码 1　0.2s
+12:36:33  存量采集收尾结束

@@ -43,6 +43,7 @@ sys.path.insert(0, os.path.join(HERE, "tools"))
 from case_attach import attach_text, attach_links, clean_attach_text  # noqa: E402
 from case_gate import classify                     # noqa: E402
 from case_subject import extract_subject           # noqa: E402
+from case_reason import derive_fields              # noqa: E402
 from case_text_clean import clean_fact, is_shell   # noqa: E402
 from harvest_cases import curl, parse_case         # noqa: E402
 
@@ -147,6 +148,12 @@ def main():
                     c["fines"] = parsed["fines"]
                 if not c.get("laws") and parsed.get("laws"):
                     c["laws"] = parsed["laws"]
+            except Exception:                            # noqa: BLE001
+                pass
+            # 回填后重算事由/处罚：送达公告的网页正文只是「现将…告知如下」，
+            # 真正的违法事实与处罚种类在决定书（附件）正文里。
+            try:
+                derive_fields(c, c["fact"])
             except Exception:                            # noqa: BLE001
                 pass
             fixed += 1
