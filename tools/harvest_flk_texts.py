@@ -32,6 +32,11 @@ SIG_API = FLK + "/law-search/download/pc"
 SRC = os.path.join(HERE, "sources", "standards", "flk_bulk.json")
 OUTDIR = os.path.join(HERE, "sources", "flk_texts")
 OUT = os.path.join(OUTDIR, "texts.jsonl")
+# 抓不到的条目（「无文字层 / 失败」）的累计失败次数。见 main() 注释：
+# 有一批条目是**确定性抓不到**的（扫描件无文字层、自治条例类公文），每次跑都会
+# 重试一遍并全部失败 —— 实测阶段① 收尾 5 条就要白花 4 分钟。累计到阈值后跳过，
+# 需要重试时加 --retry-failed。
+FAIL_LOG = os.path.join(OUTDIR, "failed.jsonl")
 JAR = os.path.join(OUTDIR, ".wzws_cookie.txt")
 TMP = os.path.join(OUTDIR, ".tmp")
 UA = ("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 "
@@ -123,6 +128,7 @@ def fetch_one(x, jar, slot, min_chars, min_docx=MIN_DOCX):
     按 slot 命名是为了多线程之间不互相覆盖。
     """
     bbbs, title, kind = x["b"], x.get("t") or "", x.get("k") or ""
+    got_file = False                 # 拿到过文件+字节 → 失败可归因于「无文字层」
     for fmt, fn, ext in (("word", docx_text, ".docx"), ("pdf", pdf_text, ".pdf")):
         url = signed_url(bbbs, fmt, jar=jar)
         if not url:
@@ -132,12 +138,14 @@ def fetch_one(x, jar, slot, min_chars, min_docx=MIN_DOCX):
         if not os.path.exists(p) or os.path.getsize(p) < 800:
             continue
         nbyte = os.path.getsize(p)
+        got_file = True
         txt = clean_text(fn(p), join_lines=(fmt == "pdf"))
         if len(txt) >= (min_docx if fmt == "word" else min_chars):
             return {"b": bbbs, "t": title, "k": kind, "o": x.get("o") or "",
                     "p": x.get("p") or "", "i": x.get("i") or "",
-                    "s": sxx_label(x.get("s")), "f": fmt, "n": len(txt), "x": txt}, nbyte
-    return None, 0
+                    "s": sxx_label(x.get("s")), "f": fmt, "n": len(txt), "x": txt}, nbyte, "ok"
+    # 区分两类失败：拿到过文件=确定性「无文字层」；连签名直链都没有=网络/WAF 抖动
+    return None, 0, ("no_text" if got_file else "no_url")
 
 
 def ole_text(path):
@@ -272,6 +280,34 @@ def load_done():
     return done
 
 
+def load_failed():
+    """返回 {bbbs: 累计失败次数}。坏行/缺文件都当空处理，绝不因此中断抓取。"""
+    out = {}
+    if os.path.exists(FAIL_LOG):
+        with open(FAIL_LOG, encoding="utf-8") as f:
+            for line in f:
+                line = line.strip()
+                if not line:
+                    continue
+                try:
+                    d = json.loads(line)
+                    out[d["b"]] = int(d.get("n") or 1)
+                except Exception:
+                    pass
+    return out
+
+
+def save_failed(counts):
+    """整文件重写失败台账（小文件，几十 KB 级）。"""
+    try:
+        with open(FAIL_LOG, "w", encoding="utf-8") as f:
+            for b, n in counts.items():
+                f.write(json.dumps({"b": b, "n": n},
+                                   ensure_ascii=False, separators=(",", ":")) + "\n")
+    except OSError:
+        pass                        # 台账写不了不影响抓取本身
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--kinds", default="", help="逗号分隔的类别白名单，默认内置重点层级")
@@ -283,6 +319,10 @@ def main():
                          "docx 必有文字层，短公文是真的短）" % MIN_DOCX)
     ap.add_argument("--sleep", type=float, default=0.6, help="每条间隔秒数")
     ap.add_argument("--fresh", action="store_true", help="忽略断点，重头抓")
+    ap.add_argument("--retry-failed", action="store_true",
+                    help="重置失败台账，重新尝试已判定抓不到的条目")
+    ap.add_argument("--max-fail", type=int, default=3,
+                    help="同一 bbbs 累计失败达到此次数后不再重试（默认 3）")
     ap.add_argument("--workers", type=int, default=1,
                     help="并发数。⚠️ 实测 >1 会触发 WAF 的 JS 挑战（302 循环 / 挑战页），"
                          "只能单线程慢跑；每个线程独立 cookie")
@@ -302,12 +342,16 @@ def main():
     targets.sort(key=lambda x: (order.get(x.get("k"), 99), x.get("t") or ""))
 
     done = set() if a.fresh else load_done()
-    todo = [x for x in targets if x["b"] not in done]
+    # 已知抓不到的条目：累计失败 >= max_fail 就跳过（否则每次跑都要白等它们超时重试）
+    fails = {} if (a.fresh or a.retry_failed) else load_failed()
+    hopeless = {b for b, n in fails.items() if n >= a.max_fail}
+    todo = [x for x in targets if x["b"] not in done and x["b"] not in hopeless]
     if a.limit:
         todo = todo[:a.limit]
 
     print(f"目标类别：{'、'.join(kinds)}")
-    print(f"命中 {len(targets)} 条，已完成 {len(done)} 条，本次待抓 {len(todo)} 条")
+    print(f"命中 {len(targets)} 条，已完成 {len(done)} 条，"
+          f"已放弃 {len(hopeless)} 条（失败≥{a.max_fail} 次），本次待抓 {len(todo)} 条")
     if not todo:
         print("没有待抓条目。")
         return
@@ -324,6 +368,7 @@ def main():
     ok = fail = empty = 0
     nbytes = 0
     counts = collections.Counter()
+    failed_ids = []
     t0 = time.time()
     fout = open(OUT, "a", encoding="utf-8")
 
@@ -337,7 +382,7 @@ def main():
     with ThreadPoolExecutor(max_workers=nw) as ex:
         futs = [ex.submit(job, (i % nw, x)) for i, x in enumerate(todo)]
         for n, fu in enumerate(as_completed(futs), 1):
-            slot, x, (rec, nbyte) = fu.result()
+            slot, x, (rec, nbyte, reason) = fu.result()
             title = x.get("t") or ""
             with lock:
                 if rec:
@@ -350,6 +395,7 @@ def main():
                     mark = "✓"
                 else:
                     empty += 1
+                    failed_ids.append(x["b"])
                     mark = "○"
                 if n % 20 == 0 or n <= 5:
                     el = time.time() - t0
@@ -358,6 +404,22 @@ def main():
                     print(f"  [{n}/{len(todo)}] {mark} {title[:32]}"
                           f"　({rate:.1f} 条/秒，约剩 {left:.0f} 分钟)")
     fout.close()
+
+    # 失败台账：只记「拿到过文件但无文字层」的确定性失败。
+    # 「连签名直链都拿不到」= WAF/网络抖动，不记账 —— 否则限流一轮就会把好条目永久拉黑。
+    det = [b for b, r in failed_ids if r == "no_text"]
+    flaky = len(failed_ids) - len(det)
+    if det:
+        for b in det:
+            fails[b] = fails.get(b, 0) + 1
+        save_failed(fails)
+        give_up = sum(1 for b in det if fails[b] >= a.max_fail)
+        print(f"失败台账：{len(det)} 条确定性无文字层已记账，"
+              f"其中 {give_up} 条达 {a.max_fail} 次，下次起跳过")
+    if flaky:
+        print(f"⚠️ {flaky} 条因取不到签名直链而失败（WAF/网络抖动），"
+              f"**未记账**，下次会重试")
+
     print(f"\n完成：成功 {ok}　无文字层/失败 {empty}　"
           f"下载累计 {nbytes / 1024 / 1024:.0f} MB　耗时 {(time.time() - t0) / 60:.1f} 分钟")
     for k, v in counts.most_common():
