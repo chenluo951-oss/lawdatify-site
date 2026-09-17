@@ -49,7 +49,12 @@ SCARRED = re.compile(
 
 
 def suspects(cases):
-    """需要重取的记录：带页面壳，或明显被截断。"""
+    """需要重取的记录：带页面壳、正文被吃掉，或**撞上 260 字旧上限被截断**。
+
+    第三条是 2026-09 新增：旧上限 260 字让 334 条记录写满即止，而案例库新加的
+    「被处罚主体」字段要从正文里取第一个企业名——正文被截断，名字就取不到。
+    """
+    from case_subject import extract_subject
     out = []
     for c in cases:
         f = c.get("fact") or ""
@@ -58,6 +63,14 @@ def suspects(cases):
             continue
         # 正文被吃掉的拼接痕迹：「信息 」后面直接接动词/名词（正常应是「信息来源：机关名」）
         if re.search(r"信息\s*[、，,。]|\s信息\s+[\u4e00-\u9fa5]{1,3}(?:部门|局|委)", f):
+            out.append(c)
+            continue
+        # 撞旧上限 + 正文没写完整（结尾不是句末标点）→ 主体大概率在被切掉的部分
+        if len(f) >= 240 and not re.search(r"[。！？；：”\"）)]$", f):
+            out.append(c)
+            continue
+        # 主体取不到，但正文还在 → 回原页看完整正文能不能提到
+        if f and not extract_subject(f, c.get("title"))[0]:
             out.append(c)
     return out
 
@@ -102,7 +115,7 @@ def main():
         nf = new.get("fact") or ""
         # 只在「变干净了」时替换：不是更短就更好，得先确认壳没了
         if nf and not is_shell(nf) and len(nf) >= 30:
-            c["fact"] = nf[:260]
+            c["fact"] = nf[:900]
             if not c.get("fines") and new.get("fines"):
                 c["fines"] = new["fines"]
             if not c.get("laws") and new.get("laws"):
@@ -112,7 +125,7 @@ def main():
             # 重取也拿不到干净正文（页面本身没正文）→ 就地清洗兜底
             cl = clean_fact(old, title)
             if cl and cl != old:
-                c["fact"] = cl[:260]
+                c["fact"] = cl[:900]
                 fixed += 1
             else:
                 shell_left += 1

@@ -299,14 +299,18 @@ def parse_case(html, title, url, org_hint=""):
         if re.search(pat, title) or (len(re.findall(pat, body[:2500])) >= 3):
             ctype = name
             break
-    # 事实摘要 = 正文剥掉「面包屑 + 元信息栏 + 页面功能件」后的前 260 字。
+    # 事实摘要 = 正文剥掉「面包屑 + 元信息栏 + 页面功能件」后的前 900 字。
+    # ⚠️ 原为 260：实测 699 条里 334 条撞顶被截断，而**被处罚主体**（第一个企业名）
+    # 常出现在 260 字之后（通报类正文先讲政策背景再讲个案）→ 案例库的
+    # 「被处罚主体」字段大面积取不到值。900 字足够覆盖绝大多数决定书正文，
+    # 页面侧再用「折叠 + 展开」控制观感。
     # ⚠️ 老写法用 `re.sub(r"来源：.{0,40}", " ")` 清「来源」，`.{0,40}` 贪婪且不限字符，
     # 把「来源：市场监管总局 市场监管部门针对电动自行车生产、销售领域违法违」整段吃掉，
     # 376 条记录各丢了几十字正文。统一改走 tools/case_text_clean.py（值限长 + 卡词边界）。
     fact = clean_fact(_dedupe_title(body, title), title)
     return {
         "title": title, "url": url, "date": dt, "org": org, "type": ctype,
-        "laws": laws, "fines": money, "fact": fact[:260],
+        "laws": laws, "fines": money, "fact": fact[:900],
     }
 
 
@@ -438,7 +442,7 @@ def main():
                 "laws": (["App违法违规收集使用个人信息行为认定方法"]
                          if re.search(r"app|个人信息|用户权益", _t, re.I) else []),
                 "fines": [],
-                "fact": _cats[:260],
+                "fact": _cats[:900],
                 "kind": preset.get("kind", "监管通报"),
             })
             continue

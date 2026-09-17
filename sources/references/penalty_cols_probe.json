@@ -1,38 +1,398 @@
 [
  {
-  "name": "部-国家外汇管理局",
-  "home": "https://www.safe.gov.cn/",
+  "name": "市-佛山",
+  "home": "https://fsamr.foshan.gov.cn/",
+  "status": "ok",
+  "pages": 15,
+  "cols": [
+   {
+    "text": "佛山市市场监督管理局网站",
+    "url": "https://fsamr.foshan.gov.cn/zwdt/tzgg/",
+    "detail_links": 20,
+    "penalty_titles": 1,
+    "samples": [
+     "致全市健康检查医疗机构、食品生产经营单位和从业人员的一封信",
+     "佛山市市场监督管理局关于拟取消第二类医疗器械经营备案的通告",
+     "佛山市市场监督管理局佛山市互联网信息办公室关于联合征集直播电商违法违规行为线索的通告",
+     "佛山市市场监督管理局关于开展2026年佛山标准产品申报工作的通知",
+     "佛山市市场监督管理局关于组织参加2026年粤港知识产权与中小企业发展（佛山）讲座的通知"
+    ],
+    "depth": 2,
+    "link_re": "https://fsamr\\.foshan\\.gov\\.cn/zwdt/tzgg/content/post_\\d+\\.html",
+    "page2": "",
+    "titlehit": ""
+   },
+   {
+    "text": "佛山市市场监督管理局网站",
+    "url": "https://fsamr.foshan.gov.cn/zwgk/zdlyxxgk/",
+    "detail_links": 20,
+    "penalty_titles": 1,
+    "samples": [
+     "佛山市市场监督管理局食品监督抽检信息通告（2026年第11期",
+     "广东省餐饮行业“价格诚信”行为指引",
+     "佛山市禅城区冠俊塑胶厂召回部分亿儫牌摩托车乘员头盔",
+     "询价通知书（2026年电动自行车产品质量专项快速检测项目）",
+     "2026年专利侵权纠纷处理案件信息公开表"
+    ],
+    "depth": 2,
+    "link_re": "https://fsamr\\.foshan\\.gov\\.cn/zwgk/zdlyxxgk/spypaqxxgk/zlxx/spzlxx/content/post_\\d+\\.html",
+    "page2": "https://fsamr.foshan.gov.cn/zwgk/zdlyxxgk/index_2.html",
+    "titlehit": ""
+   },
+   {
+    "text": "佛山市市场监督管理局网站",
+    "url": "https://fsamr.foshan.gov.cn/zwgk/",
+    "detail_links": 23,
+    "penalty_titles": 0,
+    "samples": [
+     "党组书记、局长、一级调研员",
+     "佛山市市场监督管理局2025年承办人大建议、政协提案的办...2025-12-11",
+     "关于对市政协十三届四次会议提案第20250260号的答复...2025-10-24",
+     "关于对市人大十六届五次会议建议第20250025号的答复...2025-06-27",
+     "佛山市市场监督管理局2024年承办人大建议、政协提案的办...2024-12-18"
+    ],
+    "depth": 2,
+    "link_re": "https://fsamr\\.foshan\\.gov\\.cn/zwgk/jgzn/ldzc/content/post_\\d+\\.html",
+    "page2": "",
+    "titlehit": ""
+   },
+   {
+    "text": "佛山市市场监督管理局网站",
+    "url": "https://fsamr.foshan.gov.cn/zwgk/zdlyxxgk/spypaqxxgk/index.html",
+    "detail_links": 20,
+    "penalty_titles": 0,
+    "samples": [
+     "佛山市市场监督管理局食品监督抽检信息通告（2026年第11期",
+     "佛山市市场监督管理局扎实开展“为何执法、为谁执法”大学习大讨论大提升活动",
+     "“小药师课堂”开讲！佛山市市场监督管理局带你揭秘中小学生安全用药那些事儿",
+     "佛山市2026年药械妆安全监测培训会举办",
+     "佛山市市场监督管理局食品监督抽检信息通告（2026年第10期）"
+    ],
+    "depth": 2,
+    "link_re": "https://fsamr\\.foshan\\.gov\\.cn/zwgk/zdlyxxgk/spypaqxxgk/zlxx/spzlxx/content/post_\\d+\\.html",
+    "page2": "https://fsamr.foshan.gov.cn/zwgk/zdlyxxgk/spypaqxxgk/index_2.html",
+    "titlehit": ""
+   }
+  ]
+ },
+ {
+  "name": "市-沧州",
+  "home": "https://scjgj.cangzhou.gov.cn/",
+  "status": "ok",
+  "pages": 7,
+  "cols": [
+   {
+    "text": "行政执法公示专栏",
+    "url": "https://scjgj.cangzhou.gov.cn/scjd/c116966/listDisplaySon.shtml",
+    "detail_links": 15,
+    "penalty_titles": 5,
+    "samples": [
+     "沧市监处罚〔2026〕243号沧州高新区泽涵日化店经营标签标注不符合要求的化妆品...",
+     "沧市监处罚〔2026〕245号沧州高新区依婷依秀服装店销售以不合格产品冒充合格的...",
+     "沧市监处罚〔2026〕246号高新技术产业开发区依品柏娅服装店销售以不合格产品冒...",
+     "沧市监处罚〔2026〕239号沧州高新区秀刚服装店销售侵犯注册商标专用权服装案",
+     "沧市监处罚〔2026〕235号高新技术产业开发区原木服装店未设立登记从事经营且销..."
+    ],
+    "depth": 2,
+    "link_re": "https://scjgj\\.cangzhou\\.gov\\.cn/scjd/c\\d+/\\d+/b\\d+fda\\d+dad\\d+dda\\d+d\\d+e\\d+ed\\d+c\\.shtml",
+    "page2": "",
+    "titlehit": ""
+   },
+   {
+    "text": "行政处罚公示",
+    "url": "https://scjgj.cangzhou.gov.cn/scjd/c116971/listDisplaySelf.shtml",
+    "detail_links": 15,
+    "penalty_titles": 5,
+    "samples": [
+     "沧市监处罚〔2026〕243号沧州高新区泽涵日化店经营标签标注不符合要求的化妆品...",
+     "沧市监处罚〔2026〕245号沧州高新区依婷依秀服装店销售以不合格产品冒充合格的...",
+     "沧市监处罚〔2026〕246号高新技术产业开发区依品柏娅服装店销售以不合格产品冒...",
+     "沧市监处罚〔2026〕239号沧州高新区秀刚服装店销售侵犯注册商标专用权服装案",
+     "沧市监处罚〔2026〕235号高新技术产业开发区原木服装店未设立登记从事经营且销..."
+    ],
+    "depth": 3,
+    "link_re": "https://scjgj\\.cangzhou\\.gov\\.cn/scjd/c\\d+/\\d+/b\\d+fda\\d+dad\\d+dda\\d+d\\d+e\\d+ed\\d+c\\.shtml",
+    "page2": "",
+    "titlehit": ""
+   },
+   {
+    "text": "公告公示",
+    "url": "https://scjgj.cangzhou.gov.cn/scjd/c100609/listDisplaySelf.shtml",
+    "detail_links": 15,
+    "penalty_titles": 2,
+    "samples": [
+     "沧州市市场监督管理局经济开发区分局关于对连续两年未报送并公示年度报告企业...",
+     "关于《河北省碳计量中心（基础化工）建设运营推进方案》公平竞争审查征求意见...",
+     "沧州市毛皮产品质量监督抽查实施细则（2026年版）",
+     "沧州市运河区市场监督管理局行政处罚决定书（沧运市监处罚【2026】612、（X）...",
+     "沧州市运河区市场监督管理局行政处罚决定书（沧运市监处罚【2026】471、（X）..."
+    ],
+    "depth": 2,
+    "link_re": "https://scjgj\\.cangzhou\\.gov\\.cn/scjd/c\\d+/\\d+/\\d+cefe\\d+e\\d+b\\d+fa\\d+a\\d+\\.shtml",
+    "page2": "",
+    "titlehit": ""
+   },
+   {
+    "text": "沧州市地方标准信息专栏",
+    "url": "https://scjgj.cangzhou.gov.cn/scjd/c123959/listDisplaySon.shtml",
+    "detail_links": 15,
+    "penalty_titles": 0,
+    "samples": [
+     "中华人民共和国标准化法",
+     "日光温室番茄侧枝扦插育苗技术规程",
+     "无人机防治林业病虫害作业技术规程",
+     "关于对沧州市地方标准《小径管磁粉检测操作规程（征求意见稿）》公开征求意见...",
+     "关于对沧州市地方标准《微咸水长期灌溉下土壤质量提升技术规程（征求意见稿）..."
+    ],
+    "depth": 2,
+    "link_re": "https://scjgj\\.cangzhou\\.gov\\.cn/scjd/c\\d+/\\d+/\\d+a\\d+d\\d+cb\\d+d\\d+c\\d+e\\d+\\.shtml",
+    "page2": "",
+    "titlehit": ""
+   }
+  ]
+ },
+ {
+  "name": "部-国家税务总局",
+  "home": "https://www.chinatax.gov.cn/",
+  "status": "ok",
+  "pages": 17,
+  "cols": [
+   {
+    "text": "各省税务局2018年政府信息公开年度报告汇总展示",
+    "url": "https://www.chinatax.gov.cn/chinatax/n810214/c102384r/c4179941/content.html",
+    "detail_links": 33,
+    "penalty_titles": 0,
+    "samples": [
+     "国家税务总局北京市税务局2018年政府信息公开年度报告",
+     "国家税务总局天津市税务局2018年政府信息公开年度报告",
+     "国家税务总局河北省税务局2018年政府信息公开年度报告",
+     "国家税务总局内蒙古自治区税务局2018年政府信息公开年度报告",
+     "国家税务总局辽宁省税务局2018年政府信息公开年度报告"
+    ],
+    "depth": 2,
+    "link_re": "http://beijing\\.chinatax\\.gov\\.cn/bjswj/c\\d+/\\d+/t\\d+_\\d+\\.shtml",
+    "page2": "",
+    "titlehit": ""
+   },
+   {
+    "text": "各省税务局2021年政府信息公开年度报告汇总展示",
+    "url": "https://www.chinatax.gov.cn/chinatax/n810214/c102384r/c5192259/content.html",
+    "detail_links": 32,
+    "penalty_titles": 0,
+    "samples": [],
+    "depth": 2,
+    "link_re": "http://beijing\\.chinatax\\.gov\\.cn/bjswj/c\\d+/\\d+/\\d+f\\d+ed\\d+ab\\d+d\\d+a\\d+f\\d+e\\d+ff\\.shtml",
+    "page2": "",
+    "titlehit": ""
+   },
+   {
+    "text": "各省税务局2020年政府信息公开年度报告汇总展示",
+    "url": "https://www.chinatax.gov.cn/chinatax/n810214/c102384r/c5192256/content.html",
+    "detail_links": 32,
+    "penalty_titles": 0,
+    "samples": [],
+    "depth": 2,
+    "link_re": "http://beijing\\.chinatax\\.gov\\.cn/bjswj/nb\\d+/\\d+/\\d+c\\d+c\\d+c\\d+bf\\d+f\\d+c\\d+d\\d+f\\d+b\\.shtml",
+    "page2": "",
+    "titlehit": ""
+   },
+   {
+    "text": "各省税务局2019年政府信息公开年度报告汇总展示",
+    "url": "https://www.chinatax.gov.cn/chinatax/n810214/c102384r/c5192253/content.html",
+    "detail_links": 32,
+    "penalty_titles": 0,
+    "samples": [],
+    "depth": 2,
+    "link_re": "http://beijing\\.chinatax\\.gov\\.cn/bjswj/c\\d+/\\d+/\\d+f\\d+f\\d+de\\d+f\\d+c\\d+c\\d+\\.shtml",
+    "page2": "",
+    "titlehit": ""
+   }
+  ]
+ },
+ {
+  "name": "省-福建",
+  "home": "https://scjgj.fujian.gov.cn/",
   "status": "ok",
   "pages": 9,
   "cols": [
    {
-    "text": "专题",
-    "url": "https://www.safe.gov.cn/safe/zt/index.html",
-    "detail_links": 20,
+    "text": "工业产品生产许可证制度改革专栏",
+    "url": "https://scjgj.fujian.gov.cn/zt/gyxkgg/",
+    "detail_links": 13,
     "penalty_titles": 0,
     "samples": [
-     "国家外汇管理局2025年度部门决算",
-     "国家外汇管理局2026年预算",
-     "国家外汇管理局政府网站工作年度报表（2025年）",
-     "国家外汇管理局政府网站监管年度报表（2025年）",
-     "国家外汇管理局2025年预算"
+     "福建省市场监管局关于注销190张行政许可证书的公告",
+     "市场监管总局关于公布工业产品生产许可证实施细则通则及24种产品生产许可证实施细则的公告",
+     "关于注销226张行政许可证书的公告",
+     "关于公布2024年度工业产品生产许可证审查员名单的公告",
+     "关于《国务院关于调整完善工业产品生产许可证管理目录的决定》的政策解读"
     ],
-    "depth": 1
+    "depth": 2,
+    "link_re": "https://scjgj\\.fujian\\.gov\\.cn/zt/gyxkgg/zzwj/\\d+/t\\d+_\\d+\\.htm",
+    "page2": "",
+    "titlehit": ""
    },
    {
-    "text": "政府信息公开制度",
-    "url": "https://www.safe.gov.cn/safe/zfxxgkzd/index.html",
-    "detail_links": 14,
-    "penalty_titles": 1,
+    "text": "特种设备行政许可改革专栏",
+    "url": "https://scjgj.fujian.gov.cn/zt/tzsbxzxkggzl/",
+    "detail_links": 12,
+    "penalty_titles": 0,
     "samples": [
-     "国务院办公厅政府信息与政务公开办公室关于印发《中华人民共和国政府信息公开工作年度...",
-     "国务院办公厅政府信息与政务公开办公室关于做好规章集中公开并动态更新工作的通知",
-     "国务院办公厅转发司法部关于审理政府信息公开行政复议案件若干问题指导意见的通知",
-     "国务院办公厅政府信息与政务公开办公室关于政府信息公开工作年度报告有关事项的通知",
-     "国务院办公厅政府信息与政务公开办公室关于机构改革后政府信息公开申请办理问题的解释"
+     "市场监管总局关于发布《特种设备焊接操作人员考核细则》的公告",
+     "市场监管总局关于发布《特种设备使用管理规则》的公告",
+     "关于《福建省乙类特种设备检验机构核准实施细则》政策解读",
+     "福建省市场监管局关于印发《福建省乙类特种设备检验机构核准实施细则》的通知",
+     "福建省市场监管局关于注销190张行政许可证书的公告"
     ],
-    "depth": 2
+    "depth": 2,
+    "link_re": "https://scjgj\\.fujian\\.gov\\.cn/zt/tzsbxzxkggzl/zzwj/\\d+/t\\d+_\\d+\\.htm",
+    "page2": "",
+    "titlehit": ""
    },
+   {
+    "text": "定量包装商品生产企业计量保证能力自我声明专栏（已归档）",
+    "url": "https://scjgj.fujian.gov.cn/zt/dlbznlsm/",
+    "detail_links": 7,
+    "penalty_titles": 0,
+    "samples": [
+     "宁德鲁花食用油有限公司自我声明",
+     "福建省定量包装生产企业计量保证能力自我声明名单",
+     "福建省市场监督管理局关于全面实施定量包装商品生产企业计量保证能力自我声明制度的通知",
+     "附件1.定量包装商品生产企业计量保证能力自我声明",
+     "附件2.定量包装商品生产企业基本信息"
+    ],
+    "depth": 2,
+    "link_re": "https://scjgj\\.fujian\\.gov\\.cn/zt/dlbznlsm/zcwj/\\d+/t\\d+_\\d+\\.htm",
+    "page2": "",
+    "titlehit": ""
+   }
+  ]
+ },
+ {
+  "name": "市-常州",
+  "home": "https://scjgj.changzhou.gov.cn/",
+  "status": "ok",
+  "pages": 3,
+  "cols": [
+   {
+    "text": "常州市市场监督管理局",
+    "url": "https://scjgj.changzhou.gov.cn/class/CNNFKLQJ",
+    "detail_links": 15,
+    "penalty_titles": 0,
+    "samples": [
+     "·质量在我手中",
+     "·关于茶几产品的消费提示",
+     "·激情常缆、质赢未来",
+     "·常州检标院参与的工业机器人计量检定科研项目获奖",
+     "·《港华行》-以客为尊首，一心为民生"
+    ],
+    "depth": 2,
+    "link_re": "https://scjgj\\.changzhou\\.gov\\.cn/html/gsj/\\d+/JCBKKLCI_\\d+/\\d+\\.html",
+    "page2": "https://scjgj.changzhou.gov.cn/class/CNNFKLQJ/2",
+    "titlehit": ""
+   }
+  ]
+ },
+ {
+  "name": "市-渭南",
+  "home": "https://scjgj.weinan.gov.cn/",
+  "status": "ok",
+  "pages": 6,
+  "cols": [
+   {
+    "text": "市局抽检公告",
+    "url": "https://scjgj.weinan.gov.cn/ztzl/spzl/sjcjgg/1.html",
+    "detail_links": 22,
+    "penalty_titles": 0,
+    "samples": [
+     "关于18批次食品不合格情况的通告（2026年第8期）",
+     "关于19批次食品不合格情况的通告（2026年第7期）",
+     "关于29批次食品不合格情况的通告（2026年第6期）",
+     "关于33批次食品不合格情况的通告（2026年第5期）",
+     "关于22批次食品不合格情况的通告（2026年第4期）"
+    ],
+    "depth": 2,
+    "link_re": "https://scjgj\\.weinan\\.gov\\.cn/ztzl/spzl/sjcjgg/\\d+\\.html",
+    "page2": "https://scjgj.weinan.gov.cn/ztzl/spzl/sjcjgg/2.html",
+    "titlehit": ""
+   }
+  ]
+ },
+ {
+  "name": "市-阜阳",
+  "home": "https://amr.fy.gov.cn/",
+  "status": "ok",
+  "pages": 7,
+  "cols": [
+   {
+    "text": "阜阳市市场监督管理局政府信息公开指南",
+    "url": "https://amr.fy.gov.cn/OpennessGuide/show/500.html",
+    "detail_links": 12,
+    "penalty_titles": 0,
+    "samples": [],
+    "depth": 2,
+    "link_re": "https://amr\\.fy\\.gov\\.cn/OpennessAnnualReport/show/\\d+\\.html",
+    "page2": "",
+    "titlehit": ""
+   }
+  ]
+ },
+ {
+  "name": "省-安徽",
+  "home": "https://amr.ah.gov.cn/",
+  "status": "ok",
+  "pages": 10,
+  "cols": [
+   {
+    "text": "“铁拳”行动典型案例曝光台",
+    "url": "https://amr.ah.gov.cn/xwdt/ztzl/tqxddxalpgt/index.html",
+    "detail_links": 14,
+    "penalty_titles": 0,
+    "samples": [
+     "安徽省市场监管局公布2026“守护消费”铁拳行动第六批典型案例",
+     "安徽省市场监管局公布2026“守护消费”铁拳行动第二批典型案例",
+     "安徽省市场监管局公布2026“守护消费”铁拳行动第一批典型案例",
+     "李中来宿检查时要求全力做好市场监管工作",
+     "全省市场监管工作会议在合肥召开"
+    ],
+    "depth": 2,
+    "link_re": "https://amr\\.ah\\.gov\\.cn/xwdt/ztzl/tqxddxalpgt/dxal/\\d+\\.html",
+    "page2": "",
+    "titlehit": ""
+   }
+  ]
+ },
+ {
+  "name": "省-贵州",
+  "home": "https://amr.guizhou.gov.cn/",
+  "status": "ok",
+  "pages": 8,
+  "cols": [
+   {
+    "text": "贵州省市场监督管理局",
+    "url": "https://amr.guizhou.gov.cn/zwgk/xxgkml/jcxxgk/xzcf/",
+    "detail_links": 15,
+    "penalty_titles": 4,
+    "samples": [
+     "贵州省市场监督管理局询问通知书公告",
+     "贵州省市场监督管理局行政处罚决定书公告",
+     "贵州省市场监督管理局行政处罚决定书公告",
+     "贵州省市场监督管理局行政处罚决定书（黔市监价处〔2024〕3号）",
+     "贵州省市场监督管理局行政处罚决定书（黔市监价处〔2024〕4号）"
+    ],
+    "depth": 2,
+    "link_re": "https://amr\\.guizhou\\.gov\\.cn/zwgk/xxgkml/jcxxgk/xzcf/\\d+/t\\d+_\\d+\\.html",
+    "page2": "",
+    "titlehit": ""
+   }
+  ]
+ },
+ {
+  "name": "部-国家外汇管理局",
+  "home": "https://www.safe.gov.cn/",
+  "status": "ok",
+  "pages": 7,
+  "cols": [
    {
     "text": "专栏文章",
     "url": "https://www.safe.gov.cn/safe/zlwz/index.html",
@@ -45,19 +405,10 @@
      "稳步推进外汇领域高水平开放不断提升跨境投融资便利化水平",
      "持续深化跨境贸易外汇便利化改革"
     ],
-    "depth": 2
-   },
-   {
-    "text": "外汇监管执法公示平台",
-    "url": "https://www.safe.gov.cn/safe/whjgzfgspt/index.html",
-    "detail_links": 3,
-    "penalty_titles": 1,
-    "samples": [
-     "国家外汇管理局执法证信息表",
-     "外汇管理行政执法流程图（检查处罚）",
-     "国家外汇管理局监管事项目录清单"
-    ],
-    "depth": 1
+    "depth": 2,
+    "link_re": "https://www\\.safe\\.gov\\.cn/safe/\\d+/\\d+/\\d+\\.html",
+    "page2": "",
+    "titlehit": ""
    }
   ]
  },
@@ -65,256 +416,1049 @@
   "name": "部-国家邮政局",
   "home": "https://www.spb.gov.cn/",
   "status": "ok",
-  "pages": 8,
-  "cols": [
-   {
-    "text": "政府信息公开",
-    "url": "https://www.spb.gov.cn/gjyzj/c100009/c100014/xxgk_index.shtml",
-    "detail_links": 1006,
-    "penalty_titles": 0,
-    "samples": [
-     "国务院办公厅关于印发《政府信息公开信息处理费管理办法》的通知",
-     "中华人民共和国政府信息公开条例",
-     "国务院办公厅关于施行《中华人民共和国政府信息公开条例》若干问题的意见",
-     "国家邮政局关于发布《村级寄递物流综合服务站服务规范》邮政行业标准的通告",
-     "关于刘莹职务任免的通知"
-    ],
-    "depth": 1
-   },
-   {
-    "text": "政府信息公开",
-    "url": "https://www.spb.gov.cn/gjyzj/c100009/c100014/xxgk_index.shtml?tab=gkzd",
-    "detail_links": 1006,
-    "penalty_titles": 0,
-    "samples": [
-     "国务院办公厅关于印发《政府信息公开信息处理费管理办法》的通知",
-     "中华人民共和国政府信息公开条例",
-     "国务院办公厅关于施行《中华人民共和国政府信息公开条例》若干问题的意见",
-     "国家邮政局关于发布《村级寄递物流综合服务站服务规范》邮政行业标准的通告",
-     "关于刘莹职务任免的通知"
-    ],
-    "depth": 1
-   },
-   {
-    "text": "政府信息公开",
-    "url": "https://www.spb.gov.cn/gjyzj/c100009/c100014/xxgk_index.shtml?tab=gkndbg",
-    "detail_links": 1006,
-    "penalty_titles": 0,
-    "samples": [
-     "国务院办公厅关于印发《政府信息公开信息处理费管理办法》的通知",
-     "中华人民共和国政府信息公开条例",
-     "国务院办公厅关于施行《中华人民共和国政府信息公开条例》若干问题的意见",
-     "国家邮政局关于发布《村级寄递物流综合服务站服务规范》邮政行业标准的通告",
-     "关于刘莹职务任免的通知"
-    ],
-    "depth": 1
-   },
-   {
-    "text": "政府信息公开",
-    "url": "https://www.spb.gov.cn/gjyzj/c100009/c100014/xxgk_index.shtml?tab=zdgkml",
-    "detail_links": 1006,
-    "penalty_titles": 0,
-    "samples": [
-     "国务院办公厅关于印发《政府信息公开信息处理费管理办法》的通知",
-     "中华人民共和国政府信息公开条例",
-     "国务院办公厅关于施行《中华人民共和国政府信息公开条例》若干问题的意见",
-     "国家邮政局关于发布《村级寄递物流综合服务站服务规范》邮政行业标准的通告",
-     "关于刘莹职务任免的通知"
-    ],
-    "depth": 1
-   }
-  ]
- },
- {
-  "name": "部-国家粮食和物资储备局",
-  "home": "https://www.lswz.gov.cn/",
-  "status": "ok",
-  "pages": 11,
-  "cols": [
-   {
-    "text": "通知公告",
-    "url": "https://www.lswz.gov.cn/html/tzgg/index.shtml",
-    "detail_links": 25,
-    "penalty_titles": 0,
-    "samples": [
-     "国家粮食和物资储备局办公室关于印发《粮食质量安全档案样本》和《粮食出库检验报告样...",
-     "国家粮食和物资储备局公告（2026年第5号）",
-     "国家粮食和物资储备局公告（2026年第4号）",
-     "关于2026年“全谷物好营养更健康”和“少吃油吃好油更健康”典型案例的公示",
-     "关于对《国家粮食和物资储备局技术创新中心管理办法（征求意见稿）》和《国家粮食和物..."
-    ],
-    "depth": 1
-   },
-   {
-    "text": "政府信息公开制度",
-    "url": "https://www.lswz.gov.cn/html/zfxxgk/zfxxgkzd.shtml",
-    "detail_links": 16,
-    "penalty_titles": 1,
-    "samples": [
-     "中华人民共和国政府信息公开条例",
-     "国务院办公厅关于印发《政府信息公开信息处理费管理办法》的通知",
-     "国务院办公厅转发司法部关于审理政府信息公开行政复议案件若干问题指导意见的通知",
-     "国务院办公厅政府信息与政务公开办公室关于做好规章集中公开并动态更新工作的通知",
-     "国务院办公厅政府信息与政务公开办公室关于印发《中华人民共和国政府信息公开工作..."
-    ],
-    "depth": 1
-   },
-   {
-    "text": "政府信息公开制度",
-    "url": "https://www.lswz.gov.cn/html/zfxxgk/zfxxgkzd.shtml#lswz",
-    "detail_links": 16,
-    "penalty_titles": 1,
-    "samples": [
-     "中华人民共和国政府信息公开条例",
-     "国务院办公厅关于印发《政府信息公开信息处理费管理办法》的通知",
-     "国务院办公厅转发司法部关于审理政府信息公开行政复议案件若干问题指导意见的通知",
-     "国务院办公厅政府信息与政务公开办公室关于做好规章集中公开并动态更新工作的通知",
-     "国务院办公厅政府信息与政务公开办公室关于印发《中华人民共和国政府信息公开工作..."
-    ],
-    "depth": 2
-   }
-  ]
- },
- {
-  "name": "部-国家档案局",
-  "home": "https://www.saac.gov.cn/",
-  "status": "ok",
   "pages": 5,
   "cols": [
    {
-    "text": "通知公告",
-    "url": "https://www.saac.gov.cn/daj/tzgg/list.shtml",
-    "detail_links": 20,
-    "penalty_titles": 0,
-    "samples": [
-     "香港档案学深造证书班培训通知",
-     "国家档案局办公室关于开展2026年度国家档案局优秀科技成果奖申报工作的通知",
-     "国家档案局办公室关于公布人工智能应用试点项目的通知",
-     "国家档案局评选确定人工智能应用试点",
-     "国家档案局关于开展2026年档案系列高级职称评审工作的通知"
-    ],
-    "depth": 1
-   },
-   {
     "text": "政府信息公开",
-    "url": "https://www.saac.gov.cn/daj/xxgk/list.shtml",
-    "detail_links": 20,
+    "url": "https://www.spb.gov.cn/gjyzj/c100009/xxgk_index.shtml",
+    "detail_links": 1005,
     "penalty_titles": 0,
     "samples": [
-     "国家档案局政府信息公开实施办法",
-     "国家档案局政府信息公开指南",
-     "国家档案局本级2025年度决算",
-     "国家档案局2025年度部门决算",
-     "国家档案局本级2026年单位预算"
+     "国务院办公厅关于印发《政府信息公开信息处理费管理办法》的通知",
+     "中华人民共和国政府信息公开条例",
+     "国务院办公厅关于施行《中华人民共和国政府信息公开条例》若干问题的意见",
+     "国家邮政局关于发布《村级寄递物流综合服务站服务规范》邮政行业标准的通告",
+     "国家邮政局关于公开征求《亚太经合组织第三十三次领导人非正式会议》纪念邮票图案意见的通知"
     ],
-    "depth": 1
+    "depth": 2,
+    "link_re": "https://www\\.spb\\.gov\\.cn/gjyzj/c\\d+/\\d+/\\d+cd\\d+f\\d+e\\d+a\\d+a\\d+e\\d+ba\\d+\\.shtml",
+    "page2": "",
+    "titlehit": ""
    }
   ]
  },
  {
-  "name": "部-生态环境部",
-  "home": "https://www.mee.gov.cn/",
-  "status": "ok",
+  "name": "市-三明",
+  "home": "https://scjgj.sm.gov.cn/",
+  "status": "unreachable",
+  "cols": []
+ },
+ {
+  "name": "市-上饶",
+  "home": "https://scjgj.shangrao.gov.cn/",
+  "status": "unreachable",
+  "cols": []
+ },
+ {
+  "name": "市-东莞",
+  "home": "https://scjgj.dg.gov.cn/",
+  "status": "unreachable",
+  "cols": []
+ },
+ {
+  "name": "市-中山",
+  "home": "https://www.zs.gov.cn/scjgj/",
+  "status": "no_column",
+  "pages": 1,
+  "cols": []
+ },
+ {
+  "name": "市-临沂",
+  "home": "https://scjgj.linyi.gov.cn/",
+  "status": "unreachable",
+  "cols": []
+ },
+ {
+  "name": "市-丽水",
+  "home": "https://scjgj.lishui.gov.cn/",
+  "status": "unreachable",
+  "cols": []
+ },
+ {
+  "name": "市-乌鲁木齐",
+  "home": "https://scjgj.urumqi.gov.cn/",
+  "status": "unreachable",
+  "cols": []
+ },
+ {
+  "name": "市-乐山",
+  "home": "https://scjgj.leshan.gov.cn/",
+  "status": "unreachable",
+  "cols": []
+ },
+ {
+  "name": "市-九江",
+  "home": "https://scjgj.jiujiang.gov.cn/",
+  "status": "unreachable",
+  "cols": []
+ },
+ {
+  "name": "市-保定",
+  "home": "https://scjgj.baoding.gov.cn/",
+  "status": "no_column",
+  "pages": 1,
+  "cols": []
+ },
+ {
+  "name": "市-信阳",
+  "home": "https://scjgj.xinyang.gov.cn/",
+  "status": "no_column",
+  "pages": 2,
+  "cols": []
+ },
+ {
+  "name": "市-兰州",
+  "home": "https://scjgj.lanzhou.gov.cn/",
+  "status": "no_column",
   "pages": 3,
-  "cols": [
-   {
-    "text": "政府信息公开",
-    "url": "https://www.mee.gov.cn/xxgk/list/index.shtml?id=1",
-    "detail_links": 6,
-    "penalty_titles": 0,
-    "samples": [
-     "《生态环境部政府信息主动公开基本目录》（公告2019年第9号）",
-     "行政规范性文件",
-     "建议提案处理",
-     "国务院研究室"
-    ],
-    "depth": 1
-   },
-   {
-    "text": "政府信息公开",
-    "url": "https://www.mee.gov.cn/xxgk/list/index.shtml?id=2",
-    "detail_links": 6,
-    "penalty_titles": 0,
-    "samples": [
-     "《生态环境部政府信息主动公开基本目录》（公告2019年第9号）",
-     "行政规范性文件",
-     "建议提案处理",
-     "国务院研究室"
-    ],
-    "depth": 1
-   }
-  ]
+  "cols": []
  },
  {
-  "name": "部-住房和城乡建设部",
-  "home": "https://www.mohurd.gov.cn/",
-  "status": "ok",
-  "pages": 7,
-  "cols": [
-   {
-    "text": "政府信息公开制度",
-    "url": "https://www.mohurd.gov.cn/gongkai/gkgd/index.html",
-    "detail_links": 14,
-    "penalty_titles": 1,
-    "samples": [
-     "国务院办公厅转发司法部关于审理政府信息公开行政复议案件若干问题指导意见的通知",
-     "国务院办公厅政府信息与政务公开办公室关于转发《江苏省政府信息公开申请办理答复规范》的函",
-     "国务院办公厅政府信息与政务公开办公室关于印发《中华人民共和国政府信息公开工作年度报告格式》的通知",
-     "国务院办公厅政府信息与政务公开办公室关于做好规章集中公开并动态更新工作的通知",
-     "国务院办公厅关于印发《公共企事业单位信息公开规定制定办法》的通知"
-    ],
-    "depth": 1
-   }
-  ]
+  "name": "市-包头",
+  "home": "https://scjgj.baotou.gov.cn/",
+  "status": "unreachable",
+  "cols": []
  },
  {
-  "name": "部-国家统计局",
-  "home": "https://www.stats.gov.cn/",
-  "status": "ok",
+  "name": "市-北海",
+  "home": "https://scjgj.beihai.gov.cn/",
+  "status": "unreachable",
+  "cols": []
+ },
+ {
+  "name": "市-十堰",
+  "home": "https://scjgj.shiyan.gov.cn/",
+  "status": "unreachable",
+  "cols": []
+ },
+ {
+  "name": "市-南京",
+  "home": "https://scjgj.nanjing.gov.cn/",
+  "status": "unreachable",
+  "cols": []
+ },
+ {
+  "name": "市-南充",
+  "home": "https://scjgj.nanchong.gov.cn/",
+  "status": "unreachable",
+  "cols": []
+ },
+ {
+  "name": "市-南宁",
+  "home": "https://scjgj.nanning.gov.cn/",
+  "status": "no_column",
+  "pages": 1,
+  "cols": []
+ },
+ {
+  "name": "市-南昌",
+  "home": "https://scjgj.nc.gov.cn/",
+  "status": "unreachable",
+  "cols": []
+ },
+ {
+  "name": "市-南通",
+  "home": "https://scjgj.nantong.gov.cn/",
+  "status": "no_column",
+  "pages": 3,
+  "cols": []
+ },
+ {
+  "name": "市-南阳",
+  "home": "https://scjgj.nanyang.gov.cn/",
+  "status": "unreachable",
+  "cols": []
+ },
+ {
+  "name": "市-厦门",
+  "home": "https://scjgj.xm.gov.cn/",
+  "status": "unreachable",
+  "cols": []
+ },
+ {
+  "name": "市-台州",
+  "home": "https://scjgj.taizhou.gov.cn/",
+  "status": "no_column",
   "pages": 2,
-  "cols": [
-   {
-    "text": "专题",
-    "url": "https://www.stats.gov.cn/zt_18555/",
-    "detail_links": 4,
-    "penalty_titles": 0,
-    "samples": [
-     "国务院研究室",
-     "国际组织网站",
-     "国务院研究室",
-     "国际组织网站"
-    ],
-    "depth": 1
-   }
-  ]
+  "cols": []
  },
  {
-  "name": "部-自然资源部",
-  "home": "https://www.mnr.gov.cn/",
-  "status": "ok",
+  "name": "市-合肥",
+  "home": "https://amr.hefei.gov.cn/",
+  "status": "no_column",
+  "pages": 1,
+  "cols": []
+ },
+ {
+  "name": "市-吉林市",
+  "home": "https://scjgj.jlcity.gov.cn/",
+  "status": "unreachable",
+  "cols": []
+ },
+ {
+  "name": "市-呼和浩特",
+  "home": "https://scjgj.huhhot.gov.cn/",
+  "status": "unreachable",
+  "cols": []
+ },
+ {
+  "name": "市-咸阳",
+  "home": "https://scjgj.xianyang.gov.cn/",
+  "status": "unreachable",
+  "cols": []
+ },
+ {
+  "name": "市-哈尔滨",
+  "home": "https://scjgj.harbin.gov.cn/",
+  "status": "unreachable",
+  "cols": []
+ },
+ {
+  "name": "市-唐山",
+  "home": "https://scjgj.tangshan.gov.cn/",
+  "status": "unreachable",
+  "cols": []
+ },
+ {
+  "name": "市-商丘",
+  "home": "https://scjgj.shangqiu.gov.cn/",
+  "status": "no_column",
+  "pages": 20,
+  "cols": []
+ },
+ {
+  "name": "市-嘉兴",
+  "home": "https://scjgj.jiaxing.gov.cn/",
+  "status": "no_column",
+  "pages": 1,
+  "cols": []
+ },
+ {
+  "name": "市-大同",
+  "home": "https://scjgj.dt.gov.cn/",
+  "status": "unreachable",
+  "cols": []
+ },
+ {
+  "name": "市-大庆",
+  "home": "https://scjgj.daqing.gov.cn/",
+  "status": "unreachable",
+  "cols": []
+ },
+ {
+  "name": "市-大连",
+  "home": "https://scjgj.dl.gov.cn/",
+  "status": "unreachable",
+  "cols": []
+ },
+ {
+  "name": "市-天水",
+  "home": "https://scjgj.tianshui.gov.cn/",
+  "status": "unreachable",
+  "cols": []
+ },
+ {
+  "name": "市-太原",
+  "home": "https://scjgj.taiyuan.gov.cn/",
+  "status": "no_column",
+  "pages": 5,
+  "cols": []
+ },
+ {
+  "name": "市-威海",
+  "home": "https://scjgj.weihai.gov.cn/",
+  "status": "no_column",
   "pages": 2,
-  "cols": [
-   {
-    "text": "自然资源部行政执法公示（执法查处类）",
-    "url": "https://www.mnr.gov.cn/zt/zh/xzzfgs/",
-    "detail_links": 35,
-    "penalty_titles": 0,
-    "samples": [
-     "中华人民共和国矿产资源法",
-     "中华人民共和国黑土地保护法",
-     "中华人民共和国土地管理法",
-     "中华人民共和国矿产资源法（2009年修正）",
-     "中华人民共和国城乡规划法"
-    ],
-    "depth": 1
-   }
-  ]
+  "cols": []
+ },
+ {
+  "name": "市-宁德",
+  "home": "https://scjgj.ningde.gov.cn/",
+  "status": "unreachable",
+  "cols": []
+ },
+ {
+  "name": "市-宁波",
+  "home": "https://scjgj.ningbo.gov.cn/",
+  "status": "no_column",
+  "pages": 1,
+  "cols": []
+ },
+ {
+  "name": "市-安庆",
+  "home": "https://amr.anqing.gov.cn/",
+  "status": "no_column",
+  "pages": 9,
+  "cols": []
+ },
+ {
+  "name": "市-安阳",
+  "home": "https://scjgj.anyang.gov.cn/",
+  "status": "unreachable",
+  "cols": []
+ },
+ {
+  "name": "市-宜宾",
+  "home": "https://scjgj.yibin.gov.cn/",
+  "status": "no_column",
+  "pages": 2,
+  "cols": []
+ },
+ {
+  "name": "市-宜昌",
+  "home": "https://scjgj.yichang.gov.cn/",
+  "status": "unreachable",
+  "cols": []
+ },
+ {
+  "name": "市-宜春",
+  "home": "https://scjgj.yichun.gov.cn/",
+  "status": "unreachable",
+  "cols": []
+ },
+ {
+  "name": "市-宝鸡",
+  "home": "https://scjgj.baoji.gov.cn/",
+  "status": "unreachable",
+  "cols": []
+ },
+ {
+  "name": "市-宿迁",
+  "home": "https://scjgj.suqian.gov.cn/",
+  "status": "no_column",
+  "pages": 3,
+  "cols": []
+ },
+ {
+  "name": "市-岳阳",
+  "home": "https://amr.yueyang.gov.cn/",
+  "status": "no_column",
+  "pages": 1,
+  "cols": []
+ },
+ {
+  "name": "市-常德",
+  "home": "https://amr.changde.gov.cn/",
+  "status": "unreachable",
+  "cols": []
+ },
+ {
+  "name": "市-广州",
+  "home": "https://scjgj.gz.gov.cn/",
+  "status": "no_column",
+  "pages": 2,
+  "cols": []
+ },
+ {
+  "name": "市-廊坊",
+  "home": "https://scjgj.lf.gov.cn/",
+  "status": "unreachable",
+  "cols": []
+ },
+ {
+  "name": "市-开封",
+  "home": "https://scjgj.kaifeng.gov.cn/",
+  "status": "unreachable",
+  "cols": []
+ },
+ {
+  "name": "市-徐州",
+  "home": "https://scjgj.xz.gov.cn/",
+  "status": "no_column",
+  "pages": 4,
+  "cols": []
+ },
+ {
+  "name": "市-德州",
+  "home": "https://scjgj.dezhou.gov.cn/",
+  "status": "unreachable",
+  "cols": []
+ },
+ {
+  "name": "市-德阳",
+  "home": "https://scjgj.deyang.gov.cn/",
+  "status": "unreachable",
+  "cols": []
+ },
+ {
+  "name": "市-惠州",
+  "home": "https://hzamr.huizhou.gov.cn/",
+  "status": "no_column",
+  "pages": 1,
+  "cols": []
+ },
+ {
+  "name": "市-成都",
+  "home": "https://scjgj.chengdu.gov.cn/",
+  "status": "unreachable",
+  "cols": []
+ },
+ {
+  "name": "市-扬州",
+  "home": "https://scjgj.yangzhou.gov.cn/",
+  "status": "no_column",
+  "pages": 3,
+  "cols": []
+ },
+ {
+  "name": "市-新乡",
+  "home": "https://scjgj.xinxiang.gov.cn/",
+  "status": "unreachable",
+  "cols": []
+ },
+ {
+  "name": "市-日照",
+  "home": "https://scjgj.rizhao.gov.cn/",
+  "status": "unreachable",
+  "cols": []
+ },
+ {
+  "name": "市-昌吉",
+  "home": "https://scjgj.cj.gov.cn/",
+  "status": "unreachable",
+  "cols": []
+ },
+ {
+  "name": "市-曲靖",
+  "home": "https://scjgj.qujing.gov.cn/",
+  "status": "unreachable",
+  "cols": []
+ },
+ {
+  "name": "市-杭州",
+  "home": "https://scjgj.hangzhou.gov.cn/",
+  "status": "unreachable",
+  "cols": []
+ },
+ {
+  "name": "市-柳州",
+  "home": "https://scjgj.liuzhou.gov.cn/",
+  "status": "unreachable",
+  "cols": []
+ },
+ {
+  "name": "市-株洲",
+  "home": "https://amr.zhuzhou.gov.cn/",
+  "status": "unreachable",
+  "cols": []
+ },
+ {
+  "name": "市-桂林",
+  "home": "https://scjgj.guilin.gov.cn/",
+  "status": "unreachable",
+  "cols": []
+ },
+ {
+  "name": "市-榆林",
+  "home": "https://scjgj.yl.gov.cn/",
+  "status": "unreachable",
+  "cols": []
+ },
+ {
+  "name": "市-武汉",
+  "home": "https://scjgj.wuhan.gov.cn/",
+  "status": "no_column",
+  "pages": 4,
+  "cols": []
+ },
+ {
+  "name": "市-汉中",
+  "home": "https://scjgj.hanzhong.gov.cn/",
+  "status": "unreachable",
+  "cols": []
+ },
+ {
+  "name": "市-汕头",
+  "home": "https://stamr.shantou.gov.cn/",
+  "status": "unreachable",
+  "cols": []
+ },
+ {
+  "name": "市-沈阳",
+  "home": "https://scj.shenyang.gov.cn/",
+  "status": "no_column",
+  "pages": 1,
+  "cols": []
+ },
+ {
+  "name": "市-泉州",
+  "home": "https://scjgj.quanzhou.gov.cn/",
+  "status": "no_column",
+  "pages": 3,
+  "cols": []
+ },
+ {
+  "name": "市-泉州",
+  "home": "https://scjgj.quanzhou.gov.cn/",
+  "status": "no_column",
+  "pages": 3,
+  "cols": []
+ },
+ {
+  "name": "市-泰安",
+  "home": "https://scjgj.taian.gov.cn/",
+  "status": "no_column",
+  "pages": 1,
+  "cols": []
+ },
+ {
+  "name": "市-泰州",
+  "home": "https://scjgj.taizhou.gov.cn/",
+  "status": "no_column",
+  "pages": 2,
+  "cols": []
+ },
+ {
+  "name": "市-洛阳",
+  "home": "https://scjgj.ly.gov.cn/",
+  "status": "unreachable",
+  "cols": []
+ },
+ {
+  "name": "市-济南",
+  "home": "https://scjgj.jinan.gov.cn/",
+  "status": "unreachable",
+  "cols": []
+ },
+ {
+  "name": "市-济宁",
+  "home": "https://scjgj.jining.gov.cn/",
+  "status": "unreachable",
+  "cols": []
+ },
+ {
+  "name": "市-海口",
+  "home": "https://scjgj.haikou.gov.cn/",
+  "status": "unreachable",
+  "cols": []
+ },
+ {
+  "name": "市-淄博",
+  "home": "https://scjgj.zibo.gov.cn/",
+  "status": "unreachable",
+  "cols": []
+ },
+ {
+  "name": "市-淮安",
+  "home": "https://scjgj.huaian.gov.cn/",
+  "status": "no_column",
+  "pages": 3,
+  "cols": []
+ },
+ {
+  "name": "市-清远",
+  "home": "https://scjgj.gdqy.gov.cn/",
+  "status": "unreachable",
+  "cols": []
+ },
+ {
+  "name": "市-温州",
+  "home": "https://wzmsa.wenzhou.gov.cn/",
+  "status": "no_column",
+  "pages": 1,
+  "cols": []
+ },
+ {
+  "name": "市-湖州",
+  "home": "https://scjgj.huzhou.gov.cn/",
+  "status": "no_column",
+  "pages": 3,
+  "cols": []
+ },
+ {
+  "name": "市-湘潭",
+  "home": "https://amr.xiangtan.gov.cn/",
+  "status": "no_column",
+  "pages": 1,
+  "cols": []
+ },
+ {
+  "name": "市-湛江",
+  "home": "https://scjgj.zhanjiang.gov.cn/",
+  "status": "unreachable",
+  "cols": []
+ },
+ {
+  "name": "市-滁州",
+  "home": "https://amr.chuzhou.gov.cn/",
+  "status": "unreachable",
+  "cols": []
+ },
+ {
+  "name": "市-滨州",
+  "home": "https://scjgj.binzhou.gov.cn/",
+  "status": "unreachable",
+  "cols": []
+ },
+ {
+  "name": "市-漳州",
+  "home": "https://scjgj.zhangzhou.gov.cn/",
+  "status": "unreachable",
+  "cols": []
+ },
+ {
+  "name": "市-潍坊",
+  "home": "https://scjgj.weifang.gov.cn/",
+  "status": "no_column",
+  "pages": 2,
+  "cols": []
+ },
+ {
+  "name": "市-烟台",
+  "home": "https://scjgj.yantai.gov.cn/",
+  "status": "no_column",
+  "pages": 1,
+  "cols": []
+ },
+ {
+  "name": "市-玉溪",
+  "home": "https://scjgj.yuxi.gov.cn/",
+  "status": "unreachable",
+  "cols": []
+ },
+ {
+  "name": "市-珠海",
+  "home": "https://scjgj.zhuhai.gov.cn/",
+  "status": "unreachable",
+  "cols": []
+ },
+ {
+  "name": "市-盐城",
+  "home": "https://scjgj.yancheng.gov.cn/",
+  "status": "no_column",
+  "pages": 1,
+  "cols": []
+ },
+ {
+  "name": "市-石家庄",
+  "home": "https://scjgj.sjz.gov.cn/",
+  "status": "unreachable",
+  "cols": []
+ },
+ {
+  "name": "市-福州",
+  "home": "https://scjgj.fuzhou.gov.cn/",
+  "status": "unreachable",
+  "cols": []
+ },
+ {
+  "name": "市-绍兴",
+  "home": "https://scjgj.sx.gov.cn/",
+  "status": "unreachable",
+  "cols": []
+ },
+ {
+  "name": "市-绵阳",
+  "home": "https://scjgj.mianyang.gov.cn/",
+  "status": "unreachable",
+  "cols": []
+ },
+ {
+  "name": "市-聊城",
+  "home": "https://scjgj.liaocheng.gov.cn/",
+  "status": "unreachable",
+  "cols": []
+ },
+ {
+  "name": "市-肇庆",
+  "home": "https://scjgj.zhaoqing.gov.cn/",
+  "status": "unreachable",
+  "cols": []
+ },
+ {
+  "name": "市-舟山",
+  "home": "https://scjgj.zhoushan.gov.cn/",
+  "status": "unreachable",
+  "cols": []
+ },
+ {
+  "name": "市-芜湖",
+  "home": "https://amr.wuhu.gov.cn/",
+  "status": "no_column",
+  "pages": 10,
+  "cols": []
+ },
+ {
+  "name": "市-苏州",
+  "home": "https://scjgj.suzhou.gov.cn/",
+  "status": "no_column",
+  "pages": 2,
+  "cols": []
+ },
+ {
+  "name": "市-茂名",
+  "home": "https://scjgj.maoming.gov.cn/",
+  "status": "unreachable",
+  "cols": []
+ },
+ {
+  "name": "市-荆州",
+  "home": "https://scjgj.jingzhou.gov.cn/",
+  "status": "no_column",
+  "pages": 1,
+  "cols": []
+ },
+ {
+  "name": "市-莆田",
+  "home": "https://scjgj.putian.gov.cn/",
+  "status": "no_column",
+  "pages": 1,
+  "cols": []
+ },
+ {
+  "name": "市-菏泽",
+  "home": "https://scjgj.heze.gov.cn/",
+  "status": "unreachable",
+  "cols": []
+ },
+ {
+  "name": "市-营口",
+  "home": "https://scjgj.yingkou.gov.cn/",
+  "status": "no_column",
+  "pages": 3,
+  "cols": []
+ },
+ {
+  "name": "市-蚌埠",
+  "home": "https://amr.bengbu.gov.cn/",
+  "status": "unreachable",
+  "cols": []
+ },
+ {
+  "name": "市-衡阳",
+  "home": "https://amr.hengyang.gov.cn/",
+  "status": "unreachable",
+  "cols": []
+ },
+ {
+  "name": "市-衢州",
+  "home": "https://scjgj.quzhou.gov.cn/",
+  "status": "unreachable",
+  "cols": []
+ },
+ {
+  "name": "市-襄阳",
+  "home": "https://scjgj.xiangyang.gov.cn/",
+  "status": "unreachable",
+  "cols": []
+ },
+ {
+  "name": "市-西宁",
+  "home": "https://scjgj.xining.gov.cn/",
+  "status": "no_column",
+  "pages": 3,
+  "cols": []
+ },
+ {
+  "name": "市-西安",
+  "home": "https://scjgj.xa.gov.cn/",
+  "status": "unreachable",
+  "cols": []
+ },
+ {
+  "name": "市-许昌",
+  "home": "https://scjgj.xuchang.gov.cn/",
+  "status": "unreachable",
+  "cols": []
+ },
+ {
+  "name": "市-贵阳",
+  "home": "https://scjgj.guiyang.gov.cn/",
+  "status": "unreachable",
+  "cols": []
+ },
+ {
+  "name": "市-赣州",
+  "home": "https://scjgj.ganzhou.gov.cn/",
+  "status": "unreachable",
+  "cols": []
+ },
+ {
+  "name": "市-达州",
+  "home": "https://scjgj.dazhou.gov.cn/",
+  "status": "no_column",
+  "pages": 2,
+  "cols": []
+ },
+ {
+  "name": "市-连云港",
+  "home": "https://scjgj.lyg.gov.cn/",
+  "status": "unreachable",
+  "cols": []
+ },
+ {
+  "name": "市-遵义",
+  "home": "https://amr.zunyi.gov.cn/",
+  "status": "unreachable",
+  "cols": []
+ },
+ {
+  "name": "市-邯郸",
+  "home": "https://scjgj.hd.gov.cn/",
+  "status": "unreachable",
+  "cols": []
+ },
+ {
+  "name": "市-郑州",
+  "home": "https://scjgj.zhengzhou.gov.cn/",
+  "status": "unreachable",
+  "cols": []
+ },
+ {
+  "name": "市-鄂尔多斯",
+  "home": "https://scjgj.ordos.gov.cn/",
+  "status": "unreachable",
+  "cols": []
+ },
+ {
+  "name": "市-金华",
+  "home": "https://scjgj.jinhua.gov.cn/",
+  "status": "unreachable",
+  "cols": []
+ },
+ {
+  "name": "市-银川",
+  "home": "https://scjgj.yinchuan.gov.cn/",
+  "status": "unreachable",
+  "cols": []
+ },
+ {
+  "name": "市-锦州",
+  "home": "https://scjgj.jz.gov.cn/",
+  "status": "unreachable",
+  "cols": []
+ },
+ {
+  "name": "市-镇江",
+  "home": "https://scjgj.zhenjiang.gov.cn/",
+  "status": "no_column",
+  "pages": 2,
+  "cols": []
+ },
+ {
+  "name": "市-长春",
+  "home": "https://scjgj.changchun.gov.cn/",
+  "status": "unreachable",
+  "cols": []
+ },
+ {
+  "name": "市-长沙",
+  "home": "https://amr.changsha.gov.cn/",
+  "status": "unreachable",
+  "cols": []
+ },
+ {
+  "name": "市-鞍山",
+  "home": "https://scjgj.anshan.gov.cn/",
+  "status": "unreachable",
+  "cols": []
+ },
+ {
+  "name": "市-马鞍山",
+  "home": "https://amr.mas.gov.cn/",
+  "status": "unreachable",
+  "cols": []
+ },
+ {
+  "name": "市-齐齐哈尔",
+  "home": "https://scjgj.qqhr.gov.cn/",
+  "status": "unreachable",
+  "cols": []
+ },
+ {
+  "name": "市-龙岩",
+  "home": "https://scjgj.longyan.gov.cn/",
+  "status": "no_column",
+  "pages": 1,
+  "cols": []
+ },
+ {
+  "name": "省-上海",
+  "home": "https://scjgj.sh.gov.cn/",
+  "status": "no_column",
+  "pages": 1,
+  "cols": []
+ },
+ {
+  "name": "省-云南",
+  "home": "https://amr.yn.gov.cn/",
+  "status": "no_column",
+  "pages": 1,
+  "cols": []
+ },
+ {
+  "name": "省-内蒙古",
+  "home": "https://amr.nmg.gov.cn/",
+  "status": "no_column",
+  "pages": 1,
+  "cols": []
+ },
+ {
+  "name": "省-北京",
+  "home": "https://scjgj.beijing.gov.cn/",
+  "status": "no_column",
+  "pages": 3,
+  "cols": []
+ },
+ {
+  "name": "省-吉林",
+  "home": "https://scjg.jl.gov.cn/",
+  "status": "no_column",
+  "pages": 1,
+  "cols": []
+ },
+ {
+  "name": "省-四川",
+  "home": "https://scjgj.sc.gov.cn/",
+  "status": "no_column",
+  "pages": 6,
+  "cols": []
+ },
+ {
+  "name": "省-天津",
+  "home": "https://scjg.tj.gov.cn/",
+  "status": "no_column",
+  "pages": 3,
+  "cols": []
+ },
+ {
+  "name": "省-宁夏",
+  "home": "https://scjg.nx.gov.cn/",
+  "status": "unreachable",
+  "cols": []
+ },
+ {
+  "name": "省-山东",
+  "home": "https://amr.shandong.gov.cn/",
+  "status": "unreachable",
+  "cols": []
+ },
+ {
+  "name": "省-山西",
+  "home": "https://scjgj.shanxi.gov.cn/",
+  "status": "no_column",
+  "pages": 1,
+  "cols": []
+ },
+ {
+  "name": "省-广西",
+  "home": "https://scjdglj.gxzf.gov.cn/",
+  "status": "unreachable",
+  "cols": []
+ },
+ {
+  "name": "省-新疆",
+  "home": "https://scjgj.xinjiang.gov.cn/",
+  "status": "no_column",
+  "pages": 3,
+  "cols": []
+ },
+ {
+  "name": "省-江苏",
+  "home": "https://amr.jiangsu.gov.cn/",
+  "status": "unreachable",
+  "cols": []
+ },
+ {
+  "name": "省-江西",
+  "home": "https://amr.jiangxi.gov.cn/",
+  "status": "no_column",
+  "pages": 6,
+  "cols": []
+ },
+ {
+  "name": "省-河北",
+  "home": "https://scjg.hebei.gov.cn/",
+  "status": "no_column",
+  "pages": 6,
+  "cols": []
+ },
+ {
+  "name": "省-河南",
+  "home": "https://scjg.henan.gov.cn/",
+  "status": "no_column",
+  "pages": 6,
+  "cols": []
+ },
+ {
+  "name": "省-浙江",
+  "home": "https://zjamr.zj.gov.cn/",
+  "status": "no_column",
+  "pages": 6,
+  "cols": []
+ },
+ {
+  "name": "省-海南",
+  "home": "https://amr.hainan.gov.cn/",
+  "status": "no_column",
+  "pages": 3,
+  "cols": []
+ },
+ {
+  "name": "省-湖北",
+  "home": "https://scjg.hubei.gov.cn/",
+  "status": "no_column",
+  "pages": 1,
+  "cols": []
+ },
+ {
+  "name": "省-湖南",
+  "home": "https://amr.hunan.gov.cn/",
+  "status": "no_column",
+  "pages": 3,
+  "cols": []
+ },
+ {
+  "name": "省-甘肃",
+  "home": "https://scjg.gansu.gov.cn/",
+  "status": "no_column",
+  "pages": 1,
+  "cols": []
+ },
+ {
+  "name": "省-西藏",
+  "home": "https://amr.xizang.gov.cn/",
+  "status": "unreachable",
+  "cols": []
+ },
+ {
+  "name": "省-辽宁",
+  "home": "https://scjg.ln.gov.cn/",
+  "status": "no_column",
+  "pages": 14,
+  "cols": []
+ },
+ {
+  "name": "省-重庆",
+  "home": "https://scjgj.cq.gov.cn/",
+  "status": "no_column",
+  "pages": 2,
+  "cols": []
+ },
+ {
+  "name": "省-陕西",
+  "home": "https://scjgj.shaanxi.gov.cn/",
+  "status": "unreachable",
+  "cols": []
+ },
+ {
+  "name": "省-青海",
+  "home": "https://scjgj.qinghai.gov.cn/",
+  "status": "no_column",
+  "pages": 8,
+  "cols": []
+ },
+ {
+  "name": "省-黑龙江",
+  "home": "https://amr.hlj.gov.cn/",
+  "status": "unreachable",
+  "cols": []
  },
  {
   "name": "部-中国人民银行",
   "home": "https://www.pbc.gov.cn/",
   "status": "no_column",
-  "pages": 11,
+  "pages": 7,
   "cols": []
  },
  {
@@ -328,12 +1472,19 @@
   "name": "部-中国证监会",
   "home": "https://www.csrc.gov.cn/",
   "status": "no_column",
-  "pages": 11,
+  "pages": 19,
   "cols": []
  },
  {
   "name": "部-交通运输部",
   "home": "https://www.mot.gov.cn/",
+  "status": "no_column",
+  "pages": 2,
+  "cols": []
+ },
+ {
+  "name": "部-住房和城乡建设部",
+  "home": "https://www.mohurd.gov.cn/",
   "status": "no_column",
   "pages": 2,
   "cols": []
@@ -379,6 +1530,13 @@
   "cols": []
  },
  {
+  "name": "部-国家档案局",
+  "home": "https://www.saac.gov.cn/",
+  "status": "no_column",
+  "pages": 5,
+  "cols": []
+ },
+ {
   "name": "部-国家烟草专卖局",
   "home": "https://www.tobacco.gov.cn/",
   "status": "unreachable",
@@ -388,7 +1546,7 @@
   "name": "部-国家疾病预防控制局",
   "home": "https://www.ndcpa.gov.cn/",
   "status": "no_column",
-  "pages": 5,
+  "pages": 4,
   "cols": []
  },
  {
@@ -399,10 +1557,17 @@
   "cols": []
  },
  {
-  "name": "部-国家税务总局",
-  "home": "https://www.chinatax.gov.cn/",
+  "name": "部-国家粮食和物资储备局",
+  "home": "https://www.lswz.gov.cn/",
   "status": "no_column",
-  "pages": 11,
+  "pages": 10,
+  "cols": []
+ },
+ {
+  "name": "部-国家统计局",
+  "home": "https://www.stats.gov.cn/",
+  "status": "no_column",
+  "pages": 2,
   "cols": []
  },
  {
@@ -457,6 +1622,20 @@
   "name": "部-海关总署",
   "home": "https://www.customs.gov.cn/",
   "status": "unreachable",
+  "cols": []
+ },
+ {
+  "name": "部-生态环境部",
+  "home": "https://www.mee.gov.cn/",
+  "status": "no_column",
+  "pages": 1,
+  "cols": []
+ },
+ {
+  "name": "部-自然资源部",
+  "home": "https://www.mnr.gov.cn/",
+  "status": "no_column",
+  "pages": 2,
   "cols": []
  }
 ]

@@ -92,6 +92,17 @@ def is_detail(href):
 PENALTY_TXT = re.compile(r"处罚|罚〔|罚\[|违法|决定书|案件|没收|罚款|责令")
 
 
+# ⚠️ 「每个政府站都有」的噪声栏目：两跳 BFS 里它们几乎必定被命中，把真正的
+# 「重点领域信息公开 → 行政处罚公示」挤出名额（实测整轮 197 个机构跑下来，
+# 候选绝大多数是「政府信息公开制度 / 公开指南 / 政策法规」）。
+# 这类必须先挡掉，否则下潜名额全被吃掉。
+NOISE_KW = re.compile(
+    r"信息公开制度|信息公开指南|信息公开年报|公开工作年度报告|依申请公开|"
+    r"公开目录|公开标准|公开办法|政府信息公开条例|政务公开要点|政务公开工作|"
+    r"政策法规|法律法规|规章|规范性文件|解读|一图读懂|知识|科普|"
+    r"财政|预算|决算|采购|招标|人事|任免|党建|廉政|学习|教育|创先争优|"
+    r"调查问卷|意见征集|互动|留言|访谈|办事|服务|指南|下载|导航")
+
 # 明显不是处罚公示的栏目（政策法规、办事指南、解读…）
 BAD_KW = re.compile(r"政策法规|法律法规|办事指南|办事服务|政策解读|知识|科普|"
                     r"投诉举报|消费提示|征求意见|招标|采购|人事|党建|"
@@ -117,7 +128,8 @@ def curl(url, timeout=18):
         return ""
 
 
-MAX_PAGES = 11       # 每个机构最多抓多少页（含首页）
+MAX_PAGES = 44   # ⚠️ 下潜到三跳后单站页数明显上升；砍太小会让「重点领域→处罚公示」
+                # 在第 3 跳就被预算截断，表现为「明明有处罚栏却探不到」       # 每个机构最多抓多少页（含首页）
 MIN_DETAIL = 3       # 详情链接至少这么多条才算「栏目页」
 
 
@@ -169,7 +181,7 @@ def probe_one(seed):
             continue
         L = links(p, url)
         det = [h for _t, h in L if is_detail(h)]
-        if depth > 0 and len(set(det)) >= MIN_DETAIL:
+        if depth > 1 and len(set(det)) >= MIN_DETAIL:
             heads, pk, dhs = [], 0, []
             for t, h in L:
                 if is_detail(h):
@@ -187,20 +199,26 @@ def probe_one(seed):
                           "page2": page2_of(url, p),
                           "titlehit": ""})
         # 继续下潜
-        if depth < 2:
+        if depth < 3:
             n_enq = 0
             for t, h in L:
                 if h in seen or not h.startswith(host):
                     continue
-                if len(t) > 30 or BAD_KW.search(t) or is_detail(h):
+                if len(t) > 30 or BAD_KW.search(t) or NOISE_KW.search(t) \
+                        or is_detail(h):
                     continue
                 if not (NAV_KW.search(t) or HUB_KW.search(t)):
                     continue
                 queue.append((h, depth + 1))
                 n_enq += 1
-                if n_enq >= (14 if depth == 0 else 8):
+                if n_enq >= (14 if depth == 0 else (10 if depth == 1 else 6)):
                     break
-    found.sort(key=lambda c: -c["detail_links"])
+    # 排序：栏目名直接点了「处罚 / 双公示 / 执法」的最优先，其次看标题命中数，
+    # 最后才看详情链接数（否则一个 1006 条的政府信息公开栏目永远排第一）
+    def _rank(c):
+        named = 1 if re.search(r"处罚|双公示|执法|查处|案件", c["text"]) else 0
+        return (-named, -c["penalty_titles"], -c["detail_links"])
+    found.sort(key=_rank)
     return {"name": name, "home": home,
             "status": "ok" if found else "no_column",
             "pages": pages, "cols": found[:4]}

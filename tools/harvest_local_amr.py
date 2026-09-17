@@ -172,6 +172,16 @@ SITES = [
         "titlehit": r"挂牌督办|调查处理结果的通报|违法案件通报",
         "kind_label": "行政执法查处通报",
     },
+    {
+        "key": "gz", "name": "贵州省市场监督管理局",
+        "agency": "贵州省市场监督管理局", "kind": "single",
+        # 省局里少见的「省本级行政处罚决定书」全文栏（带文号，如 黔市监价处〔2024〕3号）。
+        # ⚠️ 该栏目杂着「询问通知书公告」「送达公告」等程序性文书，靠 titlehit 只留处罚类。
+        "col": "https://amr.guizhou.gov.cn/zwgk/xxgkml/jcxxgk/xzcf/",
+        "page": "index_%d.html", "maxpage": 5,
+        "link": r"zwgk/xxgkml/jcxxgk/xzcf/\d{6}/t\d{8}_\d+\.html",
+        "titlehit": r"行政处罚",
+    },
 ]
 
 # 表格表头关键词 → 标准字段
@@ -328,7 +338,7 @@ def case_from_row(cells, hmap, title, url, date, agency, org=ORG_CAT,
         "type": guess_type(name, cell("fact"), cell("basis")),
         "laws": laws[:6],
         "fines": fines,
-        "fact": re.sub(r"\s+", " ", fact)[:260],
+        "fact": re.sub(r"\s+", " ", fact)[:900],
         "caseno": caseno,
         "kind": kind,
         # 来源标记：下游 harvest_cases.py 靠它做镜像删除（比按 org 名判断稳，
@@ -550,7 +560,7 @@ def parse_single(html_text, url, title, date, agency, kind="行政处罚决定�
     return {
         "title": shown, "url": url, "date": d or "", "org": org, "agency": agency,
         "type": guess_type(shown, cause, fact[:400]), "laws": laws[:6], "fines": fines,
-        "fact": fact[:260], "caseno": caseno, "kind": kind,
+        "fact": fact[:900], "caseno": caseno, "kind": kind,
         "src": "local_amr",
     }
 
