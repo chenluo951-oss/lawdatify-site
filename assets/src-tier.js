@@ -61,7 +61,8 @@
   var MEDIA_HOSTS = [
     'people.com.cn', 'cpc.people.com.cn', 'xinhuanet.com', 'news.cn', 'cctv.com',
     'cnr.cn', 'gmw.cn', 'chinanews.com.cn', 'ce.cn', 'china.com.cn',
-    'qstheory.cn', 'stdaily.com', 'thepaper.cn', 'jfdaily.com'
+    'qstheory.cn', 'stdaily.com', 'thepaper.cn', 'jfdaily.com',
+    'vnanet.vn'   // 越南通讯社（TTXVN，国家通讯社）→ 官方媒体档
   ];
   var ACADEMIC_HOSTS = [
     'caict.ac.cn', 'tc260.org.cn', 'cnis.ac.cn', 'sacinfo.org.cn', 'isc.org.cn',

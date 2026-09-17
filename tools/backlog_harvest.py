@@ -41,10 +41,18 @@ def log(msg):
 
 
 def running(pattern):
+    """进程是否在跑。
+
+    ⚠️ 必须排掉 `/bin/zsh -c …` 包装进程：自动化的 shell 包装命令行里**整段包含了**
+    被执行的脚本路径，只按子串匹配会把「包装进程」当成目标进程，导致永远判定为「还在跑」。
+    """
     r = subprocess.run(["ps", "-Ao", "command"], capture_output=True, text=True)
     for ln in (r.stdout or "").splitlines():
-        if pattern in ln and "backlog_harvest" not in ln and "grep" not in ln:
-            return True
+        if pattern not in ln:
+            continue
+        if "zsh -c" in ln or "bash -c" in ln or "backlog_harvest" in ln or "grep" in ln:
+            continue
+        return True
     return False
 
 

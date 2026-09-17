@@ -48,6 +48,31 @@ def html_files():
                 yield os.path.join(root, f)
 
 
+# SVG 的 <text> 里**不能**用 HTML 内联标签。按 HTML5「foreign content」规则，
+# 解析器遇到 <b>/<i>/<span>/<em>/<strong>… 会直接弹出 SVG 上下文，
+# 之后剩下的 <text>/<rect> 全被当成普通 HTML 元素 —— 图示会被撑高、文字溢出、
+# 连 <figcaption> 都会被塞进一个游离的 <rect> 里。
+# （2026-09-17 实测：analysis/food-label.html 图 1 因此从 345px 变成 654px。）
+SVG_BLOCK = re.compile(r"<svg\b.*?</svg>", re.S | re.I)
+SVG_HTML_TAG = re.compile(r"</?(b|i|em|strong|span|small|u|sup|sub|code|p|div)\b", re.I)
+
+
+def scan_svg_html_tags():
+    hits = []
+    for p in html_files():
+        t = open(p, encoding="utf-8", errors="ignore").read()
+        n, sample = 0, ""
+        for m in SVG_BLOCK.finditer(t):
+            for tag in SVG_HTML_TAG.finditer(m.group(0)):
+                n += 1
+                if not sample:
+                    i = max(0, tag.start() - 40)
+                    sample = m.group(0)[i:tag.end() + 30].replace("\n", " ")
+        if n:
+            hits.append((os.path.relpath(p, HERE), n, sample))
+    return hits
+
+
 def strip_node_ids(check):
     hits = []
     for p in html_files():
@@ -145,6 +170,18 @@ def main():
             print(f'   {mark} [{v["depth"]}] {u[:100]}')
             print(f'       ← {sorted(set(v["pages"]))[:2]}')
         print(f"   合计 {len(bad)} 条非深链（不阻断构建，建议逐条回溯官方具体页）")
+
+    print("== D. SVG 内混入 HTML 内联标签 ==")
+    hits = scan_svg_html_tags()
+    if not hits:
+        print("   0 ✓")
+    else:
+        exit_code = 1
+        print("   ✗ 阻断：HTML 解析器遇到 SVG 里的 <b>/<i>/<span> 会**跳出 SVG 上下文**，")
+        print("     后半段图示会被当成普通 HTML 解析 —— 表现为图示变高、内容溢出、图注被吞。")
+        print("     改法：写成 <tspan font-weight=\"700\">…</tspan> / <tspan font-style=\"italic\">…</tspan>。")
+        for p, n, sample in hits:
+            print(f'     {p}  {n} 处  例：{sample}')
 
     print("== 完成 ==")
     sys.exit(exit_code)

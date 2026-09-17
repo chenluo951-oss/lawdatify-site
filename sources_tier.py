@@ -251,6 +251,8 @@ GOV_MEDIA_HOSTS = {
     "stcn.com", "www.stcn.com",              # 证券时报（人民日报社主管）
     "jschina.com.cn", "jsnews.jschina.com.cn",  # 中国江苏网（新华报业）
     "jntimes.cn",                            # 江南时报（新华报业）
+    # 境外官方通讯社 / 国家新闻机构（对应「官方媒体」档，非二手转载）
+    "vnanet.vn", "en.vnanet.vn",             # 越南通讯社（TTXVN，国家通讯社）
 }
 
 # ---------------------------------------------------------------- 学术 / 协会

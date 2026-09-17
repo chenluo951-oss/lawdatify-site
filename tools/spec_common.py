@@ -65,44 +65,60 @@ def page(title, desc, crumb, h1, lead, body, css=""):
 
 
 COMMON_CSS = """
-.sp-kpi{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin:22px 0 6px}
+/* 2026-09-17 数据块瘦身：KPI 卡 16px/26px → 10px/19px（单行高 104px → 约 62px），
+   柱条轨道 16 → 11px。专题页是「读结论」的，不是「看海报」的。 */
+.sp-kpi{display:grid;grid-template-columns:repeat(auto-fit,minmax(148px,1fr));gap:10px;margin:16px 0 6px}
 .sp-k{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
-  padding:16px 18px;box-shadow:var(--shadow)}
-.sp-k b{display:block;font-size:26px;color:var(--brand);font-weight:800;line-height:1.25}
-.sp-k span{display:block;color:var(--muted);font-size:12.5px;margin-top:4px}
-.sp-k em{display:block;color:var(--faint);font-size:11.5px;font-style:normal;margin-top:2px}
-.sp-sec{margin:44px 0 0}
-.sp-sec h2{margin:0 0 6px;font-size:20px;color:var(--brand);display:flex;align-items:center;gap:9px}
-.sp-sec h2::before{content:"";width:5px;height:20px;background:var(--accent);border-radius:3px}
-.sp-sec p.lead{margin:0 0 14px}
+  padding:10px 13px;box-shadow:var(--shadow)}
+.sp-k b{display:block;font-size:19px;color:var(--brand);font-weight:800;line-height:1.25}
+.sp-k span{display:block;color:var(--muted);font-size:12.2px;margin-top:2px}
+.sp-k em{display:block;color:var(--faint);font-size:11px;font-style:normal;margin-top:1px}
+.sp-sec{margin:30px 0 0}
+.sp-sec h2{margin:0 0 6px;font-size:19px;color:var(--brand);display:flex;align-items:center;gap:9px}
+.sp-sec h2::before{content:"";width:5px;height:19px;background:var(--accent);border-radius:3px}
+.sp-sec p.lead{margin:0 0 12px}
 .sp-tbl{width:100%;border-collapse:collapse;font-size:13.5px;background:var(--card);
   border:1px solid var(--line);border-radius:var(--radius);overflow:hidden}
 .sp-tbl th{background:#f2f6fb;color:var(--ink-2);font-weight:700;text-align:left;
-  padding:10px 12px;border-bottom:1px solid var(--line);white-space:nowrap;font-size:13px}
-.sp-tbl td{padding:10px 12px;border-bottom:1px solid var(--line-2);vertical-align:top;color:var(--ink-2)}
+  padding:9px 12px;border-bottom:1px solid var(--line);white-space:nowrap;font-size:13px}
+.sp-tbl td{padding:9px 12px;border-bottom:1px solid var(--line-2);vertical-align:top;color:var(--ink-2)}
 .sp-tbl tr:last-child td{border-bottom:0}
 .sp-tbl tr:hover td{background:#fafcff}
 .sp-wrap{overflow:auto;border-radius:var(--radius)}
-.sp-bar{display:flex;align-items:center;gap:10px;margin:7px 0}
-.sp-bar .lb{width:230px;font-size:13px;color:var(--ink-2);flex:none;overflow:hidden;
+.sp-bar{display:flex;align-items:center;gap:9px;margin:5px 0}
+.sp-bar .lb{width:190px;font-size:12.6px;color:var(--ink-2);flex:none;overflow:hidden;
   text-overflow:ellipsis;white-space:nowrap}
-.sp-bar .tr{flex:1;background:#eef2f7;border-radius:6px;height:16px;overflow:hidden;display:block}
+.sp-bar .tr{flex:1;background:#eef2f7;border-radius:5px;height:11px;overflow:hidden;display:block}
 /* ⚠️ 必须 display:block：.fl 是 <span>，行内元素会忽略 height/width，
    表现为「柱条只剩空轨道、没有任何数据填充」（曾整站踩过）。 */
 .sp-bar .fl{display:block;height:100%;min-width:2px;
-  background:linear-gradient(90deg,#2c6fb2,#0f7b6c);border-radius:6px}
-.sp-bar .vv{width:60px;text-align:right;font-size:12.5px;color:var(--muted);flex:none;
+  background:linear-gradient(90deg,#2c6fb2,#0f7b6c);border-radius:5px}
+.sp-bar .vv{width:52px;text-align:right;font-size:12.2px;color:var(--muted);flex:none;
   font-variant-numeric:tabular-nums}
 .sp-note{background:#f7fafd;border:1px solid var(--line);border-left:4px solid var(--accent);
-  border-radius:10px;padding:14px 18px;color:var(--ink-2);font-size:13.5px;margin-top:18px}
+  border-radius:10px;padding:12px 16px;color:var(--ink-2);font-size:13.2px;margin-top:14px}
 .sp-note b{color:var(--ink)}
 .sp-warn{background:#fff9f4;border-left-color:#e08a3c}
 .sp-note ul{margin:8px 0 0;padding-left:18px}
 .sp-note li{margin:5px 0}
-.sp-2col{display:grid;grid-template-columns:repeat(auto-fit,minmax(330px,1fr));gap:22px;margin-top:14px}
+/* 折叠式口径声明（2026-09-17）：方法学是附录，不该占掉首屏一整屏。
+   展开前只留一行「对外引用什么数」，其余 8 条点开看。 */
+.sp-fold{padding:0;overflow:hidden}
+.sp-fold>summary{cursor:pointer;list-style:none;padding:11px 16px;font-size:13.4px;
+  display:flex;align-items:center;gap:8px;user-select:none}
+.sp-fold>summary::-webkit-details-marker{display:none}
+.sp-fold>summary::before{content:"▸";color:#b3541e;font-size:12px;transition:transform .15s}
+.sp-fold[open]>summary::before{transform:rotate(90deg)}
+.sp-fold>summary:hover{background:rgba(224,138,60,.07)}
+.sp-fold>summary b{color:var(--ink)}
+.sp-fold-tldr{margin:0;padding:0 16px 11px;font-size:13px;line-height:1.85;color:var(--ink-2)}
+.sp-fold[open]>.sp-fold-tldr{padding-top:2px}
+.sp-fold>ul{padding:0 16px 14px 34px;margin:0}
+.sp-fold[open]{padding-bottom:4px}
+.sp-2col{display:grid;grid-template-columns:repeat(auto-fit,minmax(330px,1fr));gap:18px;margin-top:12px}
 .sp-card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
-  padding:16px 18px;box-shadow:var(--shadow)}
-.sp-card h4{margin:0 0 10px;font-size:14.5px;color:var(--ink)}
+  padding:14px 16px;box-shadow:var(--shadow)}
+.sp-card h4{margin:0 0 9px;font-size:14.2px;color:var(--ink)}
 .sp-src{font-size:12.5px;color:var(--faint)}
 .sp-cnt{color:var(--muted);font-size:13px;margin:8px 0 0}
 table.sp-tbl td a{word-break:break-all}

@@ -137,22 +137,22 @@ def main():
             "</tr>")
 
     css = """
-.cs-kpi{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin:22px 0 6px}
+.cs-kpi{display:grid;grid-template-columns:repeat(auto-fit,minmax(148px,1fr));gap:10px;margin:16px 0 6px}
 .cs-k{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
-  padding:16px 18px;box-shadow:var(--shadow)}
-.cs-k b{display:block;font-size:26px;color:var(--brand);font-weight:800;line-height:1.25}
-.cs-k span{display:block;color:var(--muted);font-size:12.5px;margin-top:4px}
-.cs-sec{margin:44px 0 0}
-.cs-sec h2{margin:0 0 6px;font-size:20px;color:var(--brand);display:flex;align-items:center;gap:9px}
-.cs-sec h2::before{content:"";width:5px;height:20px;background:var(--accent);border-radius:3px}
-.cs-bar{display:flex;align-items:center;gap:10px;margin:7px 0}
-.cs-bar .lb{width:200px;font-size:13px;color:var(--ink-2);flex:none;overflow:hidden;
+  padding:10px 13px;box-shadow:var(--shadow)}
+.cs-k b{display:block;font-size:19px;color:var(--brand);font-weight:800;line-height:1.25}
+.cs-k span{display:block;color:var(--muted);font-size:12.2px;margin-top:2px}
+.cs-sec{margin:30px 0 0}
+.cs-sec h2{margin:0 0 6px;font-size:19px;color:var(--brand);display:flex;align-items:center;gap:9px}
+.cs-sec h2::before{content:"";width:5px;height:19px;background:var(--accent);border-radius:3px}
+.cs-bar{display:flex;align-items:center;gap:9px;margin:5px 0}
+.cs-bar .lb{width:190px;font-size:12.6px;color:var(--ink-2);flex:none;overflow:hidden;
   text-overflow:ellipsis;white-space:nowrap}
-.cs-bar .tr{flex:1;background:#eef2f7;border-radius:6px;height:16px;overflow:hidden;display:block}
+.cs-bar .tr{flex:1;background:#eef2f7;border-radius:5px;height:11px;overflow:hidden;display:block}
 /* ⚠️ 必须 display:block：.fl 是 <span>，行内元素忽略 height/width，
    否则柱条只剩空轨道、无数据填充（与 build_special_topics.py 同坑）。 */
 .cs-bar .fl{display:block;height:100%;min-width:2px;
-  background:linear-gradient(90deg,#b3541e,#c98a3c);border-radius:6px}
+  background:linear-gradient(90deg,#b3541e,#c98a3c);border-radius:5px}
 .cs-bar .vv{width:52px;text-align:right;font-size:12.5px;color:var(--muted);flex:none}
 .cs-q{width:100%;padding:11px 14px;border:1px solid var(--line);border-radius:10px;
   font-size:14px;font-family:var(--sans);margin:12px 0;color:var(--ink)}

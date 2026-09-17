@@ -33,6 +33,10 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 INDEX = os.path.join(HERE, "index.html")
 
 RADAR_S, RADAR_E = "<!-- RADAR:START -->", "<!-- RADAR:END -->"
+# ⚠️ 首页信息层级（2026-09-17 重排）：
+#   速览 → KPI 一行条 → **最新合规动态（正文）** → 驾驶舱（日历/行动/全球 + 领域分布）→ 全球地图
+#   驾驶舱与领域分布属于「次级分析」，绝不能挡在正文前面（用户反馈：「图表太大，正文都在最下面」）。
+KPI_S, KPI_E = "<!-- KPI:START -->", "<!-- KPI:END -->"
 FEED_S, FEED_E = "<!-- FEED:START -->", "<!-- FEED:END -->"
 GEO_S, GEO_E = "<!-- GEOMETA:START -->", "<!-- GEOMETA:END -->"
 PULSE_S, PULSE_E = "<!-- PULSE:START -->", "<!-- PULSE:END -->"
@@ -196,9 +200,15 @@ def render_dist(verified):
             f'style="width:{w}%;background:{color}"></span></span>'
             f'<span class="dist-n">{c}</span></div>'
         )
+    # 2026-09-17：单列 9 行会让这块占到 368px（半屏），正文被顶到 1000px 以下。
+    # 拆成双列（各占一半行数）后约 180px —— 条形图是「一眼看分布」，不需要整行宽度。
+    half = (len(rows) + 1) // 2
+    cols = (f'<div class="dist-cols"><div class="dist-col">{"".join(rows[:half])}</div>'
+            f'<div class="dist-col">{"".join(rows[half:])}</div></div>'
+            if len(rows) > 5 else "".join(rows))
     return (f'<div class="dist"><div class="dist-h">合规动态 · 领域分布'
             f'<span class="dist-sub">按已收录条数</span></div>'
-            f'{"".join(rows)}</div>')
+            f'{cols}</div>')
 
 
 # ---------------------------------------------------------------- 模块入口
@@ -272,9 +282,9 @@ def main():
                  if it.get("date") and week_ago <= it["date"] <= today_s)
     n_duties = load_duties()
 
+    kpi_html = render_kpi(len(verified), n_future, n_running, n_juris, len(wx))
     radar_html = (
-        render_kpi(len(verified), n_future, n_running, n_juris, len(wx))
-        + render_deck(cal, acts, g)
+        render_deck(cal, acts, g)
         + render_dist(verified)
         + render_mod_entries()
     )
@@ -284,12 +294,13 @@ def main():
 
     ok = True
     ok &= replace_block(INDEX, PULSE_S, PULSE_E, pulse_html)
+    ok &= replace_block(INDEX, KPI_S, KPI_E, kpi_html)
     ok &= replace_block(INDEX, RADAR_S, RADAR_E, radar_html)
     ok &= replace_block(INDEX, FEED_S, FEED_E, feed_html)
     ok &= replace_block(INDEX, GEO_S, GEO_E, geo_js)
     if ok:
-        print(f"  index.html ✓ 合规动态驾驶舱（速览 + KPI×5 + 领域分布 + 最新 {min(10, len(verified))} 条）"
-              f" · 全球 {n_juris} 辖区")
+        print(f"  index.html ✓ 速览 + KPI×5 → 最新 {min(10, len(verified))} 条动态（正文前置）"
+              f" → 驾驶舱 → 全球 {n_juris} 辖区")
     else:
         print("  index.html 写入失败（未找到标记）")
         return False
