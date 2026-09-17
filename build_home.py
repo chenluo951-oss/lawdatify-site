@@ -215,10 +215,12 @@ def render_dist(verified):
 def render_mod_entries():
     items = [
         ("news/index.html", "合规动态总览"),
+        ("news/today.html", "今日更新"),
         ("news/calendar.html", "立法日历"),
         ("news/actions.html", "应对建议"),
         ("news/map.html", "全球监管地图"),
         ("news/briefs.html", "简报归档"),
+        ("manage/audit.html", "合规审计"),
     ]
     chips = "".join(f'<a class="me" href="{u}">{t} →</a>' for u, t in items)
     return f'<div class="mod-entries">{chips}</div>'

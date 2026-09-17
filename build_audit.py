@@ -17,7 +17,7 @@ import sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 DUTY_SRC = os.path.join(HERE, "sources", "standards", "duties.json")
-OUT = os.path.join(HERE, "kb", "audit.html")
+OUT = os.path.join(HERE, "manage", "audit.html")
 
 PAGE_CSS = """
 .aud-lead{font-size:14.5px;color:var(--muted);line-height:1.95;margin:0 0 18px;max-width:880px}
@@ -476,7 +476,7 @@ PAGE_TPL = """<!DOCTYPE html>
 <!-- SUBNAV:START --><!-- SUBNAV:END -->
 
 <div class="pagehead"><div class="inner">
-  <div class="crumb"><a href="../index.html">首页</a> / <a href="index.html">合规知识库</a> / 合规审计</div>
+  <div class="crumb"><a href="../index.html">首页</a> / <a href="index.html">合规管理</a> / 合规审计</div>
   <h1>合规审计</h1>
   <p>审计范围直接取自合规义务清单：勾选义务 → 生成审计任务 → 记录审计进度、审计素材与审计结论 → 输出审计报告与整改任务清单。</p>
 </div></div>
@@ -587,9 +587,33 @@ def main():
             .replace("__NCAT__", str(len(cats)))
             .replace("__NSCENE__", str(n_scene))
             .replace("__NDUTY__", str(n_duty)))
+    os.makedirs(os.path.dirname(OUT), exist_ok=True)
     open(OUT, "w", encoding="utf-8").write(html)
-    print("合规审计页：kb/audit.html（%d 大类 / %d 场景 / %d 义务 / %.0f KB）"
+    print("合规审计页：manage/audit.html（%d 大类 / %d 场景 / %d 义务 / %.0f KB）"
           % (len(cats), n_scene, n_duty, os.path.getsize(OUT) / 1024))
+
+    # 2026-09-17：审计页从「合规知识库」迁到「合规管理」模块，老地址保留为跳转页，
+    # 避免任何存量外链与浏览器书签 404。
+    old = os.path.join(HERE, "kb", "audit.html")
+    os.makedirs(os.path.dirname(old), exist_ok=True)
+    open(old, "w", encoding="utf-8").write(
+        '<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8">\n'
+        '<meta name="viewport" content="width=device-width, initial-scale=1.0">\n'
+        '<title>合规审计 · 已迁至合规管理 · 合规无终点</title>\n'
+        '<link rel="canonical" href="../manage/audit.html">\n'
+        '<meta http-equiv="refresh" content="0; url=../manage/audit.html">\n'
+        '<style>body{margin:0;font-family:"PingFang SC",system-ui,sans-serif;'
+        'display:flex;align-items:center;justify-content:center;min-height:100vh;'
+        'background:#f6f8fb;color:#16202c;line-height:1.9}'
+        'div{max-width:520px;padding:36px;background:#fff;border:1px solid #e6ebf2;'
+        'border-radius:14px;text-align:center}'
+        'a{color:#1b4f8a;font-weight:600}</style></head><body><div>\n'
+        '<h1 style="font-size:19px;margin:0 0 10px">合规审计已迁至「合规管理」</h1>\n'
+        '<p style="color:#6b7a8c;font-size:14px;margin:0">'
+        '站点改版后，审计工具从「合规知识库」移到了新的一级模块「合规管理」。<br>'
+        '正在跳转到 <a href="../manage/audit.html">合规管理 · 合规审计</a>…</p>\n'
+        '</div></body></html>\n')
+    print("  kb/audit.html 已改为跳转页")
 
 
 if __name__ == "__main__":

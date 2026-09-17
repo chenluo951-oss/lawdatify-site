@@ -16,6 +16,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 
 NEWS_NAV = [
     ("index.html", "总览"),
+    ("today.html", "今日更新"),
     ("calendar.html", "立法日历"),
     ("actions.html", "应对建议"),
     ("map.html", "全球监管地图"),
@@ -29,22 +30,30 @@ KB_NAV = [
     ("texts.html", "法规原文"),
     ("cases.html", "案例库"),
     ("citations.html", "高频引用法条"),
+]
+# 2026-09-17（用户要求）：合规审计从「合规知识库」拿出来，单独成立一级模块「合规管理」。
+# 边界：知识库回答「规则是什么」，合规管理回答「我们怎么把规则落下去」。
+MANAGE_NAV = [
+    ("index.html", "总览"),
     ("audit.html", "合规审计"),
 ]
 
 BOUNDARY = {
-    "news": "本模块回答<b>合规动态全貌</b>——即将生效的法规（立法日历）、正在推进的监管行动、"
+    "news": "本模块回答<b>合规动态全貌</b>——今日增量、即将生效的法规（立法日历）、正在推进的监管行动、"
             "已发生的事件与应对建议、全球监管态势，一屏纵览。规则条文本身见 "
             "<a href=\"../kb/index.html\">合规知识库</a>。",
     "kb": None,  # 知识库总览已有「三个模块怎么分」区块，不再重复
+    "manage": "本模块回答<b>怎么把规则落下去</b>——审计范围怎么定、过程怎么留痕、"
+              "结论怎么变成整改任务。规则本身是什么见 <a href=\"../kb/index.html\">合规知识库</a>。",
 }
 
 GROUPS = [
     ("news", NEWS_NAV),
     ("kb", KB_NAV),
+    ("manage", MANAGE_NAV),
 ]
 
-MODULE_NAMES = {"news": "合规动态", "kb": "合规知识库"}
+MODULE_NAMES = {"news": "合规动态", "kb": "合规知识库", "manage": "合规管理"}
 
 BLOCK_RE = re.compile(r"<!-- SUBNAV:START -->.*?<!-- SUBNAV:END -->", re.S)
 

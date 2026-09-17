@@ -390,6 +390,9 @@ def main():
 
     # ---------------------------------------------------------- 组装 HTML
     parts = []
+    # 「今日新增合规动态」的卡片 HTML 单独留一份：合规动态首页只内嵌前几条做摘要，
+    # 完整清单留在 news/today.html（避免把 24 条动态全塞进首页把正文压到屏幕外）。
+    nat_cards = []
     if no_base:
         _base_line = f"增量基线已重置（{base_note or '首次建库'}），本次不报增量"
     else:
@@ -459,7 +462,7 @@ def main():
             t = f'<a href="{esc(url)}" target="_blank" rel="noopener">{nm}</a>' if url else nm
             ana = (f'<p class="up-point">{esc(it.get("points") or "")}</p>'
                    if it.get("points") else "")
-            parts.append(
+            _card = (
                 f'<div class="up-item"><div class="up-title">{t}</div>'
                 f'<div class="up-chips"><span class="chip chip-new">NEW</span>'
                 f'<span class="chip">{esc(it.get("domain") or "")}</span>'
@@ -467,6 +470,7 @@ def main():
                 f'<span class="chip">{esc(it.get("org") or "")}</span>'
                 f'<span class="chip chip-dim">{esc(it.get("date") or "")}</span></div>'
                 + ana + '</div>')
+            parts.append(_card)
     else:
         parts.append('<p class="lead">本批次无新增动态，可查看下方法规标准增量与监管节点。</p>')
 
@@ -595,47 +599,99 @@ def main():
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>今日更新 · 合规无终点</title>
+<title>今日更新 · 合规动态 · 合规无终点</title>
 <link rel="stylesheet" href="../assets/style.css">
 </head>
 <body>
 
-<nav class="topnav"><div class="inner">
-  <a class="brand" href="../index.html">law<span>datify</span></a>
-  <div class="navlinks">
-    <a href="../index.html">首页</a>
-    <a href="../news/index.html">合规动态</a>
-    <a href="../news/index.html">合规资讯</a>
-    <a href="../analysis/index.html">法律分析</a>
-    <a href="../kb/index.html">合规知识库</a>
-    <a href="../about.html">关于</a>
-  </div>
-</div></nav>
+<nav class="topnav"></nav>
 
 <div class="pagehead"><div class="inner">
-  <div class="crumb"><a href="../index.html">首页</a> / 今日更新</div>
+  <div class="crumb"><a href="../index.html">首页</a> / <a href="index.html">合规动态</a> / 今日更新</div>
   <h1>今日更新</h1>
-  <p>法规标准增量、生效倒计时、立法节点与草案截止，一屏掌握今天变了什么。</p>
+  <p>法规标准增量、生效倒计时、立法节点与草案截止，一屏掌握今天变了什么。
+  —— 本节已并入「合规动态」，与每日监管事件流同源同批。</p>
 </div></div>
 
 <div class="wrap">
 {body}
 </div>
 
-<footer><div class="inner">
-  <div class="foot-brand">合规<span>无终点</span> · 法规标准与合规动态库</div>
-  <div class="foot-desc">由个人独立维护 · 内容基于监管机构官网公开信息整理，逐条附原文深链</div>
-</div></footer>
+<footer></footer>
 </body>
 </html>
 """
 
-    outdir = os.path.join(HERE, "updates")
+    # 2026-09-17（用户要求「今日更新和合规动态合并」）：
+    #   ① news/today.html —— 本页正文（作为「合规动态」的子页，导航里不再占一级入口）
+    #   ② sources/updates/block.html —— 同一份内容区块，供 build_topics 内嵌进合规动态首页，
+    #      这样读者进「合规动态」第一屏就看到「今天变了什么」，不必再去另一个模块
+    #   ③ updates/index.html —— 原地址保留为跳转页，避免任何存量外链 404
+    outdir = os.path.join(HERE, "news")
     os.makedirs(outdir, exist_ok=True)
-    out = os.path.join(outdir, "index.html")
+    out = os.path.join(outdir, "today.html")
     open(out, "w", encoding="utf-8").write(html)
 
-    print(f"已生成 updates/index.html")
+    blk = os.path.join(SNAP_DIR, "block.html")
+    os.makedirs(SNAP_DIR, exist_ok=True)
+    open(blk, "w", encoding="utf-8").write(
+        "<!-- UPD-BLOCK:START -->\n" + body + "\n<!-- UPD-BLOCK:END -->\n")
+
+    old = os.path.join(HERE, "updates", "index.html")
+    os.makedirs(os.path.dirname(old), exist_ok=True)
+    open(old, "w", encoding="utf-8").write(
+        '<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8">\n'
+        '<meta name="viewport" content="width=device-width, initial-scale=1.0">\n'
+        '<title>今日更新 · 已并入合规动态 · 合规无终点</title>\n'
+        '<link rel="canonical" href="../news/today.html">\n'
+        '<meta http-equiv="refresh" content="0; url=../news/today.html">\n'
+        '<style>body{margin:0;font-family:"PingFang SC",system-ui,sans-serif;'
+        'display:flex;align-items:center;justify-content:center;min-height:100vh;'
+        'background:#f6f8fb;color:#16202c;line-height:1.9}'
+        'div{max-width:520px;padding:36px;background:#fff;border:1px solid #e6ebf2;'
+        'border-radius:14px;text-align:center}'
+        'a{color:#1b4f8a;font-weight:600}</style></head><body><div>\n'
+        '<h1 style="font-size:19px;margin:0 0 10px">「今日更新」已并入「合规动态」</h1>\n'
+        '<p style="color:#6b7a8c;font-size:14px;margin:0">'
+        '站点改版后，今日增量与每日监管事件合并在同一个模块。<br>'
+        '正在为你跳转到 <a href="../news/today.html">合规动态 · 今日更新</a>…</p>\n'
+        '</div></body></html>\n')
+
+    print(f"已生成 news/today.html（合规动态 · 今日更新）")
+    print(f"  并写出来源区块 sources/updates/block.html（供合规动态首页内嵌）")
+    print(f"  updates/index.html 已改为跳转页")
+
+    # ---- 内嵌到「合规动态」首页（幂等：替换 TODAY 标记块；模板无标记时插在子导航之后）----
+    # ⚠️ 只内嵌**摘要**（前 6 条 + 一行计数），全量留在 today.html：
+    # 用户 2026-09-17 抱怨过首页「图表太大、正文在最下面」，把整页增量灌进动态首页会重演。
+    idx = os.path.join(HERE, "news", "index.html")
+    if os.path.exists(idx):
+        teaser = []
+        teaser.append('<div class="section-title"><span class="bar"></span>今日更新'
+                      f'<span class="upd-stamp"> {TODAY_S}</span></div>')
+        bits = []
+        if nat_new:
+            bits.append(f'新增合规动态 <b>{len(nat_new)}</b> 条')
+        if not no_base and n_added_all:
+            bits.append(f'法规标准条目新增 <b>{n_added_all}</b> 条')
+        if not no_base and n_changed_all:
+            bits.append(f'状态变更 <b>{n_changed_all}</b> 条')
+        bits.append(f'未来 180 天内生效 <b>{_n_eff}</b> 条')
+        bits.append(f'进行中的监管行动 <b>{len(ongoing)}</b> 项')
+        teaser.append(f'<p class="lead">截至 {TODAY_S}：' + " · ".join(bits)
+                      + '。<a href="today.html">查看完整今日更新 →</a></p>')
+        teaser.append('<div class="up-list">' + "".join(nat_cards[:6]) + '</div>')
+        block = ("<!-- TODAY:START -->\n" + "\n".join(teaser) + "\n<!-- TODAY:END -->")
+        s = open(idx, encoding="utf-8").read()
+        pat = re.compile(r"<!-- TODAY:START -->.*?<!-- TODAY:END -->", re.S)
+        if pat.search(s):
+            s2 = pat.sub(lambda m: block, s, count=1)
+        else:
+            anchor = "<!-- SUBNAV:END -->"
+            s2 = s.replace(anchor, anchor + "\n" + block, 1) if anchor in s else s
+        if s2 != s:
+            open(idx, "w", encoding="utf-8").write(s2)
+            print(f"  news/index.html 今日更新摘要已同步（{len(nat_cards[:6])} 条）")
     print(f"  基线 {src} | 真实增量：新增 {n_added_all} / 变更 {n_changed_all} / 下线 {n_removed_all}"
           f"（页面列表列示 {len(added)}/{len(changed)}/{len(removed)} 条）")
     print(f"  合规动态批次 {nat_batch or '—'} · {len(nat_new)} 条（站点直采库 {len(nat)} 条）"

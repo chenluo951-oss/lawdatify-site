@@ -1,2 +1,9 @@
 [2026-09-17 14:23:08] supervisor start, jsonl=6025
 [2026-09-17 14:23:08] round 1 begin (jsonl=6025)
+[2026-09-17 14:57:59] round 1 end rc=1 jsonl=6025->7751
+[2026-09-17 14:58:04] round 2 begin (jsonl=7751)
+[2026-09-17 14:58:08] round 2 end rc=0 jsonl=7751->7753
+[2026-09-17 14:58:13] round 3 begin (jsonl=7753)
+[2026-09-17 14:58:13] round 3 end rc=0 jsonl=7753->7753
+[2026-09-17 14:58:13] no todo left, supervisor exits normally
+[2026-09-17 14:58:13] supervisor done (rounds=3 jsonl=7753)
