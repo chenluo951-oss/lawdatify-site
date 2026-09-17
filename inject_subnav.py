@@ -38,7 +38,6 @@ ANALYSIS_NAV = [
 KB_NAV = [
     ("index.html", "总览"),
     ("standards.html", "法规库"),
-    ("texts.html", "法规原文"),
     ("cases.html", "案例库"),
     ("citations.html", "高频引用法条"),
     ("wx.html", "公众号存档"),
@@ -73,17 +72,27 @@ MODULE_NAMES = {"news": "合规动态", "analysis": "法律分析", "kb": "合�
 
 # 模块内的「非导航项」页面（专题长文等）：不占子导航格位，但同样注入该模块的子导航。
 # 否则读者从站外搜索直接落到这些页时会失去模块层级（架构一致性）。
+# 2026-09-17（用户要求「法规库和法规原文重复了，只保留法规库就好」）：
+# kb/texts.html（原文库阅读器）**从子导航下线**，不再是并列的模块入口 ——
+# 它现在只是「法规库」里条目右侧「读原文」的落地页（下钻层，不是同层模块）。
+# 但页面本身保留：① 7739 条「读原文」深链指向它；② 案例库依据列也直落站内原文。
+# 所以它仍然要被注入子导航（否则从站外直接落到阅读页会失去模块层级），
+# 并把「法规库」标为当前项（它就是这个页面所属的入口）。
 EXTRA = {
+    "kb": ["texts.html"],
     "analysis": ["pi-audit.html", "ai-label.html", "food-label.html",
                  "app-violation-pattern.html", "algo-filing-guide.html",
                  "dark-store-license.html"],
 }
 
+# 下钻页 → 子导航里应被标为「当前」的同层入口
+ACTIVE_ALIAS = {"kb/texts.html": "standards.html"}
+
 BLOCK_RE = re.compile(r"<!-- SUBNAV:START -->.*?<!-- SUBNAV:END -->", re.S)
 
 
 def build_block(module, nav, rel):
-    cur = os.path.basename(rel)
+    cur = ACTIVE_ALIAS.get(rel.replace(os.sep, "/"), os.path.basename(rel))
     items = []
     for href, label in nav:
         on = " on" if href == cur else ""

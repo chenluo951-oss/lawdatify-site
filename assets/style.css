@@ -1727,3 +1727,15 @@ table.dm tfoot td{background:#f5f8fc;font-size:11.5px;color:var(--ink-2);padding
   .lb-d2{break-inside:avoid}
   .wz-art{border-color:#bbb;color:#111;background:#fff}
 }
+
+/* ================= 数据新鲜度一行（立法日历 / 全球监管地图） =================
+   页脚的「数据更新至」是构建日期，说明不了数据本身有没有进新条目。
+   所以雷达页在 KPI 条下单独标「数据截至 <_meta.updated> · 已收录 N 条」，
+   超过 2 天未进新条目转成琥珀色示警 —— 把沉默的停摆变成看得见的提示。
+   （起因：2026-09-17 用户反馈「立法日历和全球监管地图这几天都没更新过」，
+     实况是 global.json 自 09-09 起零新增，而页脚照样写当天。） */
+.rd-fresh{margin:10px 0 0;padding:9px 14px;font-size:13px;line-height:1.7;
+  border-left-width:3px;border-left-color:#9fb4cc;background:#fbfdff}
+.rd-fresh b{color:var(--ink)}
+.rd-fresh.rd-stale{border-left-color:#c9822a;background:#fdf8f1}
+.rd-fresh.rd-stale b{color:#8a5310}

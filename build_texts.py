@@ -1380,8 +1380,8 @@ def write_page(count_law, total_chars, parts, count_std=0):
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>原文库 · 法规与标准 · 合规无终点</title>
-<meta name="description" content="法律、行政法规、部门规章、规范性文件与国家标准、行业标准、团体标准的正文，按官方发文版式排印，可在站内直接阅读、复制、下载与打印。">
+<title>法规与标准原文 · 合规无终点</title>
+<meta name="description" content="法规库的原文阅读层：法律、行政法规、部门规章、规范性文件与国家标准、行业标准、团体标准的正文，按官方发文版式排印，可在站内直接阅读、复制、下载与打印。">
 <link rel="stylesheet" href="../assets/style.css">
 <style>__CSS__</style>
 </head>
@@ -1391,8 +1391,8 @@ def write_page(count_law, total_chars, parts, count_std=0):
 <!-- SUBNAV:START --><!-- SUBNAV:END -->
 
 <div class="pagehead"><div class="inner">
-  <div class="crumb"><a href="../index.html">首页</a> / <a href="index.html">合规知识库</a> / 原文库</div>
-  <h1>原文库</h1>
+  <div class="crumb"><a href="../index.html">首页</a> / <a href="index.html">合规知识库</a> / <a href="standards.html">法规库</a> / 法规与标准原文</div>
+  <h1>法规与标准原文</h1>
   <p>法规与标准正文统一按官方发文版式排印：标题居中、层级清晰、条文可定位。<br>
      左侧按「法规 / 标准」与效力层级筛选，正文支持复制全文、下载 TXT、导出 Word 与打印存 PDF。</p>
 </div></div>

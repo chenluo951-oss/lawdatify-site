@@ -115,7 +115,10 @@ STEPS = [
     ("全站导航页脚",    [PY, "unify_chrome.py"],                     True),
     ("OG 元数据",       [PY, "inject_meta.py"],                      True),
     ("站点体积体检",    [PY, "tools/site_size.py"],                  False),
-    ("构建前护栏",      [PY, "preflight.py"],                        False),
+    # 护栏改为**关键步骤**（2026-09-17）：E 项会逐页用 node --check 校验内联脚本，
+    # 而「整页 JS 被截断」这类故障（原文库 / 合规审计曾整页脚本全死）页面 200、
+    # A—D 全过，只有真的解析一遍 JS 才看得见 —— 门禁不过就不该上线，所以必须阻断。
+    ("构建前护栏",      [PY, "preflight.py"],                        True),
 ]
 
 # 仅当 --with-texts（新归档了标准正文）时才跑，避免无谓重生成 290MB PDF

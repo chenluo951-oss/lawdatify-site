@@ -369,9 +369,15 @@ def main():
 .cs-tbl td.lk a::after{content:"↗";margin-left:3px;font-weight:400;font-size:11.5px}
 .cs-tbl td.lk a:hover{background:var(--brand);border-color:var(--brand);color:#fff;text-decoration:none}
 
-/* 类型标签：6 色轮转（服务端按类型名稳定取色） */
+/* 类型标签：6 色轮转（服务端按类型名稳定取色）。
+   ⚠️ 必须能收敛：标签 nowrap + 单元格有 max-width 时，长标签会**溢出单元格、
+   直接压住「案件」列**（2026-09-17 用户截图：102 行「移动应用与个人信息」
+   标签 126.3px 撑出 118px 的单元格 20.3px，连带表头也被盖住）。
+   所以这里 ① 给 max-width:100% + 省略号兜底（将来出现更长的类型名也不会串列），
+   ② 类型列宽度按当前最长类型名（9 字 ≈ 126px）定死，正常情况**完整显示不省略**。 */
 .cs-tag{display:inline-block;border-radius:6px;padding:2px 8px;font-size:12px;
-  white-space:nowrap;font-weight:600}
+  white-space:nowrap;font-weight:600;max-width:100%;overflow:hidden;
+  text-overflow:ellipsis;vertical-align:top}
 .cs-tag.t0{background:#eef4fb;color:#1b4f8a}
 .cs-tag.t1{background:#eaf4ef;color:#1c6349}
 .cs-tag.t2{background:#fdf3e7;color:#8f5312}
@@ -381,9 +387,12 @@ def main():
 
 /* 被处罚主体 */
 .cs-tbl td.sbj{min-width:138px;max-width:158px}
-/* 类型列（色块）宽度收窄：省下的横向空间全给「处罚事由 / 处罚」两列，
-   否则最右吸附的「原文/文书」列在默认滚动位会把处罚事由压成 60px 宽的一条。 */
-.cs-tbl td.ty{min-width:104px;max-width:118px}
+/* 类型列（色块）：宽度按**当前最长类型名**（9 字「移动应用与个人信息」≈126px）
+   + 左右内边距 24px 定死为 152px，让标签在不省略的情况下完整显示。
+   此前收窄到 104/118px 是为了把横向空间让给「处罚事由 / 处罚」两列，
+   但代价是长标签溢出压住「案件」列 —— 表格本来就横向滚动，
+   多这 34px 不影响阅读，串列才是硬伤。 */
+.cs-tbl td.ty{min-width:152px;max-width:152px}
 .sbj-n{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;
   max-height:3.24em;color:var(--ink);font-weight:600;word-break:break-word;line-height:1.62}
 .sbj-n em{font-style:normal;color:var(--muted);font-weight:400;font-size:12px;margin-left:4px;

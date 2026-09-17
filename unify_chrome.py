@@ -135,6 +135,31 @@ def _mtime(name):
         return "1"
 
 
+def body_end(s):
+    """返回「可以安全插入脚本标签」的 </body> 位置；找不到或不安全返回 -1。
+
+    ⚠️ 这里踩过一次造成整页 JS 全死的坑（2026-09-17）：
+    原先用 `s.replace("</body>", tag + "</body>", 1)` —— 替换**第一个** </body>。
+    可 kb/texts.html 与 manage/audit.html 的内联 <script> 里用 JS 字符串拼
+    Word 导出模板，字符串里含 `'</body></html>'`，它出现在文档真正 </body> **之前**
+    ⇒ 注入标签落进字符串中间，而注入标签自带 `</script>`，
+    HTML 解析器在 JS 字符串中途就闭合了整段内联脚本 ⇒ 剩下的代码成为
+    语法错误 ⇒ **原文库 / 合规审计页整页 JS 全死**（列表空白、按钮没反应）。
+
+    所以现在：① 取**最后一个** </body>（文档真正的结束标签在最后）；
+    ② 再校验该位置不在内联 <script> 内部（前缀里 <script 与 </script> 必须平衡），
+    不平衡就放弃注入 —— 宁可不挂悬浮卡，也绝不能截断页面脚本。
+    """
+    i = s.rfind("</body>")
+    if i < 0:
+        return -1
+    pre = s[:i]
+    if (len(re.findall(r'<script', pre, re.I))
+            != len(re.findall(r'</script>', pre, re.I))):
+        return -1
+    return i
+
+
 def _mtime_arts():
     """法条索引数据 kb/arts.js 的版本号（由 tools/build_article_index.py 生成）。"""
     try:
@@ -164,16 +189,24 @@ def process(rel: str, do_write: bool) -> str:
 
         new = FOOT_RE.sub(_repl, new)
     else:
-        # 没有 footer 的页面（理论上没有）：补在 </body> 前
-        new = new.replace("</body>", build_footer(rel) + "\n</body>", 1)
+        # 没有 footer 的页面（理论上没有）：补在 </body> 前。
+        # 同样走 body_end()，避免插进内联脚本的 JS 字符串里（与悬浮卡同一个坑）。
+        _i = body_end(new)
+        if _i >= 0:
+            new = new[:_i] + build_footer(rel) + "\n" + new[_i:]
+
     new = STYLE_RE.sub(lambda m: f'href="{m.group(1)}?v={_style_v()}"', new)
     # 法条悬浮卡：先清掉旧标签再补一次，保证路径与版本号随部署更新（幂等）
+    # ARTJS_RE 也负责清掉历史误注入到 JS 字符串里的那份（见 body_end 的注释）。
     new = ARTJS_RE.sub("", new)
     p = "../" * rel.count("/")
     tag = (f'<script src="{p}assets/art-card.js?v={_mtime("art-card.js")}" '
            f'data-arts="{p}kb/arts.js?v={_mtime_arts()}" defer></script>')
-    if "</body>" in new:
-        new = new.replace("</body>", tag + "\n</body>", 1)
+    i = body_end(new)
+    if i >= 0:
+        new = new[:i] + tag + "\n" + new[i:]
+    else:
+        print(f"  ⚠ {rel} 找不到可安全注入的 </body>（可能落在内联脚本内），已跳过悬浮卡注入")
     if new == s:
         return f"  {rel:<24} 无变化"
     if do_write:

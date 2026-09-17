@@ -452,7 +452,9 @@ def build_kb_index(items, duties, drafts, soon, stat_html="", board=""):
       <b>&#128218; 法规库</b>
       <span>{n_rel_all} 条目：法律与法规 {n_law_rel} 件 / 标准 {n_std_rel} 项，含国家标准、行业与团体标准、指引指南。
       标注效力状态（现行有效 / 即将实施 / 已废止）与发布实施日期。
-      已按合规相关性筛除与技术、制造、检验方法有关的 {n_irrelevant} 项标准，可在库内切换为「显示全部」查看。</span>
+      已按合规相关性筛除与技术、制造、检验方法有关的 {n_irrelevant} 项标准，可在库内切换为「显示全部」查看。
+      其中 {n_online} 部法规、{n_std_online} 项标准已存有官方正文，条目右侧「读原文」可在站内直接阅读全文
+      （公文版式 / 标准版式、支持条文定位、复制全文与下载）。</span>
       <span class="more">进入法规库 →</span>
     </a>
     <a class="dcard lb-entry" href="standards.html#pane-duty" style="--dc:#1b4f8a">
@@ -460,12 +462,6 @@ def build_kb_index(items, duties, drafts, soon, stat_html="", board=""):
       <span>{duty_desc}。矩阵总览按「主题大类 × 业务场景」铺开，一屏看全覆盖面与整改优先级；
       逐条明细给出条款原文、标杆做法与可套用文案，并反查依据条款。</span>
       <span class="more">查看义务清单 →</span>
-    </a>
-    <a class="dcard lb-entry" href="texts.html" style="--dc:#7c3aed">
-      <b>📖 法规与标准原文</b>
-      <span>法律、行政法规、部门规章与规范性文件的官方正文 {n_online} 部，加上本人存档的国家 / 行业 / 团体标准正文
-      {n_std_online} 部，均可在站内直接阅读、复制与下载；法规按公文版式排版，支持条文定位与一键跳转。</span>
-      <span class="more">进入原文库 →</span>
     </a>
     <a class="dcard lb-entry" href="citations.html" style="--dc:#b91c1c">
       <b>⚖️ 高频引用法条</b>

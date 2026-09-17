@@ -125,6 +125,38 @@ def stat_strip(stats):
     return f'<div class="rd-stats">{cells}</div>'
 
 
+def fresh_note(meta, n_items):
+    """数据新鲜度一行 —— 把「数据截至」显式标给读者。
+
+    为什么必须有（2026-09-17 用户反馈「立法日历和全球监管地图这几天都没更新过」）：
+    页脚的「数据更新至」是**构建日期**（每天重建都会变成当天），
+    它完全不能说明数据本身有没有进新条目。实况是 global.json 自 2026-09-09
+    起零新增（境外检索缺口径），可页脚照样写着当天 —— 读者看不出「其实停了」。
+    所以这里按各数据源自己的 _meta.updated 单独标一行，
+    超过 2 天未更新直接示警，把沉默的停摆变成看得见的提示。
+    """
+    up = str((meta or {}).get("updated") or "").strip()
+    if not up:
+        return ""
+    try:
+        gap = (date.today() - date.fromisoformat(up)).days
+    except Exception:
+        gap = None
+    if gap is None:
+        age = ""
+    elif gap <= 0:
+        age = "（今天）"
+    else:
+        age = f"（{gap} 天前）"
+    stale = gap is not None and gap > 2
+    cls = "rd-note rd-fresh rd-stale" if stale else "rd-note rd-fresh"
+    # 停摆时只陈述事实，不写「正在补采」这类承诺 —— 读者看到的是数据状态，
+    # 补采动作由自动化任务负责，报告里说明。
+    tail = (f"已 {gap} 天未进新条目" if stale else "每日 10:00 自动检索并入库")
+    return (f'<p class="{cls}">数据截至 <b>{esc(up)}</b>{age}'
+            f' · 已收录 <b>{n_items}</b> 条 · {esc(tail)}</p>')
+
+
 def filter_bar(fid, options, label="筛选"):
     btns = "".join(
         f'<button class="rd-fchip{" on" if i == 0 else ""}" '
@@ -191,6 +223,7 @@ def page_calendar(cal):
         ("最近节点", future[0]["date"] if future else "-"),
         ("已跟踪总量", len(items)),
     ]))
+    parts.append(fresh_note(cal.get("_meta"), len(items)))
 
     parts.append('<p class="rd-note"><b>月历视图</b>：色条为该日节点，按领域着色；'
                  '点击日期格查看当日详情，点击条目标题直达原文。'
@@ -330,6 +363,7 @@ def page_map(g):
             ("有动态辖区", f"{len(count)} 个"),
             ("动态条目", len(items)),
         ]),
+        fresh_note(g.get("_meta"), len(items)),
         """<p class="rd-note">底图为 <b>Natural Earth 公开数据</b>的等距圆柱投影<b>示意性视图</b>，
 非地理精确边界地图，不承担划界意义。<b>点击中国可下钻到省市级监管态势地图</b>（省界含
 南海诸岛与九段线，台湾省、香港、澳门为独立省级要素）。颜色深浅代表已收录的动态条目数量；

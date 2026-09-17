@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>合规审计 · 合规无终点</title>
 <meta name="description" content="从合规义务清单勾选审计范围，生成审计任务，逐项记录审计进度、审计素材与审计结论，一键输出审计报告与整改任务清单。">
-<link rel="stylesheet" href="../assets/style.css?v=1789635184">
+<link rel="stylesheet" href="../assets/style.css?v=1789638408">
 <style>.aud-lead{font-size:14.5px;color:var(--muted);line-height:1.95;margin:0 0 18px;max-width:880px}
 .aud-steps{display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap}
 .aud-step{display:flex;align-items:center;gap:8px;background:#fff;border:1px solid var(--line);
@@ -508,8 +508,7 @@ function exportReport(){
      'h3{font-size:15px;border-left:3px solid #1b4f8a;padding-left:9px;margin:24px 0 10px}'+
      'table{width:100%;border-collapse:collapse;font-size:12.5px}th,td{border:1px solid #e6ebf2;padding:7px 9px;'+
      'vertical-align:top;text-align:left}th{background:#fafbfd}</style></head><body>'+
-     reportHTML(t).replace(/<div class="aud-card">[\s\S]*?<\/div><\/div>/,'')+'<script src="../assets/art-card.js?v=1789633496" data-arts="../kb/arts.js?v=1789633764" defer></script>
-</body></html>');
+     reportHTML(t).replace(/<div class="aud-card">[\s\S]*?<\/div><\/div>/,'')+'</body></html>');
 }
 function exportJSON(){
   var t=curTask();
@@ -580,5 +579,6 @@ $$('.aud-chip[data-q]').forEach(function(b){ b.onclick=function(){ quickScope(b.
 });
 go('scope');
 </script>
+<script src="../assets/art-card.js?v=1789633496" data-arts="../kb/arts.js?v=1789633764" defer></script>
 </body>
 </html>

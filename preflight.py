@@ -8,9 +8,12 @@
     2. 成品页面扫描不足以发现「官网首页根域名」：来源 URL 在数据模块里，
        同一条 URL 还可能只以纯文本形式出现在页面中（不是 href）。
 
-本脚本做两件事，都只读 + 就地清理：
+本脚本共五项，全部只读 + 就地清理：
     A. 清除所有 HTML 的 `data-page-node-id` 属性（就地改写，打印命中清单）
     B. 扫描官网首页根域名链接并报告（默认放行 beian.cac.gov.cn）
+    C. 外链性质：栏目页 / 首页（非深链，只报告不阻断）
+    D. SVG 内混入 HTML 内联标签（阻断 —— 解析器会跳出 SVG 上下文）
+    E. 逐页提取内联 <script> 用 node --check 校验语法（阻断 —— 防「整页 JS 被截断」）
 
 用法
     python3 preflight.py            # 清理 + 报告；有根域名时以退出码 1 结束
@@ -18,6 +21,7 @@
     python3 preflight.py --check    # 只检查不修改
 """
 import argparse
+import importlib.util
 import os
 import re
 import sys
@@ -126,6 +130,41 @@ def scan_depth():
     return bad
 
 
+def scan_inline_js():
+    """页内联脚本语法自检（委托 tools/js_syntax_check.py，用 node --check）。
+
+    为什么放进门禁：2026-09-17 原文库 / 合规审计两页的整段 JS 被
+    unify_chrome 的「插在第一个 </body> 前」误伤（第一个 </body> 落在 JS 字符串里），
+    页面 HTTP 200、HTML 结构完整、A—D 四项全过，但脚本从中间断裂 ——
+    表现是「列表空白、点按钮没反应」。这类故障只有真解析一遍 JS 才看得见。
+    返回 [(页面, 错误块数, 说明)]；工具缺失或 node 不可用时返回 None（跳过，不阻断）。
+    """
+    tool = os.path.join(HERE, "tools", "js_syntax_check.py")
+    if not os.path.exists(tool):
+        return None
+    try:
+        spec = importlib.util.spec_from_file_location("jsck", tool)
+        m = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(m)
+    except Exception:
+        return None
+    if not os.path.exists(m.NODE):
+        return None
+    try:
+        rels = m.pages()
+    except Exception:
+        return None
+    out = []
+    for rel in rels:
+        r = m.check_page(rel)
+        if not r:
+            continue
+        _blocks, bad = r
+        if bad:
+            out.append((rel, len(bad), bad[0][2][:110]))
+    return out
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--quiet", action="store_true")
@@ -182,6 +221,20 @@ def main():
         print("     改法：写成 <tspan font-weight=\"700\">…</tspan> / <tspan font-style=\"italic\">…</tspan>。")
         for p, n, sample in hits:
             print(f'     {p}  {n} 处  例：{sample}')
+
+    print("== E. 页内联脚本语法（node --check） ==")
+    print("   （防的是「整页 JS 被截断」这类致命错误：页面 200、结构正常、A—D 全过，")
+    print("     但脚本从中间断了，列表空白、按钮全没反应）")
+    js_bad = scan_inline_js()
+    if js_bad is None:
+        print("   （node 不可用或检测脚本缺失，跳过）")
+    elif not js_bad:
+        print("   0 ✓")
+    else:
+        exit_code = 1
+        print("   ✗ 阻断：")
+        for p, n, msg in js_bad:
+            print(f"     {p}  {n} 处：{msg}")
 
     print("== 完成 ==")
     sys.exit(exit_code)
