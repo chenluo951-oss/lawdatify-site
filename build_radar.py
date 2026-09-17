@@ -317,9 +317,23 @@ def page_actions(acts):
 
 
 # ================================================================= 全球地图
+def _cn_stats():
+    """中国省级视图的口径（构建期读本地文件，不联网）。"""
+    try:
+        d = json.load(open(os.path.join(HERE, "sources", "radar", "china.json"),
+                           encoding="utf-8"))
+    except Exception:
+        return 0, 0, 0, ""
+    ps = [p for p in d.get("provinces") or [] if p.get("items")]
+    n_item = sum(p.get("n") or len(p.get("items") or []) for p in ps)
+    n_case = sum(p.get("n_case") or 0 for p in ps)
+    return len(ps), n_item, n_case, ((d.get("_meta") or {}).get("updated") or "")
+
+
 def page_map(g):
     juris = g["jurisdictions"]
     items = g["items"]
+    n_cn_prov, n_cn_item, n_cn_case, cn_up = _cn_stats()
     count = {}
     last = {}
     for i in items:
@@ -358,27 +372,47 @@ def page_map(g):
         )
 
     body = "\n".join([
+        '<div id="statWorld">',
         stat_strip([
             ("收录辖区", f"{len(juris)} 个"),
             ("有动态辖区", f"{len(count)} 个"),
             ("动态条目", len(items)),
         ]),
         fresh_note(g.get("_meta"), len(items)),
+        '</div>',
+        # 中国视图的统计与全球不同口径（省级属地条目 ≠ 全球辖区条目），
+        # 切换时整体替换，否则读者盯着一张中国地图看「收录辖区 15 个」会困惑。
+        '<div id="statCN" hidden>',
+        stat_strip([
+            ("有数据省级行政区", f"{n_cn_prov} 个"),
+            ("省级属地条目", n_cn_item),
+            ("其中监管处罚", n_cn_case),
+        ]),
+        (f'<p class="rd-note rd-fresh">数据截至 <b>{esc(cn_up)}</b>'
+         f' · 随每日构建自动更新</p>' if cn_up else ""),
+        '</div>',
         """<p class="rd-note">底图为 <b>Natural Earth 公开数据</b>的等距圆柱投影<b>示意性视图</b>，
 非地理精确边界地图，不承担划界意义。<b>点击中国可下钻到省市级监管态势地图</b>（省界含
-南海诸岛与九段线，台湾省、香港、澳门为独立省级要素）。颜色深浅代表已收录的动态条目数量；
+南海诸岛与九段线，台湾省、香港、澳门为独立省级要素）。颜色深浅代表该省已收录的属地条目数量；
 本页不请求任何在线地图服务。</p>""",
-        """<div class="geo-legend">
+        """<div class="geo-legend" id="glWorld">
   <span class="gl-item"><i class="gl hv0"></i>暂无收录</span>
   <span class="gl-item"><i class="gl hv1"></i>1–2 条</span>
   <span class="gl-item"><i class="gl hv2"></i>3–4 条</span>
   <span class="gl-item"><i class="gl hv3"></i>5 条以上</span>
   <span class="gl-note">微型辖区以圆点定位</span>
+</div>
+<div class="geo-legend" id="glCN" hidden>
+  <span class="gl-item"><i class="gl hv0"></i>暂无收录</span>
+  <span class="gl-item"><i class="gl hv1"></i>1–3 条</span>
+  <span class="gl-item"><i class="gl hv2"></i>4–9 条</span>
+  <span class="gl-item"><i class="gl hv3"></i>10 条以上</span>
+  <span class="gl-note">颜色越深＝该省属地条目越多</span>
 </div>""",
         '<div class="geo-frame" id="geoMap"></div>',
         '<div class="cn-bar" id="cnBar">'
         '<button class="cn-back" id="cnBack" type="button">← 返回全球</button>'
-        '<span class="cn-mode">当前视图：<b>中国 · 省市级监管态势</b>，点击省份查看地方合规动态</span></div>',
+        '<span class="cn-mode">当前视图：<b>中国 · 省市级监管态势</b>，点击省份查看该省属地条目</span></div>',
         '<div class="cn-panel" id="cnPanel"></div>',
         '<div class="rd-mapres" id="mapres"></div>',
         '<div class="rd-glist" id="glist">' + "".join(list_html) + "</div>",
@@ -393,6 +427,16 @@ def page_map(g):
 <script>
 (function(){{
   var blocks=[].slice.call(document.querySelectorAll('.rd-gblock'));
+  // 世界套（统计条 + 图例）与中国套互斥：cn 视图下隐藏世界套、显示中国套。
+  // ⚠️ 别写成「a 与 b 取不同布尔」—— 那会让两套同时可见（图例叠两行）。
+  function swapView(cn){{
+    ['statWorld','glWorld'].forEach(function(id){{
+      var e=document.getElementById(id); if(e) e.hidden=cn;
+    }});
+    ['statCN','glCN'].forEach(function(id){{
+      var e=document.getElementById(id); if(e) e.hidden=!cn;
+    }});
+  }}
   var res=document.getElementById('mapres');
   var cnBar=document.getElementById('cnBar');
   var cnPanel=document.getElementById('cnPanel');
@@ -431,14 +475,16 @@ def page_map(g):
           +'<p>'+(it.note||'')+'</p></div></div>';
       }}).join('');
       cards+='<div class="cn-card" data-prov="'+p.name+'"><div class="cn-n">'+its.length
-        +'<em>条动态</em></div><b>'+p.short+'</b><span>'+(its[0]?its[0].title:'')+'</span></div>';
+        +'<em>条</em></div><b>'+p.short+'</b><span>'+(its[0]?its[0].title:'')+'</span></div>';
       blocks+='<div class="rd-gblock cn-block" data-prov="'+p.name+'" style="display:none">'
         +'<h4 class="rd-gh">'+p.name+'<span>'+its.length+'</span></h4>'+rows+'</div>';
     }});
-    var head='<div class="rd-note">共收录 <b>'+total+'</b> 条 2026 年省级地方合规动态，'
-      +'覆盖 '+provs.filter(function(p){{return (p.items||[]).length;}}).length
-      +' 个省级行政区。全国性法律法规与部门规章适用于全部省份，此处仅列<b>省级市场监管部门的属地监管动作</b>。'
-      +'点击卡片查看该省详情。</div><div class="cn-grid">'+cards+'</div>'+blocks;
+    var nProv=provs.filter(function(p){{return (p.items||[]).length;}}).length;
+    var nCase=0; provs.forEach(function(p){{ nCase+=(p.n_case||0); }});
+    var head='<div class="rd-note">共 <b>'+total+'</b> 条省级属地条目，覆盖 <b>'+nProv
+      +'</b> 个省级行政区（其中监管处罚 '+nCase+' 条）。属地按<b>发布机关与被处罚主体所在地</b>判定，'
+      +'数据来自本站的合规动态、合规案例库与地方市场监管机关公示，随每日构建自动更新。'
+      +'点卡片查看该省全部条目。</div><div class="cn-grid">'+cards+'</div>'+blocks;
     cnPanel.innerHTML=head;
     if(name){{
       cnPanel.querySelectorAll('.cn-block').forEach(function(b){{b.style.display='none';}});
@@ -468,6 +514,7 @@ def page_map(g):
     resetMount('geo-frame');
     cnBar.classList.add('show');
     cnPanel.classList.add('show');
+    swapView(true);
     ChinaView.render({{
       mount:'#geoMap', dataUrl:'../sources/radar/china.json',
       onProvClick:function(name,n){{
@@ -483,6 +530,7 @@ def page_map(g):
     mode='world';
     cnBar.classList.remove('show');
     cnPanel.classList.remove('show');
+    swapView(false);
     resetMount('geo-frame');
     RadarMap.render(opt);
     show(null);

@@ -150,6 +150,16 @@ def hot_counts():
     return len(items), sum(len(x.get("cases", [])) for x in items)
 
 
+def case_count():
+    """案例库规模（kb/cases.html 的条目数）。"""
+    try:
+        d = json.load(open(os.path.join(HERE, "sources", "cases", "cases.json"),
+                           encoding="utf-8"))
+        return int((d.get("meta") or {}).get("count") or len(d.get("cases") or []))
+    except Exception:
+        return 0
+
+
 def online_reader_url(it):
     """标准类：openstd 详情深链 → 官方「在线预览」阅读器深链（图片式全文，供读者自行查阅）。"""
     m = re.search(r"[?&]hcno=([A-Fa-f0-9]{32})", it.get("url") or "")
@@ -279,7 +289,7 @@ def pub_trend(items, months=12):
         '<div class="lv-trend">'
         '<span class="lv-trend-l">近 12 个月发布量</span>'
         '<svg class="lv-spark" viewBox="0 0 %d %d" width="128" height="30" '
-        'role="img" aria-label="近 12 个月合规相关条目发布量走势">'
+        'role="img" aria-label="近 12 个月条目发布量走势">'
         '<path class="lv-spark-a" d="%s"/><polyline class="lv-spark-l" points="%s"/>%s</svg>'
         '<span class="lv-trend-v">峰值 <b>%d</b> 条 · %s</span>'
         '<span class="lv-trend-x">%04d-%02d → %04d-%02d</span>'
@@ -402,10 +412,13 @@ def build_kb_index(items, duties, drafts, soon, stat_html="", board=""):
     n_local = sum(1 for x in items if x.get("local"))
     n_sooner = len(soon)
     # 合规相关性口径（与 build_library_data.mark_relevance 一致）：rel=1 才计入展示口径
-    n_rel_all = sum(1 for x in items if x.get("rel"))
-    n_std_rel = sum(1 for x in items if x.get("rel") and x.get("kind") == "标准")
-    n_law_rel = n_rel_all - n_std_rel
-    n_irrelevant = len(items) - n_rel_all
+    # 2026-09-17：法规库的「收录范围」开关已删除（页面本就全量呈现），
+    # 总览卡片随之改为全量口径，不再用「仅合规相关」的 rel 计数 —— 否则
+    # 卡片数字与进库后看到的条数对不上。
+    n_all = len(items)
+    n_law_all = n_law
+    n_std_all = n_std
+    n_rel_all = sum(1 for x in items if x.get("rel"))  # 仍用于首页等处
 
     # 草案按截止日排序，取最近 5 条
     dl = sorted([d for d in drafts if (d.get("days_left") or 9999) >= 0],
@@ -433,6 +446,7 @@ def build_kb_index(items, duties, drafts, soon, stat_html="", board=""):
     n_online = law_online_count()
     n_std_online = std_online_count()
     n_hot, n_case = hot_counts()
+    n_cases = case_count()
 
     # 义务清单统计（重构后为 大类 → 场景 → 义务 三级）
     cats = duties.get("categories", []) if isinstance(duties, dict) else []
@@ -447,43 +461,37 @@ def build_kb_index(items, duties, drafts, soon, stat_html="", board=""):
 
     body = f"""
   {stat_html}
-  <div class="lb-split">
+  <div class="lb-split lb-split6">
     <a class="dcard lb-entry" href="standards.html" style="--dc:#0f7b6c">
       <b>&#128218; 法规库</b>
-      <span>{n_rel_all} 条目：法律与法规 {n_law_rel} 件 / 标准 {n_std_rel} 项，含国家标准、行业与团体标准、指引指南。
-      标注效力状态（现行有效 / 即将实施 / 已废止）与发布实施日期。
-      已按合规相关性筛除与技术、制造、检验方法有关的 {n_irrelevant} 项标准，可在库内切换为「显示全部」查看。
-      其中 {n_online} 部法规、{n_std_online} 项标准已存有官方正文，条目右侧「读原文」可在站内直接阅读全文
-      （公文版式 / 标准版式、支持条文定位、复制全文与下载）。</span>
+      <span><strong>{n_all}</strong> 条目 · 法律法规 <strong>{n_law_all}</strong> / 标准 <strong>{n_std_all}</strong>
+      · <strong>{n_online + n_std_online}</strong> 份官方正文</span>
       <span class="more">进入法规库 →</span>
     </a>
     <a class="dcard lb-entry" href="standards.html#pane-duty" style="--dc:#1b4f8a">
       <b>🎯 合规义务清单</b>
-      <span>{duty_desc}。矩阵总览按「主题大类 × 业务场景」铺开，一屏看全覆盖面与整改优先级；
-      逐条明细给出条款原文、标杆做法与可套用文案，并反查依据条款。</span>
+      <span><strong>{n_cat}</strong> 个主题大类 · <strong>{n_scene}</strong> 个场景 ·
+      <strong>{n_duty}</strong> 项具体义务</span>
       <span class="more">查看义务清单 →</span>
     </a>
     <a class="dcard lb-entry" href="citations.html" style="--dc:#b91c1c">
       <b>⚖️ 高频引用法条</b>
-      <span>{n_hot} 条被监管处罚与司法裁判高频引用的条款，逐条给出条文摘录、合规场景、处罚标准、法律责任与正面示例，
-      并附 {n_case} 个真实监管 / 处罚 / 司法案例（全部指向发布机构官网具体页面）。可按合规领域或引用次数排序。</span>
+      <span><strong>{n_hot}</strong> 条高频被引条款 · 附 <strong>{n_case}</strong> 个真实案例</span>
       <span class="more">查看高频法条 →</span>
     </a>
     <a class="dcard lb-entry" href="cases.html" style="--dc:#a16207">
-      <b>合规案例库</b>
-      <span>监管机关官网公开的处罚决定、通报与典型案例，按违法类型、执法机关、依据法条与罚款幅度结构化索引，
-      逐条附官方原文深链，用于反查同类执法口径与定性尺度。</span>
+      <b>📁 合规案例库</b>
+      <span><strong>{n_cases}</strong> 个处罚决定与通报案例 · 逐条附官方原文深链</span>
       <span class="more">进入案例库 →</span>
     </a>
     <a class="dcard lb-entry" href="../manage/index.html" style="--dc:#0f766e">
       <b>&#128451; 合规管理</b>
-      <span>把规则落下去：从义务清单勾选审计范围（{n_cat} 大类 / {n_scene} 场景 / {n_duty} 项义务），
-      生成审计任务、逐项记录进度与结论，输出审计报告与整改任务清单。已独立为一级模块。</span>
+      <span>勾选审计范围 → 记录结论 → 输出审计报告与整改清单</span>
       <span class="more">进入合规管理 →</span>
     </a>
     <a class="dcard lb-entry" href="standards.html#pane-draft" style="--dc:#b45309">
       <b>📌 立法草案跟踪</b>
-      <span>{len(drafts)} 项在途立法与征求意见，标注起止日期与剩余天数，链接到官方征求意见通知页。</span>
+      <span><strong>{len(drafts)}</strong> 项在途立法与征求意见 · 标注截止日与剩余天数</span>
       <span class="more">查看草案 →</span>
     </a>
   </div>
@@ -503,15 +511,12 @@ def build_kb_index(items, duties, drafts, soon, stat_html="", board=""):
   <div class="lb-bound">
     <div class="lb-bd">
       <div class="lb-bd-h"><b>合规动态</b><span class="lb-tag t-future">未来 / 进行中 · 每日更新</span></div>
-      <p>合并「监管雷达 + 合规资讯」后的统一入口，回答「何时生效、何地监管、何种行动、发生了什么、我们该做什么」：
-      立法日程与施行倒计时、监管专项行动与执法态势、全球监管地图、各领域最新监管事件（逐条附官方公众号/官网深链）、
-      简报归档，以及按紧迫度排好、逐项可派的「应对建议 · 行动清单」。</p>
+      <p>何时生效、何地监管、发生了什么、该做什么 —— 每日更新。</p>
       <a href="../news/index.html">进入合规动态 →</a>
     </div>
     <div class="lb-bd on">
       <div class="lb-bd-h"><b>合规知识库</b><span class="lb-tag t-long">长期稳定</span></div>
-      <p>回答「规则本身是什么」：法规与标准原文、按主题拆解的合规义务清单、在途立法草案。
-      内容不随日更变化。</p>
+      <p>规则本身是什么 —— 法规标准、合规义务、在途草案，长期稳定。</p>
       <span class="lb-here">当前位置</span>
     </div>
   </div>
@@ -1019,6 +1024,9 @@ def main():
 
     n_std = sum(1 for x in items if x.get("kind") == "标准")
     n_law = len(items) - n_std
+    # 全量口径（2026-09-17：法规库不再有「仅合规相关 / 显示全部」开关，
+    # 页面本来就看全部，统计条随之改为全量，与进库看到的条数一致）
+    n_all, n_std_all, n_law_all = len(items), n_std, n_law
     n_rel_all = sum(1 for x in items if x.get("rel"))
     n_std_rel = sum(1 for x in items if x.get("rel") and x.get("kind") == "标准")
     n_law_rel = n_rel_all - n_std_rel
@@ -1038,11 +1046,13 @@ def main():
             drafts = []
 
     # ---------------- 统计条
+    # 2026-09-17：删掉法规库的「收录范围」开关后，这两个计数已无对应概念
+    # （「合规相关条目 / 已筛除技术类标准」说的是那个开关的两侧），
+    # 改为直接报全量口径，与进库看到的条数一致。
     stats = [(k, v) for k, v in [
-        ("合规相关条目", n_rel_all),
-        ("标准", n_std_rel),
-        ("法律法规", n_law_rel),
-        ("已筛除技术类标准", n_irrelevant),
+        ("收录条目", n_all),
+        ("法律法规", n_law_all),
+        ("标准", n_std_all),
         ("本机原文", n_local),
         ("站内法规原文", n_online),
         ("站内标准正文", n_std_online),
@@ -1125,7 +1135,13 @@ def main():
     _data_js = ("window.LB_ITEMS=" + json.dumps(lb_rows, ensure_ascii=False,
                                                separators=(",", ":")) + ";\n"
                 + "window.LB_CLS=" + json.dumps({"status": STATUS_CLS, "level": LEVEL_CLS},
-                                                ensure_ascii=False) + ";\n")
+                                                ensure_ascii=False) + ";\n"
+                # LB_META 此前**只被读取、从未写入** → 左栏「效力级别」实际退化成
+                # 按计数降序，与「按位阶从高到低」的意图不符（2026-09-17 补）。
+                # 现在把它显式下发：levels 的数组顺序即**法律位阶顺序**，
+                # 左栏分组与列表默认排序（位阶优先）都用它。
+                + "window.LB_META=" + json.dumps(
+                    {"level": data["meta"]["levels"]}, ensure_ascii=False) + ";\n")
     _data_js = _data_js.replace("<", "\\u003c")
     _dp = os.path.join(HERE, "kb", "library-data.js")
     os.makedirs(os.path.dirname(_dp), exist_ok=True)
@@ -1196,6 +1212,7 @@ def main():
         '<button type="button" class="on" data-m="exact">精确</button>'
         '<button type="button" data-m="fuzzy">模糊</button></div>'
         '<select id="lvSort" class="lv-sel" aria-label="排序">'
+        '<option value="rank" selected>位阶：高 → 低（同阶按生效时间）</option>'
         '<option value="pub_desc">发布日期：新 → 旧</option>'
         '<option value="pub_asc">发布日期：旧 → 新</option>'
         '<option value="impl_desc">实施日期：新 → 旧</option>'
@@ -1246,8 +1263,8 @@ def main():
         '直接输出该话题的<b>法律依据清单</b>——每项义务对应哪些法规标准、哪些条款、原文怎么写，'
         '并可一键复制成 Markdown 或打印成 PDF。</p>',
         ask_html,
-        '<p class="rd-note">清单中的条款原文逐字取自我站<b>官方原文库</b>，条文出处与官方发布页均为深链；'
-        '本页用于合规检索与自查参考，<b>不构成法律意见</b>，引用前请点开原文核对现行有效版本。</p>',
+        # 免责说明只保留在页面底部一处（本页曾出现两次几乎相同的句子）
+        '<p class="rd-note">清单中的条款原文逐字取自我站<b>官方原文库</b>，条文出处与官方发布页均为深链。</p>',
         "</section>",
         '<p class="rd-note">标准数据取自<b>国家标准全文公开系统</b>（发布/实施日期与现行状态以官方为准）；'
         '法律法规与规范性文件均附发布机构官网原文深链。'
@@ -1264,10 +1281,8 @@ def main():
         "亦可按业务话题直接问出该话题的法律依据清单。",
         '<a href="index.html">合规知识库</a> / 法规库',
         "法规库",
-        "与合规、安全、法规相关的法律法规与标准收在一处：哪部现行、哪部即将实施、"
-        "哪部已废止，以及每一项合规义务该引用哪些依据。左侧按资源类型、效力级别、时效性、"
-        "专题、发文机关、地域与发布日期逐层收敛，右侧逐条给出官方原文入口；"
-        "不确定从哪查起时，用「按话题找依据」说一句业务上的事，直接拿到该话题的法律依据清单。",
+        "共 " + str(len(items)) + " 条目，默认按效力位阶从高到低排列，"
+        "同位阶内按生效时间从新到旧；左侧多维过滤，右侧逐条给出官方原文入口。",
         body,
     )
 
@@ -1365,9 +1380,10 @@ LIB_RENDER = """
   var FMAP={}; FACETS.forEach(function(f){FMAP[f.k]=f;});
   function valAt(i,k){ return k==='pub' ? BND[i] : IT[i][F[k]]; }
 
-  // 当前条件：scope=rel 只看合规相关；qs=已冻结的关键词（结果中检索）；q=当前关键词；
-  //           fld=检索范围（t 标题 / f 全文）；md=匹配方式（exact / fuzzy）
-  var st={scope:'rel',q:'',qs:[],fld:'t',md:'exact',sort:'pub_desc',page:1,size:20,
+  // 当前条件：qs=已冻结的关键词（结果中检索）；q=当前关键词；
+  //           fld=检索范围（t 标题 / f 全文）；md=匹配方式（exact / fuzzy）；
+  //           sort 默认 rank = 位阶（法律 → 行政法规 → …）优先，同位阶按生效时间 新 → 旧
+  var st={q:'',qs:[],fld:'t',md:'exact',sort:'rank',page:1,size:20,
           sel:{kind:{},level:{},status:{},topic:{},issuer:{},region:{},pub:{}}};
 
   function keepSel(o){var n=0; for(var k in o) if(o[k]) n++; return n;}
@@ -1383,7 +1399,6 @@ LIB_RENDER = """
     return true;
   }
   function pass(i,skip){
-    if(st.scope==='rel' && !IT[i][F.rel]) return false;
     if(!qHit(i,skip)) return false;
     for(var k in st.sel){
       if(k===skip) continue;
@@ -1409,9 +1424,19 @@ LIB_RENDER = """
     renderSide(); renderChips(); render();
   }
 
+  // 「位阶」顺序来自 LB_META.level（法律 → 行政法规 → 部门规章 → …），
+  // 未登记的层级排最后。
+  function rk(x){ var v=RANK[x[F.level]]; return (v==null)?999:v; }
   function cmp(a,b){
     var x=IT[a],y=IT[b];
     if(st.sort==='name') return (x[F.name]||'').localeCompare(y[F.name]||'','zh');
+    if(st.sort==='rank'){
+      var ra=rk(x), rb=rk(y);
+      if(ra!==rb) return ra-rb;                                   // ① 位阶高 → 低
+      var xa=x[F.impl]||x[F.pub]||'', ya=y[F.impl]||y[F.pub]||'';
+      if(xa!==ya) return (xa<ya?1:-1);                            // ② 生效时间 新 → 旧
+      return (x[F.name]||'').localeCompare(y[F.name]||'','zh');   // ③ 名称兜底，保证稳定
+    }
     var xa=x[F.pub]||'', ya=y[F.pub]||'';
     if(st.sort==='impl_desc'){ xa=x[F.impl]||''; ya=y[F.impl]||''; }
     if(!xa&&!ya) return (y[F.name]||'').localeCompare(x[F.name]||'','zh');
@@ -1424,6 +1449,7 @@ LIB_RENDER = """
 
   // ---------------- 左栏
   var META=window.LB_META||{};
+  var RANK={}; (META.level||[]).forEach(function(l,i){ RANK[l]=i; });
   function buckets(k){
     var m=cnt[k]||{}, out=[], v;
     var f=FMAP[k];
@@ -1454,12 +1480,10 @@ LIB_RENDER = """
   }
   function renderSide(){
     var h=[];
-    h.push('<div class="lv-f"><div class="lv-fh">收录范围</div>');
-    h.push('<label class="lv-r"><input type="radio" name="lvScope" value="rel"'
-      +(st.scope==='rel'?' checked':'')+'><span>仅合规相关<b>'+n2(scopeCount('rel'))+'</b></span></label>');
-    h.push('<label class="lv-r"><input type="radio" name="lvScope" value="all"'
-      +(st.scope==='all'?' checked':'')+'><span>显示全部<b>'+n2(scopeCount('all'))+'</b></span></label>');
-    h.push('</div>');
+    // 2026-09-17（用户要求）：删掉「收录范围（仅合规相关 / 显示全部）」开关。
+    // 理由 —— 进法规库就是要看法律，把「是否看全部」做成首选项没有任何意义，
+    // 反而让用户以为库里的东西被藏起来了。现在一律全量呈现，
+    // 列表默认按**位阶高→低、同位阶按生效时间新→旧**排序（见 cmp 的 rank 分支）。
     FACETS.forEach(function(f){
       var bs=buckets(f.k), sel=st.sel[f.k];
       h.push('<div class="lv-f"><div class="lv-fh">'+e(f.t)+'</div><div class="lv-fb">');
@@ -1475,11 +1499,6 @@ LIB_RENDER = """
     });
     SIDE.innerHTML=h.join('');
   }
-  function scopeCount(sc){
-    var n=0;
-    for(var i=0;i<N;i++){ if(sc==='rel'&&!IT[i][F.rel]) continue; n++; }
-    return n;
-  }
 
   // ---------------- 已选条件
   function renderChips(){
@@ -1493,7 +1512,6 @@ LIB_RENDER = """
           +e(lab)+'<i>×</i></button>');
       }
     }
-    if(st.scope==='rel') out.unshift('<button type="button" class="lv-chip lv-chip-s" data-k="scope">仅合规相关<i>×</i></button>');
     // 结果中检索：每个被冻结的关键词各给一枚可单独移除的 chip（AND 关系）
     for(var j=st.qs.length-1;j>=0;j--){
       out.unshift('<button type="button" class="lv-chip lv-chip-q" data-k="qs" data-i="'+j
@@ -1549,7 +1567,7 @@ LIB_RENDER = """
     var a=(st.page-1)*size, b=Math.min(a+size,hits.length), out=[];
     if(!hits.length){
       host.innerHTML='<div class="lv-empty">没有符合条件的条目。可点左上「重置」清空条件，'
-        +'或把「收录范围」切到「显示全部」查看技术类标准。</div>';
+        +'或放宽「资源类型 / 效力级别 / 时效性」的勾选。</div>';
     }else{
       for(var i=a;i<b;i++) out.push(row(hits[i],i));
       host.innerHTML=out.join('');
@@ -1581,21 +1599,15 @@ LIB_RENDER = """
   SIDE.addEventListener('click',function(ev){
     var b=ev.target.closest('.lv-o'); if(!b) return;
     var k=b.getAttribute('data-k'), v=b.getAttribute('data-v');
-    if(k==='scope') return;
     var f=FMAP[k];
     if(f&&f.multi){ st.sel[k][v]=!st.sel[k][v]; }
     else { var had=st.sel[k][v]; for(var x in st.sel[k]) st.sel[k][x]=false; st.sel[k][v]=!had; }
     refilter(false);
   });
-  SIDE.addEventListener('change',function(ev){
-    if(ev.target.name!=='lvScope') return;
-    st.scope=ev.target.value; refilter(false);
-  });
   CHIPS.addEventListener('click',function(ev){
     var b=ev.target.closest('.lv-chip'); if(!b) return;
     var k=b.getAttribute('data-k');
-    if(k==='scope'){ st.scope='all'; }
-    else if(k==='q'){ st.q=''; if(Q) Q.value=''; }
+    if(k==='q'){ st.q=''; if(Q) Q.value=''; }
     else if(k==='qs'){ st.qs.splice(parseInt(b.getAttribute('data-i'),10)||0,1); }
     else st.sel[k][b.getAttribute('data-v')]=false;
     refilter(false);
@@ -1617,7 +1629,8 @@ LIB_RENDER = """
     window.scrollTo({top:top,behavior:'smooth'});
   });
   if(RESET) RESET.addEventListener('click',function(){
-    st.scope='rel'; st.q=''; st.qs=[]; st.fld='t'; st.md='exact';
+    st.q=''; st.qs=[]; st.fld='t'; st.md='exact'; st.sort='rank';
+    if(SORTD) SORTD.value='rank';
     for(var k in st.sel) st.sel[k]={};
     if(Q) Q.value='';
     syncSeg(FSEG,'f','t'); syncSeg(MSEG,'m','exact');

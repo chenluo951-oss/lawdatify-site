@@ -15,8 +15,11 @@
 (function (global) {
   'use strict';
 
+  // 热度分级按**省数据实际量级**定档（2026-09-17 接入真实数据后：单省最高 40 条）。
+  // 旧的 0/1-2/3-4/5+ 档位是为「硬编码 7 条」的量级设的，接上真实数据后
+  // 30 个省会全部落到最深的档，地图失去区分度。
   var HEAT = { 0: 'hv0', 1: 'hv1', 2: 'hv2', 3: 'hv3' };
-  function heat(n) { return n >= 5 ? 3 : n >= 3 ? 2 : n >= 1 ? 1 : 0; }
+  function heat(n) { return n >= 10 ? 3 : n >= 4 ? 2 : n >= 1 ? 1 : 0; }
 
   function esc(s) {
     return String(s == null ? '' : s)
@@ -68,7 +71,7 @@
           var n = (p.items || []).length;
           h.push('<g class="cgeo ' + HEAT[heat(n)] + (n ? ' cn-has' : '') +
                  '" data-name="' + esc(p.name) + '" tabindex="0" role="button" aria-label="' +
-                 esc(p.short) + ' ' + n + ' 条动态">');
+                 esc(p.short) + ' ' + n + ' 条属地条目">');
           h.push('<path d="' + p.path + '"/>');
           h.push('</g>');
         });
@@ -96,9 +99,12 @@
           var name = g.getAttribute('data-name');
           var p = lastData.provinces.find(function (x) { return x.name === name; });
           var n = p && p.items ? p.items.length : 0;
+          var nc = p && p.n_case ? p.n_case : 0;
           var extra = p && p.items && p.items[0] ? p.items[0].title : '';
-          moveTip(e, '<b>' + esc(p ? p.short : name) + '</b>' +
-            (n ? '<span>' + n + ' 条地方动态</span>' : '<span>暂无收录的地方动态</span>') +
+          var desc = !n ? '<span>暂无收录</span>'
+            : '<span>' + n + ' 条属地条目' +
+              (nc ? '（其中处罚 ' + nc + ' 条）' : '') + '</span>';
+          moveTip(e, '<b>' + esc(p ? p.short : name) + '</b>' + desc +
             (extra ? '<i>' + esc(extra) + '</i>' : ''));
         });
         mount.addEventListener('mouseleave', function () {

@@ -65,6 +65,10 @@ def split_library():
     raw = open(src, encoding="utf-8").read()
     m = re.search(r"window\.LB_ITEMS=(\[.*?\]);", raw, re.S)
     cls = re.search(r"window\.LB_CLS=(\{.*?\});", raw, re.S)
+    # ⚠️ LB_META 是**左栏维度顺序 + 列表位阶排序**的依据（build_standards 下发）。
+    # 切片时若不把它一并搬到第 1 片，源文件被置空后就永久丢失 ——
+    # 表现是法规库「效力级别」退化成按计数降序、默认排序的位阶序失效。
+    meta = re.search(r"window\.LB_META=(\{.*?\});", raw, re.S)
     if not m:
         print("  ! library-data.js 结构未识别，跳过")
         return
@@ -81,6 +85,8 @@ def split_library():
         js = ""
         if i == 1 and cls:
             js += "window.LB_CLS=" + cls.group(1) + ";\n"
+        if i == 1 and meta:
+            js += "window.LB_META=" + meta.group(1) + ";\n"
         js += ("window.LB_ITEMS=(window.LB_ITEMS||[]).concat("
                + json.dumps(part, ensure_ascii=False, separators=(",", ":")) + ");\n")
         js = js.replace("<", "\\u003c")

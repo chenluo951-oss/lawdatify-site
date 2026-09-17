@@ -14,62 +14,21 @@ SRC = "/tmp/china_full.json"
 DST = os.path.join(os.path.dirname(os.path.abspath(__file__)),
                    "sources", "radar", "china.json")
 
-# 省级合规动态（全部为政府官网具体页面深链，2026 年内）
-PROV_ITEMS = {
-    "上海市": [{
-        "date": "2026-08-27", "type": "政策宣贯", "domain": "平台合规",
-        "title": "上海召开即时零售高质量发展行业交流暨政策宣贯会，落地《行动方案（2026-2028）》",
-        "url": "https://www.shanghai.gov.cn/nw31406/20260828/1da9c35152004622a258bf0c11b2c9df.html",
-        "note": "市商务委 9 部门 6 月联合印发《上海市支持即时零售高质量发展行动方案（2026—2028年）》"
-                "（沪商电商〔2026〕178号），提出打造即时零售总部「第一城」，12 条措施细化为 30 余项工作举措："
-                "优化前置仓选址支持、支持店仓一体、鼓励无人机/机器人配送、加强骑手驿站与新就业群体服务管理。"}],
-    "山西省": [{
-        "date": "2026-05-07", "type": "行政约谈", "domain": "食品合规",
-        "title": "山西省、太原市两级市场监管局联合集体约谈全省外卖平台",
-        "url": "https://scjgj.taiyuan.gov.cn/sjdt/20260509/30297306.html",
-        "note": "落实总局 123 号令，省委网信办、公安厅等七部门参会，美团、淘宝闪购、京东、抖音等平台与省内备案平台 200 余人参加。"
-                "聚焦「幽灵外卖」、一证多店、证照信息不一致，要求问题清单化、闭环式整改，平台现场签订《承诺书》。"}],
-    "辽宁省": [{
-        "date": "2026-03-18", "type": "执法约谈", "domain": "食品合规",
-        "title": "沈阳市市场监管局对三大网络餐饮平台开展执法约谈",
-        "url": "https://scj.shenyang.gov.cn/tpxx/202603/t20260318_5001391.html",
-        "note": "围绕 123 号令压实平台责任：入网资质线上核验 + 线下实地抽查、证照信息线上公示、"
-                "常态化数据报送；对「幽灵外卖」、无证无照、套证借证「零容忍」，问题商户坚决下线。"}],
-    "江西省": [
-        {"date": "2026-06", "type": "行政约谈", "domain": "食品合规",
-         "title": "江西省市场监管局约谈美团、淘宝闪购、京东外卖在赣负责人",
-         "url": "https://amr.jiangxi.gov.cn/amr/sjdt/content/content_2074340051348267008.html",
-         "note": "结合亮证亮照专项解读 123 号令：运营机构台账全量梳理与合规自查、监管数据全量获取与白名单机制、"
-                 "骑手权益保障与网约配送合作机制建设。"},
-        {"date": "2026-02-10", "type": "行政约谈", "domain": "食品合规",
-         "title": "江西省市场监管局集中约谈网约配送企业，通报「幽灵外卖」典型案例",
-         "url": "https://amr.jiangxi.gov.cn/amr/sjdt/content/content_2021788454815272960.html",
-         "note": "针对「幽灵外卖」、网络抽检不合格等突出问题，指出平台在商户资质审核、日常巡查、质量管控上的短板，"
-                 "要求限期整改并报告结果，逾期未改将依法从严处理。"},
-        {"date": "2026-06-02", "type": "行政约谈", "domain": "食品合规",
-         "title": "抚州市临川区：123 号令实施 24 小时内约谈平台运营机构",
-         "url": "https://fzscj.jxfz.gov.cn/art/2026/6/5/art_5623_4453996.html",
-         "note": "五项硬性要求：严审入网资质清理「幽灵外卖」、推进「互联网+明厨亮灶」并对接省智慧监管平台、"
-                 "无堂食商户显著标识、外卖封签「出餐必封、一餐一封」、建立政企协同与骑手「一线巡查员」机制。"}],
-    "湖南省": [{
-        "date": "2026-08-24", "type": "行政约谈", "domain": "食品合规",
-        "title": "湖南省市场监管局约谈美团、淘宝闪购、京东网络餐饮平台区域负责人",
-        "url": "https://amr.hunan.gov.cn/amr/xxx/xtdtx/202608/t20260825_34050618.html",
-        "note": "通报入网商户资质审核不严、食品安全责任落实不到位、骑手权益保障缺失等问题："
-                "依法按时核验更新商户登记信息、常态化配送员安全培训与健康资质审核、全面落实外卖封签与餐箱消杀制度。"}],
-    "广西壮族自治区": [{
-        "date": "2026-06-01", "type": "集体约谈", "domain": "食品合规",
-        "title": "河池市召开网络食品交易第三方平台集体约谈会",
-        "url": "http://scjgj.hechi.gov.cn/xwzx/gzdt/t27755170.shtml",
-        "note": "宣贯 123 号令并提出「三个绝不」：月底前完成入网商户全覆盖穿透式核查、全面清除「幽灵外卖」；"
-                "代理商按时限向自治区局报告；严格落实每 6 个月一次的商户信息实地核验并留存记录。"}],
-    "陕西省": [{
-        "date": "2026-03-16", "type": "行政指导", "domain": "食品合规",
-        "title": "西安市高陵区约谈网络餐饮外卖运营商，部署 123 号令重点任务",
-        "url": "http://www.gaoling.gov.cn/ztzl/rdzt/fzzfjs/pfxc/2039271935049760770.html",
-        "note": "要求资质实质性审查、线上线下一致，清理无证、套证、超范围经营及「幽灵外卖」；"
-                "推广食安封签、规范配送容器消杀、推进「互联网+明厨亮灶」，发挥骑手监督员作用。"}],
-}
+# ⚠️ 省级条目**不再写死在本文件**（原 PROV_ITEMS 的 7 条已迁到
+# sources/radar/prov_curated.json，作为人工精选来源之一）。
+#
+# 原因：写死的结果是「站点的合规动态与案例库每天都在涨，省市级地图却一直
+# 只有那 7 条」—— 用户 2026-09-17 反馈「省市的还是没更新啊」。
+#
+# 现在省级条目由 tools/build_prov_data.py 聚合生成：
+#   · sources/radar/prov_curated.json   人工精选的地方监管动作
+#   · sources/news/items.jsonl          合规动态（按发布机关判属地）
+#   · sources/cases/cases.json          案例库（机关名 / 属地判据）
+#   · sources/cases/local_amr.jsonl     地方市场监管机关公示（agency 字段最准）
+# 本文件只负责**几何**（省界路径 + 标注点），跑完请接着跑：
+#   python3 tools/build_prov_data.py --apply
+# 该脚本会保留 path / cx / cy / viewBox，只重写 provinces[].items。
+PROV_ITEMS = {}
 
 PROV_SHORT = {
     "北京市": "北京", "天津市": "天津", "河北省": "河北", "山西省": "山西", "内蒙古自治区": "内蒙古",
@@ -171,7 +130,7 @@ def main():
         viewBox=f"0 0 {W:.0f} {H:.0f}", provinces=provs)
     json.dump(out, open(DST, "w", encoding="utf-8"), ensure_ascii=False)
     n_items = sum(len(p["items"]) for p in provs)
-    print(f"provinces={len(provs)} items={n_items} -> {DST}")
+    print(f"provinces={len(provs)} items={n_items}（几何层；条目由 build_prov_data.py 填充）-> {DST}")
     sizes = sorted(len(p["path"]) for p in provs)
     print("path size min/med/max:", sizes[0], sizes[len(sizes)//2], sizes[-1])
 

@@ -98,7 +98,13 @@ STEPS = [
     # ⚠️ 「合规管理」总览必须在 build_audit 之后：审计页坐标已被 build_audit 改到
     # manage/audit.html（老地址 kb/audit.html 变跳转页），总览页链接指向它。
     ("合规管理总览",    [PY, "build_manage.py"],                     False),
+    # ⚠️ 省市级地图数据必须排在「监管雷达」之前：china.json 的省级条目由
+    # tools/build_prov_data.py 从合规动态库 + 案例库 + 地方市监公示聚合，
+    # 页面前端 fetch 该文件。漏跑这一步 = 地图停在上一批数据（2026-09-17 前
+    # 是硬编码 7 条，用户反馈「省市的还是没更新」）。
+    ("地图·省级条目",   [PY, "tools/build_prov_data.py", "--apply"], False),
     ("监管雷达",        [PY, "build_radar.py"],                      True),
+    ("地图·省级条目",   [PY, "tools/build_prov_data.py", "--apply"], False),
     ("法律分析",        [PY, "build_analysis.py"],                   False),
     # 公众号原文存档 → kb/wx.html + sources/wx/replaces.json
     # 必须在 build_topics 之前：build_topics 读 replaces.json 把二手来源链接改指站内存档

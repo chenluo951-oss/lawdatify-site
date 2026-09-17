@@ -801,7 +801,8 @@ footer .inner{flex-direction:column;align-items:flex-start;gap:10px}
   border:1px solid #d5e6e2;box-shadow:var(--shadow)}
 .lb-entry b{font-size:17px}
 .lb-entry span{font-size:13.2px;line-height:1.8}
-.lb-entry .more{margin-top:4px;font-size:13px;color:var(--brand);font-weight:600}
+/* 卡片描述压成一行数据后，「进入 →」若仍按 inline 排会黏在数字末尾，故独立成行 */
+.lb-entry .more{margin-top:6px;font-size:13px;color:var(--brand);font-weight:600;display:block}
 
 /* ===== 知识库 v3：章节阅读 / 本机原文 / 草案跟踪 ===== */
 .lb-ext{display:inline-block;margin-left:6px;font-size:12px;color:var(--faint);
@@ -831,6 +832,8 @@ footer .inner{flex-direction:column;align-items:flex-start;gap:10px}
 
 /* ===== 知识库总览 / 模块边界 / 子导航 ===== */
 .lb-split{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px;margin:6px 0 22px}
+/* 知识库总览的 6 张入口卡：固定成 3 列两排，避免 4+2 留下半排空白 */
+.lb-split6{grid-template-columns:repeat(auto-fit,minmax(320px,1fr))}
 .lb-cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;margin-bottom:24px}
 .lb-col{border:1px solid var(--line);border-radius:10px;padding:14px 16px;background:#fff}
 .lb-col h3{margin:0 0 10px;font-size:14px;color:var(--ink)}
