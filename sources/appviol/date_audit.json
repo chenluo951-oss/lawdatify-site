@@ -1,5 +1,5 @@
 {
- "updated": "2026-09-15",
+ "updated": "2026-09-17",
  "documents": 652,
  "with_date": 652,
  "exact_day": 545,
@@ -7,10 +7,10 @@
  "by_source": {
   "pubdate": 441,
   "kept:harvest": 55,
+  "url-day": 12,
   "body": 37,
   "title-year": 9,
-  "url-path": 98,
-  "url-day": 12
+  "url-path": 98
  },
  "migrate_days": {
   "sdca.miit.gov.cn": "2026-01-29",

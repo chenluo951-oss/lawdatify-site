@@ -1,5 +1,5 @@
 {
- "updated": "2026-09-15",
+ "updated": "2026-09-17",
  "provinces": [
   {
    "abbr": "ah",
@@ -9,7 +9,7 @@
    "columns": [
     {
      "path": "/xxgk/tzgg/index.html",
-     "total_rows": 197,
+     "total_rows": 199,
      "hits": 66
     },
     {
@@ -1064,7 +1064,7 @@
     },
     {
      "path": "/zwgk/tzgg/index.html",
-     "total_rows": 301,
+     "total_rows": 302,
      "hits": 31
     },
     {
@@ -2032,7 +2032,7 @@
    "columns": [
     {
      "path": "/gzcy/gggs/index.html",
-     "total_rows": 128,
+     "total_rows": 129,
      "hits": 17
     }
    ],
@@ -2132,7 +2132,7 @@
    "columns": [
     {
      "path": "/xwdt/gzdt/index.html",
-     "total_rows": 346,
+     "total_rows": 348,
      "hits": 9
     }
    ],
@@ -2192,7 +2192,7 @@
    "columns": [
     {
      "path": "/zwgk/tzgg/index.html",
-     "total_rows": 449,
+     "total_rows": 450,
      "hits": 5
     },
     {
@@ -2297,7 +2297,7 @@
    "columns": [
     {
      "path": "/zwgk/tzgg/index.html",
-     "total_rows": 297,
+     "total_rows": 298,
      "hits": 15
     }
    ],
@@ -2392,7 +2392,7 @@
     },
     {
      "path": "/zwgk/wlaq/index.html",
-     "total_rows": 90,
+     "total_rows": 91,
      "hits": 4
     }
    ],
@@ -2582,7 +2582,7 @@
    "columns": [
     {
      "path": "/zwgk/wlaqgl/index.html",
-     "total_rows": 6,
+     "total_rows": 7,
      "hits": 1
     },
     {
@@ -2622,7 +2622,7 @@
    "columns": [
     {
      "path": "/xwdt/tzgg/index.html",
-     "total_rows": 217,
+     "total_rows": 218,
      "hits": 37
     },
     {
