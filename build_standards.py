@@ -9,7 +9,7 @@
 
 幂等：输出后自动调用 unify_chrome + inject_meta 恢复页头页脚与分享元数据。
 """
-import os, re, json, html, datetime
+import os, re, json, html, datetime, collections
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 SRC = os.path.join(HERE, "sources", "standards", "library.json")
@@ -63,6 +63,28 @@ LEVEL_CLS = {"法律": "b-purple", "行政法规": "b-purple", "部门规章": "
 
 # 站内法规原文库（build_texts.py 产出）的条目映射
 TEXT_IDS = os.path.join(HERE, "sources", "standards", "text_ids.json")
+# 法规修订沿革（tools/build_amendments.py 从官方前言提炼，P2-4）
+AMEND = os.path.join(HERE, "sources", "standards", "amendments.json")
+_AM = None
+
+
+def load_amendments():
+    global _AM
+    if _AM is None:
+        try:
+            _AM = json.load(open(AMEND, encoding="utf-8")).get("items", {})
+        except Exception:
+            _AM = {}
+    return _AM
+
+
+def amend_text(am):
+    """把沿革数据写成一句话：经 N 次修正／修订 · 最近 YYYY-MM-DD。"""
+    if not am or not am.get("n"):
+        return ""
+    last = am.get("last") or ""
+    return "经 %d 次%s%s" % (am["n"], am.get("kind") or "修正",
+                            (" · 最近 " + last) if last else "")
 SEP_RE = re.compile(r"[\s\-—–/／\\()（）《》〈〉【】\[\]:：.、,，;；·|'\"]+")
 _TID = None
 
@@ -213,6 +235,57 @@ _REGION_ORDER = (["全国"] + _PROVINCES[:4]
                     "山西", "吉林", "黑龙江", "贵州", "海南",
                     "内蒙古", "新疆", "甘肃", "宁夏", "青海", "西藏"]
                  + ["深圳", "青岛", "大连", "宁波", "厦门"])
+
+
+def pub_trend(items, months=12):
+    """近 N 个月的发布量迷你折线（P2-5，对标律商网的逐年数据量折线）。
+
+    为什么放在法规库：左栏的「发布日期」facet 只能告诉你「哪些是近 1 个月」，
+    看不出「最近在密集出什么」的趋势。这里给一条一屏可读完的走势，
+    峰值月份直接标出来，不占正文位置（高约 30px，不做大图）。
+    只统计**合规相关**条目，与页面默认视图口径一致。
+    """
+    today = datetime.date.today()
+    yms = []
+    for i in range(months - 1, -1, -1):
+        y, m = today.year, today.month - i
+        while m <= 0:
+            m += 12
+            y -= 1
+        yms.append((y, m))
+    cnt = collections.Counter()
+    for x in items:
+        if not x.get("rel"):
+            continue
+        m = re.match(r"(\d{4})-(\d{2})", x.get("pub") or "")
+        if m:
+            cnt[(int(m.group(1)), int(m.group(2)))] += 1
+    vals = [cnt.get(k, 0) for k in yms]
+    mx = max(vals) or 1
+    pk = vals.index(max(vals))
+    W, H, PL, PR, TOP, BASE = 320.0, 30.0, 3.0, 3.0, 3.0, 26.0
+    n = len(vals)
+    step = (W - PL - PR) / (n - 1)
+    pts = [(PL + i * step, BASE - (v / mx) * (BASE - TOP)) for i, v in enumerate(vals)]
+    poly = " ".join("%.1f,%.1f" % p for p in pts)
+    area = ("M%.1f,%.1f L" % (pts[0][0], BASE)) + " L".join(
+        "%.1f,%.1f" % p for p in pts) + " L%.1f,%.1f Z" % (pts[-1][0], BASE)
+    dots = "".join(
+        '<circle cx="%.1f" cy="%.1f" r="%s"><title>%04d-%02d：%d 条</title></circle>'
+        % (p[0], p[1], "2.6" if i == pk else "1.7", yms[i][0], yms[i][1], vals[i])
+        for i, p in enumerate(pts))
+    lab = '%04d-%02d' % yms[pk]
+    return (
+        '<div class="lv-trend">'
+        '<span class="lv-trend-l">近 12 个月发布量</span>'
+        '<svg class="lv-spark" viewBox="0 0 %d %d" width="128" height="30" '
+        'role="img" aria-label="近 12 个月合规相关条目发布量走势">'
+        '<path class="lv-spark-a" d="%s"/><polyline class="lv-spark-l" points="%s"/>%s</svg>'
+        '<span class="lv-trend-v">峰值 <b>%d</b> 条 · %s</span>'
+        '<span class="lv-trend-x">%04d-%02d → %04d-%02d</span>'
+        '</div>'
+    ) % (int(W), int(H), area, poly, dots, mx, lab,
+         yms[0][0], yms[0][1], yms[-1][0], yms[-1][1])
 
 
 def read_affordance(it):
@@ -491,6 +564,27 @@ def name_match(ref, name):
     return core == ref
 
 
+def short_law(name):
+    """显示用短名：去掉「中华人民共和国」前缀。全称仍保留在 title 里，不丢信息。"""
+    n = (name or "").strip()
+    return n[7:] if n.startswith("中华人民共和国") and len(n) > 9 else n
+
+
+def ref_label(x):
+    """依据标签：能当文号用就用 code，否则退回法规名。
+
+    ⚠️ library.json 里有 6400 多条常用依据的 code 字段其实就是效力级别本身
+    （地方法规 3037 / 修改决定 2537 / 司法解释 873 / 行政法规 687 / 法律 352 /
+    部门规章 21 / 规范性文件 7）。这类 code 挂在义务下面，读者只看到「部门规章」
+    四个字，不知道引用的是哪一部 —— 所以 code 与 level 相同（或本就属级别词）时
+    一律显示法规全名。判据用「code == level」而不是维护一张级别词表，避免漏项。
+    """
+    c = (x.get("code") or "").strip()
+    if c and c != (x.get("level") or "").strip():
+        return c
+    return short_law(x.get("name") or c)
+
+
 def find_refs(refs, items, n=2):
     """按 refs（标准号或法规名）在条目库中反查依据，返回可点击的条目。
 
@@ -530,9 +624,14 @@ def render_articles(arts):
         return ""
     lis = []
     for a in arts:
+        # 出处名统一去掉「中华人民共和国」前缀：义务数据里两种写法混用，
+        # 不改会在「一句话问」的法条汇总里出现《食品安全法》与《中华人民共和国食品安全法》
+        # 两条指向同一条文的重复 chip。全称放 title。
+        src = a.get("src") or ""
         lis.append(
             f'<div class="art-item">'
-            f'<div class="art-hd"><span class="art-src">{esc(a.get("src") or "")}</span>'
+            f'<div class="art-hd"><span class="art-src" title="{esc(src)}">'
+            f'{esc(short_law(src))}</span>'
             f'<span class="art-no">{esc(a.get("art") or "")}</span></div>'
             f'<blockquote class="art-quote">{esc(a.get("quote") or "")}</blockquote></div>')
     return ('<details class="art-box"><summary>条款原文'
@@ -739,9 +838,12 @@ def render_duty_tree(cats, items):
                 rels = find_refs(d.get("refs"), items)
                 ref_html = ""
                 if rels:
+                    # 依据标签优先用文号（GB/T 35273、T/TAF 078.7），但库里有一批条目的 code
+                    # 直接就是效力级别本身（「部门规章」「行政法规」「法律」「地方法规」…），
+                    # 拿它当标签等于没写，读者看不出引用的是哪部法 → 退回用法规名。
                     ref_html = '<div class="lb-refs">' + "".join(
                         f'<a href="{esc(x["url"])}" target="_blank" rel="noopener" '
-                        f'title="{esc(x["name"])}">{esc(x.get("code") or x["name"])}</a>'
+                        f'title="{esc(x["name"])}">{esc(ref_label(x))}</a>'
                         for x in rels) + "</div>"
                 else:
                     ref_html = ('<div class="lb-refs lb-refs-plain">'
@@ -773,6 +875,110 @@ def render_duty_tree(cats, items):
             f'<div class="lb-cat-body">{"".join(scenes_html)}</div></section>')
 
     return chips_html + '<div class="lb-tree">' + "".join(blocks) + "</div>"
+
+
+# --------------------------------------------------- P3-8「按话题找依据」（智能图表）
+# 对标威科先行「智能图表」：引导步骤选话题 → 直接给出该话题的法律依据清单。
+# 与「合规义务清单」共用同一套数据（17 大类 / 93 场景 / 285 义务），差别只在入口：
+#   合规义务清单 —— 按目录翻（你得先知道自己属于哪一类）
+#   按话题找依据 —— 按业务问题问（先说你正在做什么事）
+#
+# 关键取舍：**依据清单不另存一份数据**。清单里的每一项义务卡（含条款原文、官方原文深链、
+# 关联义务、法条竞合）都从已经渲染好的逐条明细里按话题筛出来复用，浏览器端 clone 即可。
+# 好处是单一事实来源 —— 明细改了清单自动跟着改，不会出现两份口径。
+#
+# ask/eg 是给业务读者看的「问句 + 常见话题示例」，用业务语言而不是分类学语言；
+# 场景与义务本身一律取 duties.json，不在本文件里手写，避免与清单走样。
+WZ_GUIDE = {
+    "app": ("App / 小程序要上新功能、新权限",
+            ["摇一摇开屏", "位置权限", "通讯录匹配", "一键登录", "引入第三方 SDK",
+             "账号注销"]),
+    "pi": ("我们要收集、使用、对外提供用户的个人信息",
+           ["单独同意", "隐私政策更新", "人脸识别", "个人信息导出与删除", "委托处理",
+            "未成年人"]),
+    "data": ("数据的存储、共享与出境",
+             ["数据分类分级", "数据出境", "日志留存", "员工数据", "委托处理",
+              "数据安全风险评估"]),
+    "net": ("网络与系统的安全防护",
+            ["等级保护备案", "漏洞管理", "安全事件应急", "供应商安全", "数据泄露报告"]),
+    "algo": ("算法推荐、排序与调度",
+             ["个性化推荐", "算法备案", "派单与调度", "自动化决策", "算法安全评估",
+              "备案变更与注销"]),
+    "ai": ("用或对外提供 AI、大模型能力",
+           ["生成式 AI 备案", "AI 生成内容标识", "训练数据与语料", "AI 客服",
+            "智能体", "AI 与未成年人"]),
+    "platform": ("平台的规则、商家准入与交易治理",
+                 ["平台规则公示", "商家与供应商准入", "二选一", "保证金与平台收费",
+                  "违规处置", "平台责任边界"]),
+    "ad": ("广告投放与营销宣传",
+           ["开屏广告", "弹窗广告", "摇一摇广告", "种草与软文", "直播带货",
+            "绝对化用语"]),
+    "price": ("定价、促销与消费者权益",
+              ["划线价", "满减凑单", "自动续费", "价格欺诈", "七日无理由退货",
+               "格式条款"]),
+    "food": ("食品经营与商品质量",
+             ["标签标识", "保质期与临期", "抽检不合格处置", "进口食品", "食品主体责任",
+              "食用农产品"]),
+    "instant": ("线上下单、前置仓拣货与网络交易",
+                ["网络交易主体登记", "亮照亮证", "商品信息公示", "交易规则", "平台化经营"]),
+    "delivery": ("即时配送与骑手管理",
+                 ["餐箱消毒", "食安封签", "骑手用工与权益", "派单算法", "配送安全培训"]),
+    "catering": ("网络餐饮与线下门店餐饮",
+                 ["入网资质审核", "明厨亮灶", "从业人员健康", "餐饮具与包装", "平台责任"]),
+    "store": ("前置仓、仓储与冷链",
+              ["冷链温控", "贮存条件", "食用农产品查验", "不合格品处置", "临期处置"]),
+    "measure": ("称重、计量与净含量",
+                ["计量器具检定", "定量包装", "净含量标注", "计价与标价"]),
+    "retail": ("会员、预付与售后",
+               ["七日无理由退货", "预付式消费", "会员权益", "自动续费", "赠品与有奖销售"]),
+    "green": ("包装、塑料制品与反食品浪费",
+              ["一次性塑料制品", "过度包装", "反食品浪费", "快递与配送包装减量"]),
+}
+
+
+def render_topic_ask(cats):
+    """「按话题找依据」引导视图：业务问句 → 场景多选 → 法律依据清单。"""
+    wz = []
+    for c in cats:
+        ask, eg = WZ_GUIDE.get(c.get("id"), ("", []))
+        scenes = []
+        for s in c.get("scenes", []):
+            # 每项义务 = [标题, 风险, 说明]。说明只用于「一句话问」的相关度打分，
+            # **不渲染**（正文仍从逐条明细 clone），所以只影响检索质量，不影响页面口径。
+            scenes.append([s.get("name", ""),
+                           [[d.get("t", ""), d.get("risk", ""), (d.get("d") or "")[:160]]
+                            for d in s.get("duties", [])]])
+        wz.append({"id": c.get("id", ""), "n": c.get("name", ""), "d": c.get("desc", ""),
+                   "a": ask, "e": eg, "s": scenes})
+    data = json.dumps(wz, ensure_ascii=False, separators=(",", ":")).replace("<", "\\u003c")
+
+    n_cat = len(cats)
+    n_scene = sum(len(c.get("scenes", [])) for c in cats)
+    n_duty = sum(len(s.get("duties", [])) for c in cats for s in c.get("scenes", []))
+
+    return f"""<div class="wz">
+  <div class="wz-steps" id="wzSteps">
+    <button type="button" class="wz-st on" data-s="1"><i>1</i><b>你在做什么</b></button>
+    <button type="button" class="wz-st" data-s="2"><i>2</i><b>落到哪个场景</b></button>
+    <button type="button" class="wz-st" data-s="3"><i>3</i><b>法律依据清单</b></button>
+  </div>
+
+  <div class="wz-free">
+    <div class="wz-fr-h"><b>也可以直接一句话问</b>
+      <span>系统在 {n_cat} 大类 / {n_scene} 个场景 / {n_duty} 项义务里定位相关场景</span></div>
+    <div class="wz-fr-row">
+      <input id="wzQ" type="search" autocomplete="off"
+        placeholder="例如：骑手派单排名怎么做才合规　/　App 要加人脸登录　/　促销要不要标划线价">
+      <button type="button" class="wz-go" id="wzGo">找依据</button>
+    </div>
+    <div class="wz-fr-tip" id="wzTip">用业务语言描述即可，不用先想它归哪一类。</div>
+  </div>
+
+  <div class="wz-pane" id="wzP1"></div>
+  <div class="wz-pane" id="wzP2" hidden></div>
+  <div class="wz-pane" id="wzOut" hidden></div>
+</div>
+<script>window.LD_WZ={data};</script>"""
 
 
 def duty_block(d, items, idx):
@@ -898,8 +1104,16 @@ def main():
     # 2026-09-15：法规库 + 标准库补齐后条目从 1419 涨到近 2 万，内联渲染会把
     # kb/standards.html 顶到 19MB（移动端无法加载）。改为全量数据写入独立文件
     # kb/library-data.js，浏览器端渲染 —— 条目一条不少，HTML 反而从 19MB 降到几十 KB。
+    am_map = load_amendments()
     lb_rows = []
+    n_amend = 0
     for x in items:
+        # 修订沿革（P2-4 轻量版）：只对站内有官方原文的条目可得，值形如
+        # 「经 4 次修正 · 最近 2020-10-17」。判据来自官方前言，不是推测。
+        tid_x = text_id(x)
+        a_txt = amend_text(am_map.get(tid_x)) if tid_x else ""
+        if a_txt:
+            n_amend += 1
         lb_rows.append([
             x.get("level", ""), x.get("topic", ""), x.get("status", ""),
             x.get("code", ""), x.get("name", ""), x.get("url", ""),
@@ -908,7 +1122,10 @@ def main():
             x.get("duty") or [], read_affordance(x),
             x.get("rel", 1), x.get("kind", ""),
             _region_of(x), len(x.get("toc") or []),
+            a_txt,
         ])
+    print(f"  修订沿革：{n_amend} 条目标注「经 N 次修正」"
+          f"（数据源 {len(am_map)} 部法规的官方前言）")
     _data_js = ("window.LB_ITEMS=" + json.dumps(lb_rows, ensure_ascii=False,
                                                separators=(",", ":")) + ";\n"
                 + "window.LB_CLS=" + json.dumps({"status": STATUS_CLS, "level": LEVEL_CLS},
@@ -933,10 +1150,15 @@ def main():
         '<div class="dm-switch">'
         '<button class="dm-sw on" data-view="matrix">矩阵总览</button>'
         '<button class="dm-sw" data-view="detail">逐条明细</button>'
-        '<span class="dm-sw-tip">搜索或点矩阵中的格子会自动切到逐条明细</span></div>'
+        '<span class="dm-sw-tip">搜索或点矩阵中的格子会自动切到逐条明细</span>'
+        '<button type="button" class="dm-goto" data-goto-tab="ask">'
+        '不知道从哪看起？按话题找依据 →</button></div>'
         f'<div class="dm-view" id="dmMatrix">{duty_matrix}</div>'
         f'<div class="dm-view" id="dmDetail" hidden>'
         f'<div class="lb-duties">{duty_detail}</div></div>')
+
+    # ---------------- 按话题找依据（P3-8，对标威科先行「智能图表」）
+    ask_html = render_topic_ask(cats)
 
     # ---------------- 草案跟踪视图
     draft_html = "\n".join(draft_card(d) for d in drafts)
@@ -949,8 +1171,10 @@ def main():
     # 没有分页，2 万条数据实际上翻不动。现在改为标杆站的范式：
     #   左栏 = 过滤条件（资源类型 / 效力级别 / 时效性 / 专题 / 发文机关 / 地域 / 发布日期），
     #          每项带**当前结果集下的动态计数**；
-    #   右栏 = 工具栏（搜索 + 排序 + 每页条数）+ 已选条件 + 紧凑列表（一条一行，含状态徽章、
-    #          层级、专题、机关与日期、要点摘要）+ 分页器。
+    #   右栏 = 工具栏（检索 + 范围 / 匹配粒度 + 排序 + 每页条数）+ 发布量走势 + 已选条件
+    #          + 紧凑列表（一条一行，含状态徽章、层级、专题、机关与日期、要点摘要、修订沿革）
+    #          + 分页器。
+    trend_html = pub_trend(items)
     lib_pane = "\n".join([
         '<section class="lb-pane" id="pane-lib">',
         '<div class="lv">',
@@ -958,9 +1182,23 @@ def main():
         '<button type="button" class="lv-reset" id="lvReset">重置</button></div>'
         '<div class="lv-facets" id="lvSide"></div></aside>',
         '<div class="lv-main">',
+        # 工具栏（2026-09-17 增补，对标北大法宝的三种检索方式）：
+        #   · 标题 / 全文 —— 检索范围。全文含条款要点、说明与章节目录
+        #     （站内 2 万条目的正文没有随页下发，检索的是结构化字段而非 PDF 全文，故文案写明口径）
+        #   · 精确 / 模糊 —— 精确=整串连续命中；模糊=按字序跳字命中（对标「模糊检索」）
+        #   · 结果中检索 —— 把当前关键词冻结成一个条件，后续关键词在它的结果里继续收敛（AND）
         '<div class="lv-bar">'
         '<div class="lv-q"><input id="lbQ" type="search" autocomplete="off" '
-        'placeholder="检索名称 / 文号 / 发布机关 / 章节目录，如 个人信息、GB/T 35273、江苏省"></div>'
+        'placeholder="检索名称 / 文号 / 发布机关 / 章节目录，如 个人信息、GB/T 35273、江苏省">'
+        '<button type="button" class="lv-inq" id="lvInq" '
+        'title="把当前关键词冻结为条件，后续关键词在它的结果里继续筛（多条以 AND 组合）">'
+        '结果中检索</button></div>'
+        '<div class="lv-seg" id="lvField" role="group" aria-label="检索范围">'
+        '<button type="button" class="on" data-f="t">标题</button>'
+        '<button type="button" data-f="f">全文</button></div>'
+        '<div class="lv-seg" id="lvMode" role="group" aria-label="匹配方式">'
+        '<button type="button" class="on" data-m="exact">精确</button>'
+        '<button type="button" data-m="fuzzy">模糊</button></div>'
         '<select id="lvSort" class="lv-sel" aria-label="排序">'
         '<option value="pub_desc">发布日期：新 → 旧</option>'
         '<option value="pub_asc">发布日期：旧 → 新</option>'
@@ -973,6 +1211,7 @@ def main():
         '<option value="100">每页 100 条</option>'
         '</select>'
         '</div>',
+        trend_html,
         '<div class="lv-bar2"><div class="lv-chips" id="lvChips"></div>'
         '<div class="lv-cnt" id="lvCount"></div></div>',
         '<div class="lv-list" id="lvList"></div>',
@@ -987,6 +1226,7 @@ def main():
         '<button class="rd-fchip on" data-tab="lib">资料库</button>'
         '<button class="rd-fchip" data-tab="draft">草案跟踪<i class="lb-dot"></i></button>'
         '<button class="rd-fchip" data-tab="duty">合规义务清单</button>'
+        '<button class="rd-fchip" data-tab="ask">按话题找依据</button>'
         "</div>",
         lib_pane,
         '<section class="lb-pane" id="pane-draft" hidden>',
@@ -1003,6 +1243,15 @@ def main():
         '前置仓与冷链仓储、即时配送与骑手权益、线下餐饮、计量与净含量、零售与会员权益、绿色包装与反食品浪费'
         '等业务场景，逐条对照监管文件要点整理。</p>',
         duty_html,
+        "</section>",
+        '<section class="lb-pane" id="pane-ask" hidden>',
+        '<p class="rd-note"><b>按话题找依据</b>与「合规义务清单」是同一套数据的两个入口：'
+        '清单是按目录翻，这一页是按问题问。你说清楚<b>正在做什么事</b>，它就在义务清单里定位到相关场景，'
+        '直接输出该话题的<b>法律依据清单</b>——每项义务对应哪些法规标准、哪些条款、原文怎么写，'
+        '并可一键复制成 Markdown 或打印成 PDF。</p>',
+        ask_html,
+        '<p class="rd-note">清单中的条款原文逐字取自我站<b>官方原文库</b>，条文出处与官方发布页均为深链；'
+        '本页用于合规检索与自查参考，<b>不构成法律意见</b>，引用前请点开原文核对现行有效版本。</p>',
         "</section>",
         '<p class="rd-note">标准数据取自<b>国家标准全文公开系统</b>（发布/实施日期与现行状态以官方为准）；'
         '法律法规与规范性文件均附发布机构官网原文深链。'
@@ -1059,6 +1308,9 @@ LIB_RENDER = """
       CHIPS=document.getElementById('lvChips'),
       PAGER=document.getElementById('lvPager'),
       Q=document.getElementById('lbQ'),
+      INQ=document.getElementById('lvInq'),
+      FSEG=document.getElementById('lvField'),
+      MSEG=document.getElementById('lvMode'),
       SORTD=document.getElementById('lvSort'),
       SIZED=document.getElementById('lvSize'),
       CNT=document.getElementById('lvCount'),
@@ -1067,7 +1319,8 @@ LIB_RENDER = """
 
   // 字段下标 —— 必须与 build_standards.py 里 lb_rows 的写入顺序严格一致
   var F={level:0,topic:1,status:2,code:3,name:4,url:5,issuer:6,pub:7,impl:8,
-         point:9,note:10,toc:11,duty:12,read:13,rel:14,kind:15,region:16,tocn:17};
+         point:9,note:10,toc:11,duty:12,read:13,rel:14,kind:15,region:16,tocn:17,
+         amend:18};
 
   function e(v){return String(v==null?'':v).replace(/&/g,'&amp;').replace(/</g,'&lt;')
     .replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
@@ -1080,13 +1333,24 @@ LIB_RENDER = """
     var d=(NOW-t)/DAY; if(d<=31) return 'm1'; if(d<=93) return 'm3';
     if(d<=366) return 'y1'; if(d<=1097) return 'y3'; return 'old';}
 
-  // 预计算检索串与发布档位（一次，后续筛选只做比较）
-  var N=IT.length, HAY=new Array(N), BND=new Array(N);
+  // 预计算两条检索串（一次，之后筛选只做比较）：
+  //   HT = 标题与文号（只搜名称 / 文号，对标法宝的「标题检索」）
+  //   HF = 全文（名称 / 文号 / 机关 / 专题 / 章节目录 / 要点 / 说明）
+  var N=IT.length, HT=new Array(N), HF=new Array(N), BND=new Array(N);
   for(var i=0;i<N;i++){
     var r=IT[i];
-    HAY[i]=(r[F.name]+' '+r[F.code]+' '+r[F.issuer]+' '+r[F.topic]+' '
-            +((r[F.toc]||[]).join(' '))).toLowerCase();
+    HT[i]=(r[F.name]+' '+r[F.code]).toLowerCase();
+    HF[i]=(r[F.name]+' '+r[F.code]+' '+r[F.issuer]+' '+r[F.topic]+' '
+           +(r[F.point]||'')+' '+(r[F.note]||'')+' '
+           +((r[F.toc]||[]).join(' '))).toLowerCase();
     BND[i]=band(r[F.pub]);
+  }
+  // 模糊匹配：查询串的字符按顺序出现即可（允许跳字），对标法宝的「模糊检索」
+  function fuzzy(hay,q){
+    var p=0, n=q.length;
+    if(!n) return true;
+    for(var i=0;i<hay.length&&p<n;i++) if(hay.charAt(i)===q.charAt(p)) p++;
+    return p===n;
   }
 
   var PUB_LABEL={m1:'近 1 个月',m3:'近 3 个月',y1:'近 1 年',y3:'近 3 年',
@@ -1103,14 +1367,26 @@ LIB_RENDER = """
   var FMAP={}; FACETS.forEach(function(f){FMAP[f.k]=f;});
   function valAt(i,k){ return k==='pub' ? BND[i] : IT[i][F[k]]; }
 
-  // 当前条件：scope=rel 只看合规相关；其余为 facet 选中集合
-  var st={scope:'rel',q:'',sort:'pub_desc',page:1,size:20,
+  // 当前条件：scope=rel 只看合规相关；qs=已冻结的关键词（结果中检索）；q=当前关键词；
+  //           fld=检索范围（t 标题 / f 全文）；md=匹配方式（exact / fuzzy）
+  var st={scope:'rel',q:'',qs:[],fld:'t',md:'exact',sort:'pub_desc',page:1,size:20,
           sel:{kind:{},level:{},status:{},topic:{},issuer:{},region:{},pub:{}}};
 
   function keepSel(o){var n=0; for(var k in o) if(o[k]) n++; return n;}
+
+  function oneQ(i,q){
+    if(!q) return true;
+    var hay=(st.fld==='f')?HF[i]:HT[i];
+    return st.md==='fuzzy' ? fuzzy(hay,q) : hay.indexOf(q)>=0;
+  }
+  function qHit(i,skip){
+    if(skip!=='q' && !oneQ(i,st.q)) return false;
+    if(skip!=='qs') for(var j=0;j<st.qs.length;j++) if(!oneQ(i,st.qs[j])) return false;
+    return true;
+  }
   function pass(i,skip){
     if(st.scope==='rel' && !IT[i][F.rel]) return false;
-    if(skip!=='q' && st.q && HAY[i].indexOf(st.q)<0) return false;
+    if(!qHit(i,skip)) return false;
     for(var k in st.sel){
       if(k===skip) continue;
       var s=st.sel[k]; if(!keepSel(s)) continue;
@@ -1220,9 +1496,18 @@ LIB_RENDER = """
       }
     }
     if(st.scope==='rel') out.unshift('<button type="button" class="lv-chip lv-chip-s" data-k="scope">仅合规相关<i>×</i></button>');
+    // 结果中检索：每个被冻结的关键词各给一枚可单独移除的 chip（AND 关系）
+    for(var j=st.qs.length-1;j>=0;j--){
+      out.unshift('<button type="button" class="lv-chip lv-chip-q" data-k="qs" data-i="'+j
+        +'" title="结果中检索：本条与前后的关键词以 AND 组合">在「'+e(st.qs[j])+'」结果中<i>×</i></button>');
+    }
     if(st.q) out.unshift('<button type="button" class="lv-chip lv-chip-q" data-k="q">关键词：'+e(st.q)+'<i>×</i></button>');
     CHIPS.innerHTML = out.length ? out.join('') : '';
-    if(CNT) CNT.innerHTML='共 <b>'+n2(hits.length)+'</b> 条';
+    var extra=[];
+    if(st.fld==='f') extra.push('全文');
+    if(st.md==='fuzzy') extra.push('模糊');
+    if(CNT) CNT.innerHTML='共 <b>'+n2(hits.length)+'</b> 条'
+      + (extra.length?' · '+extra.join(' · '):'');
   }
 
   // ---------------- 右栏列表
@@ -1231,7 +1516,7 @@ LIB_RENDER = """
     var lv=r[F.level],tp=r[F.topic],s=r[F.status],code=r[F.code],name=r[F.name],
         url=r[F.url],issuer=r[F.issuer],pub=r[F.pub],impl=r[F.impl],
         point=r[F.point],note=r[F.note],toc=r[F.toc],duty=r[F.duty],
-        read=r[F.read],region=r[F.region],tocn=r[F.tocn];
+        read=r[F.read],region=r[F.region],tocn=r[F.tocn],amend=r[F.amend];
     var h='<article class="lv-it"><div class="lv-no">'+(idx+1)+'</div><div class="lv-bd">';
     h+='<div class="lv-r1"><h3 class="lv-t">';
     h+= url ? '<a href="'+e(url)+'" target="_blank" rel="noopener">'+e(name)
@@ -1245,6 +1530,9 @@ LIB_RENDER = """
     if(region&&region!=='全国') meta.push(region);
     if(pub) meta.push('发布 '+pub); if(impl) meta.push('实施 '+impl);
     h+='<span class="lv-mt">'+e(meta.join(' · '))+'</span></div>';
+    // 修订沿革（P2-4）：显示在徽章行下，来源是官方前言里写明的「第 N 次修正 / 修订」。
+    // 用中性底色，不与「时效性」徽章抢注意力 —— 它是补充信息，不是状态。
+    if(amend) h+='<div class="lv-am"><span class="lv-am-k">修订沿革</span>'+e(amend)+'</div>';
     var ab=point||note||'';
     if(ab) h+='<p class="lv-ab">'+e(ab.length>160?ab.slice(0,160)+'…':ab)+'</p>';
     var tg='';
@@ -1310,7 +1598,17 @@ LIB_RENDER = """
     var k=b.getAttribute('data-k');
     if(k==='scope'){ st.scope='all'; }
     else if(k==='q'){ st.q=''; if(Q) Q.value=''; }
+    else if(k==='qs'){ st.qs.splice(parseInt(b.getAttribute('data-i'),10)||0,1); }
     else st.sel[k][b.getAttribute('data-v')]=false;
+    refilter(false);
+  });
+  // 「结果中检索」：把当前关键词冻结为一条条件（不进输入框，改为 chip 呈现），
+  // 之后输入的关键词在它的结果集里继续收敛 —— 等价于北大法宝的「结果中检索」。
+  if(INQ) INQ.addEventListener('click',function(){
+    var v=(Q&&Q.value||'').trim().toLowerCase();
+    if(!v){ if(Q) Q.focus(); return; }
+    st.qs.push(v); st.q='';
+    if(Q){ Q.value=''; Q.focus(); }
     refilter(false);
   });
   PAGER.addEventListener('click',function(ev){
@@ -1321,15 +1619,37 @@ LIB_RENDER = """
     window.scrollTo({top:top,behavior:'smooth'});
   });
   if(RESET) RESET.addEventListener('click',function(){
-    st.scope='rel'; st.q='';
+    st.scope='rel'; st.q=''; st.qs=[]; st.fld='t'; st.md='exact';
     for(var k in st.sel) st.sel[k]={};
     if(Q) Q.value='';
+    syncSeg(FSEG,'f','t'); syncSeg(MSEG,'m','exact');
     refilter(false);
   });
+  // 检索范围 / 匹配方式：分段按钮（对标北大法宝的「标题 / 全文」「精确 / 模糊」）
+  function syncSeg(box,attr,val){
+    if(!box) return;
+    var bs=box.querySelectorAll('button');
+    for(var i=0;i<bs.length;i++)
+      bs[i].className = (bs[i].getAttribute('data-'+attr)===val)?'on':'';
+  }
+  function bindSeg(box,attr,key,def){
+    if(!box) return;
+    box.addEventListener('click',function(ev){
+      var b=ev.target.closest('button'); if(!b) return;
+      var v=b.getAttribute('data-'+attr)||def;
+      st[key]=v; syncSeg(box,attr,v); refilter(false);
+    });
+  }
+  bindSeg(FSEG,'f','fld','t');
+  bindSeg(MSEG,'m','md','exact');
   var timer=null;
   if(Q) Q.addEventListener('input',function(){
     if(timer) clearTimeout(timer);
     timer=setTimeout(function(){ st.q=(Q.value||'').trim().toLowerCase(); refilter(false); },140);
+  });
+  // Enter = 直接冻结为「结果中检索」条件，省一次点击
+  if(Q) Q.addEventListener('keydown',function(ev){
+    if(ev.key==='Enter' && INQ){ ev.preventDefault(); INQ.click(); }
   });
   if(SORTD) SORTD.addEventListener('change',function(){
     st.sort=SORTD.value; sortHits(); st.page=1; render();
@@ -1364,7 +1684,7 @@ LIB_JS = """
     if(!b) return;
     noSmooth=true; b.click(); noSmooth=false;   // 深链直达时直接定位，不做滚动动画
   }
-  var hm=/^#pane-(lib|draft|duty)$/.exec(location.hash||'');
+  var hm=/^#pane-(lib|draft|duty|ask)(?:-([a-z]+))?$/.exec(location.hash||'');
   if(hm) activateTab(hm[1]);
 
   // ---------- （资料库的筛选 / 排序 / 分页已迁到 LIB_RENDER，见 #lvSide / #lvList）----------
@@ -1460,6 +1780,526 @@ LIB_JS = """
     applyDuty();
   });
   applyDuty();
+
+  // 通用：任何带 data-goto-tab 的按钮都可切到指定页签（如义务清单里指向「按话题找依据」）
+  [].slice.call(document.querySelectorAll('[data-goto-tab]')).forEach(function(b){
+    b.addEventListener('click',function(){ activateTab(b.getAttribute('data-goto-tab')); });
+  });
+
+  // ---------- 按话题找依据（P3-8，对标威科先行「智能图表」）----------
+  //
+  // 数据 window.LD_WZ 由构建期从 duties.json 生成（17 大类 / 93 场景 / 285 义务），
+  // 只含「结构 + 义务标题 + 风险」，**不含正文**。正文一律从 #pane-duty 里已经渲染好的
+  // 义务卡按 d-<cat>-<si>-<di> clone 过来（见 cloneDuty）—— 单一事实来源，
+  // 明细改了清单自动跟着改，不会出现两份口径。
+  (function(){
+    var pane=document.getElementById('pane-ask'); if(!pane) return;
+    var IDX=window.LD_WZ||[]; if(!IDX.length) return;
+    var q=document.getElementById('wzQ'), go=document.getElementById('wzGo'),
+        tip=document.getElementById('wzTip'), steps=document.getElementById('wzSteps'),
+        p1=document.getElementById('wzP1'), p2=document.getElementById('wzP2'),
+        out=document.getElementById('wzOut');
+    // sel 的键是 "大类下标-场景下标"：一句话问可能跨大类命中，所以场景选择不能只按当前大类存。
+    var cur=null, sel={}, p2List=[], p2Multi=false, q2Head='', blocks=[], wzArts=[],
+        mdCache='', mdTitle='', curStep=1, curLabel='';
+
+    var WSC=String.fromCharCode(9,10,13,32,12288);   // 制表/换行/回车/空格/全角空格
+    var SEP='，、；;。.？?！!／/|「」【】（）(),:：·'+WSC;
+    var RCLS={'高':'r-hi','中高':'r-mh','中':'r-md','低':'r-lo'};
+    var N_TOTAL_SCENE=IDX.reduce(function(a,c){return a+c.s.length;},0);
+
+    function sKey(ci,si){ return ci+'-'+si; }
+    function selList(){
+      var out=[], k, p;
+      for(k in sel){ if(!sel[k]) continue; p=k.split('-');
+        out.push([parseInt(p[0],10), parseInt(p[1],10)]); }
+      out.sort(function(a,b){ return (a[0]-b[0])||(a[1]-b[1]); });
+      return out;
+    }
+    function selDutyCount(){
+      var n=0;
+      selList().forEach(function(p){ n+=IDX[p[0]].s[p[1]][1].length; });
+      return n;
+    }
+    // 中文没有词边界：把问句切成 2-gram / 3-gram，命中「场景名 / 义务标题 / 义务说明」
+    // 的程度即相关度。疑问词（怎么/要不要/吗…）在语料里本来就命中不了，会自然得 0 分，
+    // 不必维护停用词表。
+    function grams(str){
+      var s=String(str||'').toLowerCase(), segs=[], cur2='', i, j;
+      for(i=0;i<s.length;i++){
+        var c=s.charAt(i);
+        if(SEP.indexOf(c)>=0){ if(cur2){segs.push(cur2); cur2='';} }
+        else cur2+=c;
+      }
+      if(cur2) segs.push(cur2);
+      var set={};
+      segs.forEach(function(seg){
+        if(seg.length>=2) set[seg]=1;
+        for(j=0;j+2<=seg.length;j++) set[seg.substr(j,2)]=1;
+        for(j=0;j+3<=seg.length;j++) set[seg.substr(j,3)]=1;
+      });
+      var out=[]; for(var k in set) out.push(k);
+      return out;
+    }
+    // 「场景名 + 义务标题」的索引：用来算词频权重。中文里「处理 / 管理 / 合规 / 食品」
+    // 这种高频词一旦按命中数计分，会把「委托处理」「食品安全主体责任」这类
+    // 与提问无关的场景顶上来（实测「门店临期食品怎么处理」会把「委托处理、共同处理与提供」
+    // 排进去）。所以按「出现在多少个场景/义务标题里」反向降权：只出现在 1-2 个标题里的
+    // 词（派单、临期、摇一摇）拿满权重，烂大街的词基本不计分。
+    var NAMES=null;
+    function nameIndex(){
+      if(NAMES) return NAMES;
+      NAMES=[];
+      IDX.forEach(function(c){
+        c.s.forEach(function(s){
+          NAMES.push(s[0].toLowerCase());
+          s[1].forEach(function(x){ NAMES.push((x[0]||'').toLowerCase()); });
+        });
+      });
+      return NAMES;
+    }
+    function queryGrams(txt){
+      var raw=grams(txt), nm=nameIndex(), out=[], i, j, g, df;
+      for(i=0;i<raw.length;i++){
+        g=raw[i];
+        df=0;
+        for(j=0;j<nm.length;j++) if(nm[j].indexOf(g)>=0) df++;
+        if(df > nm.length*0.35) continue;              // 太烂大街，直接不计分
+        var base=(g.length>=6?3:(g.length>=3?1.5:1)); // 长词权重更高
+        out.push({g:g, w:base/(1+df*0.5)});
+      }
+      return out;
+    }
+    function gHit(qg,hay){
+      var n=0, i;
+      for(i=0;i<qg.length;i++) if(hay.indexOf(qg[i].g)>=0) n+=qg[i].w;
+      return n;
+    }
+
+    function e2(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;')
+      .replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+    function flat(s){
+      s=String(s==null?'':s);
+      var o='', i, c;
+      for(i=0;i<s.length;i++){ c=s.charAt(i); o+=(WSC.indexOf(c)>=0?' ':c); }
+      while(o.indexOf('  ')>=0) o=o.split('  ').join(' ');
+      return o.replace(/^ | $/g,'');
+    }
+    function riskBar(ds){
+      var t={}, i;
+      for(i=0;i<ds.length;i++){ var r=ds[i][1]||''; t[r]=(t[r]||0)+1; }
+      var s='';
+      ['高','中高','中','低'].forEach(function(k){
+        if(t[k]) s+='<i class="'+RCLS[k]+'" style="flex:'+t[k]+' 1 0" title="'+k+' '+t[k]+' 项"></i>';
+      });
+      return s?('<span class="dm-bar">'+s+'</span>'):'';
+    }
+    function say(html,cls){
+      if(!tip) return;
+      tip.innerHTML=html;
+      tip.className='wz-fr-tip'+(cls?(' '+cls):'');
+    }
+
+    function goStep(n){
+      curStep=n;
+      var ps=steps.querySelectorAll('.wz-st');
+      for(var i=0;i<ps.length;i++)
+        ps[i].className='wz-st'+((parseInt(ps[i].getAttribute('data-s'),10)<=n)?' on':'');
+      p1.hidden=(n!==1); p2.hidden=(n!==2); out.hidden=(n!==3);
+    }
+
+    // ---------- 第 1 步：选一件「正在做的事」
+    function renderP1(){
+      var h='<div class="wz-hint"><b>第 1 步</b>　先选一件<b>你正在做的事</b>。'
+        +'不确定就从下面的问句里挑最接近的那句——不用先想它归哪一类。</div><div class="wz-cats">';
+      IDX.forEach(function(c,ci){
+        var ds=[];
+        c.s.forEach(function(s){ ds=ds.concat(s[1]); });
+        h+='<button type="button" class="wz-cat" data-ci="'+ci+'">'
+          +'<span class="wz-cat-q">'+e2(c.a||c.n)+'</span>'
+          +'<span class="wz-cat-n">'+e2(c.n)+'</span>'
+          +'<span class="wz-cat-m">'+c.s.length+' 个场景 · '+ds.length+' 项义务</span>'
+          +'<span class="wz-cat-r">'+riskBar(ds)+'</span>'
+          +'<span class="wz-cat-e">常见话题：'+e2((c.e||[]).slice(0,4).join(' · '))+'</span>'
+          +'</button>';
+      });
+      p1.innerHTML=h+'</div>';
+    }
+
+    // ---------- 第 2 步：勾场景（list 可能是「某个大类的全部场景」，也可能是「一句话问命中的场景」）
+    function renderP2(list,opts){
+      opts=opts||{};
+      var h='<div class="wz-hint">'+opts.head+'</div><div class="wz-scs">';
+      list.forEach(function(p){
+        var c=IDX[p.ci], s=c.s[p.si], k=sKey(p.ci,p.si);
+        h+='<button type="button" class="wz-sc'+(sel[k]?' on':'')+'" data-k="'+k+'">'
+          +(opts.multi?('<span class="wz-sc-c">'+e2(c.n)+'</span>'):'')
+          +'<b>'+e2(s[0])+'</b><em>'+s[1].length+' 项</em>'+riskBar(s[1])+'</button>';
+      });
+      h+='</div><div class="wz-acts">'
+        +'<button type="button" class="wz-btn wz-primary" data-a="gen">生成法律依据清单 →</button>'
+        +'<button type="button" class="wz-btn" data-a="all">全选上面这些</button>'
+        +'<button type="button" class="wz-btn" data-a="none">清空</button>'
+        +'<button type="button" class="wz-btn" data-a="back">← 按大类自己挑</button>'
+        +'<span class="wz-cnt" id="wzCnt"></span></div>';
+      p2.innerHTML=h;
+      p2List=list; p2Multi=!!opts.multi; q2Head=opts.head||'';
+      updCnt();
+    }
+    function updCnt(){
+      var ks=selList(), c=document.getElementById('wzCnt');
+      if(c) c.textContent=ks.length?('已选 '+ks.length+' 个场景 · '+selDutyCount()
+        +' 项义务 · 点上方场景可增减'):'还没选场景';
+    }
+    function catList(ci){
+      var out=[];
+      IDX[ci].s.forEach(function(s,si){ out.push({ci:ci, si:si}); });
+      return out;
+    }
+
+    function openCat(ci){
+      cur=IDX[ci]; curLabel=cur.a||cur.n; sel={};
+      var nd=cur.s.reduce(function(a,s){return a+s[1].length;},0);
+      renderP2(catList(ci), {head:'<b>第 2 步</b>　话题：<b>'+e2(curLabel)+'</b>　'
+        +'勾选这次真正涉及的场景（可多选）。本类共 '+cur.s.length+' 个场景 / '+nd+' 项义务。'});
+      goStep(2);
+      window.scrollTo({top:Math.max(0, pane.offsetTop-70), behavior:'smooth'});
+    }
+
+    p1.addEventListener('click',function(ev){
+      var b=ev.target.closest('.wz-cat'); if(!b) return;
+      openCat(parseInt(b.getAttribute('data-ci'),10)||0);
+    });
+
+    p2.addEventListener('click',function(ev){
+      var b=ev.target.closest('button'); if(!b) return;
+      var a=b.getAttribute('data-a'), k=b.getAttribute('data-k');
+      if(k!=null){
+        sel[k]=!sel[k];
+        b.className='wz-sc'+(sel[k]?' on':'');
+        updCnt();
+        return;
+      }
+      if(a==='all'){ p2List.forEach(function(p){ sel[sKey(p.ci,p.si)]=true; }); renderP2(p2List,
+        {head:q2Head, multi:p2Multi}); }
+      else if(a==='none'){ sel={}; renderP2(p2List,{head:q2Head, multi:p2Multi}); }
+      else if(a==='back'){ goStep(1);
+        window.scrollTo({top:Math.max(0,pane.offsetTop-70),behavior:'smooth'}); }
+      else if(a==='gen'){
+        if(!selList().length){ say('先至少勾选一个场景，再生成清单。','wz-warn'); return; }
+        renderOut();
+        window.scrollTo({top:Math.max(0, pane.offsetTop-70), behavior:'smooth'});
+      }
+    });
+
+    // ---------- 第 3 步：清单本体（义务卡直接从逐条明细 clone）
+    function cloneDuty(cat,si,di){
+      var src=document.getElementById('d-'+cat+'-'+si+'-'+di);
+      if(!src) return null;
+      var n=src.cloneNode(true);
+      n.removeAttribute('id');
+      n.style.display='';
+      n.setAttribute('data-wz','1');
+      return n;
+    }
+    function readDuty(n,meta){
+      function t(sel){ var x=n.querySelector(sel); return x?flat(x.textContent):''; }
+      var refs=[].slice.call(n.querySelectorAll('.lb-refs > a, .lb-refs > span'))
+        .map(function(x){return flat(x.textContent);})
+        .filter(function(x,i,a){return x && a.indexOf(x)===i;});
+      var arts=[].slice.call(n.querySelectorAll('.art-item')).map(function(it){
+        function g(sel){ var x=it.querySelector(sel); return x?flat(x.textContent):''; }
+        return {src:g('.art-src'), no:g('.art-no'), q:g('.art-quote')};
+      }).filter(function(a){return a.src||a.no;});
+      return {t:t('.lb-d2-t b'), risk:(meta&&meta[1])||t('.lb-d2-t .rk'),
+              d:t('.lb-d2-d'), refs:refs, arts:arts};
+    }
+
+    function renderOut(){
+      var list=selList();
+      var wrap=document.createElement('div'); wrap.className='wz-res';
+      blocks=[]; wzArts=[];
+      var nDuty=0, catsUsed={}, catNames=[];
+      list.forEach(function(p,idx){
+        var ci=p[0], si=p[1], c=IDX[ci], sc=c.s[si], ds=sc[1];
+        if(!catsUsed[c.n]){ catsUsed[c.n]=1; catNames.push(c.n); }
+        var sec=document.createElement('section'); sec.className='wz-sc-blk';
+        var h4=document.createElement('h4');
+        h4.innerHTML='<span class="wz-blk-i">'+(idx+1)+'</span>'
+          +(p2Multi?('<span class="wz-blk-c">'+e2(c.n)+'</span>'):'')
+          +'<span class="wz-blk-n">'+e2(sc[0])+'</span><i>'+ds.length+' 项义务</i>';
+        sec.appendChild(h4);
+        var blk={cat:c.n, name:sc[0], n:0, duties:[]};
+        for(var di=0;di<ds.length;di++){
+          var n=cloneDuty(c.id,si,di);
+          if(!n) continue;
+          sec.appendChild(n);
+          nDuty++; blk.n++;
+          blk.duties.push(readDuty(n,ds[di]));
+        }
+        var jump=document.createElement('button');
+        jump.type='button'; jump.className='wz-jump';
+        jump.setAttribute('data-cat',c.id); jump.setAttribute('data-si',si);
+        jump.textContent='该场景的标杆做法 / 参考设计 / 自查点 →';
+        sec.appendChild(jump);
+        blocks.push(blk);
+        wrap.appendChild(sec);
+      });
+      mdTitle = catNames.length<=2 ? catNames.join('、') : (catNames.length+' 个大类');
+
+      // 法条汇总：从 clone 出来的条款原文块反推「本话题涉及哪些法条」
+      var ak={};
+      [].slice.call(wrap.querySelectorAll('.art-item')).forEach(function(it){
+        var s=flat((it.querySelector('.art-src')||{}).textContent);
+        var a=flat((it.querySelector('.art-no')||{}).textContent);
+        if(!s||!a) return;
+        var k=s+'|'+a;
+        if(ak[k]){ ak[k].n++; return; }
+        ak[k]={src:s,no:a,n:1}; wzArts.push(ak[k]);
+      });
+      var laws={};
+      [].slice.call(wrap.querySelectorAll('.art-src')).forEach(function(x){
+        var t=flat(x.textContent); if(t) laws[t]=1; });
+      [].slice.call(wrap.querySelectorAll('.lb-refs > a, .lb-refs > span')).forEach(function(x){
+        var t=flat(x.textContent); if(t) laws[t]=1; });
+      var nLaw=Object.keys(laws).length;
+
+      out.innerHTML='';
+      var head=document.createElement('div'); head.className='wz-head';
+      head.innerHTML='<div class="wz-hd-l"><span class="wz-hd-k">法律依据清单</span>'
+        +'<b>'+e2(mdTitle)+'</b>'
+        +'<span class="wz-hd-s">'+list.length+' 个场景 · '+nDuty+' 项义务 · '
+        +nLaw+' 部依据 · '+wzArts.length+' 条条款原文</span></div>'
+        +'<div class="wz-hd-r">'
+        +'<button type="button" class="wz-btn" data-a="open">展开全部条款原文</button>'
+        +'<button type="button" class="wz-btn" data-a="copy">复制 Markdown</button>'
+        +'<button type="button" class="wz-btn" data-a="dl">下载 .md</button>'
+        +'<button type="button" class="wz-btn" data-a="print">打印 / 存 PDF</button>'
+        +'<button type="button" class="wz-btn" data-a="edit">← 调整场景</button>'
+        +'<button type="button" class="wz-btn" data-a="back1">← 换一个话题</button>'
+        +'</div>';
+      out.appendChild(head);
+
+      if(wzArts.length){
+        var ab=document.createElement('div'); ab.className='wz-arts';
+        ab.innerHTML='<div class="wz-arts-h">本话题涉及的法条<b>'+wzArts.length+' 条</b>'
+          +'<span>点任一条可定位到下方的条款原文；每项义务下另附官方原文深链</span></div>'
+          +'<div class="wz-arts-l">'+wzArts.map(function(a,i){
+              return '<button type="button" class="wz-art" data-i="'+i+'">《'+e2(a.src)+'》'
+                +e2(a.no)+(a.n>1?('<em>'+a.n+' 项引用</em>'):'')+'</button>';
+            }).join('')+'</div>';
+        out.appendChild(ab);
+      }else{
+        var nb=document.createElement('div'); nb.className='wz-note';
+        nb.innerHTML='本话题的 '+list.length+' 个场景里，义务已锚定到<b>具体条款号</b>的条目暂未覆盖，'
+          +'因此没有可展开的条款原文。每项义务下的<b>灰色依据标签</b>即该义务引用的法规与标准，'
+          +'点开可直达发布机构官网原文（含标准正文入口）。';
+        out.appendChild(nb);
+      }
+      out.appendChild(wrap);
+      mdCache=buildMd(list.length,nDuty,nLaw);
+      goStep(3);
+    }
+
+    function locate(i){
+      var a=wzArts[i]; if(!a) return;
+      var items=out.querySelectorAll('.art-item'), hit=null, k;
+      for(k=0;k<items.length;k++){
+        var s=flat((items[k].querySelector('.art-src')||{}).textContent);
+        var n=flat((items[k].querySelector('.art-no')||{}).textContent);
+        if(s===a.src && n===a.no){ hit=items[k]; break; }
+      }
+      if(!hit) return;
+      var box=hit.closest('.art-box'); if(box) box.open=true;
+      hit.scrollIntoView({behavior:'smooth',block:'center'});
+      hit.style.transition='background .3s'; hit.style.background='#fff8dc';
+      setTimeout(function(){ hit.style.background=''; },2600);
+    }
+    function jumpScene(cat,si){
+      activateTab('duty'); showDutyView('detail'); pickCat(cat);
+      var el=document.getElementById('s-'+cat+'-'+si);
+      if(el){ el.open=true; el.scrollIntoView({behavior:'smooth',block:'center'}); mark(el); }
+    }
+
+    out.addEventListener('click',function(ev){
+      var b=ev.target.closest('button'); if(!b) return;
+      var cls=b.className||'';
+      if(cls.indexOf('wz-art')>=0 && b.getAttribute('data-i')!=null){
+        locate(parseInt(b.getAttribute('data-i'),10)); return;
+      }
+      if(cls.indexOf('wz-jump')>=0 && b.getAttribute('data-si')!=null){
+        jumpScene(b.getAttribute('data-cat'), parseInt(b.getAttribute('data-si'),10)); return;
+      }
+      var a=b.getAttribute('data-a'); if(!a) return;
+      if(a==='open'){
+        [].slice.call(out.querySelectorAll('.art-box')).forEach(function(x){x.open=true;});
+        b.textContent='条款原文已全部展开';
+      }
+      else if(a==='copy'){ copyText(mdCache,b); }
+      else if(a==='dl'){ download(mdCache); }
+      else if(a==='print'){ window.print(); }
+      else if(a==='edit'){ goStep(2); window.scrollTo({top:Math.max(0,pane.offsetTop-70),behavior:'smooth'}); }
+      else if(a==='back1'){ goStep(1); window.scrollTo({top:Math.max(0,pane.offsetTop-70),behavior:'smooth'}); }
+    });
+
+    function copyText(txt,btn){
+      function done(ok){
+        var o=btn.textContent;
+        btn.textContent=ok?'已复制到剪贴板':'复制失败，请手动选择';
+        setTimeout(function(){ btn.textContent=o; },2000);
+      }
+      if(navigator.clipboard && navigator.clipboard.writeText){
+        navigator.clipboard.writeText(txt).then(function(){done(true);},
+          function(){done(false);});
+        return;
+      }
+      try{
+        var ta=document.createElement('textarea');
+        ta.value=txt; ta.style.position='fixed'; ta.style.left='-9999px';
+        document.body.appendChild(ta); ta.select();
+        var ok=document.execCommand('copy');
+        document.body.removeChild(ta); done(ok);
+      }catch(e){ done(false); }
+    }
+    function download(txt){
+      try{
+        var blob=new Blob([txt],{type:'text/markdown;charset=utf-8'});
+        var a=document.createElement('a');
+        a.href=URL.createObjectURL(blob);
+        a.download='法律依据清单-'+cur.n+'.md';
+        document.body.appendChild(a); a.click();
+        setTimeout(function(){ URL.revokeObjectURL(a.href);
+          if(a.parentNode) a.parentNode.removeChild(a); },500);
+      }catch(e){}
+    }
+    function buildMd(nScene,nDuty,nLaw){
+      var L=[], d=new Date();
+      L.push('# 法律依据清单 · '+mdTitle);
+      L.push('');
+      L.push('> 来源：合规无终点 · 法规库「按话题找依据」（义务清单 '+IDX.length+' 个大类 / '
+        +N_TOTAL_SCENE+' 个场景）');
+      L.push('> 生成时间：'+d.toLocaleString('zh-CN')+'　|　共 '+nScene+' 个场景 / '
+        +nDuty+' 项义务 / '+nLaw+' 部依据 / '+wzArts.length+' 条条款原文');
+      L.push('');
+      L.push('## 一、涉及的法条（'+wzArts.length+' 条）');
+      L.push('');
+      wzArts.forEach(function(a){
+        L.push('- 《'+a.src+'》'+a.no+(a.n>1?('（'+a.n+' 项义务引用）'):''));
+      });
+      L.push('');
+      L.push('## 二、义务与依据');
+      blocks.forEach(function(b){
+        L.push('');
+        L.push('### '+(p2Multi?(b.cat+' › '):'')+b.name+'（'+b.n+' 项）');
+        b.duties.forEach(function(x,i){
+          L.push('');
+          L.push('**'+(i+1)+'. '+(x.risk?('['+x.risk+'] '):'')+x.t+'**');
+          if(x.d){ L.push(''); L.push(x.d); }
+          if(x.refs.length){
+            L.push('');
+            L.push('依据：'+x.refs.map(function(r){return '《'+r+'》';}).join('、'));
+          }
+          x.arts.forEach(function(a){
+            L.push('- 《'+a.src+'》'+a.no+(a.q?('：'+a.q):''));
+          });
+        });
+      });
+      L.push('');
+      L.push('---');
+      L.push('条文原文逐字取自我站官方原文库；引用前请核对现行有效版本。'
+        +'本清单用于合规检索与自查参考，不构成法律意见。');
+      return L.join('\\n');
+    }
+
+    // ---------- 一句话问：在义务清单语料里给「场景」打分并跨大类排序
+    //
+    // 三层权重：场景名（业务最小单位）> 义务标题 > 描述正文。
+    // 命中场景名或义务标题的才进候选；只有大类介绍命中（说明只问到了领域、
+    // 没问到具体动作）时不擅自编场景，改为提示用户自己勾。宁可少给，不给错。
+    function search(txt){
+      var qg=queryGrams(txt), ci, si;
+      if(!qg.length) return null;
+      var hits=[], cats=[];
+      for(ci=0;ci<IDX.length;ci++){
+        var c=IDX[ci];
+        var cb=flat(c.a+' '+c.n+' '+(c.d||'')+' '+(c.e||[]).join(' ')).toLowerCase();
+        var cScore=gHit(qg,cb);
+        for(si=0;si<c.s.length;si++){
+          var s=c.s[si], sn=s[0].toLowerCase();
+          var tt=s[1].map(function(x){return (x[0]||'').toLowerCase();}).join(' ');
+          var dd=s[1].map(function(x){return (x[2]||'').toLowerCase();}).join(' ');
+          var vName=gHit(qg,sn)*10, vTtl=gHit(qg,tt)*3;
+          // 「场景名 + 义务标题」是人工维护的词表，命中才算相关；
+          // 义务说明是散文，只作为加权补充，单独命中不足以把场景拉进来
+          // （否则「zzz不存在的词」这类胡问也会命中含「存在」二字的说明句）。
+          if(vName+vTtl<=0) continue;
+          hits.push({ci:ci, si:si, v:vName+vTtl+gHit(qg,dd)*1});
+        }
+        if(cScore) cats.push({ci:ci, v:cScore});
+      }
+      if(!hits.length) return {hits:[], cats:cats};
+      hits.sort(function(a,b){ return b.v-a.v || a.ci-b.ci || a.si-b.si; });
+      return {hits:hits, cats:cats};
+    }
+
+    function doSearch(){
+      var txt=(q&&q.value||'').trim();
+      if(!txt){ if(q) q.focus(); return; }
+      var r=search(txt);
+      if(!r || (!r.hits.length && !r.cats.length)){
+        say('没匹配到。换个更贴近业务的说法试试（例如把「赔付」换成「售后」「退货」，'
+          +'或补上具体动作），也可以从上面的大类里挑。','wz-warn');
+        goStep(1); return;
+      }
+      if(!r.hits.length){
+        // 只问到了领域、没问到动作：落到该大类，让用户自己勾场景
+        r.cats.sort(function(a,b){ return b.v-a.v; });
+        cur=IDX[r.cats[0].ci]; curLabel=cur.a||cur.n; sel={};
+        renderP2(catList(r.cats[0].ci), {head:'<b>第 2 步</b>　只在分类层面匹配到'
+          +'「<b>'+e2(cur.n)+'</b>」，没锁定到具体场景 —— 请从下面的场景里勾选'
+          +'（本类共 '+cur.s.length+' 个场景 / '
+          +cur.s.reduce(function(a,s){return a+s[1].length;},0)+' 项义务）。'});
+        say('没锁定到具体场景，已把你送到「<b>'+e2(cur.n)+'</b>」，请勾选涉及的场景。','wz-warn');
+        goStep(2);
+        window.scrollTo({top:Math.max(0, pane.offsetTop-70), behavior:'smooth'});
+        return;
+      }
+      var top=r.hits[0].v;
+      var keep=r.hits.filter(function(h){ return h.v>=Math.max(1.2, top*0.35); }).slice(0,8);
+      sel={};
+      keep.forEach(function(h){ sel[sKey(h.ci,h.si)]=true; });
+      cur=null;
+      renderP2(keep, {multi:true, head:'<b>第 2 步</b>　一句话问：<b>'+e2(txt)+'</b>　'
+        +'命中 <b>'+r.hits.length+'</b> 个场景，按相关度列出前 '+keep.length+' 个'
+        +'（已默认勾选，可增减；每张卡左上角是该场景所属的大类）。'});
+      renderOut();
+      var cn={};
+      keep.forEach(function(h){ cn[IDX[h.ci].n]=1; });
+      say('已在 <b>'+Object.keys(cn).length+'</b> 个大类里定位到 <b>'+r.hits.length
+        +'</b> 个相关场景，清单见下方；点「← 按大类自己挑」可换成按目录浏览。','wz-ok');
+    }
+    if(go) go.addEventListener('click',doSearch);
+    if(q) q.addEventListener('keydown',function(ev){
+      if(ev.key==='Enter'){ ev.preventDefault(); doSearch(); }
+    });
+    // 步骤条：可以往回点，或回到已经生成过的清单；不允许跳过
+    steps.addEventListener('click',function(ev){
+      var b=ev.target.closest('.wz-st'); if(!b) return;
+      var n=parseInt(b.getAttribute('data-s'),10)||1;
+      if(n===3 && out.innerHTML){ goStep(3); return; }
+      if(n>curStep || (n===2 && !cur)){
+        say('按顺序来：先选一件正在做的事 → 勾场景 → 生成清单。','wz-warn'); return;
+      }
+      goStep(n);
+    });
+
+    // ---------- 初始化：支持 #pane-ask-<大类id> 深链直达该大类的第 2 步
+    var hm2=/^#pane-ask(?:-([a-z]+))?$/.exec(location.hash||'');
+    renderP1();
+    var found=-1, z;
+    if(hm2 && hm2[1]) for(z=0;z<IDX.length;z++) if(IDX[z].id===hm2[1]) found=z;
+    if(found>=0) openCat(found); else goStep(1);
+  })();
 
   // ---------- 深链定位：从搜索结果跳转 #d-xxx 时展开父级并高亮 ----------
   function focusDuty(){

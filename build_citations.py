@@ -31,6 +31,8 @@ COMPETE = os.path.join(HERE, "sources", "standards", "compete_law.json")
 AUTO = os.path.join(HERE, "sources", "standards", "hot_articles_auto.json")
 COUNTS = os.path.join(HERE, "sources", "standards", "citation_counts.json")
 TEXT_INDEX = os.path.join(HERE, "kb", "texts", "index.json")
+# 法条 → 引用它的案例（tools/build_article_index.py 生成）：本页的「反向索引」数据源
+CASE_REFS = os.path.join(HERE, "sources", "standards", "case_refs.json")
 OUT = os.path.join(HERE, "kb", "citations.html")
 
 SITE_GLOBS = ["kb", "news", "analysis", "radar", "updates"]
@@ -99,6 +101,45 @@ def load_counts(items, recount=False):
     return d["counts"]
 
 
+# ---------------- 反向索引：一条法条 → 引用它的案例（P1-2） ----------------
+# 出处：对标北大法宝「法条联想」。此前本站只能「从案例看到依据」，
+# 「从法条看到案例」这一半是缺的 —— 本页补上。
+def norm_law(name):
+    """与 tools/build_article_index.py 的 nkey() 保持同一口径，键才能对上。"""
+    s = re.sub(r"[\s\u3000《》]", "", name or "")
+    s = re.sub(r"^中华人民共和国", "", s)
+    s = re.sub(r"[（(][^）)]{0,12}(修订|修正|草案|征求意见稿)[）)]$", "", s)
+    return s
+
+
+def load_case_refs():
+    d = H.load_json(CASE_REFS, {})
+    if not d:
+        print("  ! 反向索引缺失：先跑 tools/build_article_index.py")
+    return d
+
+
+def art_keys(law, art):
+    """一条法条可能有多个候选键：条目里写着「第二十八条、第二十九条」时要逐个试。"""
+    lk = norm_law(law)
+    if not lk:
+        return []
+    out = [f"{lk}|{art}"]
+    for a in re.split(r"[、,，;；/]", art or ""):
+        a = a.strip()
+        if a.startswith("第") and a.endswith("条") and a not in out:
+            out.append(f"{lk}|{a}")
+    return out
+
+
+def case_refs_for(crefs, law, art):
+    for k in art_keys(law, art):
+        got = (crefs.get("refs") or {}).get(k)
+        if got:
+            return k, got
+    return None, []
+
+
 # ---------------- 渲染 ----------------
 KIND_CLS = {"行政处罚": "k-adm", "行政执法": "k-adm", "监管通报": "k-watch",
             "监管执法": "k-watch", "行政监管": "k-watch",
@@ -152,6 +193,13 @@ PAGE_CSS = """
 .ct-quote{grid-column:1/-1;background:#fffdf5;border:1px solid #f0e2c0}
 .ct-quote p{font-family:"Songti SC","宋体",serif;font-size:14.5px;line-height:2.0;color:#3a3226}
 .ct-cases{grid-column:1/-1}
+/* 反向索引（P1-2）：从法条反查「案例库里哪些案例引用了本条」。
+   与上半区「真实案例（按案件整理）」区分开——那是案件视角，这是法条视角。 */
+.ct-lead2{margin:0 0 11px;font-size:12.8px;line-height:1.85;color:var(--muted)}
+.ct-caserev{background:#fffdf7;border-color:#f0e2c0}
+.ct-caserev .ct-ct{font-size:13.6px;text-decoration:none;color:var(--ink)}
+.ct-caserev .ct-ct:hover{color:var(--brand);text-decoration:underline}
+.ct-cm-x{color:var(--brand);font-weight:600}
 .ct-compete{grid-column:1/-1;background:#fbfaf7;border:1px solid #f0e9dc}
 .ct-comp+.ct-comp{margin-top:16px;padding-top:14px;border-top:1px dashed #e6ddc9}
 .ct-cp-t{margin:0 0 8px;font-size:14.5px;font-weight:700;color:var(--ink)}
@@ -300,7 +348,9 @@ PAGE_TPL = """<!DOCTYPE html>
   <div class="ct-empty" id="ct-empty" style="display:none">没有符合条件的法条，换个关键词试试。</div>
 
   <p class="ct-note">说明：条文原文为便于阅读的摘录，完整条文请点「在原文库中定位」跳转站内原文库；处罚标准与法律责任根据现行有效版本整理，
-     个案的处罚幅度还会受裁量基准、从轻从重情节影响。案例信息以官方发布内容为准。</p>
+     个案的处罚幅度还会受裁量基准、从轻从重情节影响。案例信息以官方发布内容为准。<br>
+     「案例库中引用本条的案例」由案例正文的违法事实认定段自动识别得出（仅统计<b>明确写出《法规名》第 X 条</b>的引用），
+     命中 __NREV__ 条法条；识别不到的（如仅写法规名、或援引的是规章而站内未收原文）不会出现，故该数字是下限，不是全部。</p>
 </main>
 
 <footer></footer>
@@ -367,10 +417,13 @@ def render_compete(cps):
     return "".join(out)
 
 
-def render(items, counts, dm_name, law_index, compete=None):
+def render(items, counts, dm_name, law_index, compete=None, crefs=None):
     heat_max = max([counts.get(x["id"], 0) for x in items] + [1])
     dm_count = collections.Counter(x["domain"] for x in items)
     order = [d["id"] for d in json.load(open(HOT, encoding="utf-8"))["domains"]]
+    crefs = crefs or {}
+    cmeta = (crefs.get("_meta") or {}).get("cases") or {}
+    n_rev_cases = len((crefs.get("_meta") or {}).get("by_case") or {})
     chips = ['<button class="ct-chip on" data-dm="">全部 %d</button>' % len(items)]
     for did in order:
         if not dm_count.get(did):
@@ -379,6 +432,7 @@ def render(items, counts, dm_name, law_index, compete=None):
                      % (esc(did), esc(dm_name[did]), dm_count[did]))
 
     cards = []
+    n_rev_law = 0
     for i, x in enumerate(items, 1):
         heat = counts.get(x["id"], 0)
         pct = max(4, round(heat / heat_max * 100))
@@ -386,9 +440,14 @@ def render(items, counts, dm_name, law_index, compete=None):
         law_rec = law_index.get((x["law"] or "").strip(), {})
         tid = law_rec.get("id") or tid
         arts = [c for c in x["cases"]]
+        rkey, rurls = case_refs_for(crefs, x["law"], x["art"])
+        if rurls:
+            n_rev_law += 1
         tags = [f'<span class="ct-tag dm">{esc(dm_name[x["domain"]])}</span>',
                 f'<span class="ct-tag">{esc(x["art"])}</span>',
                 f'<span class="ct-tag">{len(arts)} 个案例</span>']
+        if rurls:
+            tags.append(f'<span class="ct-tag">案例库引用 {len(rurls)}</span>')
         if tid:
             tags.append(f'<span class="ct-tag">站内原文可定位</span>')
         cases_html = ""
@@ -413,6 +472,28 @@ def render(items, counts, dm_name, law_index, compete=None):
             src_link += (f'<a class="ct-link" href="{esc(law_rec["url"])}" target="_blank" '
                          f'rel="noopener">法规官方发布页 &#8599;</a>')
         cp_html = render_compete((compete or {}).get(x["id"]))
+        # 反向索引块：只列案例库里**正文明确援引过本条**的案例（真引用，不是推测）
+        rev_html = ""
+        rev_terms = []
+        if rurls:
+            items_html = []
+            for u in rurls[:14]:
+                m = cmeta.get(u) or {}
+                kc = KIND_CLS.get(m.get("k"), "k-watch")
+                items_html.append(
+                    '<div class="ct-case ct-caserev">'
+                    '<div><span class="ct-ck ' + kc + '">' + esc(m.get("k") or "案例") + '</span>'
+                    f'<a class="ct-ct" href="cases.html#{esc(m.get("id") or "")}">'
+                    f'{esc(m.get("t") or "（未标注标题）")}</a></div>'
+                    f'<p class="ct-cm">{esc(m.get("o") or "未标注机关")} · {esc(m.get("d") or "")}'
+                    f'<span class="ct-cm-x">　在案例库中打开 →</span></p></div>')
+            more = (f'<p class="ct-cm">另有 {len(rurls) - 14} 条，'
+                    f'见 <a href="cases.html">合规案例库</a>。</p>' if len(rurls) > 14 else "")
+            rev_html = ('<p class="ct-lead2">下列案例的违法事实认定段里<b>明确援引了本条</b>'
+                        '（原文写作《%s》%s）。这是「从法条反查案例」的方向，'
+                        '与上面按案件整理的真实案例互为交叉验证。</p>'
+                        % (esc(norm_law(x["law"])), esc(x["art"]))) + "".join(items_html) + more
+            rev_terms = [(m.get("t") or "") for u in rurls for m in [cmeta.get(u) or {}]]
         body = '<div class="ct-secs">' + \
                sec_if("条文原文（摘录）", x.get("quote"), "ct-quote") + \
                sec_if("合规场景", x.get("scene")) + \
@@ -421,6 +502,8 @@ def render(items, counts, dm_name, law_index, compete=None):
                (sec("法条竞合与抗辩思路", cp_html, "ct-compete") if cp_html else "") + \
                sec_if("正面示例", x.get("positive")) + \
                sec("真实案例（%d）" % len(arts), cases_html, "ct-cases") + \
+               (sec("案例库中引用本条的案例（%d）" % len(rurls), rev_html, "ct-cases")
+                if rev_html else "") + \
                '</div>' + \
                '<div class="ct-acts"><button class="ct-btn ct-tocopy">复制本条</button>' + src_link + '</div>'
         search_text = " ".join([x["law"], x.get("law_short", ""), x["art"],
@@ -429,6 +512,7 @@ def render(items, counts, dm_name, law_index, compete=None):
                                 x.get("positive", "")] +
                                [(cp.get("title", "") + cp.get("issue", "") + cp.get("guide", ""))
                                 for cp in (compete or {}).get(x["id"], [])] +
+                               rev_terms +
                                [c["title"] + c["summary"] for c in arts])
         cards.append(
             f'<article class="ct-card" id="{esc(x["id"])}" data-dm="{esc(x["domain"])}" '
@@ -454,11 +538,13 @@ def render(items, counts, dm_name, law_index, compete=None):
              .replace("__JS__", PAGE_JS.strip())
              .replace("__CHIPS__", "".join(chips))
              .replace("__CARDS__", "".join(cards))
+             .replace("__NREV__", f"{n_rev_law} 条法条 / {n_rev_cases} 条案例")
              .replace("__N__", str(len(items)))
              .replace("__C__", str(sum(len(x["cases"]) for x in items))))
     open(OUT, "w", encoding="utf-8").write(htmls)
     print("高频法条页：kb/citations.html（%d 条 / %d 案例 / %.0f KB）"
           % (len(items), sum(len(x["cases"]) for x in items), os.path.getsize(OUT) / 1024))
+    print("  反向索引：%d 条法条可反查案例，涉及 %d 条案例" % (n_rev_law, n_rev_cases))
 
 
 def main():
@@ -491,7 +577,8 @@ def main():
     compete = load_compete()
     n_cp = sum(1 for x in items if compete.get(x["id"]))
     print("法条竞合与抗辩：%d 条法条已挂载竞合分析" % n_cp)
-    render(items, counts, dm_name, law_index, compete)
+    crefs = load_case_refs()
+    render(items, counts, dm_name, law_index, compete, crefs)
 
 
 if __name__ == "__main__":

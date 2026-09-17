@@ -123,13 +123,28 @@ UPD_RE = re.compile(r'(<!-- UPDATED:START -->).*?(<!-- UPDATED:END -->)', re.S)
 
 # 样式表缓存治理：给 style.css 链接附加 mtime 版本号，改名/改样式后浏览器立即拉新。
 STYLE_RE = re.compile(r'href="((?:\.\./)?assets/style\.css)(?:\?[^"]*)?"')
+# 法条悬浮卡组件（P1-1）：全站注入一个 defer 脚本；数据 kb/arts.js 由组件**按需**加载
+# （页面里真的出现《XX 法》第 X 条才拉，首页这类页面不白付 366 KB）。
+ARTJS_RE = re.compile(r'[ \t]*<script[^>]*src="[^"]*assets/art-card\.js[^"]*"[^>]*>\s*</script>\n?')
+
+
+def _mtime(name):
+    try:
+        return str(int(os.path.getmtime(os.path.join(HERE, "assets", name))))
+    except OSError:
+        return "1"
+
+
+def _mtime_arts():
+    """法条索引数据 kb/arts.js 的版本号（由 tools/build_article_index.py 生成）。"""
+    try:
+        return str(int(os.path.getmtime(os.path.join(HERE, "kb", "arts.js"))))
+    except OSError:
+        return "1"
 
 
 def _style_v():
-    try:
-        return str(int(os.path.getmtime(os.path.join(HERE, "assets", "style.css"))))
-    except OSError:
-        return "1"
+    return _mtime("style.css")
 
 
 def process(rel: str, do_write: bool) -> str:
@@ -152,6 +167,13 @@ def process(rel: str, do_write: bool) -> str:
         # 没有 footer 的页面（理论上没有）：补在 </body> 前
         new = new.replace("</body>", build_footer(rel) + "\n</body>", 1)
     new = STYLE_RE.sub(lambda m: f'href="{m.group(1)}?v={_style_v()}"', new)
+    # 法条悬浮卡：先清掉旧标签再补一次，保证路径与版本号随部署更新（幂等）
+    new = ARTJS_RE.sub("", new)
+    p = "../" * rel.count("/")
+    tag = (f'<script src="{p}assets/art-card.js?v={_mtime("art-card.js")}" '
+           f'data-arts="{p}kb/arts.js?v={_mtime_arts()}" defer></script>')
+    if "</body>" in new:
+        new = new.replace("</body>", tag + "\n</body>", 1)
     if new == s:
         return f"  {rel:<24} 无变化"
     if do_write:

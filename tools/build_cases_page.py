@@ -32,12 +32,31 @@ from case_gate import classify  # noqa: E402
 from case_reason import extract_penalty, extract_reason  # noqa: E402
 
 SRC = os.path.join(HERE, "sources", "cases", "cases.json")
+# 法条 → 案例 的反向索引（tools/build_article_index.py 生成）。
+# 本页用它把「依据」列里明确写出条号的引用做成可点链接（P1-2 的反方向）：
+# 点进去要么落在「高频引用法条」对应条目，要么直落站内原文库的该条。
+ART_REFS = os.path.join(HERE, "sources", "standards", "case_refs.json")
+
+
+def load_art_refs():
+    try:
+        d = json.load(open(ART_REFS, encoding="utf-8"))
+    except Exception:
+        return {}, {}, {}
+    m = d.get("_meta") or {}
+    return m.get("by_case") or {}, m.get("hot") or {}, m.get("art_docs") or {}
 
 # 类型标签配色：按类型名取稳定哈希（**不能用内置 hash()**：PYTHONHASHSEED
 # 每次构建都变，同一类型两天两个颜色），6 色低饱和轮转，便于横向扫读。
 def tag_cls(t):
     h = int(hashlib.md5((t or "").encode("utf-8")).hexdigest()[:6], 16)
     return f"t{h % 6}"
+
+
+def case_id_of(url):
+    """行锚点 id —— 必须与 tools/build_article_index.py 的 case_id() 完全一致，
+    否则「高频引用法条 → 案例」的反向链接会落到页面顶部而不是具体那一行。"""
+    return "cr-" + hashlib.md5((url or "").encode("utf-8")).hexdigest()[:10]
 
 
 def esc(s):
@@ -88,6 +107,8 @@ def main():
             laws[x] += 1
 
     rows = []
+    by_case, hot_map, doc_map = load_art_refs()
+    n_with_art = 0
     with_subj = 0
     with_attach = 0
     with_reason = 0
@@ -183,15 +204,53 @@ def main():
                         f'title="处罚决定书 / 告知书原件（本行的处罚事由取自该文书）">文书</a>')
         else:
             att_html = ""
+
+        # ── 依据：明确写出条号的引用做成可点链接 ────────────────────
+        # 「只说法规名」的引用无法定位到条，保持纯文字；写成《X 法》第 X 条的，
+        # 优先链到「高频引用法条」对应条目（那里有场景/处罚标准/竞合分析），
+        # 没有则直落站内原文库该条。法条悬浮卡（assets/art-card.js）也认这些文字。
+        url_c = c.get("url") or ""
+        plist = [p for p in (by_case.get(url_c) or "").split(";") if p]
+        lw_chips, seen_laws = [], set()
+        for p in plist[:6]:
+            law_n, _, art_n = p.rpartition("|")
+            seen_laws.add(law_n)
+            label = f"《{law_n}》{art_n}"
+            hid = hot_map.get(p)
+            if hid:
+                href, tip = f"citations.html#{hid}", "在高频引用法条中查看该条（含场景与处罚标准）"
+            else:
+                did = doc_map.get(p)
+                href = f"texts.html#{did}|{art_n}" if did else ""
+                tip = "在站内原文库中定位该条"
+            if href:
+                lw_chips.append(f'<a class="lw-r" href="{esc(href)}" title="{tip}">{esc(label)}</a>')
+            else:
+                lw_chips.append(f'<span class="lw-r lw-r-p">{esc(label)}</span>')
+        rest = []
+        for nm_l in (c.get("laws") or []):
+            k = re.sub(r"^中华人民共和国", "", re.sub(r"[\s《》]", "", nm_l))
+            if k in seen_laws or nm_l in seen_laws:
+                continue
+            rest.append(nm_l)
+        for nm_l in rest[:4]:
+            lw_chips.append(f'<span class="lw-n">{esc(nm_l)}</span>')
+        if len(rest) > 4:
+            lw_chips.append(f'<span class="lw-n lw-n-more">等 {len(rest)} 部</span>')
+        if plist:
+            n_with_art += 1
+        lw_html = ("".join(lw_chips) if lw_chips
+                   else '<span class="sbj-no">—</span>')
+        lw_title = law + ("　|　条文级引用：" + "；".join(plist) if plist else "")
         rows.append(
-            "<tr class=\"cr\">"
+            f'<tr class="cr" id="{esc((case_id_of(url_c)))}">'
             f'<td class="dt">{esc(c.get("date") or "—")}</td>'
             f'<td class="ag">{esc(c.get("agency") or c.get("org") or "—")}</td>'
             f'<td class="ty"><span class="cs-tag {tag_cls(c.get("type"))}">{esc(c.get("type") or "其他")}</span></td>'
             f'<td class="tt"><div class="tt-t" title="{esc(c.get("title") or "")}">{esc(c.get("title") or "")}</div></td>'
             f'<td class="sbj">{sbj_html}</td>'
             f'<td class="fx">{fx_html}</td>'
-            f'<td class="lw"><div class="lw-t" title="{esc(law)}">{esc(law) or "—"}</div></td>'
+            f'<td class="lw"><div class="lw-t" title="{esc(lw_title)}">{lw_html}</div></td>'
             f'<td class="fn"{ptitle}>{pen_html}</td>'
             f'<td class="lk"><a href="{esc(c.get("url"))}" target="_blank" rel="noopener">原文</a>'
             f'{att_html}</td>'
@@ -279,6 +338,16 @@ def main():
    表格出现大片空白 —— 实测就是这个原因。 */
 .lw-t{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;
   overflow:hidden;max-height:4.86em}
+/* 条文级依据（P1-2）：案例正文明确写出《法规》第 X 条时，把它做成可点链接——
+   点到「高频引用法条」对应条目（含场景 / 处罚标准 / 竞合分析），没有该条目则直落原文库。
+   纯法规名保持灰字（无法定位到条）。 */
+.lw-r{display:inline-block;margin:0 3px 3px 0;padding:1px 7px;border-radius:6px;
+  background:#eef4fb;border:1px solid #d7e5f5;color:#1b4f8a;font-size:12px;
+  font-weight:600;text-decoration:none;line-height:1.5;word-break:break-word}
+.lw-r:hover{background:var(--brand);border-color:var(--brand);color:#fff;text-decoration:none}
+.lw-r-p{background:#f4f6f9;border-color:#e5eaf1;color:var(--ink-2)}
+.lw-n{display:inline;color:var(--muted)}
+.lw-n-more{color:var(--faint)}
 .cs-tbl td.fn{min-width:120px;max-width:156px;color:var(--ink-2);font-size:12.5px}
 .cs-tbl td.lk{white-space:nowrap;width:92px;min-width:92px}
 /* 「原文」列固定在右侧：9 列合计 1300px+ 超出 1120px 容器，中部要横向滚动，
@@ -384,6 +453,7 @@ def main():
                 f'<div class="cs-k"><b>{len([o for o in orgs if o != "未标注"])}</b><span>覆盖监管机关</span></div>'
                 f'<div class="cs-k"><b>{len(types)}</b><span>违法类型</span></div>'
                 f'<div class="cs-k"><b>{with_pen}</b><span>已解析处罚结果</span></div>'
+                f'<div class="cs-k"><b>{n_with_art}</b><span>依据已精确到条</span></div>'
                 '</div>')
 
     body.append('<section class="cs-sec"><h2>案例库怎么用</h2>'

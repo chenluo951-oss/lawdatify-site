@@ -1474,3 +1474,256 @@ table.dm tfoot td{background:#f5f8fc;font-size:11.5px;color:var(--ink-2);padding
 .up-sum-b li a:hover{color:var(--brand);text-decoration:underline}
 .up-sum-b li em{font-style:normal;font-size:12px;color:var(--faint);white-space:nowrap}
 .up-sum-b .up-sum-x{margin:8px 0 0;font-size:12.5px;color:var(--faint)}
+
+/* ---- 法条悬浮卡（P1-1，2026-09-17）------------------------------------------
+   对标北大法宝「法宝之窗」：正文里的《XX 法》第 X 条悬停即浮出条文原文，
+   不用跳页。组件在 assets/art-card.js，数据在 kb/arts.js（构建期生成）。 */
+.artref{border-bottom:1px dashed var(--brand-2);color:inherit;cursor:help;
+  text-decoration:none}
+.artref:hover,.artref-on{border-bottom-style:solid;background:#eef6fb;
+  border-radius:3px}
+.ak-pop{position:fixed;z-index:90;width:min(520px,calc(100vw - 24px));
+  max-height:min(72vh,620px);overflow:auto;background:var(--card);
+  border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow-h);
+  padding:13px 15px 11px;font-family:var(--sans);text-align:left}
+.ak-hd{display:flex;flex-wrap:wrap;align-items:baseline;gap:3px 8px;
+  padding-bottom:9px;border-bottom:1px solid var(--line-2)}
+.ak-hd b{font-size:14.5px;color:var(--brand);font-weight:800}
+.ak-art{font-size:13px;font-weight:700;color:var(--accent)}
+.ak-st{margin-left:auto;font-style:normal;font-size:11.6px;font-weight:600;
+  color:var(--muted);white-space:nowrap}
+.ak-q{margin:10px 0 0;font-size:13.6px;line-height:1.78;color:var(--ink);
+  white-space:pre-line}
+.ak-cs-h{margin:11px 0 5px;font-size:12.4px;font-weight:700;color:var(--warn);
+  letter-spacing:.2px}
+.ak-cs{list-style:none;margin:0;padding:0}
+.ak-cs li{display:flex;gap:8px;align-items:baseline;padding:4px 0;
+  border-top:1px dashed var(--line-2);font-size:12.8px;line-height:1.5}
+.ak-cs li:first-child{border-top:0}
+.ak-cs a{flex:1;color:var(--ink-2);text-decoration:none;overflow:hidden;
+  text-overflow:ellipsis;white-space:nowrap}
+.ak-cs a:hover{color:var(--brand);text-decoration:underline}
+.ak-cs em{font-style:normal;color:var(--faint);font-size:11.6px;white-space:nowrap}
+.ak-cs .ak-more{color:var(--faint);font-size:11.8px}
+.ak-ft{display:flex;flex-wrap:wrap;gap:6px 12px;align-items:baseline;
+  margin-top:11px;padding-top:9px;border-top:1px solid var(--line-2)}
+.ak-ft a{font-size:12.4px;font-weight:600;color:var(--brand);text-decoration:none}
+.ak-ft a:hover{text-decoration:underline}
+.ak-cav{flex:1 1 100%;font-size:11.4px;color:var(--faint);line-height:1.5}
+@media(max-width:640px){.ak-pop{width:calc(100vw - 16px)}}
+
+/* ---- 法规库：检索粒度 / 结果中检索（P1-3）+ 发布量走势（P2-5）---------------
+   对标北大法宝把检索拆成「关键词（标题·全文 / 精确·模糊）+ 高级检索 + 结果中检索」，
+   以及律商网在统计区的逐年数据量折线。这里补齐前两件与一条极简版的折线。 */
+.lv-q{display:flex;flex:1;min-width:240px;gap:0}
+.lv-q input{border-radius:8px 0 0 8px;border-right:0}
+.lv-inq{flex:none;border:1px solid var(--line);border-left:0;border-radius:0 8px 8px 0;
+  background:#f7f9fc;color:var(--ink-2);font-family:var(--sans);font-size:12.4px;
+  font-weight:600;padding:0 12px;cursor:pointer;white-space:nowrap}
+.lv-inq:hover{background:var(--brand);border-color:var(--brand);color:#fff}
+.lv-seg{display:flex;border:1px solid var(--line);border-radius:8px;overflow:hidden;flex:none}
+.lv-seg button{border:0;border-right:1px solid var(--line);background:#fff;color:var(--muted);
+  font-family:var(--sans);font-size:12.4px;font-weight:600;padding:0 12px;cursor:pointer;
+  line-height:34px}
+.lv-seg button:last-child{border-right:0}
+.lv-seg button:hover{color:var(--brand)}
+.lv-seg button.on{background:var(--brand);color:#fff}
+/* 发布量走势：一条 30px 高的迷你折线，放在工具栏与已选条件之间。
+   ⚠️ 刻意做小 —— 用户此前明确抱怨过「图表太大、正文全在最下面」，趋势是旁注不是主角。 */
+.lv-trend{display:flex;align-items:center;gap:10px;flex-wrap:wrap;
+  margin:0 0 10px;padding:5px 11px;border:1px solid var(--line-2);border-radius:10px;
+  background:#fbfcfe}
+.lv-trend-l{font-size:12.2px;font-weight:700;color:var(--ink-2);white-space:nowrap}
+.lv-spark{flex:none;display:block}
+.lv-spark-l{fill:none;stroke:var(--brand);stroke-width:1.6;stroke-linejoin:round;
+  stroke-linecap:round}
+.lv-spark-a{fill:rgba(27,79,138,.10);stroke:none}
+.lv-spark circle{fill:var(--brand);opacity:.55}
+.lv-spark circle:hover{opacity:1;r:3.4}
+.lv-trend-v{font-size:12.2px;color:var(--muted);white-space:nowrap}
+.lv-trend-v b{color:var(--warn);font-weight:800}
+.lv-trend-x{margin-left:auto;font-size:11.6px;color:var(--faint);
+  font-variant-numeric:tabular-nums;white-space:nowrap}
+/* 修订沿革（P2-4）：补充信息，用中性灰，不抢「时效性」徽章 */
+.lv-am{font-size:12.2px;color:var(--muted);margin-top:4px;line-height:1.6}
+.lv-am-k{display:inline-block;margin-right:6px;padding:0 6px;border-radius:4px;
+  background:#f2f4f8;color:#54637a;font-size:11.4px;font-weight:700}
+@media(max-width:900px){
+  .lv-q{min-width:0;width:100%}
+  .lv-seg button{padding:0 9px;font-size:12px}
+  .lv-trend-x{display:none}
+}
+
+/* ==================================================================
+   按话题找依据（P3-8「智能图表」：引导式话题 → 法律依据清单）
+   2026-09-17：对标威科先行「智能图表」。与「合规义务清单」共用同一套数据
+   （17 大类 / 93 场景 / 285 义务），差别只在入口 ——
+     义务清单   按目录翻（你得先知道自己属于哪一类）
+     按话题找依据 按业务问题问（先说你正在做什么事）
+   清单本体**不另存一份数据**：把逐条明细里已经渲染好的义务卡按话题 clone 过来
+   （见 LIB_JS 里的 cloneDuty），所以明细改了清单自动跟着改，不会出现两份口径。
+   ================================================================== */
+.wz{margin:2px 0 4px}
+
+/* ---- 步骤条 ---- */
+.wz-steps{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:0 0 14px}
+.wz-st{display:inline-flex;align-items:center;gap:8px;padding:6px 14px 6px 7px;
+  border:1px solid var(--line);border-radius:999px;background:#fff;cursor:pointer;
+  font-family:var(--sans);color:var(--muted);transition:.15s}
+.wz-st i{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;
+  border-radius:50%;background:#eef1f6;color:#5d6c80;font-style:normal;font-size:12px;font-weight:700}
+.wz-st b{font-size:13px;font-weight:600}
+.wz-st:hover{border-color:#bcd4f0}
+.wz-st.on{border-color:var(--brand);background:#f2f7fd;color:var(--brand)}
+.wz-st.on i{background:var(--brand);color:#fff}
+
+/* ---- 一句话问 ---- */
+.wz-free{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+  padding:13px 16px 12px;margin:0 0 16px;box-shadow:var(--shadow)}
+.wz-fr-h{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:9px}
+.wz-fr-h b{font-size:14px;color:var(--ink)}
+.wz-fr-h span{font-size:11.8px;color:var(--faint)}
+.wz-fr-row{display:flex;gap:8px}
+.wz-fr-row input{flex:1;min-width:0;border:1px solid var(--line);border-radius:10px;
+  padding:10px 14px;font-size:14px;font-family:var(--sans);color:var(--ink);outline:none;
+  background:#fff;transition:.15s}
+.wz-fr-row input:focus{border-color:var(--brand);box-shadow:0 0 0 3px rgba(27,79,138,.10)}
+.wz-go{flex:0 0 auto;border:1px solid var(--brand);background:var(--brand);color:#fff;
+  border-radius:10px;padding:0 22px;font-size:13.5px;font-weight:600;cursor:pointer;
+  font-family:var(--sans);transition:.15s}
+.wz-go:hover{background:#16406f;border-color:#16406f}
+.wz-fr-tip{margin-top:9px;font-size:12.3px;color:var(--faint);line-height:1.7}
+.wz-fr-tip b{color:var(--brand)}
+.wz-fr-tip.wz-ok{color:#0f6b5c}
+.wz-fr-tip.wz-ok b{color:#0f6b5c}
+.wz-fr-tip.wz-warn{color:var(--warn)}
+.wz-fr-tip.wz-warn b{color:var(--warn)}
+
+.wz-hint{font-size:12.6px;color:var(--muted);margin:0 0 11px;line-height:1.75}
+.wz-hint b{color:var(--ink-2)}
+
+/* ---- 第 1 步：大类卡 ---- */
+.wz-cats{display:grid;grid-template-columns:repeat(auto-fill,minmax(258px,1fr));gap:10px}
+.wz-cat{display:block;width:100%;text-align:left;background:var(--card);
+  border:1px solid var(--line);border-radius:12px;padding:13px 15px 12px;cursor:pointer;
+  font-family:var(--sans);transition:.16s;position:relative;overflow:hidden}
+.wz-cat::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;
+  background:var(--brand);opacity:0;transition:.16s}
+.wz-cat:hover{border-color:#bcd4f0;box-shadow:var(--shadow-h);transform:translateY(-2px)}
+.wz-cat:hover::before{opacity:1}
+.wz-cat-q{display:block;font-size:14.2px;font-weight:700;color:var(--ink);line-height:1.5}
+.wz-cat-n{display:block;font-size:11.6px;color:var(--brand);font-weight:600;margin-top:3px}
+.wz-cat-m{display:block;font-size:11.6px;color:var(--faint);margin-top:5px;
+  font-variant-numeric:tabular-nums}
+.wz-cat-r{display:block;margin-top:7px}
+.wz-cat-e{display:block;font-size:11.6px;color:var(--muted);margin-top:7px;line-height:1.6;
+  border-top:1px dashed var(--line);padding-top:7px}
+
+/* ---- 第 2 步：场景复选 ---- */
+.wz-scs{display:grid;grid-template-columns:repeat(auto-fill,minmax(228px,1fr));gap:9px;
+  margin-bottom:14px}
+.wz-sc{display:block;width:100%;text-align:left;background:#fff;border:1px solid var(--line);
+  border-radius:10px;padding:10px 13px;cursor:pointer;font-family:var(--sans);transition:.15s}
+.wz-sc:hover{border-color:#bcd4f0;background:#f7fafe}
+.wz-sc b{display:block;font-size:13.4px;color:var(--ink);font-weight:600}
+.wz-sc em{font-style:normal;font-size:11.4px;color:var(--faint);font-variant-numeric:tabular-nums}
+.wz-sc .dm-bar{margin-top:6px}
+.wz-sc.on{border-color:var(--brand);background:#f2f7fd;box-shadow:inset 0 0 0 1px var(--brand)}
+.wz-sc.on b{color:var(--brand)}
+/* 一句话问命中多个大类时，卡上标出场景所属大类 */
+.wz-sc-c{display:inline-block;font-size:10.6px;font-weight:700;color:var(--brand);
+  background:#eef5ff;border:1px solid #d5e1f2;border-radius:4px;padding:1px 6px;
+  margin-bottom:5px;letter-spacing:.2px}
+.wz-acts{display:flex;align-items:center;gap:9px;flex-wrap:wrap}
+.wz-btn{border:1px solid var(--line);background:#fff;color:var(--ink-2);border-radius:9px;
+  padding:7px 14px;font-size:13px;font-weight:600;cursor:pointer;font-family:var(--sans);
+  transition:.15s;white-space:nowrap}
+.wz-btn:hover{border-color:var(--brand);color:var(--brand);background:#f7fafe}
+.wz-btn.wz-primary{background:var(--brand);border-color:var(--brand);color:#fff}
+.wz-btn.wz-primary:hover{background:#16406f;border-color:#16406f;color:#fff}
+.wz-cnt{font-size:12.4px;color:var(--faint)}
+
+/* ---- 第 3 步：清单头 ---- */
+.wz-head{display:flex;align-items:flex-start;gap:16px;flex-wrap:wrap;
+  background:linear-gradient(135deg,#12375c 0%,#1b6b6b 100%);color:#fff;
+  border-radius:var(--radius);padding:15px 18px;margin-bottom:14px;box-shadow:var(--shadow)}
+.wz-hd-l{flex:1 1 340px;min-width:0}
+.wz-hd-k{display:inline-block;font-size:11.4px;letter-spacing:1.2px;background:rgba(255,255,255,.17);
+  border-radius:999px;padding:3px 11px;margin-bottom:8px}
+.wz-hd-l b{display:block;font-size:19px;font-weight:800;letter-spacing:.4px}
+.wz-hd-s{display:block;font-size:12.6px;color:#d3ece7;margin-top:5px;
+  font-variant-numeric:tabular-nums}
+.wz-hd-r{display:flex;gap:8px;flex-wrap:wrap}
+.wz-head .wz-btn{background:rgba(255,255,255,.13);border-color:rgba(255,255,255,.34);color:#fff}
+.wz-head .wz-btn:hover{background:rgba(255,255,255,.24);border-color:#fff;color:#fff}
+
+/* ---- 第 3 步：法条汇总 ---- */
+.wz-arts{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+  padding:13px 16px 14px;margin-bottom:15px;box-shadow:var(--shadow)}
+.wz-arts-h{font-size:13.6px;font-weight:700;color:var(--ink);margin-bottom:9px;
+  display:flex;align-items:baseline;gap:9px;flex-wrap:wrap}
+.wz-arts-h b{color:var(--brand);font-variant-numeric:tabular-nums}
+.wz-arts-h span{font-size:11.8px;color:var(--faint);font-weight:400}
+.wz-arts-l{display:flex;flex-wrap:wrap;gap:6px;max-height:186px;overflow:auto}
+.wz-art{border:1px solid #d5e1f2;background:#eef3fa;color:#1b4f8a;border-radius:999px;
+  padding:4px 12px;font-size:12.5px;cursor:pointer;font-family:var(--sans);transition:.14s;
+  display:inline-flex;align-items:center;gap:6px;line-height:1.6}
+.wz-art:hover{background:var(--brand);border-color:var(--brand);color:#fff}
+.wz-art em{font-style:normal;font-size:10.8px;opacity:.72}
+
+/* ---- 第 3 步：义务卡（clone 自逐条明细，只调必要的边界） ---- */
+/* 某话题的义务还没锚定到条款号时的说明（不假装有原文） */
+.wz-note{background:#fdf9ef;border:1px solid #f0e2bd;border-left:3px solid #d9a94a;
+  border-radius:var(--radius-s);padding:11px 15px;font-size:12.8px;color:#6b5a2e;
+  line-height:1.8;margin-bottom:15px}
+.wz-note b{color:#8a6d1f}
+
+.wz-res{display:flex;flex-direction:column;gap:14px}
+.wz-sc-blk{background:var(--card);border:1px solid var(--line);border-radius:12px;
+  padding:14px 18px 16px;box-shadow:var(--shadow)}
+.wz-sc-blk > h4{margin:0 0 10px;font-size:14.6px;color:var(--ink);
+  display:flex;align-items:center;gap:9px;padding-bottom:9px;border-bottom:1px solid var(--line-2)}
+.wz-blk-i{display:inline-flex;align-items:center;justify-content:center;width:21px;height:21px;
+  border-radius:6px;background:var(--brand);color:#fff;font-size:12px;font-weight:700;flex:none}
+.wz-blk-n{font-weight:700}
+.wz-blk-c{font-size:11px;font-weight:700;color:var(--brand);background:#eef5ff;
+  border:1px solid #d5e1f2;border-radius:5px;padding:2px 8px;flex:none;letter-spacing:.2px}
+.wz-sc-blk > h4 i{margin-left:auto;font-style:normal;font-size:11.6px;color:var(--faint);
+  font-weight:600}
+.wz-res .lb-d2{border-left-color:#cfe0f3;padding-left:14px;margin:0 0 12px}
+.wz-res .lb-d2-t b{font-size:13.8px}
+.wz-jump{display:inline-block;margin-top:2px;border:1px dashed var(--line);background:#fafbfd;
+  color:var(--muted);border-radius:8px;padding:5px 12px;font-size:12.2px;cursor:pointer;
+  font-family:var(--sans);transition:.15s}
+.wz-jump:hover{border-color:var(--brand);color:var(--brand);background:#f2f7fd}
+
+/* 义务清单里的入口按钮 */
+.dm-goto{margin-left:8px;border:1px solid #bcd4f0;background:#eef5ff;color:var(--brand);
+  border-radius:8px;padding:5px 12px;font-size:12.4px;font-weight:600;cursor:pointer;
+  font-family:var(--sans);transition:.15s;white-space:nowrap}
+.dm-goto:hover{background:var(--brand);color:#fff;border-color:var(--brand)}
+
+@media(max-width:860px){
+  .wz-cats,.wz-scs{grid-template-columns:1fr}
+  .wz-fr-row{flex-wrap:wrap}
+  .wz-go{width:100%;padding:10px 0}
+  .wz-hd-l b{font-size:17px}
+  .dm-goto{margin-left:0;width:100%;text-align:center}
+  .wz-sc-blk{padding:12px 14px 14px}
+  .wz-arts-l{max-height:none}
+}
+/* 打印 / 存 PDF：只留清单本体，链接补全 URL（沿用站内既有打印规则） */
+@media print{
+  .wz-steps,.wz-free,.wz-hint,.wz-acts,.wz-hd-r,.wz-jump,.dm-goto,
+  .lb-tabs,.topnav,.subnav,.pagehead,footer,.mod-bound,#pane-lib,#pane-draft,#pane-duty
+    {display:none !important}
+  .wz-head{background:#fff !important;color:#111 !important;border:1px solid #999;
+    box-shadow:none;padding:10px 0}
+  .wz-head .wz-hd-k{background:#eee;color:#333}
+  .wz-head .wz-hd-l b{font-size:16px}
+  .wz-head .wz-hd-s{color:#333}
+  .wz-arts,.wz-sc-blk{box-shadow:none;border-color:#bbb;break-inside:auto}
+  .wz-arts-l{max-height:none;overflow:visible}
+  .lb-d2{break-inside:avoid}
+  .wz-art{border-color:#bbb;color:#111;background:#fff}
+}

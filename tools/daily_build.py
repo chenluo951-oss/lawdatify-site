@@ -76,6 +76,17 @@ STEPS = [
     # （条目 → 原文 id 映射），build_standards 靠它给条目挂「读原文」按钮。
     # 排在后面的话按钮永远指向上一版索引——表现为「刚补的原文，库上看不到入口」。
     ("站内原文页",      [PY, "build_texts.py"],                     False),
+    # 「法条引用索引」：扫全站已生成的页面，抽出《法规名》第 X 条 → 从站内原文库切出条文原文，
+    # 产出 kb/arts.js（供法条悬浮卡按需加载）+ sources/standards/case_refs.json
+    #（供案例库「依据」列做深链、供高频法条页挂「引用本条的案例」）。
+    # ⚠️ 必须排在 build_texts 之后（它按 md5 规则算 doc id 并拿 kb/texts/index.json 校验）
+    #   且**排在 build_cases_page / build_citations 之前**（后两者都读 case_refs.json）。
+    #   它扫的是上一版页面里的引用，条号级引用本身很稳定，因此接受一天的滞后，
+    #   不必为了「当天闭环」把案例库与高频法条页各跑两遍。
+    ("法条引用索引",    [PY, "tools/build_article_index.py"],        False),
+    # 「法规修订沿革」（轻量版）：只从 flk 官方原文前言里读出「经 N 次修正 / 最近一次 YYYY-MM-DD」，
+    # 不做全文版本库。产出 sources/standards/amendments.json，由 build_standards 读进法规库列表。
+    ("法规修订沿革",    [PY, "tools/build_amendments.py"],           False),
     ("知识库·义务矩阵", [PY, "build_standards.py"],                 True),
     ("知识库·案例库",   [PY, "tools/build_cases_page.py"],          False),
     # ⚠️ 治理分析必须排在专项合规页之前：它产出 sources/appviol/analytics.json
