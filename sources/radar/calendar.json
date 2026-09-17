@@ -1,7 +1,7 @@
 {
  "_meta": {
   "desc": "合规日历数据源。src=official 表示发布机构官网原文深链；src=analysis 表示可溯源的专业评述文章页（非监管原文，页面上单独标注）。",
-  "updated": "2026-09-16"
+  "updated": "2026-09-17"
  },
  "items": [
   {
@@ -301,6 +301,42 @@
    "region": "全国",
    "domain": "数据合规",
    "note": "桌面云安全国标征求意见截止，涉及云桌面数据处理安全要求",
+   "src": "official",
+   "lang": "zh"
+  },
+  {
+   "date": "2026-09-01",
+   "type": "正式施行",
+   "title": "GB/T 47746—2026《顾客联络服务 人工与智能客户服务协同要求》实施",
+   "url": "https://www.tc260.org.cn/tc260/xwdt1/202609/e879077a3caa4722b2206d1bcaed5a6c/files/%E3%80%8A%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%AE%89%E5%85%A8%E6%B2%BB%E7%90%86%E6%A1%86%E6%9E%B63.0%E3%80%8B.pdf.pdf",
+   "issuer": "全国网络安全标准化技术委员会（TC260）",
+   "region": "CN",
+   "domain": "零售与消费者合规",
+   "note": "首个聚焦人工与智能客服协同机制的国家标准，明确 AI 客服与人工坐席的转接、告知与责任边界；朴朴客服体系需据此校准转人工路径与承诺话术。",
+   "src": "official",
+   "lang": "zh"
+  },
+  {
+   "date": "2026-09-01",
+   "type": "正式施行",
+   "title": "市场监管总局电子计价秤计量监管试点工作公告实施",
+   "url": "https://scjg.zhoukou.gov.cn/sitesources/scjdglj/page_pc/zwgk/zwzdgkml/zcfg/article3f428846e3a7491494280d0959183015.html",
+   "issuer": "国家市场监督管理总局",
+   "region": "CN",
+   "domain": "计量合规",
+   "note": "河北、浙江、福建试点；2027-01-08 起不得销售/修理不符合 JJF 2184—2025 的电子计价秤，贸易结算用秤执行 JJG 1204—2025。",
+   "src": "official",
+   "lang": "zh"
+  },
+  {
+   "date": "2026-09-14",
+   "type": "发布/生效",
+   "title": "《人工智能安全治理框架》3.0 发布（2026 国家网络安全宣传周）",
+   "url": "https://www.tc260.org.cn/tc260/xwdt1/202609/e879077a3caa4722b2206d1bcaed5a6c/files/%E3%80%8A%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%AE%89%E5%85%A8%E6%B2%BB%E7%90%86%E6%A1%86%E6%9E%B63.0%E3%80%8B.pdf.pdf",
+   "issuer": "全国网络安全标准化技术委员会（TC260）",
+   "region": "CN",
+   "domain": "AI合规",
+   "note": "更新内生/应用/衍生三类风险，新增智能体风险管理框架与可信 AI 基本准则，将作为安全评估与算法备案的实际参照。",
    "src": "official",
    "lang": "zh"
   }

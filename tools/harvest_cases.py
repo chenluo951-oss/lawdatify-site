@@ -38,6 +38,7 @@ from urllib.parse import urlencode
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from case_text_clean import clean_fact, is_shell  # noqa: E402
+from case_gate import classify  # noqa: E402
 
 HERE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 OUT = os.path.join(HERE, "sources", "cases", "cases.json")
@@ -347,7 +348,8 @@ def main():
     cand = {}
     for label, col in COLS:
         rows = jpaas_list(col, maxpages)
-        hit = [r for r in rows if HIT.search(r["title"]) and not SKIP.search(r["title"])]
+        hit = [r for r in rows if HIT.search(r["title"]) and not SKIP.search(r["title"])
+               and classify(r["title"], "", "")[0]]
         print(f"▸ {label}：列表 {len(rows)} 条，命中 {len(hit)} 条（新 {sum(1 for r in hit if r['url'] not in have)}）")
         for r in hit:
             cand.setdefault(r["url"], r)
@@ -371,7 +373,8 @@ def main():
                 it = json.loads(line)
             except Exception:
                 continue
-            if it.get("kind") in ("处罚案例", "执法通报", "专项行动"):
+            if it.get("kind") in ("处罚案例", "执法通报", "专项行动") \
+                    and classify(it.get("title", ""), "", "")[0]:
                 cand.setdefault(it.get("url", ""), {
                     "title": it.get("title", ""), "url": it.get("url", ""),
                     "_preset": {"title": it.get("title", ""), "url": it.get("url", ""),

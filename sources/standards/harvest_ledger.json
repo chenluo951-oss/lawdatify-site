@@ -78,7 +78,7 @@
   "chars": 4740,
   "http_kind": "html",
   "status": "pointer",
-  "checked": "2026-09-16",
+  "checked": "2026-09-17",
   "note": "未检出标准正文特征（范围/规范性引用文件）"
  },
  "食品安全国家标准 预包装食品营养标签通则": {
@@ -89,7 +89,7 @@
   "chars": 4740,
   "http_kind": "html",
   "status": "pointer",
-  "checked": "2026-09-16",
+  "checked": "2026-09-17",
   "note": "未检出标准正文特征（范围/规范性引用文件）"
  },
  "寄递服务用户个人信息安全管理规定（2023 修订）": {
@@ -9045,7 +9045,7 @@
   "chars": 1113,
   "http_kind": "html",
   "status": "pointer",
-  "checked": "2026-09-16",
+  "checked": "2026-09-17",
   "note": "未检出标准正文特征（范围/规范性引用文件）"
  },
  "限制商品过度包装要求 食品和化妆品": {
@@ -9056,7 +9056,7 @@
   "chars": 2876,
   "http_kind": "html",
   "status": "pointer",
-  "checked": "2026-09-16",
+  "checked": "2026-09-17",
   "note": "未检出标准正文特征（范围/规范性引用文件）"
  },
  "限制商品过度包装要求 生鲜食用农产品": {
@@ -9067,7 +9067,7 @@
   "chars": 1905,
   "http_kind": "html",
   "status": "pointer",
-  "checked": "2026-09-16",
+  "checked": "2026-09-17",
   "note": "未检出标准正文特征（范围/规范性引用文件）"
  },
  "电动自行车安全技术规范": {
@@ -9078,7 +9078,7 @@
   "chars": 1957,
   "http_kind": "html",
   "status": "pointer",
-  "checked": "2026-09-16",
+  "checked": "2026-09-17",
   "note": "未检出标准正文特征（范围/规范性引用文件）"
  },
  "YD/T 6793-2026 电信和互联网用户个人信息汇聚融合处理技术要求": {
@@ -11474,7 +11474,40 @@
   "chars": 6770,
   "http_kind": "html",
   "status": "pointer",
-  "checked": "2026-09-16",
+  "checked": "2026-09-17",
+  "note": "该页是目录/索引页"
+ },
+ "住房公积金管理条例": {
+  "code": "行政法规",
+  "level": "行政法规",
+  "source": "gov.cn/官网",
+  "official_url": "https://www.gov.cn/zhengce/zhengceku/202608/content_7078478.htm",
+  "chars": 8760,
+  "http_kind": "html",
+  "status": "pointer",
+  "checked": "2026-09-17",
+  "note": "该页是目录/索引页"
+ },
+ "国务院关于修改《住房公积金管理条例》的决定": {
+  "code": "修改决定",
+  "level": "修改决定",
+  "source": "gov.cn/官网",
+  "official_url": "https://www.gov.cn/zhengce/zhengceku/202608/content_7078478.htm",
+  "chars": 8760,
+  "http_kind": "html",
+  "status": "pointer",
+  "checked": "2026-09-17",
+  "note": "该页是目录/索引页"
+ },
+ "国务院关于修改和废止部分行政法规的决定": {
+  "code": "修改决定",
+  "level": "修改决定",
+  "source": "gov.cn/官网",
+  "official_url": "https://www.gov.cn/zhengce/zhengceku/202608/content_7077981.htm",
+  "chars": 3105,
+  "http_kind": "html",
+  "status": "pointer",
+  "checked": "2026-09-17",
   "note": "该页是目录/索引页"
  }
 }

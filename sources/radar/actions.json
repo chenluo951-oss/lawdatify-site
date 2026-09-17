@@ -1,7 +1,7 @@
 {
  "_meta": {
   "desc": "监管行动数据源：正在推进或近期推进的检查、专项治理、立法草案与安全调查。level=national 国家级 / local 地方级。src 含义同 calendar.json。",
-  "updated": "2026-09-16"
+  "updated": "2026-09-17"
  },
  "items": [
   {
@@ -197,6 +197,46 @@
     "互联网平台"
    ],
    "progress": "核查2万余款App/SDK，通报1100余款",
+   "src": "official",
+   "lang": "zh"
+  },
+  {
+   "name": "清朗·整治AI应用乱象（第二阶段）",
+   "url": "https://www.cac.gov.cn/2026-09/15/c_1790876152357946.htm",
+   "level": "national",
+   "region": "全国",
+   "series": "清朗",
+   "issuer": "中央网信办",
+   "period": "2026 年第二阶段",
+   "status": "进行中",
+   "domain": "AI合规",
+   "focus": "AI 生成虚假信息、暴力低俗内容、假冒仿冒他人、侵害未成年人权益、AI 托管水军、AI 应用与智能体违规",
+   "targets": [
+    "内容平台",
+    "MCN 机构",
+    "AI 应用与智能体"
+   ],
+   "progress": "累计清理违法违规信息 561 万余条，查处账号 4.9 万余个，处置违规网站与应用程序 2400 余个，并通报七类典型案例。",
+   "src": "official",
+   "lang": "zh"
+  },
+  {
+   "name": "2026 年个人信息保护系列专项行动",
+   "url": "https://yjglt.yn.gov.cn/html/2026/gjwlaqxcz_0914/4033747.html",
+   "level": "national",
+   "region": "全国",
+   "series": "个人信息保护",
+   "issuer": "中央网信办、工业和信息化部、公安部",
+   "period": "2026 年全年",
+   "status": "进行中",
+   "domain": "数据合规",
+   "focus": "App/SDK 违法违规收集使用个人信息、个性化广告关闭选项、教育交通卫健金融领域风险排查",
+   "targets": [
+    "App 与 SDK",
+    "小程序",
+    "平台企业"
+   ],
+   "progress": "核查检测 2 万余款 App、SDK，督促 4000 余款整改，公开通报 1100 余款，下架 400 余款；摸排 9 万余家机构，整改隐患 1.2 万余个。",
    "src": "official",
    "lang": "zh"
   }

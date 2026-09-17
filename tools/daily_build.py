@@ -62,6 +62,11 @@ STEPS = [
     # harvest_cases.py 会把它并入 cases.json（含「一条公开表 = N 个案件」的拆分结果）。
     ("地市监处罚公示",  [PY, "tools/harvest_local_amr.py"],          False),
     ("合规案例库",      [PY, "tools/harvest_cases.py"],             False),
+    # 公示页的**文书附件**（Word / PDF / Excel）：相当多地市局的处罚公示页正文是空壳，
+    # 事实/依据/罚款只在附件里（见 tools/case_attach.py）。新采的记录已随采集解析，
+    # 这一步补的是「历史存量 + 上级机关那些带附件的外链页」。
+    # ⚠️ 加 --limit：单条要下 1～3 个附件，不限量会把每日构建拖长；漏掉的次日再补。
+    ("案例文书附件",    [PY, "tools/attach_backfill.py", "--limit", "80"], False),
     ("台账并库",        [PY, "merge_ledgers.py"],                   False),
     ("法规标准条目库",  [PY, "build_library_data.py"],              False),
     ("语料合并",        [PY, "merge_corpus.py"],                    False),
@@ -132,7 +137,8 @@ def main():
 
     net_labels = {"草案跟踪", "原文抓取·每日", "私有库同步", "法规全量·flk",
                   "标准门户·检索", "专项·省局栏目发现", "专项·App违规通报",
-                  "专项·发布日期回填", "专项·算法备案", "地市监处罚公示", "合规案例库"}
+                  "专项·发布日期回填", "专项·算法备案", "地市监处罚公示", "合规案例库",
+                  "案例文书附件"}
     steps = [s for s in STEPS if not (a.no_network and s[0] in net_labels)]
     if a.skip_build:
         steps = [s for s in steps if s[0] in

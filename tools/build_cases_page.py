@@ -20,6 +20,7 @@ HERE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(HERE, "tools"))
 
 from case_subject import extract_subject, format_subject  # noqa: E402
+from case_gate import classify  # noqa: E402
 
 SRC = os.path.join(HERE, "sources", "cases", "cases.json")
 
@@ -53,6 +54,14 @@ def main():
         return 1
     d = json.load(open(SRC, encoding="utf-8"))
     cases = d.get("cases") or []
+    # ── 闸门：滤掉「不是处罚案例」的条目（会议 / 报告 / 约谈 / 工作动态 / 行政裁决）
+    # ⚠️ 数据不删，只在这里过滤：cases.json 里仍保留原记录与 noncase_reason，
+    #    便于日后复核「这条为什么没上页面」。
+    raw_n = len(cases)
+    dropped = [c for c in cases if not classify(c.get("title"), c.get("fact"), c.get("kind"))[0]]
+    cases = [c for c in cases if classify(c.get("title"), c.get("fact"), c.get("kind"))[0]]
+    print(f"  · 闸门过滤：{raw_n} → {len(cases)} 条"
+          f"（滤除 {len(dropped)} 条非处罚案例）")
     if not cases:
         print("  ! 案例库为空，跳过")
         return 1
@@ -71,6 +80,7 @@ def main():
 
     rows = []
     with_subj = 0
+    with_attach = 0
     with_fact = sum(1 for c in cases if c.get("fact"))
     for c in cases:
         law = "、".join(c.get("laws") or [])
@@ -101,6 +111,17 @@ def main():
         else:
             fx_html = '<span class="sbj-no">见原文</span>'
 
+        # ── 原文 / 文书附件 ────────────────────────────────────────
+        # 相当多的公示页正文是空壳，处罚内容只在 .docx/.pdf 里（见 tools/case_attach.py）。
+        # 这类记录给两个入口：「原文」是公示页本身，「文书」直达决定书/告知书原件。
+        ats = [u for u in (c.get("attach") or [])
+               if isinstance(u, str) and u.startswith("http")]
+        if ats:
+            with_attach += 1
+            att_html = (f'<a class="cs-att" href="{esc(ats[0])}" target="_blank" rel="noopener" '
+                        f'title="处罚决定书 / 告知书原件（本行的处罚事由取自该文书）">文书</a>')
+        else:
+            att_html = ""
         rows.append(
             "<tr class=\"cr\">"
             f'<td class="dt">{esc(c.get("date") or "—")}</td>'
@@ -111,7 +132,8 @@ def main():
             f'<td class="fx">{fx_html}</td>'
             f'<td class="lw"><div class="lw-t" title="{esc(law)}">{esc(law) or "—"}</div></td>'
             f'<td class="fn">{esc(fine) or "—"}</td>'
-            f'<td class="lk"><a href="{esc(c.get("url"))}" target="_blank" rel="noopener">原文</a></td>'
+            f'<td class="lk"><a href="{esc(c.get("url"))}" target="_blank" rel="noopener">原文</a>'
+            f'{att_html}</td>'
             "</tr>")
 
     css = """
@@ -183,11 +205,17 @@ def main():
 .lw-t{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;
   overflow:hidden;max-height:4.86em}
 .cs-tbl td.fn{min-width:112px;max-width:150px;color:var(--warn);font-weight:600;font-size:12.5px}
-.cs-tbl td.lk{white-space:nowrap;width:74px}
+.cs-tbl td.lk{white-space:nowrap;width:92px;min-width:92px}
 /* 「原文」列固定在右侧：9 列合计 1300px+ 超出 1120px 容器，中部要横向滚动，
    但**原文深链必须永远可点**（这一页存在的意义就是能直达官方原文）→ 右吸附。 */
 .cs-tbl th:last-child,.cs-tbl td.lk{position:sticky;right:0;z-index:2;
   background:var(--card);box-shadow:-6px 0 8px -6px rgba(16,24,40,.13)}
+/* 正文来自文书附件的行，额外给一个「文书」入口（直达 .docx/.pdf 原件），
+   用描边款与实心的「原文」区分开，视觉上不抢主链。 */
+.cs-tbl td.lk .cs-att{display:inline-block;margin-top:4px;padding:3px 9px;
+  border:1px dashed #d6c3a8;border-radius:999px;color:#8a5a1e;font-size:12px;
+  background:#fdfaf4;text-decoration:none}
+.cs-tbl td.lk .cs-att:hover{background:#f6ecd9;border-color:#c9a877;text-decoration:none}
 .cs-tbl th:last-child{z-index:4;background:#f2f6fb}
 .cs-tbl tbody tr:nth-child(even) td.lk{background:#fcfdff}
 .cs-tbl tr:hover td.lk{background:#f7fbff}
@@ -248,9 +276,10 @@ def main():
 
     body = []
     body.append('<div class="cs-kpi">'
-                f'<div class="cs-k"><b>{len(cases)}</b><span>案例条数</span></div>'
+                f'<div class="cs-k"><b>{len(cases)}</b><span>处罚案例条数</span></div>'
                 f'<div class="cs-k"><b>{with_subj}</b><span>已定位被处罚主体</span></div>'
                 f'<div class="cs-k"><b>{with_fact}</b><span>含处罚事由正文</span></div>'
+                f'<div class="cs-k"><b>{with_attach}</b><span>取自文书附件</span></div>'
                 f'<div class="cs-k"><b>{len([o for o in orgs if o != "未标注"])}</b><span>覆盖监管机关</span></div>'
                 f'<div class="cs-k"><b>{len(types)}</b><span>违法类型</span></div>'
                 f'<div class="cs-k"><b>{with_fine}</b><span>标明罚款幅度</span></div>'
@@ -293,20 +322,26 @@ def main():
                 '<div class="cs-wrap"><table class="cs-tbl" id="ct"><thead><tr>'
                 "<th>日期</th><th>机关</th><th>类型</th><th>案件</th>"
                 "<th>被处罚主体</th><th>处罚事由</th>"
-                "<th>依据</th><th>罚款</th><th>原文</th></tr></thead><tbody>"
+                "<th>依据</th><th>罚款</th><th>原文 / 文书</th></tr></thead><tbody>"
                 + "".join(rows) + "</tbody></table></div></section>")
 
     body.append('<div class="cs-note"><b>数据说明</b>　'
-                '案例全部取自监管机关官方网站（市场监管总局曝光台与总局要闻、'
-                '中央网信办与工业和信息化部通报、省市市场监督管理局官网的'
-                '「行政处罚公示 / 案件信息公开表」等）公开页面，链接直达原文；'
+                '本库只收<b>监管机关作出的行政处罚与执法通报</b>：'
+                '处罚决定书、行政处罚信息公开表、典型案例通报、App 违规通报。'
+                '<b>会议、座谈、年度报告、政策出台、约谈、专项整治工作动态等不计入</b>——'
+                '它们不含被处罚主体，会稀释这一页的检索价值。'
+                '来源为监管机关官方网站（市场监管总局曝光台、中央网信办与工业和信息化部通报、'
+                '省市市场监督管理局官网的「行政处罚公示 / 案件信息公开表」等）公开页面，链接直达原文；'
                 '一条公示内含多案的，按案件拆分并定位到该案所在的页面。'
                 '<b>被处罚主体</b>取自正文中的「当事人」标注或案件叙述里的企业全称，'
                 '一条公示打包多起案件的显示「等 N 家」；'
                 '部分公示对当事人作了脱敏（决定书里写作 `***`）、'
                 '或正文未标注当事人（部分 App 通报），该字段留空，可在原文中核对。'
-                '类型、依据、罚款幅度由正文自动解析，可能存在遗漏，'
-                '<b>个案的事实认定与处罚幅度以官方发布的处罚决定书/通报原文为准</b>。'
+                '<b>处罚事由、被处罚主体、依据、罚款幅度由正文自动解析</b>，'
+                '公示页正文为空、内容只在附件里的（不少地市局的送达公告、'
+                '决定书就是这种形态），已<b>下载并解析其 Word / PDF / Excel 文书</b>后并入本行，'
+                '并在「原文」列旁给出<b>文书</b>入口直达原件；'
+                '仍有遗漏的，<b>个案的事实认定与处罚幅度以官方发布的处罚决定书 / 通报原文为准</b>。'
                 '本库随每日构建增量补入。</div>')
 
     body.append("""<script>

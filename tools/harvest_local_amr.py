@@ -60,8 +60,14 @@ sys.path.insert(0, HERE)
 from harvest_cases import (CASE_TYPES, LAW_RE, MONEY_RE, curl,  # noqa: E402
                            guess_type, textify)
 from case_text_clean import clean_fact  # noqa: E402
+from case_attach import attach_text, clean_attach_text  # noqa: E402
 
 OUT = os.path.join(HERE, "sources", "cases", "local_amr.jsonl")
+
+# 是否解析详情页的文书附件（.docx/.pdf/.xls）。默认开：
+# 相当多地市局的处罚公示页正文是空壳，处罚内容只在附件里（见 case_attach.py 注释）。
+# 关掉可以用 `--no-attach`（跑全量、只想要速度时）。
+ATTACH = True
 
 # org 沿用案例库既有的「机构分类桶」口径（页面的机关分布图、机关筛选都按它聚合），
 # 精确机关名另存 `agency` —— 混着放会让统计图同一条曲线里既有分类又有机构名。
@@ -295,6 +301,24 @@ def ok_name(s):
     return len(re.sub(r"[^\u4e00-\u9fa5]", "", s)) >= 4
 
 
+def _clip_fact(s, n=30):
+    """「案件名称」列缺失时，用违法事实首句兜底当标题 —— 但**必须卡在标点上**。
+
+    ⚠️ 直接 `fact[:30]` 会把词切断：江门一条记录的标题被切成
+    「当事人购进陈皮时未如实记录该批陈皮的名称、规格、数量、生产日」（少一个「期」），
+    表格里看着像数据坏了。改为回退到最近的「、，。」，没有标点才加省略号。
+    """
+    s = re.sub(r"\s+", "", s or "")
+    s = re.sub(r"^当事人", "", s)
+    if len(s) <= n:
+        return s
+    cut = max(s.rfind("，", 0, n), s.rfind("、", 0, n), s.rfind("。", 0, n),
+              s.rfind("；", 0, n))
+    if cut >= 12:
+        return s[:cut]
+    return s[:n - 1] + "…"
+
+
 def case_from_row(cells, hmap, title, url, date, agency, org=ORG_CAT,
                   kind="行政处罚信息公开表"):
     """公开表的一行 → 一条案例；抽不出像样的案件名称则返回 None（该行丢弃）。"""
@@ -303,7 +327,7 @@ def case_from_row(cells, hmap, title, url, date, agency, org=ORG_CAT,
         return cells[i] if (i is not None and i < len(cells)) else ""
 
     name = next((x for x in (cell("case"), cell("party"),
-                             re.sub(r"\s+", "", cell("fact"))[:30], title)
+                             _clip_fact(cell("fact")), title)
                  if ok_name(x)), "")
     if not name:
         return None
@@ -536,8 +560,26 @@ def parse_single(html_text, url, title, date, agency, kind="行政处罚决定�
     fact = trim_chrome(fact)
     # 兜底：面包屑 / 元信息栏 / PDF 页码（口径见 tools/case_text_clean.py）
     fact = clean_fact(fact, title)
+    # ── 文书附件（Word / PDF / Excel）────────────────────────────
+    # ⚠️ 相当多的地市局「处罚公示」详情页是**空壳页**：网页上只有标题和附件下载链接，
+    # 违法事实/依据/罚款全在 .docx / .pdf 里。不读附件，这类记录的「处罚事由」必然
+    # 是空的（页面上就出现「见原文」）。实测青岛市局送达公告正文 0 字、
+    # 泸州市局决定书正文只有案由一句，附件里才是完整的当事人+事实+依据。
+    att = {"text": "", "links": [], "files": []}
+    if ATTACH and html_text:
+        try:
+            att = attach_text(html_text, url)
+        except Exception:  # noqa: BLE001
+            att = {"text": "", "links": [], "files": []}
+    # ⚠️ 附件正文用 clean_attach_text（轻量），**不能**用 clean_fact ——
+    # 后者是为网页壳设计的，会把本地文书正文当噪声删掉（详见 case_attach.py）。
+    ex = clean_attach_text(att["text"]) if att.get("text") else ""
+    if ex:
+        if len(re.sub(r"\s", "", fact)) < 120:
+            fact = (fact + " " + ex).strip() if fact else ex
+        # 页面正文已经够长就不再拼附件，避免同一条记录里正文重复两遍
     caseno = ""
-    mc = re.search(r"([\u4e00-\u9fa5]{1,8}市监[\u4e00-\u9fa5]{0,6}〔20\d{2}〕[\d\-～~、]+号)", body)
+    mc = re.search(r"([\u4e00-\u9fa5]{1,8}市监[\u4e00-\u9fa5]{0,6}〔20\d{2}〕[\d\-～~、]+号)", body + " " + ex)
     if mc:
         caseno = mc.group(1)
     else:
@@ -562,6 +604,9 @@ def parse_single(html_text, url, title, date, agency, kind="行政处罚决定�
         "type": guess_type(shown, cause, fact[:400]), "laws": laws[:6], "fines": fines,
         "fact": fact[:900], "caseno": caseno, "kind": kind,
         "src": "local_amr",
+        # 文书附件（Word/PDF/Excel）的原始链接 —— 页面「原文」列旁边可以多给一个
+        # 「文书附件」入口，用户能直接下到决定书原件。
+        "attach": att.get("links") or [],
     }
 
 
@@ -580,6 +625,7 @@ def load_existing():
 
 
 def main():
+    global ATTACH
     a = sys.argv[1:]
     only = a[a.index("--site") + 1] if "--site" in a else None
     full = "--full" in a
@@ -587,6 +633,9 @@ def main():
     # --refresh：连已收录的链接也重新解析一遍。解析规则改进后（标题/事实抽法变了），
     # 存量记录的标题是旧规则的结果，只靠增量永远修不到 —— 这时用它整体刷一遍。
     refresh = "--refresh" in a
+    # 附件解析要点网络（每条详情页多 1～3 次下载）。跑全量嫌慢时可关。
+    if "--no-attach" in a:
+        ATTACH = False
 
     old = load_existing()
     if "--reset" in a:
