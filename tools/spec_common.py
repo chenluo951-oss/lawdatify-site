@@ -33,7 +33,7 @@ def load(path, default=None):
         return default if default is not None else {}
 
 
-def page(title, desc, crumb, h1, lead, body, css=""):
+def page(title, desc, crumb, h1, lead, body, css="", parent="合规动态"):
     return f"""<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -49,7 +49,7 @@ def page(title, desc, crumb, h1, lead, body, css=""):
 <nav class="topnav"></nav>
 
 <div class="pagehead"><div class="inner">
-  <div class="crumb"><a href="../index.html">首页</a> / <a href="index.html">合规动态</a> / {crumb}</div>
+  <div class="crumb"><a href="../index.html">首页</a> / <a href="index.html">{parent}</a> / {crumb}</div>
   <h1>{esc(h1)}</h1>
   <p>{esc(lead)}</p>
 </div></div>

@@ -33,12 +33,16 @@ DST_ROOT = os.path.dirname(os.path.abspath(__file__))
 # 打磨日志属内部工作记录，按用户 2026-09-09 决定不对外发布：
 # 输出到 _private/（已 gitignore），仅本机可见。切勿改回 analysis/polish.html。
 POLISH_OUT = os.path.join(DST_ROOT, "_private", "polish.html")
-BENCH_OUT = os.path.join(DST_ROOT, "kb", "benchmarks.html")
+# 2026-09-17（用户要求「没必要的废话废图表就删掉」）：对标库与打磨日志是同一脚本产出的
+# **内部工作件**（给自己看排版对标用），此前一个私有化、一个却挂在公开站的「合规知识库」下，
+# 口径不一致。现一并移入 _private/（已 gitignore），仅本机可见。
+BENCH_OUT = os.path.join(DST_ROOT, "_private", "benchmarks.html")
 MANIFEST = os.path.join(DST_ROOT, "assets", "manifest.json")
 
 # 非公开页面：不得进入站内搜索索引。见 _private/ 与 .gitignore。
 PRIVATE_URLS = {"analysis/polish.html", "prm.html", "_private/polish.html",
-                "_private/prm.html"}
+                "_private/prm.html", "kb/benchmarks.html", "benchmarks.html",
+                "_private/benchmarks.html"}
 
 POLISH_FILE = os.path.join(REFS, "polish_changelog.md")
 BENCH_FILE = os.path.join(REFS, "benchmark_reports.md")
@@ -541,13 +545,6 @@ def update_manifest():
             "desc": "个人信息保护、数据安全、网络安全、算法与 AI、移动应用合规的国家标准、法律法规与指引指南汇总，标注效力状态与实施日期，并以合规义务为主线组织。",
             "cat": "合规知识库",
             "tags": ["标准", "GB/T", "法规", "指引", "合规义务", "算法", "App", "个人信息", "数据安全", "网络安全"],
-        },
-        {
-            "title": "行业报告对标库",
-            "url": "kb/benchmarks.html",
-            "desc": "ESG/法律/券商研报专业报告样本对标库，含可借鉴点与发布机构官网深链。",
-            "cat": "合规知识库",
-            "tags": ["对标", "ESG", "研报", "律所", "排版", "可借鉴"],
         },
         {
             "title": "合规动态",

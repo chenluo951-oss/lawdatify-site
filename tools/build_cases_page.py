@@ -220,6 +220,20 @@ def main():
 .cs-note{background:#f7fafd;border:1px solid var(--line);border-left:4px solid var(--accent);
   border-radius:10px;padding:14px 18px;color:var(--ink-2);font-size:13.5px;margin-top:18px}
 .cs-cnt{color:var(--muted);font-size:13px;margin:8px 0 0}
+/* 统计附录（2026-09-17 新增）：四组分布图默认收起，展开后限宽 920px——
+   横条图在 1728px 宽的版面上会拉成一条横跨全屏的线，反而读不出差异。 */
+.cs-stats{margin:26px 0 0;background:var(--card);border:1px solid var(--line);
+  border-radius:var(--radius);padding:0 16px 4px}
+.cs-stats>summary{cursor:pointer;padding:13px 0;font-size:14.5px;font-weight:700;color:var(--brand);
+  list-style:none;display:flex;align-items:center;gap:9px}
+.cs-stats>summary::-webkit-details-marker{display:none}
+.cs-stats>summary::before{content:"";width:5px;height:17px;background:var(--accent);border-radius:3px;flex:none}
+.cs-stats>summary::after{content:"展开";margin-left:auto;font-size:12px;font-weight:600;
+  color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:2px 10px}
+.cs-stats[open]>summary::after{content:"收起"}
+.cs-stats[open]>summary{border-bottom:1px solid var(--line-2)}
+.cs-stats .cs-sec{max-width:920px}
+.cs-stats .cs-sec:last-child{padding-bottom:14px}
 .cs-fl{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin:0 0 6px}
 .cs-fl label{color:var(--muted);font-size:13px}
 .cs-fl select{padding:8px 10px;border:1px solid var(--line);border-radius:9px;background:var(--card);
@@ -379,16 +393,21 @@ def main():
                 '按违法类型、执法机关、依据法条和实际处罚结果做了结构化索引——'
                 '写内部风险提示、做业务评审、回应监管问询时，可直接反查同类先例。</p></section>')
 
-    body.append('<section class="cs-sec"><h2>违法类型分布</h2>' + bars(types.most_common(14))
-                + "</section>")
-    body.append('<section class="cs-sec"><h2>执法机关分布</h2>' + bars(orgs.most_common(14))
-                + "</section>")
-    body.append('<section class="cs-sec"><h2>年度分布</h2>'
-                + bars(sorted(years.items()), limit=12) + "</section>")
+    # 2026-09-17（用户要求「没必要的废话废图表就删掉」）：
+    # 四组分布图原先铺在案例表**前面**，在 1728px 宽的版面上每条横条要横跨整个屏幕，
+    # 表格却被压到第 5 屏；这与用户此前对首页的抱怨（「图表太大、正文在最下面」）同型。
+    # 改为：表格紧跟导语，四组统计折叠到表尾的 <details> 里，默认收起。
+    stats = []
+    stats.append('<section class="cs-sec"><h2>违法类型分布</h2>' + bars(types.most_common(14))
+                 + "</section>")
+    stats.append('<section class="cs-sec"><h2>执法机关分布</h2>' + bars(orgs.most_common(14))
+                 + "</section>")
+    stats.append('<section class="cs-sec"><h2>年度分布</h2>'
+                 + bars(sorted(years.items()), limit=12) + "</section>")
     if laws:
-        body.append('<section class="cs-sec"><h2>高频依据法条</h2>'
-                    '<p class="lead">案例正文中援引的法律法规名称（仅统计明确写出书名号的引用）。</p>'
-                    + bars(laws.most_common(16)) + "</section>")
+        stats.append('<section class="cs-sec"><h2>高频依据法条</h2>'
+                     '<p class="lead">案例正文中援引的法律法规名称（仅统计明确写出书名号的引用）。</p>'
+                     + bars(laws.most_common(16)) + "</section>")
 
     body.append('<section class="cs-sec"><h2>案例明细</h2>'
                 '<p class="lead">可按被处罚主体、处罚事由、机关、法条或类型检索。'
@@ -412,6 +431,9 @@ def main():
                 "<th>被处罚主体</th><th>处罚事由</th>"
                 "<th>依据</th><th>处罚</th><th>原文 / 文书</th></tr></thead><tbody>"
                 + "".join(rows) + "</tbody></table></div></section>")
+
+    body.append('<details class="cs-stats"><summary>统计视角：违法类型 / 执法机关 / 年度 / 高频依据法条</summary>'
+                + "".join(stats) + "</details>")
 
     body.append('<div class="cs-note"><b>数据说明</b>　'
                 '本库只收<b>监管机关作出的行政处罚与执法通报</b>：'

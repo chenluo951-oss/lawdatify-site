@@ -5,13 +5,17 @@
   --radius:14px;--radius-s:10px;
   --shadow:0 1px 2px rgba(16,24,40,.04),0 6px 20px rgba(16,24,40,.055);
   --shadow-h:0 2px 6px rgba(16,24,40,.06),0 14px 34px rgba(16,24,40,.10);
-  /* 版式宽度：2026-09-17 用户要求「所有页面铺满，别留两边那么大留白」。
-     原值 1120px 在 1920 屏上左右各空 400px，表格类页面（案例库 9 列、法规库 2 万条）
-     信息密度被压得很低。现改为「占满视口、超宽屏封顶 2000px」：
-       · 1920 屏 → 内容宽 1872px（仅留 .inner 的 24px 内边距）
-       · 2560 屏 → 封顶 2000px（否则一行正文过长，阅读反而变差）
-     ⚠️ 长文阅读页不受影响：.art / .art-fig 各自有独立的窄栏 max-width。 */
-  --maxw:min(2000px,100%);
+  /* 版式宽度（三段演化）：
+       1120px  → 1920 屏两侧各空 400px，表格类页面（案例库 9 列、法规库 2 万条）
+                 信息密度被压得很低 → 用户 2026-09-17 要求「铺满」。
+       min(2000px,100%) → 铺到贴边，1920 屏只剩 24px 内边距，横向视线要拉到底，
+                 页面失去「版面」的框，反而显得要溢出屏幕 → 用户当天再反馈「太满」。
+       现取值 min(1800px,90%)：**两侧留出约 5% 的呼吸边距**，超宽屏封顶 1800px。
+         · 1440 屏 → 内容 1296px，左右各 72px
+         · 1920 屏 → 内容 1728px，左右各 96px
+         · 2560 屏 → 内容 1800px（封顶），左右各 380px
+       ⚠️ 长文阅读页不受影响：.art（840px）/ .art-fig 各有独立窄栏 max-width。 */
+  --maxw:min(1800px,90%);
   --sans:"PingFang SC","HarmonyOS Sans SC","Microsoft YaHei","Hiragino Sans GB","Source Han Sans SC",system-ui,-apple-system,sans-serif;
 }
 *{box-sizing:border-box}
@@ -1337,6 +1341,11 @@ table.dm tfoot td{background:#f5f8fc;font-size:11.5px;color:var(--ink-2);padding
      右栏 = 工具栏（检索 / 排序 / 每页条数）+ 已选条件 chips + 紧凑列表 + 分页器
    ================================================================== */
 .lv{display:grid;grid-template-columns:252px minmax(0,1fr);gap:22px;align-items:start}
+/* 宽屏（≥1500px）：facet 左栏加宽到 300px。原先 252px 在 1728px 版面上只占 15%，
+   左栏挤、右栏空，视觉配重失衡。 */
+@media(min-width:1500px){
+  .lv{grid-template-columns:300px minmax(0,1fr);gap:26px}
+}
 .lv-side{position:sticky;top:78px;max-height:calc(100vh - 96px);overflow:auto;
   background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
   padding:14px 14px 18px;box-shadow:var(--shadow)}

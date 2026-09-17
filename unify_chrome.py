@@ -42,11 +42,10 @@ PAGES = [
     "kb/texts.html",
     "kb/wx.html",
     "kb/citations.html",
-    "kb/benchmarks.html",
     "news/calendar.html",
     "news/map.html",
-    "news/app-violations.html",
-    "news/algo-filing.html",
+    "analysis/app-violations.html",
+    "analysis/algo-filing.html",
     "kb/cases.html",
     "search.html",
 ]

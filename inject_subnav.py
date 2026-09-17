@@ -1,12 +1,19 @@
 #!/usr/bin/env python3
 """模块子导航 + 边界一句话（幂等注入）。
 
-三个一级模块各有明确的「回答什么问题」，用 SUBNAV:START/END 幂等块注入，
+四个一级模块各有明确的「回答什么问题」，用 SUBNAV:START/END 幂等块注入，
 避免同一条信息在多个模块重复出现、也避免名称混淆：
 
-  监管雷达   何时生效 / 何地监管 / 何种行动（时间 + 地域维度，前瞻）
-  合规资讯   发生了什么 / 我们该做什么（事件流 + 应对，日更）
-  合规知识库 规则本身是什么（法规标准原文 + 义务拆解 + 草案，长期稳定）
+  合规动态   发生了什么（事件流 + 今日增量 + 前瞻 + 地域，日更）
+  法律分析   怎么理解（专题长文 + 数据看板，按主题沉淀）
+  合规管理   怎么落地（审计范围 → 过程留痕 → 整改任务）
+  合规知识库 依据是什么（法规标准原文 + 案例 + 高频法条，长期稳定）
+
+2026-09-17（用户要求「全站重新设计、架构重搭，能整合的整合，该拆出来的拆出来」）：
+  · 「移动应用违规治理」「算法合规治理」两个**专项数据看板**从「合规动态」移出，
+    归入「法律分析」——它们与同域的深度长文（app-violation-pattern / algo-filing-guide）
+    本是一组「结论 + 数据底稿」，放在一处才找得到；留在 news 只会把子导航挤成 8 项。
+  · 「合规动态」子导航由 8 项收敛为 6 项；「法律分析」新增子导航（此前 7 篇专题平铺、无层级）。
 """
 import os
 import re
@@ -18,11 +25,15 @@ NEWS_NAV = [
     ("index.html", "总览"),
     ("today.html", "今日更新"),
     ("calendar.html", "立法日历"),
-    ("actions.html", "应对建议"),
     ("map.html", "全球监管地图"),
-    ("app-violations.html", "移动应用违规治理"),
-    ("algo-filing.html", "算法合规治理"),
+    ("actions.html", "应对建议"),
     ("briefs.html", "简报归档"),
+]
+# 两个专项看板迁入本模块（原在 news/）：与同域长文构成「分析 + 数据」配对。
+ANALYSIS_NAV = [
+    ("index.html", "总览"),
+    ("app-violations.html", "移动应用看板"),
+    ("algo-filing.html", "算法合规看板"),
 ]
 KB_NAV = [
     ("index.html", "总览"),
@@ -30,6 +41,7 @@ KB_NAV = [
     ("texts.html", "法规原文"),
     ("cases.html", "案例库"),
     ("citations.html", "高频引用法条"),
+    ("wx.html", "公众号存档"),
 ]
 # 2026-09-17（用户要求）：合规审计从「合规知识库」拿出来，单独成立一级模块「合规管理」。
 # 边界：知识库回答「规则是什么」，合规管理回答「我们怎么把规则落下去」。
@@ -42,6 +54,8 @@ BOUNDARY = {
     "news": "本模块回答<b>合规动态全貌</b>——今日增量、即将生效的法规（立法日历）、正在推进的监管行动、"
             "已发生的事件与应对建议、全球监管态势，一屏纵览。规则条文本身见 "
             "<a href=\"../kb/index.html\">合规知识库</a>。",
+    "analysis": "本模块回答<b>怎么理解</b>——每篇都是「结论先行 + 官方原文深链 + 产品级图示」的"
+                "专题研究；两个专项看板是同主题的数据底稿（通报库 / 备案清单），与长文互为参照。",
     "kb": None,  # 知识库总览已有「三个模块怎么分」区块，不再重复
     "manage": "本模块回答<b>怎么把规则落下去</b>——审计范围怎么定、过程怎么留痕、"
               "结论怎么变成整改任务。规则本身是什么见 <a href=\"../kb/index.html\">合规知识库</a>。",
@@ -49,11 +63,21 @@ BOUNDARY = {
 
 GROUPS = [
     ("news", NEWS_NAV),
+    ("analysis", ANALYSIS_NAV),
     ("kb", KB_NAV),
     ("manage", MANAGE_NAV),
 ]
 
-MODULE_NAMES = {"news": "合规动态", "kb": "合规知识库", "manage": "合规管理"}
+MODULE_NAMES = {"news": "合规动态", "analysis": "法律分析", "kb": "合规知识库",
+                "manage": "合规管理"}
+
+# 模块内的「非导航项」页面（专题长文等）：不占子导航格位，但同样注入该模块的子导航。
+# 否则读者从站外搜索直接落到这些页时会失去模块层级（架构一致性）。
+EXTRA = {
+    "analysis": ["pi-audit.html", "ai-label.html", "food-label.html",
+                 "app-violation-pattern.html", "algo-filing-guide.html",
+                 "dark-store-license.html"],
+}
 
 BLOCK_RE = re.compile(r"<!-- SUBNAV:START -->.*?<!-- SUBNAV:END -->", re.S)
 
@@ -103,6 +127,10 @@ def main():
     n = 0
     for module, nav in GROUPS:
         for href, _ in nav:
+            rel = f"{module}/{href}"
+            print(process(rel, module, nav, do_write))
+            n += 1
+        for href in EXTRA.get(module, []):
             rel = f"{module}/{href}"
             print(process(rel, module, nav, do_write))
             n += 1

@@ -194,22 +194,56 @@ def build_algo():
     return page("算法合规治理专项",
                 "算法合规治理专项：汇总国家网信办与省级网信部门的算法备案、深度合成算法备案、"
                 "大模型备案与 AI 应用登记信息，形成可溯源的备案信息库，并给出与年度汇总公告的对账口径。",
-                "算法合规治理", "算法合规治理专项",
+                "算法合规看板", "算法合规治理专项",
                 "汇总国家网信办的互联网信息服务算法备案、深度合成服务算法备案、生成式人工智能服务"
                 "备案与登记四条并列序列，并单列注销记录与年度汇总公告（不参与累加），"
                 "形成可溯源的备案信息库。",
-                "".join(body), COMMON_CSS)
+                "".join(body), COMMON_CSS, parent="法律分析")
+
+
+# 2026-09-17（用户要求「架构重搭，能整合的整合，该拆出来的拆出来」）：
+#   两个**专项数据看板**从「合规动态」迁到「法律分析」。理由是它们不是日更事件流，
+#   而是与同域深度长文（analysis/app-violation-pattern.html、analysis/algo-filing-guide.html）
+#   配对的「数据底稿」；同域相邻读者才找得到，news 的子导航也才从 8 项收回 6 项。
+#   旧地址一律留跳转页，存量外链不 404。
+MOVED = [
+    ("app-violations.html", "移动应用违规治理", "移动应用看板"),
+    ("algo-filing.html", "算法合规治理", "算法合规看板"),
+]
 
 
 def main():
-    out = os.path.join(HERE, "news")
+    out = os.path.join(HERE, "analysis")
     os.makedirs(out, exist_ok=True)
     for name, fn in (("app-violations.html", build_appviol),
                      ("algo-filing.html", build_algo)):
         html_text = fn()
         p = os.path.join(out, name)
         open(p, "w", encoding="utf-8").write(html_text)
-        print(f"✓ {name}  {os.path.getsize(p)/1024:.0f} KB")
+        print(f"✓ analysis/{name}  {os.path.getsize(p)/1024:.0f} KB")
+
+    old_dir = os.path.join(HERE, "news")
+    os.makedirs(old_dir, exist_ok=True)
+    for name, title, label in MOVED:
+        old = os.path.join(old_dir, name)
+        open(old, "w", encoding="utf-8").write(
+            '<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8">\n'
+            '<meta name="viewport" content="width=device-width, initial-scale=1.0">\n'
+            f'<title>{title} · 已迁至法律分析 · 合规无终点</title>\n'
+            f'<link rel="canonical" href="../analysis/{name}">\n'
+            f'<meta http-equiv="refresh" content="0; url=../analysis/{name}">\n'
+            '<style>body{margin:0;font-family:"PingFang SC",system-ui,sans-serif;'
+            'display:flex;align-items:center;justify-content:center;min-height:100vh;'
+            'background:#f6f8fb;color:#16202c;line-height:1.9}'
+            'div{max-width:540px;padding:36px;background:#fff;border:1px solid #e6ebf2;'
+            'border-radius:14px;text-align:center}'
+            'a{color:#1b4f8a;font-weight:600}</style></head><body><div>\n'
+            f'<h1 style="font-size:19px;margin:0 0 10px">「{title}」已迁至「法律分析」</h1>\n'
+            '<p style="color:#6b7a8c;font-size:14px;margin:0">'
+            f'站点改版后，这一份数据看板与同主题的深度分析放在了一起。<br>'
+            f'正在跳转到 <a href="../analysis/{name}">法律分析 · {label}</a>…</p>\n'
+            '</div></body></html>\n')
+        print(f"  news/{name} 已改为跳转页")
     return 0
 
 

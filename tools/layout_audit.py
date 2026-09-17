@@ -23,15 +23,16 @@ CHROME = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
 
 DEFAULT_PAGES = [
     "index.html",
-    "news/index.html", "news/actions.html", "news/app-violations.html",
-    "news/map.html", "news/calendar.html", "news/briefs.html",
+    "news/index.html", "news/actions.html", "news/map.html",
+    "news/calendar.html", "news/briefs.html", "news/today.html",
     "analysis/index.html", "analysis/food-label.html",
     "analysis/app-violation-pattern.html", "analysis/pi-audit.html",
     "analysis/ai-label.html", "analysis/algo-filing-guide.html",
     "analysis/dark-store-license.html",
+    "analysis/app-violations.html", "analysis/algo-filing.html",
     "kb/index.html", "kb/standards.html", "kb/cases.html",
-    "kb/citations.html", "kb/benchmarks.html", "kb/audit.html",
-    "updates/index.html",
+    "kb/citations.html", "kb/texts.html",
+    "manage/index.html", "manage/audit.html",
 ]
 
 # 视为「可视化/大块数据展示」的选择器
