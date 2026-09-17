@@ -15,8 +15,8 @@
 
 属地识别走 tools/prov_map.py；判不出属地的条目**不入省视图**（宁缺毋滥）。
 
-⚠️ 本脚本**只重写 china.json 的 items / n_case / last 三个键**，几何数据
-（path / cx / cy / viewBox）原样保留 —— 这样零联网、幂等，也不必重跑依赖
+⚠️ 本脚本**只重写 china.json 的 items / n / n_case / last 四个键**（外加 `_meta`），
+几何数据（path / cx / cy / viewBox）原样保留 —— 这样零联网、幂等，也不必重跑依赖
 DataV 下载件的 gen_china_map.py。
 
 用法：
@@ -25,6 +25,7 @@ DataV 下载件的 gen_china_map.py。
 """
 import json
 import os
+import re
 import sys
 from collections import Counter
 
@@ -146,21 +147,55 @@ def norm_items():
     return rows
 
 
+def _url_year(u):
+    m = re.search(r"/(\d{4})/", u or "")
+    return m.group(1) if m else ""
+
+
+def _better(a, b):
+    """同标题的两条里该留哪条（见 merge 的说明）。"""
+    da, db = (a.get("date") or "")[:4], (b.get("date") or "")[:4]
+    sa, sb = _url_year(a.get("url")) == da and da != "", \
+        _url_year(b.get("url")) == db and db != ""
+    if sa != sb:
+        return sa
+    return (a.get("url") or "") < (b.get("url") or "")
+
+
 def merge(rows):
-    """按省聚合 + 按 URL（无 URL 用标题）去重 + 日期倒序 + 截断。"""
+    """按省聚合 + 两级去重 + 日期倒序 + 截断。
+
+    ① **URL 全局唯一**（无 URL 用标题兜底）：跨省也不会重复收录同一条。
+    ② **同省同标题只留一条**（2026-09-17 补）：市场监管总局的处罚决定书在
+       栏目分页里会以 `art/2022/…` 与 `art/2023/…` 两个 **不同 URL** 各出现
+       一次，标题 / 日期 / 正文完全相同 —— 只按 URL 去重会把它算成两起案件。
+       实测这类重复 36 组（430 条里虚高 36 条），地图上的「省级属地条目」
+       会跟着虚高，读者一点进去就发现同一个案子出现两次。
+    保留顺序：URL 里的年份目录与案件日期年份一致的那条优先（总局分页按
+    发布时间归档，日期年份匹配的通常是最初发布页），再退化为 URL 字典序，
+    保证多次构建结果稳定。
+    """
+    seen_url = set()
     by = {}
-    seen = {}
     for prov, it in rows:
         key = it.get("url") or ("t:" + it.get("title", ""))
-        if not key or key in seen:
+        if not key or key in seen_url:
             continue
-        seen[key] = prov
-        by.setdefault(prov, []).append(it)
-    for prov in by:
-        by[prov].sort(key=lambda x: (x.get("date") or "", x.get("title") or ""),
-                      reverse=True)
-        by[prov] = by[prov][:MAX_PER_PROV]
-    return by
+        seen_url.add(key)
+        d = by.setdefault(prov, {})
+        tk = (it.get("title") or "").strip()
+        if tk and tk in d:
+            if _better(it, d[tk]):
+                d[tk] = it
+            continue
+        d[tk or key] = it
+    out = {}
+    for prov, d in by.items():
+        lst = sorted(d.values(),
+                     key=lambda x: (x.get("date") or "", x.get("title") or ""),
+                     reverse=True)
+        out[prov] = lst[:MAX_PER_PROV]
+    return out
 
 
 def main():

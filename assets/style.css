@@ -388,6 +388,11 @@ footer .inner{flex-direction:column;align-items:flex-start;gap:10px}
   border-radius:var(--radius-s);padding:14px 18px;color:var(--ink-2);font-size:13.5px;
   line-height:1.85;margin:22px 0 18px}
 .rd-note b{color:var(--brand)}
+/* 世界辖区列表里「中国」分组的说明：地图上的数字含省级属地条目，而这里的
+   列表只列全国性条目 —— 两个数不同源，必须在原处解释清楚（2026-09-17）。 */
+.rd-cnsum{margin:2px 0 14px;padding:10px 14px;border-left-color:#b45309;
+  background:#b453090d;font-size:13px}
+.rd-cnsum a{color:var(--brand);font-weight:600;white-space:nowrap}
 
 /* 统计条 */
 .rd-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:16px 0 4px}

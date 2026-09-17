@@ -318,27 +318,58 @@ def page_actions(acts):
 
 # ================================================================= 全球地图
 def _cn_stats():
-    """中国省级视图的口径（构建期读本地文件，不联网）。"""
+    """中国省级视图的口径（构建期读本地文件，不联网）。
+
+    返回 (省数, 条目数, 处罚数, 数据更新日, 最新条目日期)。
+    ⚠️ 第 4 项与第 5 项不是一回事：`_meta.updated` 是**构建日**（每天都变），
+    最新条目日期才是「这个辖区的动态到哪天为止」。地图 tooltip 的「最近 xx」
+    要的是后者，否则中国永远显示今天、别的辖区显示真实日期，没法比。
+    """
     try:
         d = json.load(open(os.path.join(HERE, "sources", "radar", "china.json"),
                            encoding="utf-8"))
     except Exception:
-        return 0, 0, 0, ""
+        return 0, 0, 0, "", ""
     ps = [p for p in d.get("provinces") or [] if p.get("items")]
     n_item = sum(p.get("n") or len(p.get("items") or []) for p in ps)
     n_case = sum(p.get("n_case") or 0 for p in ps)
-    return len(ps), n_item, n_case, ((d.get("_meta") or {}).get("updated") or "")
+    last_item = max((it.get("date") or "" for p in ps
+                     for it in (p.get("items") or [])), default="")
+    return (len(ps), n_item, n_case,
+            ((d.get("_meta") or {}).get("updated") or ""), last_item)
+
+
+def geo_counts(g):
+    """全球地图各辖区的条目数 + 「最近」提示。
+
+    ⚠️ **中国（CN）必须与站内中国口径对齐**（2026-09-17 用户反馈
+    「怎么外面显示还是 6 条动态」）：
+    `global.json` 只装「全球雷达」视角下的辖区条目，中国在里面
+    **只有 6 条全国性条目**；而站内中国辖区的真实体量在
+    `sources/radar/china.json`（合规动态 + 案例库 + 地方市监公示
+    聚合出的省级属地条目）。两处口径不一致时，读者在外层世界地图上
+    看到「中国 6 条动态」、点进去却是 395 条 —— 一眼就觉得数据是假的。
+    故 CN 的计数 = 全国性条目（global.json）+ 省级属地条目（china.json），
+    「最近」取两者较新者。其余辖区仍只按 global.json 计。
+    """
+    count, last = {}, {}
+    for i in g["items"]:
+        count[i["code"]] = count.get(i["code"], 0) + 1
+        last[i["code"]] = max(last.get(i["code"], ""), i["date"])
+    _n_prov, n_cn_item, _n_cn_case, cn_up, cn_last = _cn_stats()
+    if n_cn_item:
+        count["CN"] = count.get("CN", 0) + n_cn_item
+        last["CN"] = max(last.get("CN", ""), cn_last or cn_up)
+    return count, last
 
 
 def page_map(g):
     juris = g["jurisdictions"]
     items = g["items"]
-    n_cn_prov, n_cn_item, n_cn_case, cn_up = _cn_stats()
-    count = {}
-    last = {}
-    for i in items:
-        count[i["code"]] = count.get(i["code"], 0) + 1
-        last[i["code"]] = max(last.get(i["code"], ""), i["date"])
+    n_cn_prov, n_cn_item, n_cn_case, cn_up, _cn_last = _cn_stats()
+    # ⚠️ 不能只用 g["items"] 计数：中国在世界地图上必须与站内中国口径一致，
+    # 见 geo_counts 的说明（否则外层显示 6 条、点进去 430 条）。
+    count, last = geo_counts(g)
 
     counts_js = json.dumps(count, ensure_ascii=False)
     names_js = json.dumps({j["code"]: j["name"] for j in juris},
@@ -365,20 +396,34 @@ def page_map(g):
                 f'{src_tag(i.get("src","official"))}</h3>'
                 f'<p>{esc(i.get("note",""))}</p></div></div>'
             )
+        # 中国：地图上的数字含省级属地条目，但本列表只列全球雷达里的全国性
+        # 条目 —— 数字与列表不一致必须当场解释，并给出下钻入口。
+        head_n, note = len(rows), ""
+        if j["code"] == "CN" and n_cn_item:
+            head_n = len(rows) + n_cn_item
+            note = (f'<p class="rd-note rd-cnsum">中国辖区合计 <b>{head_n}</b> 条：'
+                    f'下列 <b>{len(rows)}</b> 条为全国性动态；另有 <b>{n_cn_item}</b> '
+                    f'条省级属地条目（覆盖 {n_cn_prov} 个省级行政区，其中监管处罚 '
+                    f'{n_cn_case} 条），'
+                    f'见<a href="#CN">中国省市级视图 →</a></p>')
         list_html.append(
             f'<div class="rd-gblock" data-code="{esc(j["code"])}">'
-            f'<h4 class="rd-gh">{esc(j["name"])}<span>{len(rows)}</span></h4>'
-            f'{"".join(rows)}</div>'
+            f'<h4 class="rd-gh">{esc(j["name"])}<span>{head_n}</span></h4>'
+            f'{note}{"".join(rows)}</div>'
         )
 
+    # 世界统计条与地图同口径（含中国的省级属地条目），否则「条目数」和
+    # 地图上中国节点的数字又对不上。数据截至取两源较新者。
+    n_world = sum(count.values())
+    world_up = max(str((g.get("_meta") or {}).get("updated") or ""), cn_up)
     body = "\n".join([
         '<div id="statWorld">',
         stat_strip([
             ("收录辖区", f"{len(juris)} 个"),
             ("有动态辖区", f"{len(count)} 个"),
-            ("动态条目", len(items)),
+            ("动态条目", n_world),
         ]),
-        fresh_note(g.get("_meta"), len(items)),
+        fresh_note({"updated": world_up}, n_world),
         '</div>',
         # 中国视图的统计与全球不同口径（省级属地条目 ≠ 全球辖区条目），
         # 切换时整体替换，否则读者盯着一张中国地图看「收录辖区 15 个」会困惑。
@@ -608,11 +653,8 @@ def page_index(cal, acts, g):
     running = [i for i in acts["items"]
                if i.get("status") in ("进行中", "待施行", "待发布", "待审议")]
 
-    # 地图数据
-    count, last = {}, {}
-    for i in g["items"]:
-        count[i["code"]] = count.get(i["code"], 0) + 1
-        last[i["code"]] = max(last.get(i["code"], ""), i["date"])
+    # 地图数据（口径见 geo_counts：中国要并上省级属地条目）
+    count, last = geo_counts(g)
     names = {j["code"]: j["name"] for j in g["jurisdictions"]}
     tips = {c: f"最近 {d}" for c, d in last.items()}
 
@@ -779,10 +821,7 @@ def refresh_home_radar(cal, acts, g):
     s = _replace_block(s, HOME_RADAR_START, HOME_RADAR_END, HOME_RADAR_RE,
                        home_deck(cal, acts, g))
 
-    count, last = {}, {}
-    for i in g["items"]:
-        count[i["code"]] = count.get(i["code"], 0) + 1
-        last[i["code"]] = max(last.get(i["code"], ""), i["date"])
+    count, last = geo_counts(g)
     names = {j["code"]: j["name"] for j in g["jurisdictions"]}
     geo_js = ("<script>window.GEO_META={counts:" +
               json.dumps(count, ensure_ascii=False) +

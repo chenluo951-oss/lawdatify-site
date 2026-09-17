@@ -27,7 +27,7 @@ import sys
 from datetime import date, timedelta
 
 from build_topics import build_feed, DOMAIN_KEYS, DOMAIN_COLOR, esc
-from build_radar import load as radar_load
+from build_radar import load as radar_load, geo_counts
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 INDEX = os.path.join(HERE, "index.html")
@@ -248,10 +248,9 @@ def render_feed(verified, n=10):
 
 # ---------------------------------------------------------------- 全球地图元数据
 def render_geo(g):
-    count, last = {}, {}
-    for i in g["items"]:
-        count[i["code"]] = count.get(i["code"], 0) + 1
-        last[i["code"]] = max(last.get(i["code"], ""), i["date"])
+    # 口径见 build_radar.geo_counts：中国的数字要并上 china.json 的省级属地条目，
+    # 否则首页地图上中国显示「6 条动态」、点进去却是 430 条。
+    count, last = geo_counts(g)
     names = {j["code"]: j["name"] for j in g["jurisdictions"]}
     tips = {c: f"最近 {d}" for c, d in last.items()}
     return ("<script>window.GEO_META={counts:" + json.dumps(count, ensure_ascii=False)
