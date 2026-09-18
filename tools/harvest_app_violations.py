@@ -539,14 +539,17 @@ def mstl_docs():
     只收 App 违规通报，其余（认证、标准宣贯、满意度调查）一律不取。
     """
     out = {}
-    html = curl(MSTL_BASE + MSTL_LIST % "")
+    # ⚠️ 必须带 Referer：该站对无来源的直连列表请求会返回空 / 403，
+    #    表现为「候选文书 0 份」——不是站点下线，也不是筛选规则问题。
+    html = curl(MSTL_BASE + MSTL_LIST % "", referer=MSTL_BASE + "/")
     if not html:
         return []
     m = re.search(r"当前页次\s*\d+\s*/\s*(\d+)\s*页", html)
     pages = int(m.group(1)) if m else 1
     pages = max(1, min(pages, 20))
     for p in range(1, pages + 1):
-        h = html if p == 1 else curl(MSTL_BASE + MSTL_LIST % ("_" + str(p)))
+        h = html if p == 1 else curl(MSTL_BASE + MSTL_LIST % ("_" + str(p)),
+                                    referer=MSTL_BASE + "/")
         if not h:
             continue
         for u, t in re.findall(
@@ -585,6 +588,36 @@ RE_CAC_IMG = re.compile(
 RE_INLINE_APP = re.compile(r"《([^》]{2,40})》\s*(?:[（(]([^）)]{0,60})[）)])?")
 
 
+_LAW_SUFFIX = re.compile(r"(条例|规定|办法|法|通知|公告|决定|意见|指南|标准|细则|"
+                         r"方案|规则|规划|纲要|清单|目录|名录|要求|规范|守则)$")
+
+
+def _inline_entries(text, lo=2, hi=40):
+    """正文内嵌《应用名》(版本, 来源) 抽取（公安部 / 病毒中心 / 省局下架通报）。
+    ---------------------------------------------------------------
+    ⚠️ 「法条引用」与「以『法』结尾的应用名」形状完全相同：
+       《网络安全法》 与 《复真书法》（版本 4.4.3，华为应用市场）都命中后缀规则。
+       只按后缀剔除会误杀真实应用——实测三所检测中心「40 款」通报只收 38 款
+       （丢的正是《复真书法》《不厌书法》）。
+       判据：**带版本 / 来源括号的一律视为应用**；不带括号的才按法条后缀剔除，
+       但若同名在本篇别处带括号出现过，仍视为应用。
+    """
+    hits = RE_INLINE_APP.findall(text)
+    with_ver = {a.strip() for a, v in hits if (v or "").strip()}
+    out = []
+    for app, ver in hits:
+        n, v = app.strip(), (ver or "").strip()
+        if not (lo <= len(n) <= hi):
+            continue
+        if not v and n not in with_ver and _LAW_SUFFIX.search(n):
+            continue
+        if re.search(r"中华人民共和国|国务院|委员会", n):
+            continue
+        out.append({"app": n, "dev": "", "ver": v, "store": "",
+                    "probs": [], "region": ""})
+    return out
+
+
 def mstl_entries(html):
     """公安部三所检测中心通报：按「N、问题类别。涉及 M 款如下：」分节抽明细。
 
@@ -612,16 +645,9 @@ def mstl_entries(html):
             continue
         if not cur:
             continue
-        for app, ver in RE_INLINE_APP.findall(t):
-            if not (2 <= len(app) <= 40):
-                continue
-            if re.search(r"(条例|规定|办法|法|通知|公告|决定|意见|指南|标准|细则|"
-                         r"方案|规则|规划|纲要|清单|目录|名录|要求|规范|守则)$", app):
-                continue
-            if re.search(r"中华人民共和国|国务院|委员会", app):
-                continue
-            out.append({"app": app, "dev": "", "ver": (ver or "").strip(),
-                        "store": "", "probs": [cur] if cur else [], "region": ""})
+        for e in _inline_entries(t):
+            e["probs"] = [cur]
+            out.append(e)
     return out
 
 
@@ -711,21 +737,9 @@ def parse_doc(url, meta, ocr=True):
             carrier = "inline-text"
     # 4) 正文内嵌《应用名》(版本, 来源)（公安部 / 病毒中心式，以及省局下架通报的正文点名）
     if not entries:
-        hits = RE_INLINE_APP.findall(body)
-        if hits:
-            for app, ver in hits:
-                if len(app) < 2 or len(app) > 30:
-                    continue
-                # 排除法条引用（《网络安全法》《…管理办法》等）
-                if re.search(r"(条例|规定|办法|法|通知|公告|决定|意见|指南|标准|细则|"
-                             r"方案|规则|规划|纲要|清单|目录|名录|要求|规范|守则)$", app):
-                    continue
-                if re.search(r"中华人民共和国|国务院|委员会", app):
-                    continue
-                entries.append({"app": app, "dev": "", "ver": (ver or "").strip(),
-                                "store": "", "probs": [], "region": ""})
-            if entries:
-                carrier = "inline-text"
+        entries = _inline_entries(body, lo=2, hi=30)
+        if entries:
+            carrier = "inline-text"
 
     # 同文书内去重（⚠️ 同一款应用可能被分节列多次：**合并 probs 而不是丢弃**，
     #    否则「问题类型」只留下第一处，公安部三所序列的问题分布会系统性偏窄）
@@ -790,6 +804,11 @@ def ocr_entry(cells):
 def main():
     argv = sys.argv[1:]
     full = "--full" in argv
+    # --refresh：**覆盖重写存量**（不新增站点、不动范围，只把已在库的文书重新解析一遍）。
+    # 改了正文抽取规则时用，例如「以『法』结尾的 App 名被法条后缀规则误杀」
+    # 这类解析器修复——必须重解析才有新明细，重抓 / 重跑聚合都不解决。
+    # 配 --only mstl 用时只重解析该站，其余文书从旧库合并回来，不会丢。
+    refresh = "--refresh" in argv
     ocr = "--no-ocr" not in argv
     only = ""
     if "--only" in argv:
@@ -797,8 +816,13 @@ def main():
 
     os.makedirs(OUTDIR, exist_ok=True)
     docs_path = os.path.join(OUTDIR, "docs.json")
+    # ⚠️ --full 是「全量重抓」：候选清单本身就是全集，故不读旧库（读旧库会让
+    #    已经下线的文书永远留在库里）。但它与 --only 同用时候选只剩一个站，
+    #    再丢掉旧库 = 把其它站的文书整库删掉 —— 故凡带 --only 一律读旧库，
+    #    旧文书随后会被合并回来（见下方「已有文书补齐」）。
+    load_old = (not full) or bool(only)
     old = {}
-    if os.path.exists(docs_path) and not full:
+    if os.path.exists(docs_path) and load_old:
         try:
             for d in json.load(open(docs_path, encoding="utf-8")).get("docs", []):
                 old[d["url"]] = d
@@ -883,9 +907,24 @@ def main():
             continue
         seen.add(u)
         urls.append(dict(r, url=u))
+    # ✚ --refresh：**要重解析谁，本来就由旧库决定**，不该受列表页是否可达影响。
+    #   把旧库里属于本次范围的文书补进候选（列表页改版 / 频控 / 下线都不再是阻塞）。
+    if refresh:
+        hosts = {"mstl": ("mstl.org.cn",), "miit": ("miit.gov.cn",),
+                 "cac": ("cac.gov.cn",), "prov": ("miit.gov.cn",)}.get(only)
+        added = 0
+        for u, d in old.items():
+            if hosts is not None and not any(x in u for x in hosts):
+                continue
+            if u in seen:
+                continue
+            seen.add(u)
+            urls.append({"url": u, "title": d.get("title") or ""})
+            added += 1
+        print(f"↻ 存量重解析候选 {added} 份（按旧库补入，不依赖列表页）")
     print(f"\n候选文书 {len(urls)} 份；已有 {len(old)} 份")
 
-    todo = [r for r in urls if full or r["url"] not in old]
+    todo = [r for r in urls if full or refresh or r["url"] not in old]
     print(f"本次待抓 {len(todo)} 份\n")
 
     docs = []
