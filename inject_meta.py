@@ -64,6 +64,7 @@ PAGES = [
     "news/actions.html",
     "analysis/index.html",
     "analysis/pi-audit.html",
+    "analysis/penalty-read.html",
     "analysis/ai-label.html",
     "analysis/food-label.html",
     "analysis/app-violation-pattern.html",
@@ -101,7 +102,7 @@ OG_DESC = {
     "manage/audit.html": "合规审计：从合规义务清单勾选审计范围，生成审计任务，逐项记录进度、素材与结论，一键输出审计报告与整改任务清单。",
     "analysis/index.html": "法律分析：围绕合规实务场景的专题研究，结论先行、逐条附官方原文深链、配产品级合规图示。",
     "analysis/pi-audit.html": "个保合规审计：1000 万门槛、三档频次、两条触发路径与八项审计重点，含监管要求审计的执行链路图。",
-    "analysis/penalty-read.html": "处罚公示的读法：一份决定书由抬头与程序段、违法事实认定段、依据与罚则段构成，只有第二段能映射到自有业务；拆开 640 条处罚公示，472 笔可解析罚款中位 5.03 万元，罚款重心在宣传与广告用语而非过期食品，含三段结构图、金额分布与六类风险面热力矩阵。",
+    "analysis/penalty-read.html": "处罚公示的读法：一份决定书由抬头与程序段、违法事实认定段、依据与罚则段构成，只有第二段能映射到自有业务；拆开 680 条处罚公示，479 笔可解析罚款中位 5.02 万元（反不正当竞争类型中位 8.25 万元），罚款重心在宣传与广告用语而非过期食品，含三段结构图、金额分布与六类风险面热力矩阵。",
     "analysis/ai-label.html": "AI 生成内容标识：四类主体义务分工、显式与隐式双标识、传播端「属于/可能为/疑似」三档判定流程。",
     "analysis/food-label.html": "食品标签新规与前置仓：拆箱称重被纳入预包装食品监管，含合规标签版面示意图与 6 个月倒计时行动表。",
     "analysis/app-violation-pattern.html": "基于 651 份 App 侵害用户权益通报的实证分析：30 家发布机关的两层结构、三段处置链条（批次通报 / 整改复核 / 下架处置）、四种名单载体与 35 天的整改窗口，含统计口径说明与行动清单。",
@@ -156,11 +157,16 @@ def sync_duty_scale(html: str) -> str:
 
 
 def page_url(rel: str) -> str:
-    """把相对文件路径转成对外绝对 URL（目录页去掉 index.html）。"""
+    """把相对文件路径转成对外绝对 URL。
+
+    ⚠️ 目录页去掉 index.html 并以 / 结尾；**普通 .html 页绝不能加尾斜杠**
+    —— GitHub Pages 上 `.../x.html/` 是 404，社交爬虫拿 og:url 回抓会失败，
+    卡片就会退化成秃链接。
+    """
     p = "/" + rel.replace(os.sep, "/")
     if p.endswith("/index.html"):
-        p = p[: -len("index.html")]
-    return SITE_URL + p.rstrip("/") + "/"
+        return SITE_URL + p[: -len("index.html")]
+    return SITE_URL + p
 
 
 def esc_attr(s: str) -> str:
