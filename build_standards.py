@@ -468,7 +468,7 @@ def build_kb_index(items, duties, drafts, soon, stat_html="", board=""):
       · <strong>{n_online + n_std_online}</strong> 份官方正文</span>
       <span class="more">进入法规库 →</span>
     </a>
-    <a class="dcard lb-entry" href="standards.html#pane-duty" style="--dc:#1b4f8a">
+    <a class="dcard lb-entry" href="duties.html" style="--dc:#1b4f8a">
       <b>🎯 合规义务清单</b>
       <span><strong>{n_cat}</strong> 个主题大类 · <strong>{n_scene}</strong> 个场景 ·
       <strong>{n_duty}</strong> 项具体义务</span>
@@ -1016,6 +1016,10 @@ def main():
         duties = {"categories": []}
     cats = duties.get("categories", [])
     n_duty = sum(len(d.get("duties", [])) for c in cats for d in c.get("scenes", []))
+    # 规模口径（大类 / 场景 / 义务）——独立页 kb/duties.html 的 h1 引语要用，
+    # 且**禁止写死数字**：先前首页把 17/93/285 写进静态 HTML，数据一变就失真。
+    n_cat = len(cats)
+    n_scene = sum(len(c.get("scenes") or []) for c in cats)
 
     # 时效分区
     soon = [x for x in items if x.get("status") == "即将实施" and (x.get("impl") or "") >= today]
@@ -1238,8 +1242,6 @@ def main():
         '<div class="lb-tabs">'
         '<button class="rd-fchip on" data-tab="lib">资料库</button>'
         '<button class="rd-fchip" data-tab="draft">草案跟踪<i class="lb-dot"></i></button>'
-        '<button class="rd-fchip" data-tab="duty">合规义务清单</button>'
-        '<button class="rd-fchip" data-tab="ask">按话题找依据</button>'
         "</div>",
         lib_pane,
         '<section class="lb-pane" id="pane-draft" hidden>',
@@ -1248,37 +1250,18 @@ def main():
         '截止日期与剩余天数按页面打开当天计算。<b>草案不产生合规义务</b>，但往往预示监管方向。</p>',
         f'<div class="rd-list" id="draftList">{draft_html}</div>',
         "</section>",
-        '<section class="lb-pane" id="pane-duty" hidden>',
-        '<p class="rd-note">以<b>合规义务</b>为主线反查依据。<b>矩阵总览</b>按「主题大类 × 业务场景」铺开，'
-        '一格即一个场景，格内数字为该场景的义务条数、色点为其整改优先级分布，一屏看全覆盖面与风险重心；'
-        '点任一格子进入<b>逐条明细</b>，每项义务下列出可直接引用的法律法规与标准条款原文、行业标杆做法与可套用文案。'
-        '义务清单以个人信息保护、数据安全与网络安全的合规底稿为起点，并按即时零售、网络交易与外卖、'
-        '前置仓与冷链仓储、即时配送与骑手权益、线下餐饮、计量与净含量、零售与会员权益、绿色包装与反食品浪费'
-        '等业务场景，逐条对照监管文件要点整理。</p>',
-        duty_html,
-        "</section>",
-        '<section class="lb-pane" id="pane-ask" hidden>',
-        '<p class="rd-note"><b>按话题找依据</b>与「合规义务清单」是同一套数据的两个入口：'
-        '清单是按目录翻，这一页是按问题问。你说清楚<b>正在做什么事</b>，它就在义务清单里定位到相关场景，'
-        '直接输出该话题的<b>法律依据清单</b>——每项义务对应哪些法规标准、哪些条款、原文怎么写，'
-        '并可一键复制成 Markdown 或打印成 PDF。</p>',
-        ask_html,
-        # 免责说明只保留在页面底部一处（本页曾出现两次几乎相同的句子）
-        '<p class="rd-note">清单中的条款原文逐字取自我站<b>官方原文库</b>，条文出处与官方发布页均为深链。</p>',
-        "</section>",
         '<p class="rd-note">标准数据取自<b>国家标准全文公开系统</b>（发布/实施日期与现行状态以官方为准）；'
         '法律法规与规范性文件均附发布机构官网原文深链。'
         '本页用于合规检索与自查参考，<b>不构成法律意见</b>；引用前请点开原文核对现行有效版本。</p>',
         LIB_RENDER,
-        LIB_JS,
+        TABS_JS,
     ])
 
     out = page(
         "法规库",
         "个人信息保护、数据安全、网络安全、算法与 AI、移动应用、平台与电商、食品安全、"
         "计量与冷链等合规领域的法律法规、国家标准与指引指南汇总，按资源类型、效力级别、时效性、"
-        "专题、发文机关与地域多维筛选，逐条标注发布与实施日期并附官方原文深链；"
-        "亦可按业务话题直接问出该话题的法律依据清单。",
+        "专题、发文机关与地域多维筛选，逐条标注发布与实施日期并附官方原文深链。",
         '<a href="index.html">合规知识库</a> / 法规库',
         "法规库",
         "共 " + str(len(items)) + " 条目，默认按效力位阶从高到低排列，"
@@ -1291,6 +1274,55 @@ def main():
     open(dst, "w", encoding="utf-8").write(out)
     print(f"  kb/standards.html  {len(out)} B  ✓  "
           f"({len(items)} 条目)")
+
+    # ---------------- 合规义务清单（**独立页面** kb/duties.html）
+    # 2026-09-18（用户报障：「点击合规义务清单，跳进去还是原来带法条原文库的页面」）：
+    # 义务清单此前只是法规库页面的第三个页签 —— 子导航与知识库总览都把它当作与
+    # 「法规库」并列的模块，点进来却停在「资料库」（也就是法条原文列表）视图上，
+    # 入口名与落地页身份不符。拆成独立页面后，页面身份 / h1 / 默认视图三者一致。
+    #
+    # ⚠️「按话题找依据」必须跟着一起搬：它从 #pane-duty 里已经渲染好的义务卡 clone 正文
+    # （见 DUTY_JS 里 cloneDuty 的注释），两个面板分居两页会断掉这份单一事实来源。
+    duty_body = "\n".join([
+        '<div class="lb-tabs">'
+        '<button class="rd-fchip on" data-tab="duty">义务清单</button>'
+        '<button class="rd-fchip" data-tab="ask">按话题找依据</button>'
+        "</div>",
+        '<section class="lb-pane" id="pane-duty">',
+        '<p class="rd-note"><b>矩阵总览</b>按「主题大类 × 业务场景」铺开，一格即一个场景，'
+        '格内数字为该场景的义务条数、色点为其整改优先级分布，一屏看全覆盖面与风险重心；'
+        '点任一格子进入<b>逐条明细</b>，每项义务下列出可直接引用的法律法规与标准条款原文、'
+        '行业标杆做法与可套用文案。</p>',
+        duty_html,
+        "</section>",
+        '<section class="lb-pane" id="pane-ask" hidden>',
+        '<p class="rd-note"><b>按话题找依据</b>与「义务清单」是同一套数据的两个入口：'
+        '清单是按目录翻，这一页是按问题问。你说清楚<b>正在做什么事</b>，它就在义务清单里定位到相关场景，'
+        '直接输出该话题的<b>法律依据清单</b>——每项义务对应哪些法规标准、哪些条款、原文怎么写，'
+        '并可一键复制成 Markdown 或打印成 PDF。</p>',
+        ask_html,
+        '<p class="rd-note">清单中的条款原文逐字取自我站<b>官方原文库</b>，'
+        '条文出处与官方发布页均为深链。</p>',
+        "</section>",
+        TABS_JS,
+        DUTY_JS,
+    ])
+
+    duty_out = page(
+        "合规义务清单",
+        "按 17 个主题大类 × 93 个业务场景铺开的合规义务清单：每项义务给出可直接引用的法规与"
+        "标准条款原文、整改优先级、行业标杆做法与可套用文案，并可按业务话题反查法律依据。",
+        '<a href="index.html">合规知识库</a> / 合规义务清单',
+        "合规义务清单",
+        f"共 {n_cat} 个主题大类 · {n_scene} 个业务场景 · {n_duty} 项具体义务，"
+        "每项附条款原文、整改优先级与可套用文案。",
+        duty_body,
+    )
+
+    dst2 = os.path.join(HERE, "kb", "duties.html")
+    open(dst2, "w", encoding="utf-8").write(duty_out)
+    print(f"  kb/duties.html     {len(duty_out)} B  ✓  "
+          f"({n_cat} 大类 / {n_scene} 场景 / {n_duty} 义务)")
 
     build_kb_index(items, duties, drafts, soon, stat_html=stat_html, board=board)
 
@@ -1672,9 +1704,26 @@ LIB_RENDER = """
 </script>
 """
 
-LIB_JS = """
+# ---------------------------------------------------------------- 页签通用逻辑（两页共用）
+# 2026-09-18：法规库与合规义务清单拆成两个页面后，两页仍用同一套「页签切换 + 深链直达」逻辑，
+# 故抽成共用块。业务脚本通过 window.kbTab 调用（原 activateTab）。
+TABS_JS = """
 <script>
 (function(){
+  // ⚠️ 旧锚点兜底 —— 拆页的**必要条件**，不能删。
+  // standards.html#pane-duty / #pane-ask / #d-xxx 曾经都落在法规库页，站外分享、搜索
+  // 引擎收录、公众号里传过的链接都带这些锚点；本页没有对应面板时若不转走，读者会
+  // 静默停在错误视图（用户 2026-09-18 的原话：「点击合规义务清单，跳进去还是原来
+  // 带法条原文库的页面」）。用 location.replace 而非 href：不留历史记录，返回键可正常回退。
+  var h=location.hash||'';
+  var hasDuty=!!document.getElementById('pane-duty');
+  var hasLib=!!document.getElementById('pane-lib');
+  if(hasLib && !hasDuty && /^#(pane-(duty|ask)(?:-[a-z]+)?|d-[A-Za-z0-9-]+)$/.test(h)){
+    location.replace('duties.html'+h); return;
+  }
+  if(hasDuty && !hasLib && /^#pane-(lib|draft)(?:-[a-z]+)?$/.test(h)){
+    location.replace('standards.html'+h); return;
+  }
   var tabs=[].slice.call(document.querySelectorAll('.lb-tabs > .rd-fchip'));
   var panes=[].slice.call(document.querySelectorAll('.lb-pane'));
   var noSmooth=false;
@@ -1693,10 +1742,18 @@ LIB_JS = """
     if(!b) return;
     noSmooth=true; b.click(); noSmooth=false;   // 深链直达时直接定位，不做滚动动画
   }
-  var hm=/^#pane-(lib|draft|duty|ask)(?:-([a-z]+))?$/.exec(location.hash||'');
+  window.kbTab=activateTab;
+  var hm=/^#pane-(lib|draft|duty|ask)(?:-([a-z]+))?$/.exec(h);
   if(hm) activateTab(hm[1]);
+})();
+</script>
+"""
 
-  // ---------- （资料库的筛选 / 排序 / 分页已迁到 LIB_RENDER，见 #lvSide / #lvList）----------
+
+DUTY_JS = """
+<script>
+(function(){
+  var activateTab=window.kbTab||function(){};
 
   // ---------- 合规义务清单：主题大类切换 + 义务全文搜索 ----------
   var dchips=[].slice.call(document.querySelectorAll('.duty-filters .rd-fchip'));

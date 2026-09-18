@@ -39,6 +39,7 @@ PAGES = [
     "manage/audit.html",
     "kb/index.html",
     "kb/standards.html",
+    "kb/duties.html",
     "kb/texts.html",
     "kb/wx.html",
     "kb/citations.html",

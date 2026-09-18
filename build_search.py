@@ -105,7 +105,7 @@ def main():
                 items.append({
                     "t": d.get("t") or "",
                     "c": "duty",
-                    "u": f'kb/standards.html#d-{c["id"]}-{si}-{di}',
+                    "u": f'kb/duties.html#d-{c["id"]}-{si}-{di}',
                     "s": f'{c["name"]} › {s["name"]}' + (f' · 风险{d["risk"]}' if d.get("risk") else ""),
                     "d": clean(desc, 420),
                     "k": " ".join([d.get("t") or "", d.get("d") or "", c["name"], s["name"],
@@ -198,10 +198,12 @@ def main():
         ("应对建议", "news/actions.html", "进行中监管行动与按领域给出的整改落地建议"),
         ("全球监管地图", "news/map.html", "按地域查看合规动态分布"),
         ("简报归档", "news/briefs.html", "日报 / 周报 / 月报全期次归档"),
-        ("合规知识库", "kb/index.html", "资料库、义务清单与草案跟踪"),
-        ("合规义务清单", "kb/standards.html",
+        ("合规知识库", "kb/index.html", "法规库、义务清单与草案跟踪"),
+        ("合规义务清单", "kb/duties.html",
          f"{_duty_scale(du)}，矩阵总览 + 逐条明细，配条款原文、标杆做法与参考文案"),
-        ("法规原文库", "kb/texts.html", "法律、行政法规、部门规章与规范性文件正文，按官方发文版式排印"),
+        # ⚠️ 这里**不再**列「法规原文库」(kb/texts.html)：它已从导航下线，现在只是法规库
+        # 每条右侧「读原文」的落地页（下钻层），不是并列入口。2026-09-17 用户要求去掉
+        # 重复入口时只改了导航栏、漏了搜索页这一处 —— 2026-09-18 用户点名的就是这个。
         ("高频引用法条", "kb/citations.html", "执法与司法高频援引条款，含法条竞合与抗辩思路"),
         ("合规审计", "kb/audit.html", "按义务清单逐项自评的合规审计模板与评分口径"),
         ("专题分析", "analysis/index.html", "深度专题研究，结论先行、附官方深链"),

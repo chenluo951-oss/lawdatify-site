@@ -40,6 +40,12 @@ KPI_S, KPI_E = "<!-- KPI:START -->", "<!-- KPI:END -->"
 FEED_S, FEED_E = "<!-- FEED:START -->", "<!-- FEED:END -->"
 GEO_S, GEO_E = "<!-- GEOMETA:START -->", "<!-- GEOMETA:END -->"
 PULSE_S, PULSE_E = "<!-- PULSE:START -->", "<!-- PULSE:END -->"
+# 首页「合规义务清单」区块：6 张精选卡是人工写的业务导读，但**规模数字与入口链接不能写死** ——
+# 数字会随 duties.json 变化而过期；链接曾经是裸 `kb/standards.html`（不带锚点），点进去落在
+# 法规库默认的「资料库」视图，也就是用户 2026-09-18 报障的「点击合规义务清单，跳进去还是
+# 原来带法条原文库的页面」。现在数字由构建期算、链接指向独立页 kb/duties.html。
+DUTY_LEAD_S, DUTY_LEAD_E = "<!-- DUTYLEAD:START -->", "<!-- DUTYLEAD:END -->"
+DUTY_MORE_S, DUTY_MORE_E = "<!-- DUTYMORE:START -->", "<!-- DUTYMORE:END -->"
 
 RUN_STATUSES = ("进行中", "待施行", "待发布", "待审议")
 
@@ -86,6 +92,31 @@ def load_duties():
         for s in c.get("scenes", []):
             n += len(s.get("duties", []) or [])
     return n
+
+
+def duty_scale():
+    """义务清单规模 (主题大类, 业务场景, 具体义务) —— 从 duties.json 动态算，**禁止写死**。"""
+    p = os.path.join(HERE, "sources", "standards", "duties.json")
+    try:
+        d = json.load(open(p, encoding="utf-8"))
+    except (OSError, ValueError):
+        return 0, 0, 0
+    cats = d.get("categories") or []
+    sc = sum(len(c.get("scenes") or []) for c in cats)
+    du = sum(len(s.get("duties") or []) for c in cats
+             for s in (c.get("scenes") or []))
+    return len(cats), sc, du
+
+
+def render_duty_lead():
+    nc, ns, nd = duty_scale()
+    return f"<b>{nc}</b> 个主题大类 · <b>{ns}</b> 个业务场景 · <b>{nd}</b> 项具体义务"
+
+
+def render_duty_more():
+    _nc, _ns, nd = duty_scale()
+    return ('<a href="kb/duties.html">查看义务清单矩阵总览 · '
+            f'{nd} 项逐条含条款原文与参考设计 →</a>')
 
 
 # ---------------------------------------------------------------- KPI 看板
@@ -299,6 +330,8 @@ def main():
     ok &= replace_block(INDEX, RADAR_S, RADAR_E, radar_html)
     ok &= replace_block(INDEX, FEED_S, FEED_E, feed_html)
     ok &= replace_block(INDEX, GEO_S, GEO_E, geo_js)
+    ok &= replace_block(INDEX, DUTY_LEAD_S, DUTY_LEAD_E, render_duty_lead())
+    ok &= replace_block(INDEX, DUTY_MORE_S, DUTY_MORE_E, render_duty_more())
     if ok:
         print(f"  index.html ✓ 速览 + KPI×5 → 最新 {min(10, len(verified))} 条动态（正文前置）"
               f" → 驾驶舱 → 全球 {n_juris} 辖区")
