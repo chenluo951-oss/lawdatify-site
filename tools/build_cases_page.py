@@ -257,12 +257,17 @@ def main():
             "</tr>")
 
     css = """
-.cs-kpi{display:grid;grid-template-columns:repeat(auto-fit,minmax(148px,1fr));gap:10px;margin:16px 0 6px}
+/* KPI 只占**一行条**：8 张卡在 1248px 里排成 8 列需要 minmax ≤ 128px
+   （8×128+7×8=1080 ≤ 1248）。原写 minmax(148px) 只能排 7 列 → 8 张卡折成两行、
+   独占 149px，把首屏往下压了近 90px。数字卡是「读数」不是「海报」。 */
+.cs-kpi{display:grid;grid-template-columns:repeat(auto-fit,minmax(128px,1fr));gap:8px;margin:14px 0 4px}
 .cs-k{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
-  padding:10px 13px;box-shadow:var(--shadow)}
-.cs-k b{display:block;font-size:19px;color:var(--brand);font-weight:800;line-height:1.25}
-.cs-k span{display:block;color:var(--muted);font-size:12.2px;margin-top:2px}
-.cs-sec{margin:30px 0 0}
+  padding:8px 11px;box-shadow:var(--shadow)}
+.cs-k b{display:block;font-size:18px;color:var(--brand);font-weight:800;line-height:1.22}
+.cs-k span{display:block;color:var(--muted);font-size:11.8px;margin-top:2px}
+.cs-sec{margin:26px 0 0}
+/* 主体块（表格所在节）贴紧 KPI，不再让说明文字插在中间 */
+.cs-sec.cs-main{margin:16px 0 0}
 .cs-sec h2{margin:0 0 6px;font-size:19px;color:var(--brand);display:flex;align-items:center;gap:9px}
 .cs-sec h2::before{content:"";width:5px;height:19px;background:var(--accent);border-radius:3px}
 .cs-bar{display:flex;align-items:center;gap:9px;margin:5px 0}
@@ -274,11 +279,13 @@ def main():
 .cs-bar .fl{display:block;height:100%;min-width:2px;
   background:linear-gradient(90deg,#b3541e,#c98a3c);border-radius:5px}
 .cs-bar .vv{width:52px;text-align:right;font-size:12.5px;color:var(--muted);flex:none}
-.cs-q{width:100%;padding:11px 14px;border:1px solid var(--line);border-radius:10px;
-  font-size:14px;font-family:var(--sans);margin:12px 0;color:var(--ink)}
+.cs-q{flex:1 1 300px;min-width:200px;padding:9px 13px;border:1px solid var(--line);
+  border-radius:9px;font-size:13.5px;font-family:var(--sans);margin:0;color:var(--ink)}
 .cs-note{background:#f7fafd;border:1px solid var(--line);border-left:4px solid var(--accent);
   border-radius:10px;padding:14px 18px;color:var(--ink-2);font-size:13.5px;margin-top:18px}
-.cs-cnt{color:var(--muted);font-size:13px;margin:8px 0 0}
+/* 「共 N 条」并进 <h2> 行右侧（JS 命中后改写为「命中 N 条 / 共 M 条」）——
+   它本来就只是这一节的读数，独占一行会白占 ~30px。 */
+.cs-cnt{margin-left:auto;color:var(--muted);font-size:12.5px;font-weight:600;letter-spacing:0}
 /* 统计附录（2026-09-17 新增）：四组分布图默认收起，展开后限宽 920px——
    横条图在 1728px 宽的版面上会拉成一条横跨全屏的线，反而读不出差异。 */
 .cs-stats{margin:26px 0 0;background:var(--card);border:1px solid var(--line);
@@ -293,15 +300,19 @@ def main():
 .cs-stats[open]>summary{border-bottom:1px solid var(--line-2)}
 .cs-stats .cs-sec{max-width:920px}
 .cs-stats .cs-sec:last-child{padding-bottom:14px}
-.cs-fl{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin:0 0 6px}
-.cs-fl label{color:var(--muted);font-size:13px}
-.cs-fl select{padding:8px 10px;border:1px solid var(--line);border-radius:9px;background:var(--card);
-  color:var(--ink);font-size:13px;font-family:var(--sans);max-width:260px}
+/* 搜索框 + 机关 / 类型 两枚筛选器排**同一行**：原先是「搜索框独占一行 +
+   筛选条再占一行」，两行控件把表格又往下推了 ~90px。
+   同时去掉 <label>——select 的默认项（「全部机关」/「全部类型」）本身已自解释。 */
+.cs-fl{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin:11px 0 9px}
+.cs-fl select{padding:9px 10px;border:1px solid var(--line);border-radius:9px;background:var(--card);
+  color:var(--ink);font-size:13px;font-family:var(--sans);max-width:236px}
 
 /* ---------------- 明细表 ---------------- */
 /* 表格是这一页的主体：信息密度高，靠「表头吸顶 + 首列吸附 + 横向滚动」保证
    在 1120px 里也能一次看完 9 列，不用来回找列名。 */
-.cs-wrap{overflow:auto;max-height:660px;border:1px solid var(--line);
+/* ⚠️ 可视高度跟视口走，别写死 660px：在 1440×900 上盒子底边会掉到屏幕外，
+   用户得「先滚页面、再滚盒子」两层滚动。改 vh 后一屏内能看完一个整框。 */
+.cs-wrap{overflow:auto;max-height:min(76vh,820px);border:1px solid var(--line);
   border-radius:var(--radius);background:var(--card);box-shadow:var(--shadow);
   -webkit-overflow-scrolling:touch}
 /* ⚠️ 表格必须给**硬性最小宽度**（= 各列宽之和），否则 `width:100%` 会把 9 列
@@ -448,6 +459,9 @@ def main():
 }
 @media(max-width:640px){
   .cs-bar .lb{width:110px}.cs-kpi{grid-template-columns:repeat(2,1fr)}
+  /* 窄屏三枚控件各占一行：搜索框铺满，两枚 select 平分一行 */
+  .cs-q{flex:1 1 100%}
+  .cs-fl select{flex:1 1 44%;max-width:none}
   .cs-tbl{min-width:660px;font-size:13px}
   .cs-tbl td.ag{display:none}
 }
@@ -465,12 +479,17 @@ def main():
                 f'<div class="cs-k"><b>{n_with_art}</b><span>依据已精确到条</span></div>'
                 '</div>')
 
-    body.append('<section class="cs-sec"><h2>案例库怎么用</h2>'
-                '<p class="lead">合规判断最容易出错的地方不是「有没有这条规定」，'
-                '而是「同类行为在实践中怎么定性、按哪条罚、罚到什么程度」。'
-                '这一页把监管机关官网公开的处罚决定、通报与典型案例，'
-                '按违法类型、执法机关、依据法条和实际处罚结果做了结构化索引——'
-                '写内部风险提示、做业务评审、回应监管问询时，可直接反查同类先例。</p></section>')
+    # 2026-09-18（用户报「那个案例库也是一样的，只有一个小框」）：
+    # 「案例库怎么用」是纯说明文字，原先排在表格**前面**，连同「案例明细」的 5 行导语
+    # 把表格起点推到 821px（1440×1000 视口只有 913px）——首屏只剩 ~90px 表格，
+    # 看着就是"一个小框"。按 static-site-fold-layout 的配方处理：
+    # **正文（表格）提到说明块之前**，说明文字与表尾「数据说明」合并下移。
+    howto_head = ('<section class="cs-sec"><h2>案例库怎么用</h2>'
+             '<p class="lead">合规判断最容易出错的地方不是「有没有这条规定」，'
+             '而是「同类行为在实践中怎么定性、按哪条罚、罚到什么程度」。'
+             '这一页把监管机关官网公开的处罚决定、通报与典型案例，'
+             '按违法类型、执法机关、依据法条和实际处罚结果做了结构化索引——'
+             '写内部风险提示、做业务评审、回应监管问询时，可直接反查同类先例。</p>')
 
     # 2026-09-17（用户要求「没必要的废话废图表就删掉」）：
     # 四组分布图原先铺在案例表**前面**，在 1728px 宽的版面上每条横条要横跨整个屏幕，
@@ -488,23 +507,22 @@ def main():
                      '<p class="lead">案例正文中援引的法律法规名称（仅统计明确写出书名号的引用）。</p>'
                      + bars(laws.most_common(16)) + "</section>")
 
-    body.append('<section class="cs-sec"><h2>案例明细</h2>'
-                '<p class="lead">可按被处罚主体、处罚事由、机关、法条或类型检索。'
-                '<b>处罚事由</b>取自决定书／通报里认定违法事实的段落（为什么处罚），'
-                '汇编类通报按起数逐条列出；<b>处罚</b>含罚款、吊销营业执照、停业整顿、'
-                '没收、通报等全部处罚种类。两者均为正文解析结果，最终以官方原文为准。</p>'
+    # 表格节：标题行内联读数 + 搜索/筛选同一行 + 表格。**不插任何说明段落**——
+    # 说明文字全部下移到表尾（见下方 howto_head / note）。
+    body.append('<section class="cs-sec cs-main">'
+                f'<h2>案例明细<span class="cs-cnt" id="cc">共 {len(cases)} 条</span></h2>'
+                '<div class="cs-fl">'
                 '<input class="cs-q" id="cq" type="search" '
                 'placeholder="搜索关键词，例如：虚假宣传、明码标价、过期食品、个人信息">'
-                '<div class="cs-fl"><label for="ca">机关</label>'
-                '<select id="ca"><option value="">全部机关</option>'
+                '<select id="ca" aria-label="按执法机关筛选">'
+                '<option value="">全部机关</option>'
                 + "".join(f'<option value="{esc(a)}">{esc(a)}（{n}）</option>'
                           for a, n in agys.most_common() if a != "未标注")
-                + '</select><label for="cty">类型</label><select id="cty">'
+                + '</select><select id="cty" aria-label="按违法类型筛选">'
                 '<option value="">全部类型</option>'
                 + "".join(f'<option value="{esc(t)}">{esc(t)}（{n}）</option>'
                           for t, n in types.most_common())
                 + '</select></div>'
-                f'<p class="cs-cnt" id="cc">共 {len(cases)} 条</p>'
                 '<div class="cs-wrap"><table class="cs-tbl" id="ct"><thead><tr>'
                 "<th>日期</th><th>机关</th><th>类型</th><th>案件</th>"
                 "<th>被处罚主体</th><th>处罚事由</th>"
@@ -514,7 +532,7 @@ def main():
     body.append('<details class="cs-stats"><summary>统计视角：违法类型 / 执法机关 / 年度 / 高频依据法条</summary>'
                 + "".join(stats) + "</details>")
 
-    body.append('<div class="cs-note"><b>数据说明</b>　'
+    note = ('<div class="cs-note"><b>数据说明</b>　'
                 '本库只收<b>监管机关作出的行政处罚与执法通报</b>：'
                 '处罚决定书、行政处罚信息公开表、典型案例通报、App 违规通报。'
                 '<b>会议、座谈、年度报告、政策出台、约谈、专项整治工作动态等不计入</b>——'
@@ -535,6 +553,9 @@ def main():
                 '并在「原文」列旁给出<b>文书</b>入口直达原件；'
                 '仍有遗漏的，<b>个案的事实认定与处罚幅度以官方发布的处罚决定书 / 通报原文为准</b>。'
                 '本库随每日构建增量补入。</div>')
+
+    # 表尾顺序：统计视角（折叠）→「案例库怎么用」+ 数据说明（同一块，紧邻表格）。
+    body.append(howto_head + note + '</section>')
 
     body.append("""<script>
 (function(){

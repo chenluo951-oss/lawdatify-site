@@ -739,12 +739,19 @@ def main():
         teaser.append('<div class="up-sum">' + "".join(b for b in boxes if b) + '</div>')
         block = ("<!-- TODAY:START -->\n" + "\n".join(teaser) + "\n<!-- TODAY:END -->")
         s = open(idx, encoding="utf-8").read()
-        pat = re.compile(r"<!-- TODAY:START -->.*?<!-- TODAY:END -->", re.S)
-        if pat.search(s):
-            s2 = pat.sub(lambda m: block, s, count=1)
-        else:
-            anchor = "<!-- SUBNAV:END -->"
-            s2 = s.replace(anchor, anchor + "\n" + block, 1) if anchor in s else s
+        # 2026-09-18（用户报「案例库也是一样的，只有一个小框」后全站版式体检发现）：
+        # 这个摘要块原先插在 <!-- SUBNAV:END --> 之后，也就是**动态列表之前**——
+        # 它自带 178px 的速览四宫格 + 61px 的节标题，把首条动态推到 Y=1006px，
+        # 而 1280×900 的视口只有 813px：首屏一条动态都看不到。
+        # 与案例库/原文库同型（正文被数据块压在最下面），按 static-site-fold-layout
+        # 的配方把**正文（动态列表）提到摘要块之前** → 首条动态回到 Y≈763px。
+        pat = re.compile(r"\n?<!-- TODAY:START -->.*?<!-- TODAY:END -->", re.S)
+        s = pat.sub("", s, count=1)          # 先摘掉旧块：它可能还在旧位置
+        s2 = s
+        for anchor in ("<!-- FEED:END -->", "<!-- SUBNAV:END -->"):
+            if anchor in s2:
+                s2 = s2.replace(anchor, anchor + "\n" + block, 1)
+                break
         if s2 != s:
             open(idx, "w", encoding="utf-8").write(s2)
             print(f"  news/index.html 今日更新摘要已同步（增量块："

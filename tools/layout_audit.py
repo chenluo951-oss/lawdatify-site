@@ -44,7 +44,12 @@ VIZ_SEL = ",".join([
 ])
 
 # 视为「正文首段」的选择器（按优先级）
+# ⚠️ 「正文」不等于 `<p>`：案例库的主体是**表格**、原文库的主体是**纸张**，
+#    只按 p 判断会把它们的表尾说明段当成正文，报出 1100px+ 的假警报
+#    （2026-09-18 案例库首屏重排时踩到）。主体块选择器排在前面。
 BODY_SEL = [
+    ".cs-wrap",            # 案例库：明细表
+    ".rd-main", ".paper",  # 原文库：阅读器正文
     ".art-lead p", ".art p", ".up-item .up-point", ".ni-body",
     "main p", ".wrap p", ".inner p",
 ]
@@ -100,9 +105,11 @@ def measure(page):
     os.makedirs(os.path.dirname(tmp), exist_ok=True)
     # 保持相对路径可用：把临时文件放在页面同级目录
     tmp = os.path.join(os.path.dirname(path), "._audit_tmp.html")
-    instr = html.replace("</body>", probe + "</body>")
-    if probe not in instr:
-        instr = html + probe
+    # ⚠️ 必须只替换**最后一个** </body>：页面内联脚本里可能含字面量 "</body>"
+    #    （kb/texts.html 的 Word 导出模板就是这样），全量 replace 会把探针塞进
+    #    脚本字符串中间，整页 JS 当场断掉、探针静默不执行。
+    k = html.rfind("</body>")
+    instr = (html[:k] + probe + html[k:]) if k != -1 else html + probe
     open(tmp, "w", encoding="utf-8").write(instr)
     try:
         r = subprocess.run(
