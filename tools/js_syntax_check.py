@@ -27,6 +27,11 @@ import subprocess
 import sys
 import tempfile
 
+try:
+    from _stash import stash          # 直接运行 tools/xxx.py 时，本目录在 sys.path[0]
+except ImportError:                   # 被当包导入时
+    from tools._stash import stash
+
 HERE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, HERE)
 
@@ -92,7 +97,7 @@ def check_page(rel):
                     line = f'（脚本第 {mm.group(1)} 行）'
                 bad.append((i, line, (msg or '未知错误')[:150]))
         finally:
-            os.unlink(tmp)
+            stash(tmp)
     return blocks, bad
 
 

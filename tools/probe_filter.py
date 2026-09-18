@@ -12,6 +12,11 @@ import re
 import subprocess
 import sys
 
+try:
+    from _stash import stash          # 直接运行 tools/xxx.py 时，本目录在 sys.path[0]
+except ImportError:                   # 被当包导入时
+    from tools._stash import stash
+
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 CHROME = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
 
@@ -73,7 +78,7 @@ def run(page):
                            capture_output=True, text=True, timeout=120)
         dom = r.stdout
     finally:
-        os.remove(tmp)
+        stash(tmp)
     m = re.search(r'data-probe="(.*?)"', dom, re.S)
     if not m:
         print(f"{page}  ! 探针未执行")

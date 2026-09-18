@@ -88,7 +88,7 @@ EXTRA = {
     "kb": ["texts.html"],
     "analysis": ["pi-audit.html", "ai-label.html", "food-label.html",
                  "app-violation-pattern.html", "algo-filing-guide.html",
-                 "dark-store-license.html"],
+                 "dark-store-license.html", "penalty-read.html"],
 }
 
 # 下钻页 → 子导航里应被标为「当前」的同层入口

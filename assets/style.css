@@ -1943,10 +1943,30 @@ footer .upd{color:var(--cy-2);font-variant-numeric:tabular-nums}
 .deck-col::before{content:"";position:absolute;left:0;right:0;top:0;height:3px;
   background:linear-gradient(90deg,var(--cy-2),var(--accent))}
 .deck-h{font-weight:800;color:#0c2136}
-.pulse-row{border:1px solid var(--line);border-radius:13px;background:var(--card);
-  box-shadow:var(--shadow);transition:transform .15s,box-shadow .15s,border-color .15s}
-.pulse-row:hover{transform:translateY(-2px);border-color:#cfe4ee;box-shadow:var(--shadow-h)}
-.pulse-main b{font-variant-numeric:tabular-nums;color:var(--cy-ink);font-weight:800}
+/* ⚠️ 2026-09-18 修对比度（用户截图反馈「这个文字颜色有问题」）：
+   上一版把 .pulse-row 改成白卡（background:var(--card)），却没有覆盖基类的 color:#fff，
+   于是「白字压白卡」——标签与副标题直接看不见；而 :hover 又只改了 background-color，
+   基类的 rgba(255,255,255,.13) 半透明白叠在 .pulse 的深蓝底上变成深蓝行，
+   白字才露出来、数字却还是深青 —— 一行里两种对比度，读起来是坏的。
+   改法：不再做「深底 + 白卡」两层，整块按统一深色信号台处理，所有文字都给明确浅色。 */
+.pulse{
+  background:
+    radial-gradient(120% 150% at 10% -25%,rgba(40,211,230,.22),transparent 60%),
+    linear-gradient(158deg,var(--dash-1) 0%,var(--dash-2) 58%,var(--dash-3) 100%);
+  border:1px solid rgba(255,255,255,.09);border-radius:16px;gap:7px;
+  box-shadow:0 1px 0 rgba(255,255,255,.06) inset,0 18px 40px -26px rgba(7,24,42,.85)}
+.pulse-row{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.09);
+  color:#e9f4fc;border-radius:12px;
+  transition:background .16s,border-color .16s,transform .16s,box-shadow .16s}
+.pulse-row:hover{background:rgba(40,211,230,.14);border-color:rgba(40,211,230,.45);
+  transform:translateY(-2px);box-shadow:0 12px 26px -18px rgba(40,211,230,.9)}
+.pulse-ico{background:rgba(40,211,230,.16);border:1px solid rgba(40,211,230,.24)}
+.pulse-main{color:#e9f4fc}
+.pulse-main b{font-variant-numeric:tabular-nums;color:#5fe9f5;font-weight:800;
+  text-shadow:0 0 18px rgba(95,233,245,.35)}
+.pulse-main i{color:rgba(196,219,236,.88);opacity:1}
+.pulse-go{color:rgba(95,233,245,.72)}
+.pulse-row:hover .pulse-go{color:#5fe9f5}
 .dist-h{font-weight:800;color:#0c2136}
 .dist-n{font-variant-numeric:tabular-nums;font-weight:700;color:var(--cy-ink)}
 .dist-bar{background:linear-gradient(90deg,var(--cy),var(--accent))!important}
@@ -2029,3 +2049,146 @@ a.dist-row:hover{text-decoration:none}
 a.dist-row:hover .dist-name{color:var(--cy-ink)}
 a.dist-row:hover .dist-n{color:var(--cy-ink)}
 .dist-cols>div{min-width:0}
+
+/* ==========================================================================
+   设计系统 v3.1「动态控制台」—— 动效层（2026-09-18）
+   用户 2026-09-18：「科技感不是改改颜色，能不能多加点特效」。
+   原则：① 只用 transform / opacity / 背景位移做动效，**不改变任何布局尺寸**
+            （首屏正文起点刚压到 730px，动效一旦影响盒高就会把正文顶下去）；
+         ② 每个动效都能在 JS 缺失时优雅退化（默认态即最终态，靠 .fx.js 加 class 才生效）；
+         ③ prefers-reduced-motion 与 @media print 一律关闭。
+   ========================================================================== */
+
+/* ---------- ① 面板扫光带：一道浅青斜光横掠（.fx-sweep 由 assets/fx.js 注入） ---------- */
+/* .pulse 基类没有 position，扫光带是绝对定位的，必须给它建立包含块；行要压在光带之上 */
+.pulse{position:relative}
+.pulse>.pulse-row{position:relative;z-index:1}
+.fx-sweep{position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:0}
+.fx-sweep i{position:absolute;top:-12%;bottom:-12%;left:-40%;width:32%;display:block;
+  background:linear-gradient(100deg,transparent,rgba(130,240,255,.11) 42%,
+    rgba(130,240,255,.045) 58%,transparent);
+  transform:skewX(-16deg);animation:fxSweep 8.5s cubic-bezier(.45,.05,.55,.95) infinite}
+@keyframes fxSweep{0%{left:-40%}58%,100%{left:120%}}
+/* 底边跑光：一条光点沿底边循环 */
+.fx-sweep b{position:absolute;left:0;right:0;bottom:0;height:2px;display:block;
+  background:linear-gradient(90deg,transparent,var(--cy-2),transparent);
+  background-size:32% 100%;background-repeat:no-repeat;
+  animation:fxBeam 4.6s linear infinite}
+@keyframes fxBeam{0%{background-position:-40% 0}100%{background-position:140% 0}}
+
+/* ---------- ② hero 网格缓慢漂移（.hero::before 已是网格，只改位移） ---------- */
+.hero::before,.pagehead::before,.up-hero::before{animation:fxGrid 14s linear infinite}
+@keyframes fxGrid{0%{background-position:0 0,0 0}100%{background-position:0 -30px,-30px 0}}
+
+/* ---------- ③ 滚动入场：fx.js 加 .fx-rev，进入视口加 .fx-in ---------- */
+.fx-rev{opacity:0;transform:translateY(16px);
+  transition:opacity .5s ease,transform .5s cubic-bezier(.22,.72,.28,1)}
+.fx-rev.fx-in{opacity:1;transform:none}
+/* 速览四行的错峰入场（首屏，用纯 CSS 延迟，不等 IntersectionObserver） */
+.pulse .pulse-row{animation:fxRowIn .5s cubic-bezier(.22,.72,.28,1) backwards}
+.pulse .pulse-row:nth-child(1){animation-delay:.04s}
+.pulse .pulse-row:nth-child(2){animation-delay:.10s}
+.pulse .pulse-row:nth-child(3){animation-delay:.16s}
+.pulse .pulse-row:nth-child(4){animation-delay:.22s}
+@keyframes fxRowIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+
+/* ---------- ④ 指针跟随高光：fx.js 写 --mx/--my ---------- */
+.fx-spot{position:relative}
+.fx-spot::after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;
+  opacity:0;transition:opacity .28s;
+  background:radial-gradient(200px circle at var(--mx,50%) var(--my,50%),
+    rgba(40,211,230,.17),transparent 62%)}
+.fx-spot:hover::after{opacity:1}
+.kpi-card.fx-spot::after{background:radial-gradient(200px circle at var(--mx,50%) var(--my,50%),
+  rgba(120,240,255,.20),transparent 64%)}
+
+/* ---------- ⑤ 数字滚动计数：计数期间加 .fx-tick（量值色微亮） ---------- */
+.fx-tick{color:var(--cy-2)!important;text-shadow:0 0 14px rgba(40,211,230,.45)}
+.kpi-card b.fx-tick{color:#8ff2ff!important}
+
+/* ---------- ⑥ 顶部阅读进度条（fx.js 注入 .fx-prog） ---------- */
+.fx-prog{position:fixed;left:0;top:0;height:2px;width:0;z-index:90;pointer-events:none;
+  background:linear-gradient(90deg,var(--cy),var(--cy-2));
+  box-shadow:0 0 10px rgba(40,211,230,.75)}
+
+/* ---------- ⑦ 导航滚动毛玻璃 ---------- */
+.topnav{transition:background .25s,box-shadow .25s}
+.topnav.fx-stuck{background:rgba(247,251,255,.80);backdrop-filter:saturate(1.5) blur(11px);
+  -webkit-backdrop-filter:saturate(1.5) blur(11px);
+  box-shadow:0 10px 26px -22px rgba(7,24,42,.65)}
+
+/* ---------- ⑧ 区块标题竖条：呼吸光 ---------- */
+.section-title .bar{animation:fxBar 3.6s ease-in-out infinite}
+@keyframes fxBar{0%,100%{box-shadow:0 0 0 1px rgba(14,159,181,.18),0 2px 10px -2px rgba(14,159,181,.5)}
+  50%{box-shadow:0 0 0 1px rgba(14,159,181,.28),0 3px 16px -1px rgba(40,211,230,.85)}}
+
+/* ---------- ⑨ 条形图生长（fx.js 先把宽度降到 0 再放开） ---------- */
+.dist-bar{transition:width .9s cubic-bezier(.22,.72,.28,1)}
+
+/* ---------- ⑩ 明细表 / 案例表：行扫描高光 ---------- */
+#docTbl tbody tr[data-docrow],.cs-tbl tbody tr{transition:background .16s,box-shadow .16s}
+#docTbl tbody tr[data-docrow]:hover,.cs-tbl tbody tr:hover{
+  box-shadow:inset 3px 0 0 var(--cy),inset 0 0 0 1px rgba(40,211,230,.18)}
+
+/* ---------- ⑪ 可点数字：hover 时数字本身发一点光 ---------- */
+.num-a{transition:color .14s,border-color .14s,text-shadow .18s}
+.num-a:hover{text-shadow:0 0 12px rgba(40,211,230,.5)}
+.deck-n{transition:background .16s,color .16s,border-color .16s,box-shadow .16s}
+.deck-n:hover{box-shadow:0 6px 18px -10px rgba(14,159,181,.9)}
+
+/* ---------- ⑫ 部门层级卡 / 专题卡：抬升 + 描边点亮 ---------- */
+.rg-top,.rg-node,.sp-card,.kpi-card{transition:transform .18s,box-shadow .18s,border-color .18s}
+.rg-top:hover{border-color:rgba(40,211,230,.45);box-shadow:0 14px 30px -22px rgba(7,24,42,.8)}
+.sp-card:hover{transform:translateY(-2px);border-color:rgba(40,211,230,.35)}
+.sp-k:hover{box-shadow:0 14px 30px -20px rgba(14,159,181,.7)}
+
+/* ---------- ⑬ 动效关闭开关 ---------- */
+@media (prefers-reduced-motion:reduce){
+  .fx-sweep i,.fx-sweep b,.hero::before,.pagehead::before,.up-hero::before,
+  .section-title .bar,.pulse .pulse-row{animation:none!important}
+  .pulse .pulse-row{opacity:1!important}
+  .fx-rev{opacity:1!important;transform:none!important}
+  .dist-bar{transition:none!important}
+}
+@media print{
+  .fx-prog,.fx-sweep{display:none!important}
+  .fx-rev{opacity:1!important;transform:none!important}
+  .hero::before,.pagehead::before,.up-hero::before,.section-title .bar,
+  .pulse .pulse-row,.fx-sweep i,.fx-sweep b{animation:none!important}
+  .dist-bar{transition:none!important}
+  .num-a:hover{text-shadow:none!important}
+}
+
+/* ==========================================================================
+   设计系统 v3.2 追加动效（2026-09-18）—— 顶边流光 / 悬停光条
+   用户：「科技感不是改改颜色，能不能多加点特效」。
+   两条都走**已在本站验证过的写法**（.deck-col::before 那套顶边渐变），
+   不用 mask / backdrop 之类支持面窄的属性 —— 那样一旦不被支持会整块糊掉。
+   ========================================================================== */
+
+/* KPI 卡：顶边一道流光扫过，五张卡按序错峰，看起来像「一排仪表在自检」 */
+.kpi-card{position:relative;overflow:hidden}
+.kpi-card::before{content:"";position:absolute;left:0;right:0;top:0;height:2px;
+  border-radius:13px 13px 0 0;pointer-events:none;
+  background:linear-gradient(90deg,transparent,var(--cy-2),transparent);
+  background-size:42% 100%;background-repeat:no-repeat;
+  animation:fxBeam 4.4s linear infinite}
+.kpi-card:nth-child(2)::before{animation-delay:.35s}
+.kpi-card:nth-child(3)::before{animation-delay:.70s}
+.kpi-card:nth-child(4)::before{animation-delay:1.05s}
+.kpi-card:nth-child(5)::before{animation-delay:1.40s}
+
+/* 速览行：悬停时左侧亮起一道青色光条 */
+.pulse-row::before{content:"";position:absolute;left:0;top:9px;bottom:9px;width:3px;
+  border-radius:3px;background:linear-gradient(180deg,var(--cy-2),var(--cy));
+  opacity:0;transform:scaleY(.35);transform-origin:center;
+  transition:opacity .16s,transform .22s}
+.pulse-row:hover::before{opacity:1;transform:scaleY(1)}
+
+@media (prefers-reduced-motion:reduce){
+  .kpi-card::before{animation:none!important;opacity:.35}
+  .pulse-row::before{transition:none}
+}
+@media print{
+  .kpi-card::before,.pulse-row::before{display:none!important}
+}

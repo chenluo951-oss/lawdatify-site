@@ -1,0 +1,294 @@
+[
+ {
+  "name": "部-国家税务总局",
+  "home": "https://www.chinatax.gov.cn/",
+  "status": "ok",
+  "pages": 17,
+  "cols": [
+   {
+    "text": "各省税务局2018年政府信息公开年度报告汇总展示",
+    "url": "https://www.chinatax.gov.cn/chinatax/n810214/c102384r/c4179941/content.html",
+    "detail_links": 33,
+    "penalty_titles": 0,
+    "samples": [
+     "国家税务总局北京市税务局2018年政府信息公开年度报告",
+     "国家税务总局天津市税务局2018年政府信息公开年度报告",
+     "国家税务总局河北省税务局2018年政府信息公开年度报告",
+     "国家税务总局内蒙古自治区税务局2018年政府信息公开年度报告",
+     "国家税务总局辽宁省税务局2018年政府信息公开年度报告"
+    ],
+    "depth": 2,
+    "link_re": "http://beijing\\.chinatax\\.gov\\.cn/bjswj/c\\d+/\\d+/t\\d+_\\d+\\.shtml",
+    "page2": "",
+    "titlehit": ""
+   },
+   {
+    "text": "各省税务局2021年政府信息公开年度报告汇总展示",
+    "url": "https://www.chinatax.gov.cn/chinatax/n810214/c102384r/c5192259/content.html",
+    "detail_links": 32,
+    "penalty_titles": 0,
+    "samples": [],
+    "depth": 2,
+    "link_re": "http://beijing\\.chinatax\\.gov\\.cn/bjswj/c\\d+/\\d+/\\d+f\\d+ed\\d+ab\\d+d\\d+a\\d+f\\d+e\\d+ff\\.shtml",
+    "page2": "",
+    "titlehit": ""
+   },
+   {
+    "text": "各省税务局2020年政府信息公开年度报告汇总展示",
+    "url": "https://www.chinatax.gov.cn/chinatax/n810214/c102384r/c5192256/content.html",
+    "detail_links": 32,
+    "penalty_titles": 0,
+    "samples": [],
+    "depth": 2,
+    "link_re": "http://beijing\\.chinatax\\.gov\\.cn/bjswj/nb\\d+/\\d+/\\d+c\\d+c\\d+c\\d+bf\\d+f\\d+c\\d+d\\d+f\\d+b\\.shtml",
+    "page2": "",
+    "titlehit": ""
+   },
+   {
+    "text": "各省税务局2019年政府信息公开年度报告汇总展示",
+    "url": "https://www.chinatax.gov.cn/chinatax/n810214/c102384r/c5192253/content.html",
+    "detail_links": 32,
+    "penalty_titles": 0,
+    "samples": [],
+    "depth": 2,
+    "link_re": "http://beijing\\.chinatax\\.gov\\.cn/bjswj/c\\d+/\\d+/\\d+f\\d+f\\d+de\\d+f\\d+c\\d+c\\d+\\.shtml",
+    "page2": "",
+    "titlehit": ""
+   }
+  ]
+ },
+ {
+  "name": "部-国家外汇管理局",
+  "home": "https://www.safe.gov.cn/",
+  "status": "ok",
+  "pages": 7,
+  "cols": [
+   {
+    "text": "专栏文章",
+    "url": "https://www.safe.gov.cn/safe/zlwz/index.html",
+    "detail_links": 6,
+    "penalty_titles": 0,
+    "samples": [
+     "科技赋能深化跨境金融服务平台建设",
+     "强监管防风险有力有效维护外汇市场健康秩序",
+     "有序推进外汇领域改革开放促进跨境贸易和投融资便利化",
+     "稳步推进外汇领域高水平开放不断提升跨境投融资便利化水平",
+     "持续深化跨境贸易外汇便利化改革"
+    ],
+    "depth": 2,
+    "link_re": "https://www\\.safe\\.gov\\.cn/safe/\\d+/\\d+/\\d+\\.html",
+    "page2": "",
+    "titlehit": ""
+   }
+  ]
+ },
+ {
+  "name": "部-国家邮政局",
+  "home": "https://www.spb.gov.cn/",
+  "status": "ok",
+  "pages": 5,
+  "cols": [
+   {
+    "text": "政府信息公开",
+    "url": "https://www.spb.gov.cn/gjyzj/c100009/xxgk_index.shtml",
+    "detail_links": 1005,
+    "penalty_titles": 0,
+    "samples": [
+     "国务院办公厅关于印发《政府信息公开信息处理费管理办法》的通知",
+     "中华人民共和国政府信息公开条例",
+     "国务院办公厅关于施行《中华人民共和国政府信息公开条例》若干问题的意见",
+     "国家邮政局所属单位2026年度拟接收落户高校毕业生情况公示",
+     "国家邮政局关于发布《村级寄递物流综合服务站服务规范》邮政行业标准的通告"
+    ],
+    "depth": 2,
+    "link_re": "https://www\\.spb\\.gov\\.cn/gjyzj/c\\d+/\\d+/\\d+cd\\d+f\\d+e\\d+a\\d+a\\d+e\\d+ba\\d+\\.shtml",
+    "page2": "",
+    "titlehit": ""
+   }
+  ]
+ },
+ {
+  "name": "部-中国人民银行",
+  "home": "https://www.pbc.gov.cn/",
+  "status": "no_column",
+  "pages": 7,
+  "cols": []
+ },
+ {
+  "name": "部-中国民航局",
+  "home": "https://www.caac.gov.cn/",
+  "status": "no_column",
+  "pages": 1,
+  "cols": []
+ },
+ {
+  "name": "部-中国证监会",
+  "home": "https://www.csrc.gov.cn/",
+  "status": "no_column",
+  "pages": 19,
+  "cols": []
+ },
+ {
+  "name": "部-交通运输部",
+  "home": "https://www.mot.gov.cn/",
+  "status": "no_column",
+  "pages": 2,
+  "cols": []
+ },
+ {
+  "name": "部-住房和城乡建设部",
+  "home": "https://www.mohurd.gov.cn/",
+  "status": "no_column",
+  "pages": 2,
+  "cols": []
+ },
+ {
+  "name": "部-农业农村部",
+  "home": "https://www.moa.gov.cn/",
+  "status": "no_column",
+  "pages": 3,
+  "cols": []
+ },
+ {
+  "name": "部-国家中医药管理局",
+  "home": "https://www.natcm.gov.cn/",
+  "status": "unreachable",
+  "cols": []
+ },
+ {
+  "name": "部-国家体育总局",
+  "home": "https://www.sport.gov.cn/",
+  "status": "no_column",
+  "pages": 2,
+  "cols": []
+ },
+ {
+  "name": "部-国家卫生健康委",
+  "home": "https://www.nhc.gov.cn/",
+  "status": "no_column",
+  "pages": 1,
+  "cols": []
+ },
+ {
+  "name": "部-国家文物局",
+  "home": "https://www.ncha.gov.cn/",
+  "status": "unreachable",
+  "cols": []
+ },
+ {
+  "name": "部-国家林业和草原局",
+  "home": "https://www.forestry.gov.cn/",
+  "status": "no_column",
+  "pages": 2,
+  "cols": []
+ },
+ {
+  "name": "部-国家档案局",
+  "home": "https://www.saac.gov.cn/",
+  "status": "no_column",
+  "pages": 5,
+  "cols": []
+ },
+ {
+  "name": "部-国家烟草专卖局",
+  "home": "https://www.tobacco.gov.cn/",
+  "status": "unreachable",
+  "cols": []
+ },
+ {
+  "name": "部-国家疾病预防控制局",
+  "home": "https://www.ndcpa.gov.cn/",
+  "status": "no_column",
+  "pages": 4,
+  "cols": []
+ },
+ {
+  "name": "部-国家矿山安全监察局",
+  "home": "https://www.chinamine-safety.gov.cn/",
+  "status": "no_column",
+  "pages": 1,
+  "cols": []
+ },
+ {
+  "name": "部-国家粮食和物资储备局",
+  "home": "https://www.lswz.gov.cn/",
+  "status": "no_column",
+  "pages": 10,
+  "cols": []
+ },
+ {
+  "name": "部-国家统计局",
+  "home": "https://www.stats.gov.cn/",
+  "status": "no_column",
+  "pages": 2,
+  "cols": []
+ },
+ {
+  "name": "部-国家能源局",
+  "home": "https://www.nea.gov.cn/",
+  "status": "no_column",
+  "pages": 1,
+  "cols": []
+ },
+ {
+  "name": "部-国家药监局",
+  "home": "https://www.nmpa.gov.cn/",
+  "status": "no_column",
+  "pages": 1,
+  "cols": []
+ },
+ {
+  "name": "部-国家金融监督管理总局",
+  "home": "https://www.nfra.gov.cn/",
+  "status": "no_column",
+  "pages": 1,
+  "cols": []
+ },
+ {
+  "name": "部-国家铁路局",
+  "home": "https://www.nra.gov.cn/",
+  "status": "no_column",
+  "pages": 5,
+  "cols": []
+ },
+ {
+  "name": "部-应急管理部",
+  "home": "https://www.mem.gov.cn/",
+  "status": "no_column",
+  "pages": 2,
+  "cols": []
+ },
+ {
+  "name": "部-文化和旅游部",
+  "home": "https://www.mct.gov.cn/",
+  "status": "no_column",
+  "pages": 2,
+  "cols": []
+ },
+ {
+  "name": "部-水利部",
+  "home": "https://www.mwr.gov.cn/",
+  "status": "unreachable",
+  "cols": []
+ },
+ {
+  "name": "部-海关总署",
+  "home": "https://www.customs.gov.cn/",
+  "status": "unreachable",
+  "cols": []
+ },
+ {
+  "name": "部-生态环境部",
+  "home": "https://www.mee.gov.cn/",
+  "status": "no_column",
+  "pages": 1,
+  "cols": []
+ },
+ {
+  "name": "部-自然资源部",
+  "home": "https://www.mnr.gov.cn/",
+  "status": "no_column",
+  "pages": 2,
+  "cols": []
+ }
+]

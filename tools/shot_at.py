@@ -10,6 +10,11 @@ import re
 import subprocess
 import sys
 
+try:
+    from _stash import stash          # 直接运行 tools/xxx.py 时，本目录在 sys.path[0]
+except ImportError:                   # 被当包导入时
+    from tools._stash import stash
+
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 CHROME = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
 OUT = "/Users/luochen/WorkBuddy/Claw/_qa/shots"
@@ -19,11 +24,14 @@ def shot(page, sel_index, out, h=1500, w=1440):
     path = os.path.join(ROOT, page)
     html = open(path, encoding="utf-8").read()
     tmp = os.path.join(os.path.dirname(path), "._shot_tmp.html")
+    # ⚠️ 不是所有页面都有 <main>：analysis/ 下的专题长文骨架是 .wrap > .art，
+    #    只认 main 会静默拍到页面顶部（看不出问题，以为截图成功）。
+    #    按 main → .art → .wrap 依次回退。
     js = ("<script>window.addEventListener('load',function(){"
-          "var m=document.querySelector('main');if(!m)return;"
+          "var m=document.querySelector('main')||document.querySelector('.art')"
+          "||document.querySelector('.wrap');if(!m)return;"
           "var c=[].slice.call(m.children);"
           f"c.slice(0,{sel_index}).forEach(function(e){{e.style.display='none';}});"
-          "document.querySelectorAll('.pagehead .lead,[class*=notice]').forEach(function(e){});"
           "});</script>")
     k = html.rfind("</body>")
     open(tmp, "w", encoding="utf-8").write(
@@ -36,7 +44,7 @@ def shot(page, sel_index, out, h=1500, w=1440):
                         f"--screenshot={os.path.join(OUT, out)}",
                         "file://" + tmp], capture_output=True, timeout=120)
     finally:
-        os.remove(tmp)
+        stash(tmp)
     print(out, os.path.getsize(os.path.join(OUT, out)) // 1024, "KB")
 
 

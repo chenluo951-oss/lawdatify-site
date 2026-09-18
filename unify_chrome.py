@@ -30,6 +30,7 @@ PAGES = [
     "news/actions.html",
     "analysis/index.html",
     "analysis/pi-audit.html",
+    "analysis/penalty-read.html",
     "analysis/ai-label.html",
     "analysis/food-label.html",
     "analysis/app-violation-pattern.html",
@@ -127,6 +128,10 @@ STYLE_RE = re.compile(r'href="((?:\.\./)?assets/style\.css)(?:\?[^"]*)?"')
 # 法条悬浮卡组件（P1-1）：全站注入一个 defer 脚本；数据 kb/arts.js 由组件**按需**加载
 # （页面里真的出现《XX 法》第 X 条才拉，首页这类页面不白付 366 KB）。
 ARTJS_RE = re.compile(r'[ \t]*<script[^>]*src="[^"]*assets/art-card\.js[^"]*"[^>]*>\s*</script>\n?')
+# 设计系统 v3.1 动效层（2026-09-18）：扫光带 / 底边跑光 / 数字滚动 / 滚动入场 /
+# 指针高光 / 条形图生长 / 阅读进度条 / 导航毛玻璃。全部是装饰性动效，脚本不到时页面
+# 退回静态态（CSS 里 .fx-* 一律由它自己加 class 才生效）。同样先清后注入，保证幂等。
+FXJS_RE = re.compile(r'[ \t]*<script[^>]*src="[^"]*assets/fx\.js[^"]*"[^>]*>\s*</script>\n?')
 
 
 def _mtime(name):
@@ -200,9 +205,11 @@ def process(rel: str, do_write: bool) -> str:
     # 法条悬浮卡：先清掉旧标签再补一次，保证路径与版本号随部署更新（幂等）
     # ARTJS_RE 也负责清掉历史误注入到 JS 字符串里的那份（见 body_end 的注释）。
     new = ARTJS_RE.sub("", new)
+    new = FXJS_RE.sub("", new)
     p = "../" * rel.count("/")
     tag = (f'<script src="{p}assets/art-card.js?v={_mtime("art-card.js")}" '
-           f'data-arts="{p}kb/arts.js?v={_mtime_arts()}" defer></script>')
+           f'data-arts="{p}kb/arts.js?v={_mtime_arts()}" defer></script>\n'
+           f'<script src="{p}assets/fx.js?v={_mtime("fx.js")}" defer></script>')
     i = body_end(new)
     if i >= 0:
         new = new[:i] + tag + "\n" + new[i:]
