@@ -258,23 +258,60 @@ def render_mod_entries():
 
 
 # ---------------------------------------------------------------- 最新动态流
+def load_batch():
+    """读「今日入库批次单」（由 build_updates.py 写入，口径只此一份）。
+
+    首页列表按条目日期排序，天生看不出「今天采集了什么」；批次单给出的是
+    **入库日**口径，两者相加才回答得了「今天更新了几条」。
+    """
+    try:
+        with open(os.path.join(HERE, "sources", "news", "batch.json"),
+                  encoding="utf-8") as f:
+            d = json.load(f)
+        return d if isinstance(d, dict) else {}
+    except (OSError, ValueError):
+        return {}
+
+
 def render_feed(verified, n=10):
+    b = load_batch()
+    n_new = int(b.get("n") or 0)
+    # ⚠️ 批次单是上一次 build_updates 留下的文件：若它不是今天写的，就绝不能自称
+    #「今日」（构建顺序被手工打乱时最容易踩到）。此时降级为「最近批次」，仍报真数。
+    batch_is_today = (bool(b.get("is_today"))
+                      and b.get("updated") == date.today().isoformat())
+    new_titles = set(b.get("titles") or []) if n_new else set()
+
+    head = ""
+    if n_new:
+        # 今天没采到就如实说「最近批次」，绝不挂「今日」（同 build_updates 的纪律）
+        word = "今日" if batch_is_today else "最近批次"
+        head = (
+            '<div class="feed-today">'
+            f'<span class="ft-n">{n_new}</span>'
+            f'<span class="ft-l">{word}新增合规动态'
+            f'（入库批次 {esc(b.get("batch") or "")}）</span>'
+            '<a class="ft-a" href="news/today.html">逐条查看 →</a></div>'
+        )
+
     lst = sorted(verified, key=lambda x: (x["date"], x.get("issue", "")),
                  reverse=True)[:n]
     rows = []
     for it in lst:
         color = DOMAIN_COLOR.get(it["domain"], "#1b4f8a")
         wx = '<span class="hl-wx">公众号</span>' if it.get("wx_id") else ""
+        fresh = ('<span class="hl-new">今日入库</span>'
+                 if it["title"] in new_titles else "")
         rows.append(
             f'<a class="hl" href="news/index.html#g-{esc(it["domain"])}">'
             f'<span class="hl-d" style="background:{color}">{esc(it["domain"])}</span>'
             f'<span class="hl-t">{esc(it["title"])}</span>'
-            f'{wx}'
+            f'{fresh}{wx}'
             f'<span class="hl-m">{esc(it["date"])}</span></a>'
         )
     more = (f'<div class="feed-more"><a href="news/index.html">查看全部 '
             f'{len(verified)} 条合规动态 →</a></div>')
-    return f'<div class="hlist">{"".join(rows)}</div>{more}'
+    return f'{head}<div class="hlist">{"".join(rows)}</div>{more}'
 
 
 # ---------------------------------------------------------------- 全球地图元数据

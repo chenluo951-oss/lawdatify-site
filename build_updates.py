@@ -329,6 +329,26 @@ def main():
     today_nat = [x for x in nat if (x.get("collected") or "") == nat_batch] if nat_batch else []
     nat_new = sorted(today_nat, key=lambda x: (x.get("date") or ""), reverse=True)
 
+    # ---- 批次单（供首页显式标注「今日新增 N 条」）----
+    # 首页「最新合规动态」按**条目日期**倒序取前 10，而今天入库的条目日期往往早于
+    # 今天（机关官宣在前、本站采集在后），于是首页完全看不出"今天做了什么" ——
+    # 用户 2026-09-18 就是据此质疑「怎么就更新了两条」。这里把批次事实落成一个小
+    # 文件，口径**只此一份**（本脚本），build_home.py 只读不算，避免两页各算各的。
+    try:
+        _nd = os.path.join(HERE, "sources", "news")
+        if not os.path.isdir(_nd):
+            os.makedirs(_nd)
+        with open(os.path.join(_nd, "batch.json"), "w", encoding="utf-8") as f:
+            json.dump({
+                "updated": TODAY_S,
+                "batch": nat_batch,
+                "is_today": nat_is_today,
+                "n": len(nat_new),
+                "titles": [x.get("title") or "" for x in nat_new if x.get("title")],
+            }, f, ensure_ascii=False, indent=1)
+    except OSError as e:
+        print(f"  ! 批次单写入失败（首页将不显示今日新增）：{e}")
+
     # --- 生效时间轴 ---
     def soon(days_lo, days_hi):
         out = []
@@ -472,10 +492,13 @@ def main():
         parts.append('<p class="lead">本批次无新增动态，可查看下方法规标准增量与监管节点。</p>')
 
     # 1. 新增（标题写明真实总量；列表截断时说明本页只列示多少条）
+    # ⚠️ 标题必须写明统计对象是「法规 / 标准库」——原名「最新收录条目」与上方
+    # 「今日新增合规动态 N 条」并排时，读者会把它当成动态增量，于是出现
+    # 「上面 9 条、下面 0 条」的观感矛盾（用户 2026-09-18 报障）。
     if no_base:
-        _t1 = "最新收录条目（无可用基线，本轮不报增量）"
+        _t1 = "法规 / 标准收录（无可用基线，本轮不报增量）"
     else:
-        _t1 = f"最新收录条目（新增 {n_added_all} 条" + \
+        _t1 = f"法规 / 标准收录（新增 {n_added_all} 条" + \
               (f"，本页列示最新 {len(added)} 条）" if up_trunc else "）")
     parts.append(f'<div class="section-title"><span class="bar"></span>{_t1}</div>')
     if no_base:
@@ -486,7 +509,8 @@ def main():
         for it in added:
             parts.append(item_row(it, '<span class="chip chip-new">NEW</span>'))
     else:
-        parts.append('<p class="lead">本期无新增收录。</p>')
+        parts.append('<p class="lead">本期法规 / 标准条目库无新增收录'
+                     '（合规动态增量见上方「今日新增合规动态」）。</p>')
 
     # 2. 变更
     if changed:

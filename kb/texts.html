@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>法规与标准原文 · 合规无终点</title>
 <meta name="description" content="法规库的原文阅读层：法律、行政法规、部门规章、规范性文件与国家标准、行业标准、团体标准的正文，按官方发文版式排印，可在站内直接阅读、复制、下载与打印。">
-<link rel="stylesheet" href="../assets/style.css?v=1789643457">
+<link rel="stylesheet" href="../assets/style.css?v=1789711016">
 <style>/* ================= 原文阅读器：公文版式 + 标准版式 ================= */
 .rd{display:grid;grid-template-columns:332px 1fr;gap:26px;align-items:start}
 @media(max-width:960px){.rd{grid-template-columns:1fr}}
@@ -26,7 +26,7 @@
   background:#fff;color:var(--muted);cursor:pointer;white-space:nowrap;font-family:var(--sans)}
 .rd-chip.on{background:var(--ink);border-color:var(--ink);color:#fff}
 .rd-count{font-size:12.5px;color:var(--faint);margin:0 0 8px}
-.rd-list{overflow:auto;flex:1;margin:0;padding:0;list-style:none}
+.rd-list{overflow:auto;flex:1 1 auto;min-height:0;margin:0;padding:0;list-style:none}
 .rd-list li{margin:0}
 .rd-list button{display:block;width:100%;text-align:left;background:none;border:0;cursor:pointer;
   padding:8px 10px;border-radius:8px;font-size:13.5px;line-height:1.5;color:inherit;font-family:var(--sans)}
@@ -36,9 +36,11 @@
 .rd-list .lv{font-size:11.5px;color:var(--faint);margin-left:6px;white-space:nowrap}
 .rd-main{min-height:460px}
 
-/* 工具条 */
-.rd-bar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;background:#fff;
-  border:1px solid var(--line);border-radius:11px;padding:9px 12px;margin-bottom:16px}
+/* 工具条：吸附在顶栏下方，滚动时始终可点（原来会随正文滚走，读长法要回头找工具）。 */
+.rd-bar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;background:rgba(255,255,255,.96);
+  backdrop-filter:saturate(160%) blur(6px);
+  border:1px solid var(--line);border-radius:11px;padding:7px 12px;margin-bottom:14px;
+  position:sticky;top:70px;z-index:12}
 .rd-seg{display:flex;border:1px solid var(--line);border-radius:8px;overflow:hidden}
 .rd-seg button{border:0;background:#fff;color:var(--ink-2);font-size:13px;padding:6px 12px;
   cursor:pointer;font-family:var(--sans);border-right:1px solid var(--line)}
@@ -49,16 +51,21 @@
 .rd-btn:hover{border-color:var(--brand);color:var(--brand)}
 .rd-sp{flex:1}
 .rd-hint{font-size:12px;color:var(--faint)}
-/* 返回列表 + 当前文档名 + 章节目录（左栏目录态） */
+/* 返回列表 + 当前文档名 + 章节目录（左栏目录态）
+   ⚠️ 这三行固定高度必须写死 flex:0 0 auto：左栏是 flex 纵向容器，
+   `.rd-cur` 带 overflow:hidden（自动最小尺寸 = 0）又被 max-height 限制，
+   一旦容器空间不够就会被当成可压缩项压到零头高度 —— 表现为文档名
+   **上半个字被裁掉**（用户 2026-09-18 截图报障）。只有章节目录该滚动。 */
 .rd-back{display:block;width:100%;box-sizing:border-box;text-align:left;font-size:13px;
-  padding:8px 11px;margin:0 0 11px;border-radius:9px;border:1px solid var(--line);
+  flex:0 0 auto;padding:8px 11px;margin:0 0 11px;border-radius:9px;border:1px solid var(--line);
   background:#fff;color:var(--brand);cursor:pointer;font-family:var(--sans);font-weight:600}
 .rd-back:hover{background:#f1f6fd;border-color:var(--brand)}
-.rd-cur{font-size:13.5px;font-weight:700;line-height:1.5;color:var(--ink);margin:0 0 7px;
-  display:-webkit-box;-webkit-line-clamp:2;max-height:3em;-webkit-box-orient:vertical;overflow:hidden}
-.rd-tochd{font-size:11.5px;color:var(--faint);margin:0 0 9px;padding:0 0 9px;
+.rd-cur{font-size:14px;font-weight:700;line-height:1.45;color:var(--ink);margin:0 0 7px;
+  flex:0 0 auto;display:-webkit-box;-webkit-line-clamp:2;max-height:2.9em;
+  -webkit-box-orient:vertical;overflow:hidden}
+.rd-tochd{font-size:11.5px;color:var(--faint);flex:0 0 auto;margin:0 0 9px;padding:0 0 9px;
   border-bottom:1px solid var(--line-2)}
-.rd-toclist{overflow:auto;flex:1;margin:0;padding:0;list-style:none}
+.rd-toclist{overflow:auto;flex:1 1 auto;min-height:0;margin:0;padding:0;list-style:none}
 .rd-toclist li{margin:0}
 .rd-toclist a{display:block;padding:6px 10px;font-size:13px;line-height:1.5;color:var(--ink-2);
   border-left:2px solid transparent;border-radius:0 7px 7px 0;cursor:pointer}
@@ -68,10 +75,22 @@
 .rd-toclist a.lv3{padding-left:38px;font-size:12.5px}
 .rd-toclist a.lv4{padding-left:50px;font-size:12.5px;color:var(--muted)}
 
-/* 纸张 */
-.paper{background:#fff;border:1px solid var(--line);border-radius:6px;max-width:920px;margin:0 auto;
-  box-shadow:0 1px 2px rgba(16,24,40,.05),0 12px 34px rgba(16,24,40,.07);padding:52px 60px 64px}
-@media(max-width:640px){.paper{padding:28px 20px 36px}}
+/* 纸张：铺满右栏（原来写死 920px + 52/60 内边距，在宽屏上留出大片空白，
+   用户 2026-09-18 反馈「阅读器只有一个小框」）。行宽靠 .gw/.st/.cm 自身的
+   字号与 max-width 控制，不再让纸张居中缩在一角。 */
+.paper{background:#fff;border:1px solid var(--line);border-radius:6px;max-width:100%;margin:0;
+  box-shadow:0 1px 2px rgba(16,24,40,.05),0 12px 34px rgba(16,24,40,.07);padding:38px 44px 52px}
+.paper>.gw,.paper>.cm{max-width:1080px;margin:0 auto}
+.paper>.st{max-width:100%}
+@media(max-width:640px){.paper{padding:24px 16px 32px}}
+
+/* 专注阅读：收起左栏与页头，让正文占满整幅（工具栏右侧按钮切换）。
+   长法条通读时最实用 —— 一屏多出两百多像素正文。 */
+body.rd-focus .rd{grid-template-columns:1fr}
+body.rd-focus .rd-side{display:none}
+body.rd-focus .pagehead,body.rd-focus .rd-note,body.rd-focus .mod-bound{display:none}
+body.rd-focus .wrap{padding-top:14px}
+body.rd-focus .paper{max-width:100%;padding:44px 56px 56px}
 
 /* 文末信息 */
 .rd-meta{font-size:13px;color:var(--muted);line-height:1.95;margin:34px 0 0;
@@ -173,9 +192,92 @@
 .rd-splash{padding:56px 6px;color:var(--muted);font-size:14.5px;line-height:2.1}
 .rd-splash b{color:var(--ink)}
 
+/* ================= 法条 → 站内关联（案例 / 义务 / 专题分析） =================
+   数据：kb/links.js（window.LD_LINKS，由 tools/build_text_links.py 生成）。
+   用户 2026-09-18：读条文时看不到站内有没有引用它的处罚案例、有没有围绕
+   这一条写的分析 —— 于是给每条被引用过的条文挂一个可点的计数徽标，
+   点开右侧抽屉看明细，正文本身不动（复制全文与 Word 导出都取原始文本）。 */
+.rd-btn.on{background:var(--brand);border-color:var(--brand);color:#fff}
+.gw-n[data-rel],.cm-n[data-rel]{cursor:pointer;border-bottom:1px dotted rgba(15,40,70,.45)}
+.gw-n[data-rel]:hover,.cm-n[data-rel]:hover{background:#eef5ff}
+/* 徽标用伪元素渲染：不进正文 DOM，复制 / 导出 / 检索都不受污染 */
+.gw-n[data-rel]:after,.cm-n[data-rel]:after{
+  content:attr(data-reltxt);font-family:var(--sans);font-size:10.5px;font-weight:600;
+  color:var(--brand);background:#eaf2fd;border:1px solid #cfe0f7;border-radius:999px;
+  padding:0 6px;margin-left:8px;letter-spacing:0;vertical-align:2px;
+  -webkit-text-decoration:none;text-decoration:none;white-space:nowrap}
+body.rd-no-rel .gw-n[data-rel]:after,body.rd-no-rel .cm-n[data-rel]:after{display:none}
+body.rd-no-rel .gw-n[data-rel],body.rd-no-rel .cm-n[data-rel]{cursor:inherit;border-bottom:0}
+
+/* 文末「本站关联」：法规级清单 */
+.rd-docrel{max-width:1080px;margin:34px auto 0;padding:18px 20px 16px;border:1px solid var(--line);
+  border-radius:12px;background:linear-gradient(180deg,#fafcff,#fff);font-family:var(--sans)}
+.rd-docrel h4{font-family:var(--sans);font-size:14px;margin:0 0 4px;display:flex;
+  align-items:center;gap:8px}
+.rd-docrel h4 em{font-style:normal;font-size:11.5px;font-weight:600;color:var(--brand);
+  background:#eaf2fd;border-radius:999px;padding:2px 8px}
+.rd-docrel .dr-hint{font-size:12.5px;color:var(--faint);margin:0 0 12px}
+.rd-docrel .dr-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}
+.rd-docrel .dr-col{border:1px solid var(--line);border-radius:9px;padding:10px 12px;background:#fff}
+.rd-docrel .dr-col>b{display:block;font-size:12.5px;color:var(--ink-2);margin:0 0 7px;
+  padding:0 0 6px;border-bottom:1px solid var(--line-2)}
+.rd-docrel .dr-col>b em{font-style:normal;color:var(--brand)}
+.rd-docrel ul{margin:0;padding:0;list-style:none}
+.rd-docrel li{font-size:12.5px;line-height:1.62;margin:0 0 6px;padding-left:12px;position:relative}
+.rd-docrel li:before{content:"·";position:absolute;left:2px;color:var(--faint)}
+/* ⚠️ 条目名必须独占一行：案例名与「机关 + 日期」挤在同一行时，换行会把
+   日期甩到句子中间（用户 2026-09-18 截图里看着像错版）。让 <a> 成块，
+   两条 <i> 仍在同一行。 */
+.rd-docrel li a{display:block;color:var(--ink);text-decoration:none}
+.rd-docrel li a:hover{color:var(--brand);text-decoration:underline}
+.rd-docrel li i{font-style:normal;color:var(--faint);margin-left:5px;font-size:11.5px}
+.rd-docrel .dr-more{font-size:12px;color:var(--faint);margin:6px 0 0}
+
+/* 右侧抽屉：本条关联明细 */
+.rel-mask{position:fixed;inset:0;background:rgba(16,24,40,.30);z-index:78;
+  opacity:0;pointer-events:none;transition:opacity .18s}
+body.rd-rel-open .rel-mask{opacity:1;pointer-events:auto}
+.rel-drawer{position:fixed;top:0;right:0;height:100%;width:min(440px,94vw);background:#fff;
+  border-left:1px solid var(--line);box-shadow:-12px 0 40px rgba(16,24,40,.16);z-index:80;
+  display:flex;flex-direction:column;transform:translateX(103%);
+  transition:transform .22s cubic-bezier(.4,0,.2,1)}
+body.rd-rel-open .rel-drawer{transform:none}
+.rel-hd{display:flex;align-items:flex-start;gap:10px;padding:16px 18px 12px;
+  border-bottom:1px solid var(--line-2);flex:0 0 auto}
+.rel-hd .rh-t{flex:1;min-width:0}
+.rel-hd .rh-t b{display:block;font-size:15px;line-height:1.5}
+.rel-hd .rh-t span{display:block;font-size:12.5px;color:var(--faint);margin-top:3px}
+.rel-x{border:1px solid var(--line);background:#fff;border-radius:8px;width:30px;height:30px;
+  cursor:pointer;color:var(--ink-2);font-size:15px;line-height:1;flex:0 0 auto}
+.rel-x:hover{border-color:var(--brand);color:var(--brand)}
+.rel-bd{flex:1 1 auto;overflow:auto;padding:14px 18px 22px;font-family:var(--sans)}
+.rel-bd h5{font-size:12.5px;color:var(--ink-2);margin:0 0 8px;display:flex;align-items:center;gap:7px}
+.rel-bd h5 em{font-style:normal;font-size:11px;font-weight:700;color:var(--brand);
+  background:#eaf2fd;border-radius:999px;padding:1px 7px}
+.rel-q{font-family:"FangSong","仿宋_GB2312","Songti SC",serif;font-size:15px;line-height:1.85;
+  color:#101418;background:#fafbfd;border-left:3px solid var(--brand);border-radius:0 8px 8px 0;
+  padding:11px 13px;margin:0 0 18px;max-height:260px;overflow:auto}
+.rel-sec{margin:0 0 18px}
+.rel-sec ul{margin:0;padding:0;list-style:none}
+.rel-sec li{border:1px solid var(--line);border-radius:9px;padding:9px 11px;margin:0 0 8px;
+  font-size:13px;line-height:1.6}
+.rel-sec li a{color:var(--ink);text-decoration:none;font-weight:600}
+.rel-sec li a:hover{color:var(--brand)}
+.rel-sec li em{display:block;font-style:normal;font-size:11.5px;color:var(--faint);margin-top:4px}
+.rel-sec li.ref-li{border-style:dashed;background:#fafcff}
+.rel-sec li.ref-li b{font-weight:700;display:block;font-size:12.5px}
+.rel-sec li.ref-li span{font-size:12px;color:var(--muted);display:block;margin-top:3px}
+.rel-none{font-size:12.5px;color:var(--faint);line-height:1.8;margin:0}
+.rel-ft{flex:0 0 auto;border-top:1px solid var(--line-2);padding:11px 18px;
+  display:flex;gap:10px;flex-wrap:wrap;font-size:12.5px;font-family:var(--sans)}
+.rel-ft a{color:var(--brand);text-decoration:none}
+.rel-ft a:hover{text-decoration:underline}
+@media(max-width:640px){.rel-drawer{width:100%;border-left:0}}
+
 @media print{
   .topnav,.subnav,.mod-bound,footer,.rd-side,.rd-bar,.rd-toc,.pagehead,.rd-note,
-  #toTop{display:none !important}
+  #toTop,.rel-drawer,.rel-mask,.rd-docrel{display:none !important}
+  .gw-n[data-rel]:after,.cm-n[data-rel]:after{display:none !important}
   body{background:#fff}
   .wrap{max-width:100%;padding:0}
   .paper{border:0;box-shadow:none;padding:0;max-width:100%}
@@ -236,7 +338,8 @@
   <div class="crumb"><a href="../index.html">首页</a> / <a href="index.html">合规知识库</a> / <a href="standards.html">法规库</a> / 法规与标准原文</div>
   <h1>法规与标准原文</h1>
   <p>法规与标准正文统一按官方发文版式排印：标题居中、层级清晰、条文可定位。<br>
-     左侧按「法规 / 标准」与效力层级筛选，正文支持复制全文、下载 TXT、导出 Word 与打印存 PDF。</p>
+     左侧按「法规 / 标准」与效力层级筛选；条文号上的蓝色徽标可点开看引用该条的处罚案例与依据该条的合规义务，文末给出整部法规的关联清单。
+     正文支持复制全文、下载 TXT、导出 Word 与打印存 PDF，长文可切「专注阅读」。</p>
 </div></div>
 
 <main class="wrap">
@@ -282,6 +385,11 @@
   </div>
   <div class="foot-meta">数据更新至 <span class="upd"><!-- UPDATED:START -->2026-09-18<!-- UPDATED:END --></span> · 本站内容不构成法律意见 · © 2026 合规无终点</div>
 </div></footer>
+
+<!-- 本条关联抽屉（内容由 JS 渲染；数据来自 kb/links.js） -->
+<div class="rel-mask" id="rel-mask"></div>
+<aside class="rel-drawer" id="rd-rel" role="dialog" aria-label="本条关联"></aside>
+
 <script>(function(){
   var IX=null, CUR=null, PARTS={}, KIND='', LV='', MODE='', HL='', SZ=0;
   var $=function(s){return document.querySelector(s)};
@@ -307,6 +415,88 @@
   }
 
   /* ---------- 结构识别 ---------- */
+  var RE_TOCLINE=/^目\s*[录次]$/;
+  var RE_CHAPLN=/^第([一二三四五六七八九十百零〇\d]+)([章编节])\s*(.{0,26})$/;
+  var CN_D={'〇':0,'零':0,'一':1,'二':2,'三':3,'四':4,'五':5,'六':6,'七':7,'八':8,'九':9};
+  function cnNum(s){
+    if(/^\d+$/.test(s)) return parseInt(s,10);
+    var total=0,num=0;
+    for(var i=0;i<s.length;i++){
+      var c=s.charAt(i);
+      if(CN_D[c]!==undefined) num=CN_D[c];
+      else if(c==='十'){ total+=(num||1)*10; num=0; }
+      else if(c==='百'){ total+=(num||1)*100; num=0; }
+      else return 0;
+    }
+    return total+num;
+  }
+  /* 正文自带「目录」段：官方文本里法条前普遍先排一份目录，逐条与后面的章节
+     标题**同名**。若照收，章节目录会整体翻倍（《农业法》14 章被列成 28 节，
+     《食品安全法》10 章变 20 节，用户 2026-09-18 报障），正文里也会多出一截
+     只有标题的目录页。两条判据，先用严的：
+       ① 标题串「自我重复」——把全文所有章/节标题按序抽出，若前 k 个与紧接着的
+          k 个逐字相同，则前 k 个就是目录项（节也列进目录的法都用这条）。
+       ② 序号递增段回退——目录只列章不列节时标题串对不齐，改看「第X章」的序号：
+          若出现两段各自严格递增、且第二段从第一段末尾回退，则第一段是目录。
+     ⚠️ 两条都要求成段（≥3 项）才动手，避免把正常法条正文里的孤立小标题误判。 */
+  function dropToc(bs){
+    var idx=[], txt=[], i, j;
+    for(i=0;i<bs.length;i++){
+      if(bs[i].used) continue;
+      if(bs[i].type!=='h1'&&bs[i].type!=='h2') continue;
+      var t=(bs[i].text||'').replace(/\s/g,'');
+      if(!t||t.length>40||/[。；：]/.test(t)) continue;
+      idx.push(i); txt.push(t);
+    }
+    var n=txt.length, from=-1, to=-1, k;
+    if(n>=6){
+      for(k=Math.floor(n/2);k>=3;k--){
+        var ok=true;
+        for(j=0;j<k;j++){ if(txt[j]!==txt[k+j]){ ok=false; break; } }
+        if(ok){ from=idx[0]; to=idx[k]; break; }
+      }
+    }
+    if(from<0){
+      var ch=[];
+      for(i=0;i<bs.length;i++){
+        if(bs[i].used) continue;
+        var tx=(bs[i].text||'').trim();
+        var m=tx.match(RE_CHAPLN);
+        if(!m||m[2]==='节') continue;
+        if(tx.length>32||/[。；]/.test(tx)) continue;
+        ch.push({i:i,n:cnNum(m[1])});
+      }
+      if(ch.length>=6){
+        var runs=[], cur=[ch[0]];
+        for(i=1;i<ch.length;i++){
+          if(ch[i].n>ch[i-1].n) cur.push(ch[i]);
+          else { runs.push(cur); cur=[ch[i]]; }
+        }
+        runs.push(cur);
+        if(runs.length>=2&&runs[0].length>=3&&runs[1].length>=3&&
+           runs[1][0].n<=runs[0][runs[0].length-1].n){
+          from=runs[0][0].i; to=runs[1][0].i;
+        }
+      }
+    }
+    if(from<0) return false;
+    for(i=from;i<to;i++) bs[i].used=1;
+    /* 目录标记本身：常单独成段（「目　录」），也常与上一段黏在一起
+       （「…第二次修正）目录」）——后者只切掉尾部两个字，不整段丢弃。 */
+    if(from>0&&!bs[from-1].used){
+      var p=bs[from-1], t0=(p.text||'').replace(/\s+$/,'');
+      if(/目\s*[录次]$/.test(t0)){
+        if(t0.length<=6) p.used=1;
+        else{
+          p.text=t0.replace(/[ \t\u3000]*目\s*[录次]$/,'');
+          if(p.lines&&p.lines.length)
+            p.lines[p.lines.length-1]=p.lines[p.lines.length-1]
+              .replace(/[ \t\u3000]*目\s*[录次]$/,'');
+        }
+      }
+    }
+    return true;
+  }
   function blocks(t){
     var out=[], ps=t.split(/\n{2,}/);
     for(var i=0;i<ps.length;i++){
@@ -325,6 +515,7 @@
       else if(lines.length>1&&RE_MULTI.test(raw)) type='table';
       out.push({type:type,text:flat,lines:lines});
     }
+    dropToc(out);
     return out;
   }
   function artNo(t){ var m=t.match(RE_ARTNO); return m?m[0]:''; }
@@ -556,6 +747,154 @@
 
   function baseSize(x,mode){ return mode==='cm'?16:(x.kind==='std'?16:20.5); }
 
+  /* ---------- 法条 → 站内关联（kb/links.js，由 tools/build_text_links.py 生成） ----------
+     站内三份资产（案例库 / 义务清单 / 专题分析）本来互相独立，读一条法条时看不出
+     谁引用过它。这里把条文号变成关联入口：徽标显示「案例 N · 义务 M」，点开右侧抽屉。
+     ⚠️ 法规名归一必须与 tools/build_article_index.py、assets/art-card.js 同一套。 */
+  var LINKS=null, LINKS_TRIED=false, REL_ON=true;
+  function lawKeyOf(name){
+    var s=String(name||'').replace(/[\s\u3000《》]/g,'');
+    s=s.replace(/^中华人民共和国/,'');
+    s=s.replace(/[（(][^）)]{0,12}(修订|修正|草案|征求意见稿)[）)]$/,'');
+    return s.length<3?'':s;
+  }
+  function loadLinks(){
+    if(LINKS||LINKS_TRIED){ decorate(); return; }
+    LINKS_TRIED=true;
+    var s=document.createElement('script');
+    s.src='links.js';                      // 与 texts.html 同级（kb/links.js）
+    s.async=true;
+    s.onload=s.onerror=function(){
+      LINKS=window.LD_LINKS||{laws:{},arts:{}};
+      decorate();
+    };
+    document.head.appendChild(s);
+  }
+  function relOf(art){
+    if(!LINKS||!CUR||!art) return null;
+    var k=lawKeyOf(CUR.name); if(!k) return null;
+    return (LINKS.arts||{})[k+'|'+art]||null;
+  }
+  function docRel(){
+    if(!LINKS||!CUR) return null;
+    var k=lawKeyOf(CUR.name); if(!k) return null;
+    return (LINKS.laws||{})[k]||null;
+  }
+  function relTxt(r){
+    var s=[],a=(r.c||[]).length,w=(r.w||[]).length;
+    if(a) s.push('案例 '+a);
+    if(w) s.push('义务 '+w);
+    return s.join(' · ');
+  }
+  /* 给正文里的条文号挂关联徽标（徽标是 CSS 伪元素，正文 DOM 不变） */
+  function decorate(){
+    var body=$('#rd-body'); if(!body) return;
+    var art=body.querySelectorAll('[data-art]');
+    for(var i=0;i<art.length;i++){
+      var blk=art[i], tag=blk.querySelector('.gw-n,.cm-n,.st-n')||blk;
+      var r=relOf(blk.getAttribute('data-art'));
+      var t=r?relTxt(r):'';
+      if(!t){
+        tag.removeAttribute('data-rel'); tag.removeAttribute('data-reltxt');
+        tag.removeAttribute('data-art'); continue;
+      }
+      tag.setAttribute('data-rel','1');
+      tag.setAttribute('data-reltxt',t);
+      tag.setAttribute('data-art',blk.getAttribute('data-art'));
+      tag.title='点击查看引用本条的案例与依据本条的义务';
+    }
+    /* 文末「本站关联」：links.js 是异步拉的，首屏渲染时数据常常还没到
+       —— 在这里补一次，避免「有徽标却没有文末清单」的半截状态。 */
+    var paper=body.parentNode;
+    if(paper&&!paper.querySelector('.rd-docrel')){
+      var h=docRelHtml();
+      if(h){
+        var meta=paper.querySelector('.rd-meta');
+        if(meta) meta.insertAdjacentHTML('beforebegin',h);
+        else paper.insertAdjacentHTML('beforeend',h);
+      }
+    }
+  }
+  function closeRel(){
+    document.body.classList.remove('rd-rel-open');
+    var dr=$('#rd-rel'); if(dr) dr.innerHTML='';
+  }
+  function openRel(art){
+    var r=relOf(art); if(!r) return;
+    var dr=$('#rd-rel'); if(!dr) return;
+    var blk=document.querySelector('#rd-body [data-art="'+String(art).replace(/"/g,'')+'"]');
+    var q=blk?blk.textContent.replace(/\s+/g,' ').trim():'';
+    var law=docRel()||{};
+    var h='<div class="rel-hd"><div class="rh-t"><b>'+esc(art)+' · 本条关联</b>'+
+      '<span>'+esc(CUR.name)+'</span></div>'+
+      '<button class="rel-x" id="rel-x" type="button" title="关闭">&#215;</button></div>';
+    h+='<div class="rel-bd">';
+    h+='<div class="rel-q">'+esc(q)+'</div>';
+    if((r.c||[]).length){
+      h+='<div class="rel-sec"><h5>引用本条的处罚案例<em>'+r.c.length+' 条</em></h5><ul>';
+      for(var i=0;i<r.c.length;i++){ var c=r.c[i];
+        h+='<li><a href="cases.html#'+esc(c[0])+'" target="_blank" rel="noopener">'+esc(c[1])+'</a>'+
+           '<em>'+esc(c[2]||'')+(c[3]?' · '+esc(c[3]):'')+(c[4]?' · '+esc(c[4]):'')+'</em></li>'; }
+      h+='</ul></div>';
+    }
+    if((r.w||[]).length){
+      h+='<div class="rel-sec"><h5>依据本条的合规义务<em>'+r.w.length+' 项</em></h5><ul>';
+      for(var j=0;j<r.w.length;j++){ var w=r.w[j];
+        h+='<li class="ref-li"><b>'+esc(w[2])+'</b><span>'+esc(w[0])+' · '+esc(w[1])+'</span>'+
+           '<span><a href="duties.html'+esc(w[3])+'" target="_blank" rel="noopener">在合规义务清单中查看 &#8599;</a></span></li>'; }
+      h+='</ul></div>';
+    }
+    if(!(r.c||[]).length&&!(r.w||[]).length){
+      h+='<p class="rel-none">本条暂未关联到站内案例或义务。</p>';
+    }
+    if((law.a||[]).length){
+      h+='<div class="rel-sec"><h5>本法专题分析<em>'+law.a.length+' 篇</em></h5><ul>';
+      for(var m=0;m<law.a.length;m++){ var an=law.a[m];
+        h+='<li><a href="'+esc(an[1])+'" target="_blank" rel="noopener">'+esc(an[0])+'</a>'+
+           '<em>'+esc(an[2]||'')+'</em></li>'; }
+      h+='</ul></div>';
+    }
+    h+='</div><div class="rel-ft"><a href="texts.html#'+esc((docRel()||{}).d||'')+'|'+esc(art)+
+       '" target="_blank" rel="noopener">本条固定链接</a>'+
+       '<a href="citations.html" target="_blank" rel="noopener">高频引用法条</a>'+
+       (CUR.url?'<a href="'+esc(CUR.url)+'" target="_blank" rel="noopener">官方发布页 &#8599;</a>':'')+
+       '<span style="color:var(--faint)">条文逐字取自我站官方原文库</span></div>';
+    dr.innerHTML=h;
+    document.body.classList.add('rd-rel-open');
+    $('#rel-x').onclick=closeRel;
+  }
+  /* 文末「本站关联」：法规级清单 */
+  function docRelHtml(){
+    var r=docRel(); if(!r) return '';
+    var cs=r.c||[], ws=r.w||[], as=r.a||[];
+    if(!cs.length&&!ws.length&&!as.length) return '';
+    var cols='';
+    if(cs.length){
+      cols+='<div class="dr-col"><b>引用本法规的处罚案例 <em>'+cs.length+'</em></b><ul>';
+      for(var i=0;i<cs.length&&i<8;i++){ var c=cs[i];
+        cols+='<li><a href="cases.html#'+esc(c[0])+'" target="_blank" rel="noopener">'+esc(c[1])+
+              '</a><i>'+esc(c[2]||'')+'</i><i>'+esc(c[3]||'')+'</i></li>'; }
+      cols+='</ul>'+(cs.length>8?'<p class="dr-more">另有 '+(cs.length-8)+' 条，可在案例库按「依据」检索</p>':'')+'</div>';
+    }
+    if(ws.length){
+      cols+='<div class="dr-col"><b>依据本法规的合规义务 <em>'+ws.length+'</em></b><ul>';
+      for(var j=0;j<ws.length&&j<8;j++){ var w=ws[j];
+        cols+='<li><a href="duties.html'+esc(w[3])+'" target="_blank" rel="noopener">'+esc(w[2])+
+              '</a><i>'+esc(w[0])+'</i></li>'; }
+      cols+='</ul>'+(ws.length>8?'<p class="dr-more">另有 '+(ws.length-8)+' 项，见合规义务清单</p>':'')+'</div>';
+    }
+    if(as.length){
+      cols+='<div class="dr-col"><b>本法专题分析 <em>'+as.length+'</em></b><ul>';
+      for(var m=0;m<as.length;m++){ var an=as[m];
+        cols+='<li><a href="'+esc(an[1])+'" target="_blank" rel="noopener">'+esc(an[0])+
+              '</a><i>'+esc(an[2]||'')+'</i></li>'; }
+      cols+='</ul></div>';
+    }
+    return '<div class="rd-docrel"><h4>本站关联 <em>法条 → 案例 / 义务 / 分析</em></h4>'+
+      '<p class="dr-hint">下列内容取自本站案例库、合规义务清单与专题分析，均已与本法条建立引用关系；'+
+      '正文中带蓝色徽标的条文号可点开看单条关联。</p><div class="dr-grid">'+cols+'</div></div>';
+  }
+
   /* ---------- 左栏目录态 ----------
      用户 2026-09-17：点开一部法规后，章节目录要挪进左栏（原先是 .rd-toc 横铺在
      正文上方，既吃掉首屏又看不出层级），并给一个「返回列表」按钮。 */
@@ -630,6 +969,18 @@
     RAF=requestAnimationFrame(function(){ RAF=0; spy(); });
   },{passive:true});
 
+  /* 条文关联抽屉的开关：正文里的徽标、遮罩、关闭键都走这一处 */
+  document.addEventListener('click',function(e){
+    var t=e.target;
+    if(!t||!t.closest) return;
+    var el=t.closest('[data-rel="1"]');
+    if(el){ e.preventDefault(); openRel(el.getAttribute('data-art')); return; }
+    if(t.closest('.rel-x')||t.id==='rel-mask') closeRel();
+  });
+  document.addEventListener('keydown',function(e){
+    if(e.key==='Escape'||e.keyCode===27) closeRel();
+  });
+
   function render(){
     if(!CUR) return;
     var x=CUR, isStd=(x.kind==='std');
@@ -653,6 +1004,9 @@
         '<button class="rd-btn" id="rd-dl">下载 TXT</button>'+
         '<button class="rd-btn" id="rd-wd">下载 Word</button>'+
         '<button class="rd-btn" id="rd-pr">打印 / 存 PDF</button>'+
+        '<button class="rd-btn'+(REL_ON?' on':'')+'" id="rd-relbtn" '+
+          'title="显示 / 隐藏条文号上的关联徽标">关联案例 · 分析</button>'+
+        '<button class="rd-btn" id="rd-focus" title="收起左栏与页头，让正文占满整幅">专注阅读</button>'+
         '<span class="rd-sp"></span><span class="rd-hint">'+t.length.toLocaleString()+' 字</span>'+
         '</div>';
       var meta=[];
@@ -665,6 +1019,7 @@
       if(x.url) meta.push('<a href="'+esc(x.url)+'" target="_blank" rel="noopener">官方发布页 &#8599;</a>');
       $('#rd-main').innerHTML=bar+'<div class="paper">'+
         '<div class="'+cls+'" id="rd-body">'+r.html+'</div>'+
+        docRelHtml()+
         '<div class="rd-meta">'+meta.join(' · ')+'</div></div>';
       fillToc(r.chapters);
       document.title=x.name+' · 原文 · 合规无终点';
@@ -672,6 +1027,18 @@
       function applySize(){ $('#rd-body').style.fontSize=SZ+'px'; }
       $('#rd-plus').onclick=function(){ SZ=Math.min(27,SZ+1); applySize(); };
       $('#rd-minus').onclick=function(){ SZ=Math.max(13,SZ-1); applySize(); };
+      $('#rd-relbtn').onclick=function(){
+        REL_ON=!REL_ON;
+        document.body.classList.toggle('rd-no-rel',!REL_ON);
+        $('#rd-relbtn').className='rd-btn'+(REL_ON?' on':'');
+        if(!REL_ON) closeRel();
+      };
+      $('#rd-focus').onclick=function(){
+        var on=document.body.classList.toggle('rd-focus');
+        $('#rd-focus').className='rd-btn'+(on?' on':'');
+      };
+      if(!REL_ON) document.body.classList.add('rd-no-rel');
+      loadLinks();          // 条文关联徽标（links.js 只在第一次真正去拉）
       var segs=document.querySelectorAll('.rd-seg button[data-m]');
       for(var i=0;i<segs.length;i++){(function(b){
         b.onclick=function(){ MODE=b.getAttribute('data-m'); render(); };
@@ -762,8 +1129,11 @@
     $('#rd-main').innerHTML='<div class="rd-splash"><b>从左侧选择一部法规或标准</b><br>'+
       '共 '+IX.items.length+' 部原文（法规 '+IX._law+' 部 · 标准 '+IX._std+' 部）。'+
       '正文按官方发文版式排印，支持复制全文、下载 TXT、导出 Word 与打印存 PDF。<br>'+
+      '条文号上带蓝色徽标的，说明站内已有引用该条的处罚案例或依据该条的合规义务 —— 点开即看；'+
+      '文末「本站关联」给出整部法规的案例 / 义务 / 专题分析清单。<br>'+
+      '长文可点工具条「专注阅读」把左栏收起，正文占满整幅。<br>'+
       '外部可直接定位到条文：<code>texts.html#原文id|第X条</code></div>';
-    CUR=null; showPane('list'); renderList();
+    CUR=null; closeRel(); showPane('list'); renderList();
   }
 
   function open(hash){

@@ -1333,6 +1333,17 @@ table.dm tfoot td{background:#f5f8fc;font-size:11.5px;color:var(--ink-2);padding
 .feed-more a{color:var(--brand);font-weight:600;text-decoration:none}
 .hl-wx{display:inline-block;font-size:11px;font-weight:700;color:#92400e;background:#fef3c7;
   border-radius:6px;padding:2px 7px;margin-left:auto}
+/* 今日入库批次条 + 条目标记：首页列表按「条目日期」排序，看不出今天采集了什么，
+   这两处补的是**入库日**口径（批次数字由 build_updates.py 落盘，口径只此一份）。 */
+.feed-today{display:flex;align-items:center;gap:10px;background:linear-gradient(90deg,#eaf2fd,#f7fbff);
+  border:1px solid #cfe0f6;border-radius:10px;padding:9px 14px;margin:0 0 12px}
+.feed-today .ft-n{font-size:20px;font-weight:800;color:var(--brand);line-height:1}
+.feed-today .ft-l{font-size:13px;color:var(--ink-2);font-weight:600}
+.feed-today .ft-a{margin-left:auto;font-size:13px;font-weight:700;color:var(--brand);
+  text-decoration:none;white-space:nowrap}
+.feed-today .ft-a:hover{text-decoration:underline}
+.hl-new{display:inline-block;font-size:11px;font-weight:700;color:#0e5c3f;background:#dcf5e7;
+  border-radius:6px;padding:2px 7px;flex:0 0 auto}
 @media(max-width:760px){
   .kpi{grid-template-columns:repeat(2,1fr)}
   .dist-cols{grid-template-columns:1fr;gap:0}

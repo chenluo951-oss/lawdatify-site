@@ -84,6 +84,12 @@ STEPS = [
     #   它扫的是上一版页面里的引用，条号级引用本身很稳定，因此接受一天的滞后，
     #   不必为了「当天闭环」把案例库与高频法条页各跑两遍。
     ("法条引用索引",    [PY, "tools/build_article_index.py"],        False),
+    # 「原文阅读器的法条关联」：把案例库 / 合规义务清单 / 专题分析挂到条文号上，
+    # 产出 kb/links.js（原文页按需加载），解决「读一条法条看不到谁引用过它」。
+    # ⚠️ 必须排在「法条引用索引」之后（它读 case_refs.json）与「站内原文页」之后
+    #   （它读 kb/texts/index.json 拿 doc id），且排在 build_cases_page 之后无妨
+    #   —— 案例锚点是 md5(url) 的稳定值，不依赖页面生成结果。
+    ("原文·法条关联",   [PY, "tools/build_text_links.py"],          False),
     # 「法规修订沿革」（轻量版）：只从 flk 官方原文前言里读出「经 N 次修正 / 最近一次 YYYY-MM-DD」，
     # 不做全文版本库。产出 sources/standards/amendments.json，由 build_standards 读进法规库列表。
     ("法规修订沿革",    [PY, "tools/build_amendments.py"],           False),
