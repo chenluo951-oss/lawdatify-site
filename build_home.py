@@ -172,6 +172,11 @@ def render_deck(cal, acts, g):
                if i.get("status") in RUN_STATUSES][:4]
     names = {j["code"]: j["name"] for j in g["jurisdictions"]}
     g_latest = sorted(g["items"], key=lambda x: x["date"], reverse=True)[:4]
+    # 驾驶舱的每个数字都是入口（用户 2026-09-18：「所有数字应该可以点击」）：
+    # 三栏各自的「共几项」挂在栏头，点了进对应模块页，而不是只把「日历 →」做成链接。
+    n_soon = len(future)
+    n_run = sum(1 for i in acts["items"] if i.get("status") in RUN_STATUSES)
+    n_geo = len({i["code"] for i in g["items"]})
 
     def row(when, sub, url, title):
         return (f'<div class="rd-rowline"><span class="rd-when">{esc(when)}'
@@ -191,20 +196,24 @@ def render_deck(cal, acts, g):
         for i in g_latest
     ) or '<div class="rd-empty">暂无全球动态</div>'
 
+    def head(ico, bg, fg, title, n, unit, url, label):
+        return (f'<div class="deck-h"><span class="deck-ico" style="background:{bg};'
+                f'color:{fg}">{ico}</span>{title}'
+                f'<a class="deck-n" href="{url}" title="查看全部{title}">'
+                f'{n}<i>{unit}</i></a>'
+                f'<a class="deck-go" href="{url}">{label} →</a></div>')
+
     return f"""<div class="deck">
   <div class="deck-col">
-    <div class="deck-h"><span class="deck-ico" style="background:#eef6fb;color:#1b4f8a">📅</span>
-      即将到期 <a href="news/calendar.html">日历 →</a></div>
+    {head("📅", "#eef6fb", "#1b4f8a", "即将到期", n_soon, "项", "news/calendar.html", "日历")}
     <div class="rd-soon">{col1}</div>
   </div>
   <div class="deck-col">
-    <div class="deck-h"><span class="deck-ico" style="background:#eaf6f3;color:#0f7b6c">🛡️</span>
-      推进中的行动 <a href="news/actions.html">全部 →</a></div>
+    {head("🛡️", "#eaf6f3", "#0f7b6c", "推进中的行动", n_run, "项", "news/actions.html", "全部")}
     <div class="rd-soon">{col2}</div>
   </div>
   <div class="deck-col">
-    <div class="deck-h"><span class="deck-ico" style="background:#f1effa;color:#6c5bb0">🌐</span>
-      全球最新动态 <a href="news/map.html">地图 →</a></div>
+    {head("🌐", "#f1effa", "#6c5bb0", "全球最新动态", n_geo, "个辖区", "news/map.html", "地图")}
     <div class="rd-soon">{col3}</div>
   </div>
 </div>"""
@@ -226,10 +235,12 @@ def render_dist(verified):
         color = DOMAIN_COLOR.get(d, "#1b4f8a")
         w = max(6, round(c / mx * 100))
         rows.append(
-            f'<div class="dist-row"><span class="dist-name">{esc(d)}</span>'
+            f'<a class="dist-row" href="news/index.html#g-{esc(d)}" '
+            f'title="查看「{esc(d)}」的全部合规动态">'
+            f'<span class="dist-name">{esc(d)}</span>'
             f'<span class="dist-track"><span class="dist-bar" '
             f'style="width:{w}%;background:{color}"></span></span>'
-            f'<span class="dist-n">{c}</span></div>'
+            f'<span class="dist-n">{c}</span></a>'
         )
     # 2026-09-17：单列 9 行会让这块占到 368px（半屏），正文被顶到 1000px 以下。
     # 拆成双列（各占一半行数）后约 180px —— 条形图是「一眼看分布」，不需要整行宽度。

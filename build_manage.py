@@ -40,9 +40,9 @@ def main():
     n_cat, n_scene, n_duty = duty_stats()
 
     body = f"""
-  <p class="lead">合规管理回答的是「<b>规则怎么落下去</b>」：把义务清单变成可勾选的审计范围，
-  把审计过程变成可追溯的记录，把结论变成可派发的整改任务。规则本身是什么，见
-  <a href="../kb/index.html">合规知识库</a>；外面发生了什么，见
+  <p class="lead">把义务清单变成可勾选的审计范围，把审计过程变成可追溯的记录，
+  把结论变成可派发的整改任务。规则本身见
+  <a href="../kb/index.html">合规知识库</a>，外面发生了什么见
   <a href="../news/index.html">合规动态</a>。</p>
 
   <div class="lb-split">

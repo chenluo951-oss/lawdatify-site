@@ -53,6 +53,11 @@ STEPS = [
     # 每天重扫一次才能跟上，否则新增省份/改名栏目会静默漏采。
     ("专项·省局栏目发现", [PY, "tools/prov_ca_discover.py"],           False),
     ("专项·App违规通报", [PY, "tools/harvest_app_violations.py"],    False),
+    # 公安部第三研究所检测中心（国家网络与信息系统安全产品质量检验检测中心）的
+    # 移动应用通报：mstl.org.cn 静态分页，一页里多个「问题类别」分节、每节点名若干款。
+    # ⚠️ 它是**技术支撑单位**通报，不是与三部并列的监管通报——页面上挂靠到「公安部体系」。
+    # 走 --only mstl 只跑该站，不重复抓已采过的其他机关。
+    ("专项·检测中心通报", [PY, "tools/harvest_app_violations.py", "--only", "mstl"], False),
     # ⚠️ 必须紧跟 App 通报采集：省局列表接口不返回发布日期，新采的文书 date 为空，
     # 而「按年统计通报量」是治理分析的地基 → 立刻从页面 PubDate 回填（带缓存，增量很快）。
     ("专项·发布日期回填", [PY, "tools/backfill_appviol_dates.py"],    False),
@@ -98,6 +103,11 @@ STEPS = [
     # ⚠️ 治理分析必须排在专项合规页之前：它产出 sources/appviol/analytics.json
     # （机构×年度矩阵、治理动作年度构成、再犯分析、执法强度），页面直接消费该文件。
     ("专项·治理分析",   [PY, "tools/appviol_analytics.py"],         False),
+    # 「算法条目速查索引」：把算法备案 / 深度合成 / 生成式AI 三个库合成 kb/algo-index.js
+    # （约 1 万行，1.1MB，前端**按需加载**——只有用户点某个数字时才拉）。
+    # ⚠️ 必须排在「专项合规页」之前：build_special_topics 会往页面里写 #algoIdx 容器的
+    #   data-idx 指向与首屏提示数字，文件不存在时点击无反应。
+    ("算法·条目索引",   [PY, "tools/build_algo_index.py"],           False),
     ("专项合规页",      [PY, "tools/build_special_topics.py"],      False),
     ("高频法条",        [PY, "build_citations.py"],                  False),
     ("合规审计",        [PY, "build_audit.py"],                      False),
@@ -165,8 +175,8 @@ def main():
 
     net_labels = {"草案跟踪", "原文抓取·每日", "私有库同步", "法规全量·flk",
                   "标准门户·检索", "专项·省局栏目发现", "专项·App违规通报",
-                  "专项·发布日期回填", "专项·算法备案", "地市监处罚公示", "合规案例库",
-                  "案例文书附件"}
+                  "专项·检测中心通报", "专项·发布日期回填", "专项·算法备案",
+                  "地市监处罚公示", "合规案例库", "案例文书附件"}
     steps = [s for s in STEPS if not (a.no_network and s[0] in net_labels)]
     if a.skip_build:
         steps = [s for s in steps if s[0] in

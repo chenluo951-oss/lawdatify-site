@@ -1763,7 +1763,7 @@ def write_page(count_law, total_chars, parts, count_std=0):
 </div></div>
 
 <main class="wrap">
-  <p class="rd-note">法规正文来自发布机关官网公开文本；标准正文取自本人存档（国标为三轮 OCR 比对定稿，行标与团标为发布机构公开 PDF 的文字层），仅供个人学习研究，正式引用请以官方发布版本为准。</p>
+  <p class="rd-note">法规正文来自发布机关官网公开文本；标准正文取自本人存档（国标为三轮 OCR 比对定稿，行标与团标为发布机构公开 PDF 的文字层）。正式引用请以官方发布版本为准。</p>
   <div class="rd">
     <aside class="rd-side">
       <div class="rd-pane" id="rd-pane-list">

@@ -225,11 +225,9 @@ def page_calendar(cal):
     ]))
     parts.append(fresh_note(cal.get("_meta"), len(items)))
 
-    parts.append('<p class="rd-note"><b>月历视图</b>：色条为该日节点，按领域着色；'
-                 '点击日期格查看当日详情，点击条目标题直达原文。'
-                 '<b>官方原文</b>指发布机构官网的具体公告/全文页面；<b>专业解读</b>'
-                 '指暂未获取原文深链时采用的可溯源专业评述页面，两者已明确区分，'
-                 '不做混同。日期以官方文件为准，征求意见稿不作为生效规则。</p>')
+    parts.append('<p class="rd-note">条目标题直达原文。<b>官方原文</b>＝发布机构官网公告页；'
+                 '<b>专业解读</b>＝暂缺原文深链时的可溯源评述页。日期以官方文件为准，'
+                 '征求意见稿不作为生效规则。</p>')
 
     parts.append(f"""
 <div class="cal" id="calMount">
@@ -436,9 +434,8 @@ def page_map(g):
         (f'<p class="rd-note rd-fresh">数据截至 <b>{esc(cn_up)}</b>'
          f' · 随每日构建自动更新</p>' if cn_up else ""),
         '</div>',
-        """<p class="rd-note">底图为 <b>Natural Earth 公开数据</b>的等距圆柱投影<b>示意性视图</b>，
-非地理精确边界地图，不承担划界意义。<b>点击中国可下钻到省市级监管态势地图</b>（省界含
-南海诸岛与九段线，台湾省、香港、澳门为独立省级要素）。颜色深浅代表该省已收录的属地条目数量；
+        """<p class="rd-note">底图为等距圆柱投影<b>示意性视图</b>，非精确边界、不承担划界意义。
+点击中国下钻省市级视图（省界含南海诸岛与九段线；台湾省、中国香港、中国澳门为独立省级要素）。
 本页不请求任何在线地图服务。</p>""",
         """<div class="geo-legend" id="glWorld">
   <span class="gl-item"><i class="gl hv0"></i>暂无收录</span>

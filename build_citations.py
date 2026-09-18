@@ -330,8 +330,8 @@ PAGE_TPL = """<!DOCTYPE html>
 </div></div>
 
 <main class="wrap">
-  <p class="ct-lead">案例全部取自监管机构与法院官网公开发布的具体页面（通报、典型案例、裁判文书），链接可直达原文。
-     「站内引用热度」= 该法条在法规标准语料与站内文章中被引用的次数，用于反映现实执法与合规实务中的关注强度。</p>
+  <p class="ct-lead">案例取自监管机构与法院官网公开发布的具体页面，链接直达原文。
+     「站内引用热度」＝该法条在法规标准语料与站内文章中的被引次数。</p>
 
   <div class="ct-bar">
     <input id="ct-q" type="search" placeholder="搜索法条、关键词、案例当事人或处罚事由">
@@ -489,9 +489,8 @@ def render(items, counts, dm_name, law_index, compete=None, crefs=None):
                     f'<span class="ct-cm-x">　在案例库中打开 →</span></p></div>')
             more = (f'<p class="ct-cm">另有 {len(rurls) - 14} 条，'
                     f'见 <a href="cases.html">合规案例库</a>。</p>' if len(rurls) > 14 else "")
-            rev_html = ('<p class="ct-lead2">下列案例的违法事实认定段里<b>明确援引了本条</b>'
-                        '（原文写作《%s》%s）。这是「从法条反查案例」的方向，'
-                        '与上面按案件整理的真实案例互为交叉验证。</p>'
+            rev_html = ('<p class="ct-lead2">违法事实认定段里<b>明确援引了本条</b>'
+                        '（原文写作《%s》%s）的案例：</p>'
                         % (esc(norm_law(x["law"])), esc(x["art"]))) + "".join(items_html) + more
             rev_terms = [(m.get("t") or "") for u in rurls for m in [cmeta.get(u) or {}]]
         body = '<div class="ct-secs">' + \

@@ -1,12 +1,12 @@
 {
- "updated": "2026-09-17",
- "documents": 652,
- "with_date": 652,
- "exact_day": 545,
+ "updated": "2026-09-18",
+ "documents": 655,
+ "with_date": 655,
+ "exact_day": 548,
  "year_only": 107,
  "by_source": {
   "pubdate": 441,
-  "kept:harvest": 55,
+  "kept:harvest": 58,
   "url-day": 12,
   "body": 37,
   "title-year": 9,

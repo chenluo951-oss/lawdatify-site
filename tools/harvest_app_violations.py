@@ -4,19 +4,37 @@
 
 谁在通报 —— 本库覆盖的发布主体（全部为发布机关官网原文页）
 ======================================================
-【国家层面 · 监管部门】
+⚠️ 监管层级（2026-09-18 用户明确，本库与页面一律按此口径呈现）
+   顶层监管部门只有三个：**网信办（国家互联网信息办公室）/ 公安部 / 工业和信息化部**。
+   其余机构都是这三个部门的**技术支撑 / 检测支撑单位**，不是与三部并列的「国家监管主体」：
+     · 国家互联网应急中心（CNCERT/CC）        —— 中央网信办直属事业单位
+     · 国家计算机病毒应急处理中心（病毒中心）  —— 受公安部委托开展 App/SDK 检测通报
+     · 公安部第三研究所检测中心               —— 公安部三所下属，2026 年起对外通报 App
+   把它们与三个部门平铺成一层，会让「谁在管」这张表失去治理含义。
+
+【顶层部门 ①：国家网信办】
+②（编号沿用历史顺序）中央网信办《关于 N 款 App（和 M 款 SDK）个人信息收集使用问题的通报》
+   经网信办站内检索枚举（search.cac.gov.cn，必须带 Referer）。
+   名单载体：**内嵌 PNG 图片** → macOS Vision OCR + 按 y 坐标聚类还原表行。
+
+【顶层部门 ②：工业和信息化部】
 ① 工业和信息化部信息通信管理局《关于侵害用户权益行为的 APP（SDK）通报》
    栏目 https://www.miit.gov.cn/jgsj/xgj/APPqhyhqyzxzzxd/tzgg/index.html
    2019-12 起连续编号，总第 1 批→当前，是该领域最完整的国家序列。
    名单载体：正文无表，**附件为 PDF**，经 pdfjs viewer iframe 内嵌
    （`/cms_files/filemanager/.../attach/YYYYM/<hash>.pdf`）→ pdfplumber 提表格。
-② 中央网信办《关于 N 款 App（和 M 款 SDK）个人信息收集使用问题的通报》
-   经网信办站内检索枚举（search.cac.gov.cn，必须带 Referer）。
-   名单载体：**内嵌 PNG 图片** → macOS Vision OCR + 按 y 坐标聚类还原表行。
-③ 公安部（网安局）《N 款移动应用违法违规收集使用个人信息》
-   经公安部计算机信息系统安全产品质量监督检验中心检测后通报，
-   属独立于①②的第三条国家序列；名单**以正文文字内嵌**（《应用名》(版本x, 来源)）→ 正则抽取。
-④ 国家计算机病毒应急处理中心检测通报（同上，独立检测机构）。
+
+【顶层部门 ③：公安部（网安局）及其技术支撑单位】
+③ 公安部 · 国家计算机病毒应急处理中心（技术支撑）
+   受公安部委托以计算机病毒防治产品实验室名义开展 App/SDK 检验检测与通报处置；
+   列表无稳定 PC 栏目，本站未接入，仅登记。
+④ 公安部第三研究所检测中心（技术支撑）
+   《中心检测发现 N 款违法违规收集使用个人信息的移动应用》
+   栏目 http://www.mstl.org.cn/html/news/index.html（静态分页 index_N，共 4 页）
+   正文内嵌《应用名》(版本x, 来源)，并按「1、问题类别。涉及 N 款如下：」分节
+   → 分节解析可同时拿到问题类型；发布时间在「发布时间：YYYY-MM-DD」。
+   ⚠️ 该站只挂出 2026-06 / 2026-07 / 2026-09 三期（更早的 54 款、37 款两期
+   已从站点列表中撤下），故本序列起始于 2026-06，不代表该中心只发过这三期。
 
 【国家层面 · 协会 / 机构】
 ⑤ 中国互联网协会（ISC）App 个人信息收集使用专家评议；
@@ -246,6 +264,11 @@ def org_scope(title, body, url, fallback=""):
     工信部的通报统统标成公安部。判定优先级：域名 > 标题首部机关名 > 正文**落款**。
     """
     low = url.lower()
+    # 0) 公安部技术支撑单位的独立站点（域名即主体，必须先判）
+    #    ⚠️ 正文首句会写「根据公安部、中央网信办、工业和信息化部联合发布的…」，
+    #       若走关键词扫描会把这份通报记到三部头上（见本函数开头警告）。
+    if "mstl.org.cn" in low:
+        return "公安部第三研究所检测中心", "国家"
     # 1) 标题首部机关名 / 联合发布（比域名更准：川渝联合通报同时挂在两个省局站上，
     #    只看域名会被拆成两个单一省份）
     m = re.search(r"^([\u4e00-\u9fff]{2,14}?(?:省|市|自治区)通信管理局)", title)
@@ -504,6 +527,41 @@ def cac_docs():
     return [dict(v, url=u) for u, v in out.items()]
 
 
+MSTL_BASE = "http://www.mstl.org.cn"
+MSTL_LIST = "/html/news/index%s.html"
+MSTL_HIT = re.compile(r"违法违规收集使用个人信息|移动应用.{0,6}个人信息")
+
+
+def mstl_docs():
+    """公安部第三研究所检测中心（公安部技术支撑单位）App 违规通报。
+
+    站点形态：静态分页 `index.html` / `index_2.html` …，页脚给「共 N 条记录 当前页次 x/M」。
+    只收 App 违规通报，其余（认证、标准宣贯、满意度调查）一律不取。
+    """
+    out = {}
+    html = curl(MSTL_BASE + MSTL_LIST % "")
+    if not html:
+        return []
+    m = re.search(r"当前页次\s*\d+\s*/\s*(\d+)\s*页", html)
+    pages = int(m.group(1)) if m else 1
+    pages = max(1, min(pages, 20))
+    for p in range(1, pages + 1):
+        h = html if p == 1 else curl(MSTL_BASE + MSTL_LIST % ("_" + str(p)))
+        if not h:
+            continue
+        for u, t in re.findall(
+                r'href="(/html/news/detail_[^"]+)"[^>]*title="([^"]*)"', h):
+            t = re.sub(r"\s+", " ", unescape(t)).strip()
+            if not MSTL_HIT.search(t):
+                continue
+            # 路径自带日期：detail_YYYY_MM/DD/<id>.html
+            d = re.search(r"detail_(\d{4})_(\d{2})/(\d{2})/", u)
+            date = f"{d.group(1)}-{d.group(2)}-{d.group(3)}" if d else ""
+            out[MSTL_BASE + u] = {"title": t, "date": date}
+        time.sleep(0.2)
+    return [dict(v, url=u) for u, v in out.items()]
+
+
 def prov_docs():
     if not os.path.exists(PROVCOL):
         return []
@@ -527,9 +585,50 @@ RE_CAC_IMG = re.compile(
 RE_INLINE_APP = re.compile(r"《([^》]{2,40})》\s*(?:[（(]([^）)]{0,60})[）)])?")
 
 
+def mstl_entries(html):
+    """公安部三所检测中心通报：按「N、问题类别。涉及 M 款如下：」分节抽明细。
+
+    与纯正文内嵌不同，这里的**问题类别是以小标题给出**的（同一款应用可能出现在多节里），
+    因此逐节解析才能把 probs 落到每条明细上 —— 否则该序列在「问题类型 × 年度」里全空。
+    """
+    i = html.find('id="articlebody"')
+    if i < 0:
+        return []
+    seg = html[i:i + 300000]
+    # ⚠️ 不要按第一个 "</div>" 截断：正文段落很长，截断会把最后几节整段丢掉
+    #    （实测 42 款通报表因此只抽出 38 款）。改为在**页脚标记**处停。
+    ps = [re.sub(r"\s+", " ", unescape(re.sub(r"<[^>]+>", "", x))).strip()
+          for x in re.findall(r"<p[^>]*>(.*?)</p>", seg, re.S)]
+    out, cur = [], None
+    for t in ps:
+        if re.match(r"^(返回列表|联系我们|廉洁承诺)", t) or "版权所有" in t:
+            break
+        m = re.match(r"^(\d+)[、.．]\s*([^。]{4,90})。\s*涉及\s*(\d+)\s*款", t)
+        if m:
+            # ⚠️ norm_prob 对未收录表述返回 None —— 不能因此把整节丢掉
+            #    （实测「未列明向第三方提供…」「在申请打开…权限时未同步告知」两节
+            #     共 14 次点名被静默丢弃，42 款只抽出 38 款）。留原文兜底。
+            cur = norm_prob(m.group(2)) or m.group(2)[:24]
+            continue
+        if not cur:
+            continue
+        for app, ver in RE_INLINE_APP.findall(t):
+            if not (2 <= len(app) <= 40):
+                continue
+            if re.search(r"(条例|规定|办法|法|通知|公告|决定|意见|指南|标准|细则|"
+                         r"方案|规则|规划|纲要|清单|目录|名录|要求|规范|守则)$", app):
+                continue
+            if re.search(r"中华人民共和国|国务院|委员会", app):
+                continue
+            out.append({"app": app, "dev": "", "ver": (ver or "").strip(),
+                        "store": "", "probs": [cur] if cur else [], "region": ""})
+    return out
+
+
 def parse_doc(url, meta, ocr=True):
-    html = curl(url, referer="https://www." + ("cac.gov.cn/" if "cac.gov.cn" in url
-                                              else "miit.gov.cn/"), timeout=60)
+    ref = ("https://www.cac.gov.cn/" if "cac.gov.cn" in url else
+           MSTL_BASE + "/" if "mstl.org.cn" in url else "https://www.miit.gov.cn/")
+    html = curl(url, referer=ref, timeout=60)
     if not html:
         return None
     title = meta.get("title") or ""
@@ -605,6 +704,11 @@ def parse_doc(url, meta, ocr=True):
                 entries = []
             else:
                 carrier = "image-ocr"
+    # 3.5) 公安部三所检测中心：分节抽取（带问题类别）
+    if not entries and "mstl.org.cn" in url:
+        entries = mstl_entries(html)
+        if entries:
+            carrier = "inline-text"
     # 4) 正文内嵌《应用名》(版本, 来源)（公安部 / 病毒中心式，以及省局下架通报的正文点名）
     if not entries:
         hits = RE_INLINE_APP.findall(body)
@@ -623,13 +727,21 @@ def parse_doc(url, meta, ocr=True):
             if entries:
                 carrier = "inline-text"
 
-    # 同文书内去重
-    seen, uniq = set(), []
+    # 同文书内去重（⚠️ 同一款应用可能被分节列多次：**合并 probs 而不是丢弃**，
+    #    否则「问题类型」只留下第一处，公安部三所序列的问题分布会系统性偏窄）
+    seen, uniq = {}, []
     for e in entries:
         k = re.sub(r"[\s（）()【】]", "", e["app"])
         if k in seen:
+            old = seen[k]
+            old.setdefault("probs", [])
+            for p in (e.get("probs") or []):
+                if p and p not in old["probs"]:
+                    old["probs"].append(p)
+            if not old.get("ver") and e.get("ver"):
+                old["ver"] = e["ver"]
             continue
-        seen.add(k)
+        seen[k] = e
         uniq.append(e)
 
     batches = re.search(r"（?(\d{4})年第(\d+)批[，,]\s*总第(\d+)批", title)
@@ -758,6 +870,10 @@ def main():
         pd = prov_docs()
         print(f"▸ 省级通信管理局（属地序列 · 页面 HTML 表格）{len(pd)} 份")
         for r in pd:
+            cand.append(r)
+    if only in ("", "mstl"):
+        print("▸ 公安部第三研究所检测中心（公安部技术支撑单位）")
+        for r in mstl_docs():
             cand.append(r)
 
     urls, seen = [], set()

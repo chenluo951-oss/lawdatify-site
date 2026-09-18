@@ -482,8 +482,9 @@ PAGE_TPL = """<!DOCTYPE html>
 <!-- SUBNAV:START --><!-- SUBNAV:END -->
 
 <main class="wrap">
-  <p class="aud-lead">共 __NCAT__ 个主题大类、__NSCENE__ 个业务场景、__NDUTY__ 项具体义务可供勾选。
-     每个审计项都可回填审计素材（制度、系统、日志、截图、访谈记录）与审计结论，不符合项自动进入整改任务清单。</p>
+  <p class="aud-lead">审计范围取自合规义务清单：__NCAT__ 个主题大类、__NSCENE__ 个业务场景、
+     __NDUTY__ 项具体义务可供勾选。每项可回填审计素材（制度、系统、日志、截图、访谈记录）
+     与审计结论，不符合项自动进入整改任务清单。</p>
 
   <div class="aud-steps">
     <div class="aud-step on" data-v="scope"><i>1</i>配置审计范围</div>

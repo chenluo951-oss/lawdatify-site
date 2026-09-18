@@ -87,7 +87,7 @@ def main():
 
 <div class="wrap">
   <div class="section-title"><span class="bar"></span>专题研究</div>
-  <p class="lead">每篇均标注依据文件、成稿日期与图示数量；正文中的全部外链均为发布机构官网具体页面，发布前逐条实测可达。</p>
+  <p class="lead">每篇标注依据文件、成稿日期与图示数量；全部外链均为发布机构官网具体页面，发布前逐条实测可达。</p>
   <div class="card-grid-2">
 {chr(10).join(cards)}
   </div>

@@ -33,7 +33,9 @@ def load(path, default=None):
         return default if default is not None else {}
 
 
-def page(title, desc, crumb, h1, lead, body, css="", parent="合规动态"):
+def page(title, desc, crumb, h1, lead, body, css="", parent="合规动态",
+         js=("../assets/dash.js",)):
+    scripts = "".join(f'<script src="{esc(u)}" defer></script>' for u in (js or []))
     return f"""<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -43,6 +45,7 @@ def page(title, desc, crumb, h1, lead, body, css="", parent="合规动态"):
 <meta name="description" content="{esc(desc)}">
 <link rel="stylesheet" href="../assets/style.css">
 <style>{css}</style>
+{scripts}
 </head>
 <body>
 
@@ -192,9 +195,24 @@ def link(url, text=None):
     return f'<a href="{esc(url)}" target="_blank" rel="noopener">{esc(text or "官方原文")}</a>'
 
 
-def sec(title, lead, body):
-    return (f'<section class="sp-sec"><h2>{esc(title)}</h2>'
-            + (f'<p class="lead">{lead}</p>' if lead else "") + body + "</section>")
+def sec(title, lead, body, sid=""):
+    return (f'<section class="sp-sec" id="{esc(sid)}">' if sid
+            else '<section class="sp-sec">') + f'<h2>{esc(title)}</h2>' \
+        + (f'<p class="lead">{lead}</p>' if lead else "") + body + "</section>"
+
+
+def num_a(text, flt="", href="", title="", cls="num-a"):
+    """可点击数字：`data-flt`（设过滤条件）或普通锚点二选一。
+
+    用户 2026-09-18：「驾驶舱所有数字应该可以点击」。全站所有「数字即入口」
+    一律走本函数，保证交互手感一致（虚线底、悬停转青、右侧箭头）。
+    """
+    t = esc(text)
+    if flt:
+        return (f'<a class="{cls}" href="#f={esc(flt)}" data-flt="{esc(flt)}"'
+                + (f' title="{esc(title)}"' if title else "") + f'>{t}</a>')
+    return (f'<a class="{cls}" href="{esc(href)}"'
+            + (f' title="{esc(title)}"' if title else "") + f'>{t}</a>')
 
 
 def registry_table(group):
@@ -233,6 +251,148 @@ def registry_group(title, groups):
         out.append(registry_table(g))
         out.append("</div>")
     return "".join(out)
+
+
+# ---------------------------------------------------------------------------
+# 监管主体层级树（2026-09-18）
+# ---------------------------------------------------------------------------
+# 为什么重做：原来把「网信办 / 公安部 / 工信部 / 病毒中心 / 联合专项」平铺成一层
+# 「国家层面 · 监管部门」，读起来像五个平行的监管机构 —— 而病毒中心、应急中心、
+# 三所检测中心只是这三个部门的**技术支撑单位**（用户 2026-09-18 明确指出：
+# 「顶层监管部门就三个：网信办、公安部、工信部 … 你要分清楚」）。
+# 平铺不仅失真，还把「谁在管」这张表变成了清单：读者看不到体系与体量。
+#
+# 现在的结构：三层（顶层部门 → 技术支撑单位 / 地方监管层 / 行业组织与标准机构），
+# 顶层部门卡直接挂「本体系已入库多少份文书」，把治理体量落到体系上。
+ABBR = {"网": "网", "公": "公", "工": "工"}
+
+
+def _rich(s):
+    """登记表里的说明文字：先转义，再把 `**x**` 渲染成 <b>x</b>。
+
+    ⚠️ 不能直接把 JSON 里的文字塞进 HTML：登记表是人工维护的，任何一处笔误都会变成
+    注入点。但说明文字又确实需要粗体（否则「不参与累加」这类关键限定词会被淹没），
+    故只放开这一种内联标记，其余一律转义。
+    """
+    return re.sub(r"\*\*(.+?)\*\*", r"<b>\1</b>", esc(s))
+
+
+def _seq_block(seqs):
+    if not seqs:
+        return ""
+    out = []
+    for s in seqs:
+        chips = [f'<span class="rg-chip k">{esc(s.get("kind",""))}</span>'
+                 if s.get("kind") else ""]
+        if s.get("carrier"):
+            chips.append(f'<span class="rg-chip c">{esc(s["carrier"])}</span>')
+        st = s.get("status", "")
+        cls = "on" if st.startswith("已接入") else "off"
+        chips.append(f'<span class="rg-cov {cls}">{esc(st)}</span>')
+        if s.get("entry"):
+            chips.append(link(s["entry"], s.get("entry_label") or "查看原文"))
+        out.append(
+            '<div class="rg-seq"><div class="q">'
+            + (f'<i>{esc(s["org"])}</i>' if s.get("org") else "")
+            + f'<b>{esc(s.get("sequence",""))}</b>'
+            + (f'<div class="rg-sm">{esc(s["range"])}</div>' if s.get("range") else "")
+            + (f'<div class="rg-sm">{_rich(s["note"])}</div>' if s.get("note") else "")
+            + '</div><div class="m">' + "".join(chips) + "</div></div>")
+    return "".join(out)
+
+
+def registry_node(nd, cover=None, word="份"):
+    """顶层部门 / 独立主体的一张卡：头部（部门 + 覆盖）+ 序列 + 技术支撑单位。"""
+    org = nd.get("org", "")
+    ac = nd.get("accent") or "#0f4c8a"
+    ic = (nd.get("short") or org)[:1]
+    line = " ｜ ".join(x for x in (nd.get("aka"), nd.get("role")) if x)
+    cov = cover(org, nd) if cover else None
+    badge = ""
+    if cov and isinstance(cov[0], int):
+        badge = f'<span class="rg-cov on">本体系已入库 {num(cov[0])} {word}</span>'
+    elif cov and cov[0]:
+        badge = f'<span class="rg-cov off">{esc(cov[0])}</span>'
+    # 非顶层部门（地方监管层 / 查询入口）没有 seqs / children，信息直接挂在节点上，
+    # 必须单独渲染 —— 否则卡片会只剩一个标题（2026-09-18 首版即踩）。
+    extra = []
+    if not nd.get("seqs") and not nd.get("children"):
+        if nd.get("belong"):
+            extra.append(f'<p><span class="rg-chip">{esc(nd["belong"])}</span></p>')
+        if nd.get("scope"):
+            extra.append(f'<p><span class="rg-chip c">范围 {esc(nd["scope"])}</span>'
+                         f'<span class="rg-cov {"on" if (nd.get("status") or "").startswith("已接入") else "off"}"'
+                         f' style="margin-left:7px">{esc(nd.get("status",""))}</span></p>')
+        if nd.get("note"):
+            extra.append(f'<p class="rg-sm">{_rich(nd["note"])}</p>')
+        if nd.get("entry"):
+            extra.append(f'<p>{link(nd["entry"], "官方原文页")}</p>')
+    body = list(extra)
+    if nd.get("seqs"):
+        body.append(_seq_block(nd["seqs"]))
+    kids = nd.get("children") or []
+    if kids:
+        ch = []
+        for k in kids:
+            kcov = cover(k.get("org", ""), k) if cover else None
+            tag = ""
+            if kcov and isinstance(kcov[0], int) and kcov[0] > 0:
+                on = (k.get("status") or "").startswith("已接入")
+                tag = (f'<em class="{"on" if on else ""}">已入库 {num(kcov[0])} 份</em>')
+            ch.append(
+                '<div class="rg-unit"><div class="rg-unit-h">'
+                f'<b>{esc(k.get("org",""))}</b>{tag}'
+                + (f'<span class="rg-sm">{esc(k.get("rel",""))}</span>'
+                   if k.get("rel") else "")
+                + "</div>"
+                + (f'<p>{esc(k.get("role",""))}</p>' if k.get("role") else "")
+                + _seq_block(k.get("seqs") or [])
+                + (f'<p class="rg-sm">{_rich(k["note"])}</p>' if k.get("note") else "")
+                + (f'<p>{link(k["entry"], "官方原文页")}</p>' if k.get("entry") else "")
+                + (f'<p><span class="rg-cov off" style="display:inline-block">'
+                   f'{esc(k.get("status",""))}</span></p>'
+                   if k.get("status") and not k.get("seqs") else "")
+                + "</div>")
+        body.append('<div class="rg-chain"><div class="rg-sm" style="margin:6px 0 0">'
+                    "技术支撑 / 检测单位</div>" + "".join(ch) + "</div>")
+    return ('<div class="rg-top" style="--rg:' + esc(ac) + '">'
+            '<div class="rg-top-h"><span class="rg-ic">' + esc(ic) + "</span>"
+            '<span class="rg-t"><b>' + esc(org) + "</b>"
+            + (f'<span>{esc(line)}</span>' if line else "") + "</span>"
+            + badge + "</div>"
+            '<div class="rg-body">' + "".join(body) + "</div></div>")
+
+
+def registry_tiers(tiers, cover=None, word="份"):
+    out = []
+    for i, t in enumerate(tiers or [], 1):
+        h = (f'<div class="rg-tier-h"><i>{i:02d}</i>{esc(t.get("label",""))}'
+             + (f'<s>{_rich(t["desc"])}</s>' if t.get("desc") else "")
+             + "<u></u></div>")
+        nodes = "".join(registry_node(nd, cover, word)
+                            for nd in (t.get("nodes") or []))
+        out.append(f'<div class="rg-tier">{h}{nodes}</div>')
+    return "".join(out)
+
+
+def system_of(org):
+    """发布主体 → 三个顶层部门之一（本函数是「体系归属」口径的唯一实现）。
+
+    ⚠️ 不能用「正文里出现哪个部门名」判断（所有通报都写三部联合发布）。
+    只能按**发布主体名**归属，且技术支撑单位要归到其主责部门：
+      公安部第三研究所检测中心 / 国家计算机病毒应急处理中心 → 公安部体系
+      国家互联网应急中心（CNCERT/CC）                      → 网信办体系
+      各级通信管理局 / 工业和信息化部                       → 工信部体系
+    """
+    s = org or ""
+    if "公安" in s or "病毒" in s:
+        return "公安部"
+    if "网信办" in s or "互联网信息办公室" in s or "应急中心" in s:
+        return "网信办"
+    if "工业和信息化部" in s or "通信管理局" in s:
+        return "工信部"
+    return "其他"
+
 
 
 def f2(v):
