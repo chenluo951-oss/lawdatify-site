@@ -1,7 +1,7 @@
 {
  "_meta": {
   "desc": "监管行动数据源：正在推进或近期推进的检查、专项治理、立法草案与安全调查。level=national 国家级 / local 地方级。src 含义同 calendar.json。",
-  "updated": "2026-09-17"
+  "updated": "2026-09-18"
  },
  "items": [
   {

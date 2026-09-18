@@ -1,7 +1,7 @@
 {
  "_meta": {
   "desc": "全球辖区合规动态数据源（用于监管地图）。group 用于地图分区：na 北美 / sa 拉美 / eu 欧洲 / apac 亚太 / mea 中东非。src=official 表示监管机构官网具体页面；src=analysis 表示可溯源的专业评述文章页。",
-  "updated": "2026-09-17"
+  "updated": "2026-09-18"
  },
  "jurisdictions": [
   {
@@ -315,6 +315,61 @@
    "domain": "数据合规",
    "note": "荷兰《通用数据保护条例实施法》修正案（公报 No. 2026, 154）自 2026-09-01 生效，取消监管机关在公开制裁时的裁量空间。对在荷兰经营或面向荷兰用户的企业，GDPR 罚款从纯财务风险变为「确定性声誉事件」，被处罚主体名称将可检索、可传播且长期留存。",
    "url": "https://zoek.officielebekendmakingen.nl/stb-2026-154.html",
+   "src": "official",
+   "lang": "zh"
+  },
+  {
+   "code": "AU",
+   "date": "2026-08-31",
+   "type": "立法进程",
+   "title": "澳大利亚发布《隐私修正（个人数据保护）法案2026》草案",
+   "domain": "数据合规",
+   "note": "近40项提案，强化同意要求、敏感信息范围与数据泄露通知。",
+   "url": "https://consultations.ag.gov.au/rights-and-protections/privacy-reform/",
+   "src": "official",
+   "lang": "zh"
+  },
+  {
+   "code": "CA",
+   "date": "2026-09-10",
+   "type": "监管指引",
+   "title": "加拿大OPC发布第三方服务商评估指引",
+   "domain": "数据合规",
+   "note": "PIPEDA下受托处理个人信息的第三方尽职调查11项最佳实践，意见截止2026-12-04。",
+   "url": "https://www.priv.gc.ca/en/privacy-topics/privacy-for-businesses/appropriate-handling-of-personal-information/gd_third-party_202609/",
+   "src": "official",
+   "lang": "zh"
+  },
+  {
+   "code": "SG",
+   "date": "2026-06-02",
+   "type": "监管指引",
+   "title": "新加坡PDPC发布生成式AI个人数据使用咨询指南",
+   "domain": "AI合规",
+   "note": "按生成式AI生命周期明确训练数据『公开可用例外』、部署方义务与个体权利响应。",
+   "url": "https://www.pdpc.gov.sg/assets/ceb45ef8-294d-4b45-be35-e884d578fd8d",
+   "src": "official",
+   "lang": "zh"
+  },
+  {
+   "code": "EU",
+   "date": "2026-09-09",
+   "type": "处罚案例",
+   "title": "法国CNIL因未妥善处理删除权对EXTIA罚款30万欧元",
+   "domain": "数据合规",
+   "note": "2024年265件删除请求中超3/4未妥善处理或未告知结果，违反GDPR第12、17条。",
+   "url": "https://cnil.fr/en/sanction-failure-rights-individuals-extia",
+   "src": "official",
+   "lang": "zh"
+  },
+  {
+   "code": "US",
+   "date": "2026-08-19",
+   "type": "执法政策",
+   "title": "美国FTC发布个性化定价执法政策声明（征询中）",
+   "domain": "价格合规",
+   "note": "明确未充分披露个性化定价可能违反FTC Act第5条；意见截止2026-09-25。",
+   "url": "https://www.ftc.gov/news-events/news/press-releases/2026/08/ftc-seeks-comment-enforcement-policy-statement-regarding-personalized-pricing",
    "src": "official",
    "lang": "zh"
   }
